@@ -1,0 +1,93 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Build target'
+        required: true
+        default: 'android-debug'
+        type: choice
+        options:
+          - android-debug
+          - desktop-linux
+          - desktop-windows
+          - desktop-macos
+
+jobs:
+  android-debug:
+    if: github.event.inputs.target == 'android-debug'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install NDK & CMake
+        run: |
+          sdkmanager "ndk;28.2.13676358" "cmake;3.22.1" "platforms;android-36" "build-tools;36.0.0"
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew :app:assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapid-pi-android-debug
+          path: android/app/build/outputs/apk/debug/*.apk
+
+  desktop-linux:
+    if: github.event.inputs.target == 'desktop-linux'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - name: Build desktop
+        working-directory: desktop
+        run: cargo build --release
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapid-pi-desktop-linux
+          path: desktop/target/release/rapid-pi-desktop 2>/dev/null || desktop/target/release/waku
+
+  desktop-windows:
+    if: github.event.inputs.target == 'desktop-windows'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build desktop
+        working-directory: desktop
+        run: cargo build --release
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapid-pi-desktop-windows
+          path: desktop/target/release/*.exe
+
+  desktop-macos:
+    if: github.event.inputs.target == 'desktop-macos'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build desktop
+        working-directory: desktop
+        run: cargo build --release
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapid-pi-desktop-macos
+          path: desktop/target/release/waku
