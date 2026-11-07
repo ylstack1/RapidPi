@@ -202,7 +202,7 @@ class GitParseTest {
 
     @Test
     fun githubRemotes() {
-        assertEquals("opensec-git" to "Rapid Pi", GitHubRemote.parse("https://github.com/opensec-git/Rapid Pi.git"))
+        assertEquals("opensec-git" to "Rapid Pi", GitHubRemote.parse("https://github.com/ylstack1/RapidPi.git"))
         assertEquals("o" to "r", GitHubRemote.parse("https://user@github.com/o/r"))
         assertEquals("o" to "r.js", GitHubRemote.parse("git@github.com:o/r.js.git"))
         assertEquals("o" to "r", GitHubRemote.parse("ssh://git@github.com/o/r.git"))

@@ -77,10 +77,10 @@ for file in "${builds[@]}"; do
 	"name": "$pkg",
 	"version": "$VERSION",
 	"description": "The Rapid Pi $VERSION executable ($platform) for its installer. Install Rapid Pi with the rapid-pi package or $(if [ "$os" = win32 ]; then echo install.ps1; else echo install.sh; fi).",
-	"homepage": "https://github.com/opensec-git/Rapid Pi",
+	"homepage": "https://github.com/ylstack1/RapidPi",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/opensec-git/Rapid Pi.git"
+		"url": "git+https://github.com/ylstack1/RapidPi.git"
 	},
 	"license": "MIT",
 	"author": "OpenSec",
@@ -92,7 +92,7 @@ EOF
 	cat >"$dir/README.md" <<EOF
 # $pkg
 
-\`$file\` of the [Rapid Pi $VERSION release](https://github.com/opensec-git/Rapid Pi/releases/tag/bolt-v$VERSION), the same
+\`$file\` of the [Rapid Pi $VERSION release](https://github.com/ylstack1/RapidPi/releases/tag/bolt-v$VERSION), the same
 bytes, for Rapid Pi's installer to download from the npm registry. Nothing to install from here: use
 
 $(if [ "$os" = win32 ]; then printf '```powershell\npowershell -c "irm https://rapid-pi.opensec.in/install.ps1 | iex"\n```'; else printf '```bash\ncurl -fsSL https://rapid-pi.opensec.in/install.sh | sh\n```'; fi)

@@ -11,7 +11,7 @@ Only the latest release gets security fixes. Update with `rapid-pi update` (or y
 
 ## Reporting a vulnerability
 
-Report privately through GitHub: **[open a private security advisory](https://github.com/opensec-git/Rapid Pi/security/advisories/new)**.
+Report privately through GitHub: **[open a private security advisory](https://github.com/ylstack1/RapidPi/security/advisories/new)**.
 Do not open a public issue, pull request or discussion for a vulnerability.
 
 Include:
@@ -68,7 +68,7 @@ Or with OpenSSL 3, using [`keys/release.pub`](keys/release.pub):
 openssl pkeyutl -verify -pubin -inkey release.pub -rawin -in SHA256SUMS -sigfile SHA256SUMS.sig
 ```
 
-Every archive also has a GitHub build attestation: `gh attestation verify <file> -R opensec-git/Rapid Pi`.
+Every archive also has a GitHub build attestation: `gh attestation verify <file> -R ylstack1/RapidPi`.
 
 ## Extensions and projects
 

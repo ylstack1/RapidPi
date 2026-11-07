@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "docs-site"
 OUT = ROOT / "site" / "docs"
 SITE = "https://rapid-pi.opensec.in"
-REPO = "https://github.com/opensec-git/Rapid Pi"
+REPO = "https://github.com/ylstack1/RapidPi"
 
 NAV = [
     ("Get started", ["index", "installation", "quickstart"]),

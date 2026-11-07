@@ -42,13 +42,13 @@ release key is a secret of the `release` environment, used only by `publish` run
 
 By hand (with `AUTO_RELEASE` unset, or to redo a step): push the tag yourself
 (`git tag -a bolt-vX.Y.Z -m "Rapid Pi X.Y.Z" && git push origin bolt-vX.Y.Z`), then, once the draft is there, run `publish` from
-`rapid-pi`: `gh workflow run publish.yml -R opensec-git/Rapid Pi -f tag=bolt-vX.Y.Z`. A draft can also be signed on a machine that
+`rapid-pi`: `gh workflow run publish.yml -R ylstack1/RapidPi -f tag=bolt-vX.Y.Z`. A draft can also be signed on a machine that
 has the key, before `publish`:
 
 ```bash
-gh release download bolt-vX.Y.Z -R opensec-git/Rapid Pi -p SHA256SUMS -D dist/X.Y.Z --clobber
+gh release download bolt-vX.Y.Z -R ylstack1/RapidPi -p SHA256SUMS -D dist/X.Y.Z --clobber
 scripts/sign-release.sh --key rapid-pi-signing-key.pem dist/X.Y.Z
-gh release upload bolt-vX.Y.Z -R opensec-git/Rapid Pi dist/X.Y.Z/SHA256SUMS.sig dist/X.Y.Z/SHA256SUMS.sshsig
+gh release upload bolt-vX.Y.Z -R ylstack1/RapidPi dist/X.Y.Z/SHA256SUMS.sig dist/X.Y.Z/SHA256SUMS.sshsig
 ```
 
 `publish` refuses a draft whose signature does not verify against `keys/release.pub`. Either workflow can be run again with the
@@ -63,8 +63,8 @@ npm under the dist-tag `beta`, and the `rapid-pi` package, the installers, the s
 again for the same tag without it makes the release the latest and publishes the `rapid-pi` package.
 
 ```bash
-gh workflow run publish.yml -R opensec-git/Rapid Pi -f tag=bolt-vX.Y.Z -f prerelease=true
-gh workflow run publish.yml -R opensec-git/Rapid Pi -f tag=bolt-vX.Y.Z      # later: the latest release
+gh workflow run publish.yml -R ylstack1/RapidPi -f tag=bolt-vX.Y.Z -f prerelease=true
+gh workflow run publish.yml -R ylstack1/RapidPi -f tag=bolt-vX.Y.Z      # later: the latest release
 ```
 
 A pre-release is a version like any other: one that needs a fix is followed by the next version, not replaced.
@@ -111,7 +111,7 @@ When it changed, the four runtimes are built before tagging, by the `runtime` wo
 merged:
 
 ```bash
-gh workflow run runtime.yml -R opensec-git/Rapid Pi -f tag=bolt-vX.Y.Z
+gh workflow run runtime.yml -R ylstack1/RapidPi -f tag=bolt-vX.Y.Z
 ```
 
 It builds each runtime on its platform's runner (Linux x86-64 and ARM64, macOS, Windows), runs `tests/aot` and `tests/runtime`
@@ -140,7 +140,7 @@ not yet built bit for bit the same twice; the prebuilt heap of a Pi build is che
 
 Every archive of a release has a build provenance attestation (`actions/attest-build-provenance`): a statement of which
 workflow run built it, from which commit, signed with that run's GitHub identity through Sigstore and kept in the repository's
-[attestations](https://github.com/opensec-git/Rapid Pi/attestations). `runtime` attests the runtimes it builds; `release`'s build
+[attestations](https://github.com/ylstack1/RapidPi/attestations). `runtime` attests the runtimes it builds; `release`'s build
 jobs attest every archive they make, dry runs included. It is a second check beside the signature of `SHA256SUMS`: the signature
 says the release key's holder approved a file, and the attestation says which run made it. Releases up to 1.0.1 have no
 attestations.
@@ -148,14 +148,14 @@ attestations.
 To check a downloaded file (GitHub CLI 2.49 or later):
 
 ```bash
-gh attestation verify rapid-pi-linux-x64.tar.xz -R opensec-git/Rapid Pi
+gh attestation verify rapid-pi-linux-x64.tar.xz -R ylstack1/RapidPi
 # Stricter: made by the release workflow, run from rapid-pi (the tag workflow starts it there) or from the release's tag.
-gh attestation verify rapid-pi-linux-x64.tar.xz -R opensec-git/Rapid Pi \
-  --signer-workflow opensec-git/Rapid Pi/.github/workflows/release.yml --source-ref refs/heads/rapid-pi
+gh attestation verify rapid-pi-linux-x64.tar.xz -R ylstack1/RapidPi \
+  --signer-workflow ylstack1/RapidPi/.github/workflows/release.yml --source-ref refs/heads/rapid-pi
 ```
 
 A runtime that `runtime` built and that is still on a draft is checked with
-`--signer-workflow opensec-git/Rapid Pi/.github/workflows/runtime.yml --source-ref refs/heads/rapid-pi`. Releases 1.0.2 and
+`--signer-workflow ylstack1/RapidPi/.github/workflows/runtime.yml --source-ref refs/heads/rapid-pi`. Releases 1.0.2 and
 1.0.3 were built on Blacksmith's runners, which GitHub counts as self-hosted, so `--deny-self-hosted-runners` fails on their
 attestations; later releases are built on GitHub's runners again. An
 attestation names the commit its run started from: `release` builds the tag's commit, and `runtime` run with `-f ref=...`
@@ -174,7 +174,7 @@ The exception: runtimes released before attestations existed have none. `release
 without an attestation, in its "Runtime provenance" step. Each one it accepts gets a warning in the run and a line in its summary,
 so nothing is skipped silently. The list holds only 1.0.1's four runtimes, the ones the next release reuses. Their `bun`
 executables are 1.0.0's, and those are byte for byte the ones run
-[39963518293](https://github.com/opensec-git/Rapid Pi/actions/runs/39963518293) of `runtime` built (branch `runtime/v1.0.0b`,
+[39963518293](https://github.com/ylstack1/RapidPi/actions/runs/39963518293) of `runtime` built (branch `runtime/v1.0.0b`,
 commit `ca41028c`):
 
 | Runtime of 1.0.1 | SHA-256 |
@@ -216,7 +216,7 @@ environment, which accepts only the `rapid-pi` branch and `bolt-v*` tags. To set
 ```bash
 for p in rapid-pi rapid-pi-linux-x64 rapid-pi-linux-x64-baseline rapid-pi-linux-x64-jit rapid-pi-linux-arm64 rapid-pi-linux-arm64-jit \
   rapid-pi-darwin-arm64 rapid-pi-darwin-arm64-jit @kushalkhemka/rapid-pi-win32-x64 @kushalkhemka/rapid-pi-win32-x64-jit; do
-  npm trust github "$p" --file publish.yml --repo opensec-git/Rapid Pi --env npm --allow-publish --yes
+  npm trust github "$p" --file publish.yml --repo ylstack1/RapidPi --env npm --allow-publish --yes
 done
 ```
 
@@ -228,7 +228,7 @@ published once by hand, as below, and then given the trust. Then set the reposit
 Until then the npm job is skipped, and the packages are published from the maintainer's machine after `publish`:
 
 ```bash
-gh release download bolt-vX.Y.Z -R opensec-git/Rapid Pi -p '*.tar.xz' -p '*.zip' -p SHA256SUMS -D dist/X.Y.Z --clobber
+gh release download bolt-vX.Y.Z -R ylstack1/RapidPi -p '*.tar.xz' -p '*.zip' -p SHA256SUMS -D dist/X.Y.Z --clobber
 scripts/publish-npm-builds.sh dist/X.Y.Z
 (cd npm && npm publish --access public)
 ```
@@ -256,7 +256,7 @@ To create the token:
 4. Permissions → Repository permissions → Contents: Read and write (Metadata: Read-only is added with it). Nothing else.
 5. If the organization requires approval for fine-grained tokens, an owner approves it under the organization's Settings →
    Personal access tokens → Pending requests.
-6. opensec-git/Rapid Pi → Settings → Secrets and variables → Actions → New repository secret, named `HOMEBREW_TAP_TOKEN`. (A
+6. ylstack1/RapidPi → Settings → Secrets and variables → Actions → New repository secret, named `HOMEBREW_TAP_TOKEN`. (A
    repository secret, not one of the `release` environment: a job in that environment waits for its reviewers.)
 
 By hand, from a clone of the tap: `node scripts/update-homebrew-formula.mjs Formula/rapid-pi.rb SHA256SUMS X.Y.Z` with the
@@ -283,9 +283,9 @@ mise installs Rapid Pi from the GitHub release with its `github` backend; nothin
 [docs-site/pages/installation.html](../docs-site/pages/installation.html)) pick the default build's archive per platform,
 strip the `bolt-v` tag prefix, rename `pi` to `rapid-pi` and put only `rapid-pi` on PATH. mise takes a release once it is older
 than its `minimum_release_age` setting. A Rapid Pi in mise's installs folder (`.../mise/installs/<tool>/...`, or under
-`$MISE_DATA_DIR/installs`) knows it: `rapid-pi update` says to run `mise upgrade --bump github:opensec-git/Rapid Pi`
+`$MISE_DATA_DIR/installs`) knows it: `rapid-pi update` says to run `mise upgrade --bump github:ylstack1/RapidPi`
 (`mise upgrade --bump rapid-pi` once mise's registry has the shorthand), and `rapid-pi update --rollback` to run
-`mise use -g github:opensec-git/Rapid Pi@<version>`. If a release renames its archives, update the options in the docs.
+`mise use -g github:ylstack1/RapidPi@<version>`. If a release renames its archives, update the options in the docs.
 
 ## A new Pi version
 
@@ -302,7 +302,7 @@ By hand:
    `--out DIR` and merged in on Linux with `--with DIR`, it also places what only macOS runs). On Windows, `scripts\train-heap.ps1`
    then adds the prebuilt heap's order to it (`heap-functions.txt`, and the strings' order in `bytecode.order`): commit that too.
    The `heap-profile` workflow runs it on the Windows runner with the latest release's runtime
-   (`gh workflow run heap-profile.yml -R opensec-git/Rapid Pi --ref <branch>`), uploads the profile as an artifact and pushes it to
+   (`gh workflow run heap-profile.yml -R ylstack1/RapidPi --ref <branch>`), uploads the profile as an artifact and pushes it to
    the branch `heap-profile/pi-X.Y.Z`; open a pull request from that branch by hand.
 3. Push; `ci` builds and tests it, and it is released as above.
 
@@ -359,7 +359,7 @@ required reviewers on the `release` environment (Settings → Environments → r
 To set the key, as an administrator, on the machine that has it:
 
 ```bash
-gh secret set RAPIDPI_SIGNING_KEY -R opensec-git/Rapid Pi --env release < rapid-pi-signing-key.pem
+gh secret set RAPIDPI_SIGNING_KEY -R ylstack1/RapidPi --env release < rapid-pi-signing-key.pem
 ```
 
 To make the key pair:

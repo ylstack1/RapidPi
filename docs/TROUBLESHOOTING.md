@@ -230,7 +230,7 @@ remove anything private from it before you post it.
 
 ## Reporting a problem
 
-Please [open an issue](https://github.com/opensec-git/Rapid Pi/issues/new) with:
+Please [open an issue](https://github.com/ylstack1/RapidPi/issues/new) with:
 
 - the output of `rapid-pi doctor` (the build, installation, extensions and packages, and the problems it finds; no keys or
   tokens, and your home folder shown as `~`);

@@ -33,7 +33,7 @@
     <h1>Rapid Pi crashed. Sorry about that.</h1>
     <p>This page's address holds an encoded stack trace of the crash, and nothing else: no file names, paths or data of yours.
     Rapid Pi's maintainers decode it against the symbols of your release.</p>
-    <p><a class="button" id="issue" href="https://github.com/opensec-git/Rapid Pi/issues/new">Open an issue with this trace</a></p>
+    <p><a class="button" id="issue" href="https://github.com/ylstack1/RapidPi/issues/new">Open an issue with this trace</a></p>
     <p class="muted">Please add what you were doing when it crashed, and the output of <code>rapid-pi --version</code>. The trace:</p>
     <pre id="trace"></pre>
   </div>
@@ -50,7 +50,7 @@
     var trace = location.href;
     document.getElementById("trace").textContent = trace;
     var body = "**What happened**\n\n(what you were doing)\n\n**Version**\n\n```\n(output of rapid-pi --version)\n```\n\n**Trace**\n\n" + trace + "\n";
-    document.getElementById("issue").href = "https://github.com/opensec-git/Rapid Pi/issues/new?title=" +
+    document.getElementById("issue").href = "https://github.com/ylstack1/RapidPi/issues/new?title=" +
       encodeURIComponent("Crash: ") + "&body=" + encodeURIComponent(body);
     document.getElementById("crash").hidden = false;
     document.getElementById("notfound").hidden = true;

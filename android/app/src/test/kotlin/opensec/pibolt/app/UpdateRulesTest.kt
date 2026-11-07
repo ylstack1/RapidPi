@@ -17,10 +17,10 @@ class UpdateRulesTest {
     private val source = UpdateSource.RELEASE
     private val sha = "1b63214818d9e910241e51f954e7c076e1a9d90b61609c2a2c71ef2b80a17b25"
     private val cert = "f752464c8b6d5906d7fd467346b89316518e3ddfe77843f66b1fa673818a2c90"
-    private val apk = "https://github.com/opensec-git/Rapid Pi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk"
+    private val apk = "https://github.com/ylstack1/RapidPi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk"
 
     private fun manifest(apkUrl: String = apk, version: String = "0.2.2", shaValue: String = sha, certValue: String = cert, size: String = "114423412") =
-        """{"version":"$version","apk":"$apkUrl","page":"https://github.com/opensec-git/Rapid Pi/releases/tag/android-v$version","size":$size,"sha256":"$shaValue","certSha256":"$certValue"}"""
+        """{"version":"$version","apk":"$apkUrl","page":"https://github.com/ylstack1/RapidPi/releases/tag/android-v$version","size":$size,"sha256":"$shaValue","certSha256":"$certValue"}"""
 
     private fun info(version: String) = UpdateInfo(version, apk, null, 1, sha, cert)
 
@@ -47,7 +47,7 @@ class UpdateRulesTest {
     @Test
     fun parsesAndroidJson() {
         val parsed = UpdateRules.parseManifest(manifest(), source).getOrThrow()
-        assertEquals(UpdateInfo("0.2.2", apk, "https://github.com/opensec-git/Rapid Pi/releases/tag/android-v0.2.2", 114423412, sha, cert), parsed)
+        assertEquals(UpdateInfo("0.2.2", apk, "https://github.com/ylstack1/RapidPi/releases/tag/android-v0.2.2", 114423412, sha, cert), parsed)
     }
 
     @Test
@@ -73,31 +73,31 @@ class UpdateRulesTest {
     fun acceptsOnlyPiBoltReleaseDownloads() {
         val prefix = source.apkPrefix
         assertTrue(UpdateRules.isAllowedApkUrl(apk, prefix))
-        assertTrue(UpdateRules.isAllowedApkUrl("https://GitHub.com/opensec-git/Rapid Pi/releases/download/android-v0.2.2/x.apk", prefix))
+        assertTrue(UpdateRules.isAllowedApkUrl("https://GitHub.com/ylstack1/RapidPi/releases/download/android-v0.2.2/x.apk", prefix))
         val refused = listOf(
             // Other hosts and look-alikes.
-            "https://evil.example/opensec-git/Rapid Pi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk",
-            "https://github.com.evil.example/opensec-git/Rapid Pi/releases/download/android-v0.2.2/a.apk",
-            "https://objects.githubusercontent.com/opensec-git/Rapid Pi/releases/download/a.apk",
-            "https://github.com@evil.example/opensec-git/Rapid Pi/releases/download/a.apk",
-            "https://user@github.com/opensec-git/Rapid Pi/releases/download/a.apk",
-            "https://github.com:8443/opensec-git/Rapid Pi/releases/download/a.apk",
+            "https://evil.example/ylstack1/RapidPi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk",
+            "https://github.com.evil.example/ylstack1/RapidPi/releases/download/android-v0.2.2/a.apk",
+            "https://objects.githubusercontent.com/ylstack1/RapidPi/releases/download/a.apk",
+            "https://github.com@evil.example/ylstack1/RapidPi/releases/download/a.apk",
+            "https://user@github.com/ylstack1/RapidPi/releases/download/a.apk",
+            "https://github.com:8443/ylstack1/RapidPi/releases/download/a.apk",
             // Other paths: another repository, another fork, outside releases/download, traversal, encoding.
             "https://github.com/someone/Rapid Pi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk",
-            "https://github.com/opensec-git/Rapid Pi-fork/releases/download/a.apk",
-            "https://github.com/opensec-git/Rapid Pi/raw/main/a.apk",
-            "https://github.com/opensec-git/Rapid Pi/releases/download/../../../someone/x/releases/download/a.apk",
-            "https://github.com/opensec-git/Rapid Pi/releases/download/%2e%2e/a.apk",
-            "https://github.com/opensec-git/Rapid Pi/releases/download//a.apk",
-            "https://github.com/opensec-git/Rapid Pi/releases/download/",
-            "https://github.com/opensec-git/Rapid Pi/releases/download/android-v0.2.2/notes.txt",
-            "https://github.com/opensec-git/Rapid Pi/releases/download/a.apk?redirect=https://evil.example/a.apk",
-            "https://github.com/opensec-git/Rapid Pi/releases/download/a.apk#x",
+            "https://github.com/ylstack1/RapidPi-fork/releases/download/a.apk",
+            "https://github.com/ylstack1/RapidPi/raw/main/a.apk",
+            "https://github.com/ylstack1/RapidPi/releases/download/../../../someone/x/releases/download/a.apk",
+            "https://github.com/ylstack1/RapidPi/releases/download/%2e%2e/a.apk",
+            "https://github.com/ylstack1/RapidPi/releases/download//a.apk",
+            "https://github.com/ylstack1/RapidPi/releases/download/",
+            "https://github.com/ylstack1/RapidPi/releases/download/android-v0.2.2/notes.txt",
+            "https://github.com/ylstack1/RapidPi/releases/download/a.apk?redirect=https://evil.example/a.apk",
+            "https://github.com/ylstack1/RapidPi/releases/download/a.apk#x",
             // Plain HTTP and other schemes.
-            "http://github.com/opensec-git/Rapid Pi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk",
+            "http://github.com/ylstack1/RapidPi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk",
             "file:///sdcard/rapid-pi.apk",
             "content://downloads/a.apk",
-            "/opensec-git/Rapid Pi/releases/download/a.apk",
+            "/ylstack1/RapidPi/releases/download/a.apk",
             "not a url",
         )
         for (url in refused) {
@@ -121,17 +121,17 @@ class UpdateRulesTest {
           {"tag_name":"v1.2.0","draft":false,"prerelease":false,"body":"","assets":[]},
           {"tag_name":"android-v0.2.10","draft":true,"prerelease":false,"body":"","assets":[]},
           {"tag_name":"android-v0.2.3","draft":false,"prerelease":true,"body":"","assets":[]},
-          {"tag_name":"android-v0.2.1","draft":false,"prerelease":false,"html_url":"https://github.com/opensec-git/Rapid Pi/releases/tag/android-v0.2.1","body":"",
-           "assets":[{"name":"rapid-pi-android-0.2.1.apk","size":1,"digest":"sha256:$sha","browser_download_url":"https://github.com/opensec-git/Rapid Pi/releases/download/android-v0.2.1/rapid-pi-android-0.2.1.apk"}]},
-          {"tag_name":"android-v0.2.2","draft":false,"prerelease":false,"html_url":"https://github.com/opensec-git/Rapid Pi/releases/tag/android-v0.2.2",
+          {"tag_name":"android-v0.2.1","draft":false,"prerelease":false,"html_url":"https://github.com/ylstack1/RapidPi/releases/tag/android-v0.2.1","body":"",
+           "assets":[{"name":"rapid-pi-android-0.2.1.apk","size":1,"digest":"sha256:$sha","browser_download_url":"https://github.com/ylstack1/RapidPi/releases/download/android-v0.2.1/rapid-pi-android-0.2.1.apk"}]},
+          {"tag_name":"android-v0.2.2","draft":false,"prerelease":false,"html_url":"https://github.com/ylstack1/RapidPi/releases/tag/android-v0.2.2",
            "body":"Signing certificate:\n```\nV3.0 Signer: certificate SHA-256 digest: $cert\n```\n",
            "assets":[
-             {"name":"rapid-pi-android-0.2.2.apk.sha256","size":92,"digest":"sha256:$cert","browser_download_url":"https://github.com/opensec-git/Rapid Pi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk.sha256"},
+             {"name":"rapid-pi-android-0.2.2.apk.sha256","size":92,"digest":"sha256:$cert","browser_download_url":"https://github.com/ylstack1/RapidPi/releases/download/android-v0.2.2/rapid-pi-android-0.2.2.apk.sha256"},
              {"name":"rapid-pi-android-0.2.2.apk","size":114423412,"digest":"sha256:$sha","browser_download_url":"$apk"}
            ]}
         ]"""
         val parsed = UpdateRules.parseGithubReleases(releases, source).getOrThrow()
-        assertEquals(UpdateInfo("0.2.2", apk, "https://github.com/opensec-git/Rapid Pi/releases/tag/android-v0.2.2", 114423412, sha, cert), parsed)
+        assertEquals(UpdateInfo("0.2.2", apk, "https://github.com/ylstack1/RapidPi/releases/tag/android-v0.2.2", 114423412, sha, cert), parsed)
     }
 
     @Test

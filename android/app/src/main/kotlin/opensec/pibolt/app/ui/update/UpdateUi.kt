@@ -225,7 +225,7 @@ private fun DownloadSheet(app: PiBoltApp, info: UpdateInfo) {
             NetworkKind.Unknown -> Triple(Icons.Rounded.Wifi, "$size download", colors.ink2)
         }
         InfoBox(icon, text, tint)
-        if (info.page?.startsWith("https://github.com/opensec-git/Rapid Pi/releases/") == true) {
+        if (info.page?.startsWith("https://github.com/ylstack1/RapidPi/releases/") == true) {
             TextAction("Release notes", onClick = { runCatching { uri.openUri(info.page) } }, color = colors.accent, modifier = Modifier.padding(start = 8.dp))
         }
         Spacer(Modifier.height(12.dp))

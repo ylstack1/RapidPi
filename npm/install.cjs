@@ -29,7 +29,7 @@ const zlib = require("node:zlib");
 
 // The public key that releases are signed with (keys/release.pub in the repository, as in install.sh and install.ps1).
 const RELEASE_KEY = "MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY=";
-const REPO = "https://github.com/opensec-git/Rapid Pi";
+const REPO = "https://github.com/ylstack1/RapidPi";
 const VARIANTS = ["x64", "x64-baseline", "x64-jit"];
 
 /** A reason not to install, said to the user as it is. */

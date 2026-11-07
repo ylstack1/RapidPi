@@ -2901,7 +2901,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 			expect(warnings[0].message).toContain("1.0.1");
 		});
 
-		// opensec-git/Rapid Pi#223
+		// ylstack1/RapidPi#223
 		it("should report packages npm prunes from the npm root because they were not saved", async () => {
 			const npmRoot = join(agentDir, "npm");
 			const nodeModules = join(npmRoot, "node_modules");
@@ -2944,7 +2944,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 			expect(warnings[0].message).not.toContain("hoisted-dep");
 		});
 
-		// opensec-git/Rapid Pi#223
+		// ylstack1/RapidPi#223
 		it("should report a pruned unsaved package that a saved package only declares as a peer", async () => {
 			const npmRoot = join(agentDir, "npm");
 			const nodeModules = join(npmRoot, "node_modules");
@@ -2985,7 +2985,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 			expect(warnings[0].message).toContain(": peer-pkg.");
 		});
 
-		// opensec-git/Rapid Pi#223
+		// ylstack1/RapidPi#223
 		it("should resolve dependencies per installed copy when reporting pruned packages", async () => {
 			const npmRoot = join(agentDir, "npm");
 			const nodeModules = join(npmRoot, "node_modules");

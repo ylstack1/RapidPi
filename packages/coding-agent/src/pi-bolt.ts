@@ -1,5 +1,5 @@
 /**
- * Rapid Pi: Pi compiled ahead of time (https://github.com/opensec-git/Rapid Pi).
+ * Rapid Pi: Pi compiled ahead of time (https://github.com/ylstack1/RapidPi).
  *
  * scripts/build-pi.sh defines RAPIDPI_BUILD when it compiles this tree ("0.3.1 x64 jit-off e0f307e3d3f66944": the Rapid Pi
  * version, the CPU variant (x64, x64-baseline, x64-jit, arm64), whether the JIT is on, and the runtime stamp of the engine it
@@ -85,7 +85,7 @@ export function rapidPiInstallerProcess(installerFile?: string): { command: stri
 		],
 	};
 }
-export const RAPIDPI_RELEASES_URL = "https://github.com/opensec-git/Rapid Pi/releases";
+export const RAPIDPI_RELEASES_URL = "https://github.com/ylstack1/RapidPi/releases";
 /** The key releases' SHA256SUMS are signed with (keys/release.pub; the installers carry it too). */
 export const RAPIDPI_RELEASE_KEY = `-----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY=
@@ -95,9 +95,9 @@ MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY=
 export const RAPIDPI_LATEST_RELEASE_URL = `${RAPIDPI_RELEASES_URL}/latest`;
 /** The releases, pre-releases among them, as an Atom feed; not counted against GitHub's API limit either. */
 export const RAPIDPI_RELEASES_FEED = `${RAPIDPI_RELEASES_URL}.atom`;
-export const RAPIDPI_LATEST_RELEASE_API = "https://api.github.com/repos/opensec-git/Rapid Pi/releases/latest";
+export const RAPIDPI_LATEST_RELEASE_API = "https://api.github.com/repos/ylstack1/RapidPi/releases/latest";
 /** The releases, newest first, pre-releases among them (drafts are not shown to anyone without write access). */
-export const RAPIDPI_RELEASES_API = "https://api.github.com/repos/opensec-git/Rapid Pi/releases?per_page=30";
+export const RAPIDPI_RELEASES_API = "https://api.github.com/repos/ylstack1/RapidPi/releases?per_page=30";
 
 /**
  * Which releases `rapid-pi update` takes: `stable`, the latest release; or `beta`, the newest one, pre-releases included (a
@@ -188,14 +188,14 @@ function isScoopPath(path: string): boolean {
 /**
  * The tool a Rapid Pi that mise installed goes by, from the folder mise put it in, <data>/installs/<folder>/<version>: <data> is
  * ~/.local/share/mise (%LOCALAPPDATA%\mise on Windows) or $MISE_DATA_DIR, and <folder> is `rapid-pi` for the registry's
- * shorthand or `github-opensec-git-rapid-pi` for `github:opensec-git/Rapid Pi`. Undefined if mise did not install it.
+ * shorthand or `github-opensec-git-rapid-pi` for `github:ylstack1/RapidPi`. Undefined if mise did not install it.
  */
 export function rapidPiMiseTool(path: string = realPathOf(process.execPath)): string | undefined {
 	let folder = /[\\/]mise[\\/]installs[\\/]([^\\/]+)[\\/]/.exec(path)?.[1];
 	const dataDir = process.env.MISE_DATA_DIR;
 	if (folder === undefined && dataDir) folder = pathInside(path, join(dataDir, "installs"))?.split("/")[0];
 	if (!folder || !/rapid-pi/i.test(folder)) return undefined;
-	return folder.startsWith("github-") ? "github:opensec-git/Rapid Pi" : "rapid-pi";
+	return folder.startsWith("github-") ? "github:ylstack1/RapidPi" : "rapid-pi";
 }
 
 /**

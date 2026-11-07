@@ -41,7 +41,7 @@ The app checks https://rapid-pi.opensec.in/android.json (or GitHub's newest `and
 once a day and from Settings > About, downloads the APK from the GitHub release, checks its SHA-256, signing
 certificate (android.json's `certSha256` and the installed app's own), package name and versionCode, and installs it
 with Android's package installer through a FileProvider (`app/src/main/kotlin/opensec/rapidpi/app/update/`). Release builds accept only that URL and APKs
-under `https://github.com/opensec-git/Rapid Pi/releases/download/`.
+under `https://github.com/ylstack1/RapidPi/releases/download/`.
 
 To test against a local server, build a debug APK with both overrides (debug builds only):
 

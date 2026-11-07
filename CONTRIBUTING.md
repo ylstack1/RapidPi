@@ -11,15 +11,15 @@ Security problems: never in a public issue. See [SECURITY.md](SECURITY.md). Ever
 
 ## Opening an issue
 
-1. Update first (`rapid-pi update`) and search [existing issues](https://github.com/opensec-git/Rapid Pi/issues).
+1. Update first (`rapid-pi update`) and search [existing issues](https://github.com/ylstack1/RapidPi/issues).
 2. Check whether stock Pi does the same (`npx @earendil-works/pi-coding-agent`). If it does, report it to Pi instead.
-3. Open a [bug report](https://github.com/opensec-git/Rapid Pi/issues/new?template=bug.yml) or a
-   [feature request](https://github.com/opensec-git/Rapid Pi/issues/new?template=feature.yml) and fill in the form:
+3. Open a [bug report](https://github.com/ylstack1/RapidPi/issues/new?template=bug.yml) or a
+   [feature request](https://github.com/ylstack1/RapidPi/issues/new?template=feature.yml) and fill in the form:
    - what you did, what you expected, what happened, with error messages as text;
    - `rapid-pi --version`, your OS and how you installed;
    - the smallest steps that reproduce it.
 
-Questions and ideas that aren't bugs go to [Discussions](https://github.com/opensec-git/Rapid Pi/discussions).
+Questions and ideas that aren't bugs go to [Discussions](https://github.com/ylstack1/RapidPi/discussions).
 [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) covers common problems and what to collect.
 
 ## Opening a pull request

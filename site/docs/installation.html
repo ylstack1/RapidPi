@@ -33,8 +33,8 @@
     </button>
     <nav class="top" aria-label="Main">
       <a href="../#benchmarks">Benchmarks</a>
-      <a href="https://github.com/opensec-git/Rapid Pi/releases/latest">Releases</a>
-      <a class="gh" href="https://github.com/opensec-git/Rapid Pi"><span>GitHub</span><i aria-hidden="true">↗</i></a>
+      <a href="https://github.com/ylstack1/RapidPi/releases/latest">Releases</a>
+      <a class="gh" href="https://github.com/ylstack1/RapidPi"><span>GitHub</span><i aria-hidden="true">↗</i></a>
     </nav>
   </div>
 </header>
@@ -116,7 +116,7 @@ scoop install opensec-git/rapid-pi</pre>
       <code>rapid-pi</code> on your PATH with a Scoop shim. For the JIT build, use the installer.</p>
   </div>
   <div data-tab="mise" data-title="mise">
-<pre data-label="~/.config/mise/config.toml">[tools."github:opensec-git/Rapid Pi"]
+<pre data-label="~/.config/mise/config.toml">[tools."github:ylstack1/RapidPi"]
 version = "latest"
 version_prefix = "bolt-v"
 asset_pattern = 'rapid-pi-{{ os(macos="darwin", windows="win32") }}-{{ arch() }}.tar.gz'
@@ -223,7 +223,7 @@ npm install -g --allow-scripts=rapid-pi rapid-pi</pre>
   the next run downloads the new release. With Homebrew, run <code>brew upgrade rapid-pi</code>; <code>rapid-pi update</code>
   says so and changes nothing, and <code>--rollback</code> is not available. With Scoop, run <code>scoop update rapid-pi</code>,
   and <code>scoop reset rapid-pi@&lt;version&gt;</code> to go back to a version Scoop still keeps. With mise, run
-  <code>mise upgrade --bump github:opensec-git/Rapid Pi</code>, and <code>mise use -g github:opensec-git/Rapid Pi@&lt;version&gt;</code>
+  <code>mise upgrade --bump github:ylstack1/RapidPi</code>, and <code>mise use -g github:ylstack1/RapidPi@&lt;version&gt;</code>
   for another version. <code>rapid-pi update</code> and <code>--rollback</code> give these commands for a Rapid Pi that Scoop or
   mise installed, and change nothing. Running the installer again also updates.</p>
 
@@ -231,11 +231,11 @@ npm install -g --allow-scripts=rapid-pi rapid-pi</pre>
 <p>Run the installer again and choose <strong>uninstall</strong>. It removes the Rapid Pi builds from <code>~/.rapid-pi</code>, the
   one kept for a rollback among them, and the <code>rapid-pi</code> link. With npm, run <code>npm uninstall -g rapid-pi</code>, then delete <code>~/.rapid-pi/npm</code>,
   where the npm package keeps the release it downloaded. With Homebrew, run <code>brew uninstall rapid-pi</code>; with Scoop,
-  <code>scoop uninstall rapid-pi</code>; with mise, <code>mise unuse -g github:opensec-git/Rapid Pi</code>.</p>
+  <code>scoop uninstall rapid-pi</code>; with mise, <code>mise unuse -g github:ylstack1/RapidPi</code>.</p>
 <p>Your Pi configuration in <code>~/.pi/agent</code> belongs to Pi and is not removed.</p>
 
 <h2 id="manual-download">Manual download<a class="anchor" href="#manual-download" aria-label="Link to this section">#</a></h2>
-<p>Download a build from the <a href="https://github.com/opensec-git/Rapid Pi/releases/latest">latest release</a>, check it against
+<p>Download a build from the <a href="https://github.com/ylstack1/RapidPi/releases/latest">latest release</a>, check it against
   <code>SHA256SUMS</code>, unpack it, and run <code>./pi</code> (on Windows, <code>rapid-pi.exe</code>). Keep the unpacked folder
   together: the executable uses the files around it for themes, HTML export and image tools. Link to the executable rather than
   copying it.</p>
@@ -281,7 +281,7 @@ npm install -g --allow-scripts=rapid-pi rapid-pi</pre>
 
     </article>
     <div class="doc-foot">
-      <a class="edit" href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs-site/pages/installation.html">Edit this page on GitHub</a>
+      <a class="edit" href="https://github.com/ylstack1/RapidPi/blob/rapid-pi/docs-site/pages/installation.html">Edit this page on GitHub</a>
     </div>
     <nav class="pager" aria-label="Previous and next page"><a class="prev" href="index.html"><span>Previous</span>Overview</a><a class="next" href="quickstart.html"><span>Next</span>Quickstart</a></nav>
   </main>
@@ -295,7 +295,7 @@ npm install -g --allow-scripts=rapid-pi rapid-pi</pre>
   <div class="foot">
     <p>© 2026 OpenSec · <strong>Rapid Pi</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
       affiliated with Pi's authors or with Oven. MIT licensed.</p>
-    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Rapid Pi">GitHub</a> ·
+    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/ylstack1/RapidPi">GitHub</a> ·
       <a href="https://www.npmjs.com/package/rapid-pi">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
   </div>
 </footer>

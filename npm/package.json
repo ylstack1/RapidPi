@@ -10,13 +10,13 @@
 		"aot",
 		"bun"
 	],
-	"homepage": "https://github.com/opensec-git/Rapid Pi",
+	"homepage": "https://github.com/ylstack1/RapidPi",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/opensec-git/Rapid Pi.git",
+		"url": "git+https://github.com/ylstack1/RapidPi.git",
 		"directory": "npm"
 	},
-	"bugs": "https://github.com/opensec-git/Rapid Pi/issues",
+	"bugs": "https://github.com/ylstack1/RapidPi/issues",
 	"license": "MIT",
 	"author": "OpenSec",
 	"bin": {

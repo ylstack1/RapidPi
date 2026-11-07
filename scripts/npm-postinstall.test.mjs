@@ -151,7 +151,7 @@ function makeRelease({ signer, sumsVersion = VERSION, zips = { x64: buildZip() }
 	return files;
 }
 
-const GITHUB = `https://github.com/opensec-git/Rapid Pi/releases/download/bolt-v${VERSION}`;
+const GITHUB = `https://github.com/ylstack1/RapidPi/releases/download/bolt-v${VERSION}`;
 const REGISTRY = "https://registry.npmjs.org";
 const npmUrl = (variant = "x64") => `${REGISTRY}/@kushalkhemka/rapid-pi-win32-${variant}/-/rapid-pi-win32-${variant}-${VERSION}.tgz`;
 

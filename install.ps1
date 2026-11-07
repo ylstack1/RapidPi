@@ -34,8 +34,8 @@
 
 # The public key that releases are signed with (keys/release.pub in the repository; scripts/sign-release.sh).
 $PiBoltReleaseKey = 'MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY='
-$PiBoltRepo = 'https://github.com/opensec-git/Rapid Pi'
-$PiBoltApi = 'https://api.github.com/repos/opensec-git/Rapid Pi'
+$PiBoltRepo = 'https://github.com/ylstack1/RapidPi'
+$PiBoltApi = 'https://api.github.com/repos/ylstack1/RapidPi'
 
 # --- Modules ---------------------------------------------------------------------------------------------------------------
 # PowerShell 7 passes its own module directories to everything it starts, and they come before this PowerShell's own. An

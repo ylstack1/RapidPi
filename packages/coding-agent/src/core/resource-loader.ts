@@ -50,7 +50,7 @@ import { resetTimings } from "./timings.ts";
 // Rapid Pi shares Pi's agent directory, so a package installed for one runtime is loaded by the other too.
 const TOOL_CONFLICT_HINT =
 	". Two packages provide this tool: exclude one with rapid-pi remove --rapid-pi <source>" +
-	" (add --local for a project package; https://github.com/opensec-git/Rapid Pi#pi-and-rapid-pi-side-by-side)";
+	" (add --local for a project package; https://github.com/ylstack1/RapidPi#pi-and-rapid-pi-side-by-side)";
 
 export interface ResourceExtensionPaths {
 	skillPaths?: Array<{ path: string; metadata: PathMetadata }>;

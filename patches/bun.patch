@@ -7386,10 +7386,10 @@ index 91e2ee80..f4246de1 100644
 +    /// crashes go to Rapid Pi, with the trace in the same encoding, which Rapid Pi decodes against its own symbols.
 +    const PI_BOLT_REPORT_BASE_URL: &str = "https://rapid-pi.opensec.in/crash";
 +    const PI_BOLT_CRASH_MESSAGE: &[u8] = b"Rapid Pi has crashed. This is a bug in Rapid Pi, not in your code.\n\n\
-+        Please report it at https://github.com/opensec-git/Rapid Pi/issues/new\n\
++        Please report it at https://github.com/ylstack1/RapidPi/issues/new\n\
 +        with the link below and what you were doing:\n\n";
 +    const PI_BOLT_OOM_MESSAGE: &[u8] = b"Rapid Pi has run out of memory.\n\n\
-+        Please report it at https://github.com/opensec-git/Rapid Pi/issues/new\n\
++        Please report it at https://github.com/ylstack1/RapidPi/issues/new\n\
 +        with the link below and what you were doing:\n\n";
 +
 +    // A Rapid Pi executable: one that carries code compiled ahead of time, whether it uses it or not (on a CPU it was not

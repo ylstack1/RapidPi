@@ -9,11 +9,11 @@ bundled Pi extensions), `runtimes/` (Node.js, npm, Python, pip) and `esbuild/` (
 
 The complete corresponding source of every GPL and LGPL component listed here, including our build scripts and
 the changes we made, is published with each release of the app as the asset
-`rapid-pi-android-engine-sources.tar` next to the APK (https://github.com/opensec-git/Rapid Pi/releases). It contains
+`rapid-pi-android-engine-sources.tar` next to the APK (https://github.com/ylstack1/RapidPi/releases). It contains
 the glibc release tarball, Termux's glibc patches, the git and curl release tarballs, the Debian source packages of
 bash and busybox, and the scripts that build this engine pack (`android/engine/` in the repository). The source is
 also available on request for three years from the release date: open an issue at
-https://github.com/opensec-git/Rapid Pi/issues.
+https://github.com/ylstack1/RapidPi/issues.
 
 ## Components
 

@@ -20,7 +20,7 @@ VERSION="${1:-}"
 DRY_RUN="${2:-}"
 [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && ( -z "$DRY_RUN" || "$DRY_RUN" == "--dry-run" ) ]] ||
 	die "usage: publish-android-download.sh VERSION [--dry-run] (VERSION like 0.1.0)"
-REPO="${GITHUB_REPOSITORY:-opensec-git/Rapid Pi}"
+REPO="${GITHUB_REPOSITORY:-ylstack1/RapidPi}"
 TAG="android-v$VERSION"
 APK="rapid-pi-android-$VERSION.apk"
 PAGES_POLL_SECONDS="${PAGES_POLL_SECONDS:-5}"

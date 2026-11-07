@@ -16,7 +16,7 @@ while [ $# -gt 0 ]; do
 	shift
 done
 need curl
-REPO="https://github.com/opensec-git/Rapid Pi"
+REPO="https://github.com/ylstack1/RapidPi"
 if [ "$TAG" = latest ]; then BASE="$REPO/releases/latest/download"; else BASE="$REPO/releases/download/$TAG"; fi
 BASE="${RAPIDPI_DOWNLOAD_BASE:-$BASE}"
 NAME=rapid-pi-runtime-$RAPIDPI_PLATFORM.tar.gz

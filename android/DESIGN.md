@@ -1231,7 +1231,7 @@ you close them"). Lock screens show only a public title and "Unlock to see it".
 
 The app is sideloaded, so it updates itself from GitHub releases. Source of truth: `rapid-pi.opensec.in/android.json`
 (written by the Android release workflow), or GitHub's newest `android-v*` release when the site is down. Both are a
-plain GET with no identifiers. The APK URL must be under `github.com/opensec-git/Rapid Pi/releases/download/`.
+plain GET with no identifiers. The APK URL must be under `github.com/ylstack1/RapidPi/releases/download/`.
 - Check: on launch at most once a day (on IO, "Check for updates automatically", on by default) and from Settings >
   About > "Check for updates". About shows "Up to date (0.2.1)" or "0.2.2 is available · 109 MB", then "Checked 3 min
   ago".

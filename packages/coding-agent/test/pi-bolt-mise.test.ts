@@ -21,7 +21,7 @@ vi.mock("../src/utils/version-check.ts", async (importOriginal) => ({
 	getLatestPiRelease: async () => ({ version: "1.0.1" }),
 }));
 
-const GITHUB_TOOL = "github:opensec-git/Rapid Pi";
+const GITHUB_TOOL = "github:ylstack1/RapidPi";
 const realExecPath = process.execPath;
 let dir: string;
 let installs: string;
@@ -31,7 +31,7 @@ function runningFrom(execPath: string): void {
 }
 
 /**
- * What `mise use github:opensec-git/Rapid Pi` installs (with the options in docs: the release's archive, `pi` renamed to
+ * What `mise use github:ylstack1/RapidPi` installs (with the options in docs: the release's archive, `pi` renamed to
  * `rapid-pi`, and only that on PATH): the archive's folder, unpacked into <data>/installs/<tool folder>/<version>, with links
  * for the version prefixes. Returns the folder; rapid-pi there starts pi-bin beside it.
  */

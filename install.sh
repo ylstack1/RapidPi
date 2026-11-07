@@ -43,8 +43,8 @@ MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY=
 ESC=$(printf '\033')
 CR=$(printf '\r')
 ETX=$(printf '\003')
-REPO="https://github.com/opensec-git/Rapid Pi"
-API="https://api.github.com/repos/opensec-git/Rapid Pi"
+REPO="https://github.com/ylstack1/RapidPi"
+API="https://api.github.com/repos/ylstack1/RapidPi"
 NPM_REGISTRY="${RAPIDPI_NPM_REGISTRY:-https://registry.npmjs.org}"
 
 main() {

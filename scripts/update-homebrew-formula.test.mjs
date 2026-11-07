@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import { updateFormula } from "./update-homebrew-formula.mjs";
 
 const script = fileURLToPath(new URL("./update-homebrew-formula.mjs", import.meta.url));
-const base = "https://github.com/opensec-git/Rapid Pi/releases/download";
+const base = "https://github.com/ylstack1/RapidPi/releases/download";
 const old = (n) => String(n).repeat(64);
 const sum = (c) => c.repeat(64);
 

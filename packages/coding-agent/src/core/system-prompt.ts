@@ -278,7 +278,7 @@ function buildSystemPromptSectionsUncached(input: BuildSystemPromptOptions): Sys
 - When asked about: extensions (docs/extensions.md, examples/extensions/), themes (docs/themes.md), skills (docs/skills.md), prompt templates (docs/prompt-templates.md), TUI components (docs/tui.md), keybindings (docs/keybindings.md), SDK integrations (docs/sdk.md), custom providers (docs/custom-provider.md), adding models (docs/models.md), packages (docs/packages.md), environment variables (docs/environment-variables.md), MCP servers (docs/mcp.md), codemode scripts and non-LLM models such as classifiers and image models (docs/codemode.md)
 - Before implementing harness changes, read the relevant docs and examples in full, following related cross-references.${
 			RAPIDPI
-				? "\n- This is Rapid Pi: its command is `rapid-pi`, and it is updated with `rapid-pi update` (https://github.com/opensec-git/Rapid Pi). The install and update commands in pi's README install pi itself, not Rapid Pi: do not suggest them."
+				? "\n- This is Rapid Pi: its command is `rapid-pi`, and it is updated with `rapid-pi update` (https://github.com/ylstack1/RapidPi). The install and update commands in pi's README install pi itself, not Rapid Pi: do not suggest them."
 				: ""
 		}`;
 	}

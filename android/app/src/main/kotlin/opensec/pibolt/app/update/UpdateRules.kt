@@ -30,8 +30,8 @@ data class UpdateSource(val manifestUrl: String, val apkPrefix: String, val gith
     companion object {
         val RELEASE = UpdateSource(
             manifestUrl = "https://rapid-pi.opensec.in/android.json",
-            apkPrefix = "https://github.com/opensec-git/Rapid Pi/releases/download/",
-            githubReleasesUrl = "https://api.github.com/repos/opensec-git/Rapid Pi/releases?per_page=100",
+            apkPrefix = "https://github.com/ylstack1/RapidPi/releases/download/",
+            githubReleasesUrl = "https://api.github.com/repos/ylstack1/RapidPi/releases?per_page=100",
         )
     }
 }

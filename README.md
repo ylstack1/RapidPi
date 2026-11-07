@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/opensec-git/Rapid Pi">
+  <a href="https://github.com/ylstack1/RapidPi">
     <img alt="Rapid Pi logo" src="docs/images/logo.svg" width="128">
   </a>
 </p>
@@ -13,10 +13,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/opensec-git/Rapid Pi/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/opensec-git/Rapid Pi/ci.yml?branch=rapid-pi&event=push&style=flat-square&label=ci&logo=githubactions&logoColor=white" /></a>
-  <a href="https://github.com/opensec-git/Rapid Pi/releases/latest"><img alt="Latest release" src="https://img.shields.io/npm/v/rapid-pi?style=flat-square&label=release&color=2a78d6" /></a>
+  <a href="https://github.com/ylstack1/RapidPi/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/ylstack1/RapidPi/ci.yml?branch=rapid-pi&event=push&style=flat-square&label=ci&logo=githubactions&logoColor=white" /></a>
+  <a href="https://github.com/ylstack1/RapidPi/releases/latest"><img alt="Latest release" src="https://img.shields.io/npm/v/rapid-pi?style=flat-square&label=release&color=2a78d6" /></a>
   <a href="https://www.npmjs.com/package/rapid-pi"><img alt="npm downloads" src="https://img.shields.io/npm/dm/rapid-pi?style=flat-square&logo=npm&logoColor=white&label=downloads&color=2a78d6" /></a>
-  <a href="https://github.com/opensec-git/Rapid Pi/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/opensec-git/Rapid Pi?style=flat-square&logo=github&logoColor=white&color=f0b03a" /></a>
+  <a href="https://github.com/ylstack1/RapidPi/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ylstack1/RapidPi?style=flat-square&logo=github&logoColor=white&color=f0b03a" /></a>
   <a href="sources.json"><img alt="The Pi release Rapid Pi is built on" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fopensec-git%2FRapid Pi%2Frapid-pi%2Fsources.json&query=%24.pi.tag&label=built%20on%20pi&color=f0b03a&style=flat-square" /></a>
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-1baf7a?style=flat-square" /></a>
   <br>
@@ -89,9 +89,9 @@ Or:
 - Homebrew (macOS on Apple silicon, Linux): `brew install opensec-git/tap/rapid-pi`, updated with `brew upgrade rapid-pi`
 - Scoop (Windows): `scoop bucket add opensec-git https://github.com/opensec-git/scoop-bucket`, then
   `scoop install opensec-git/rapid-pi`, updated with `scoop update rapid-pi`
-- mise: `github:opensec-git/Rapid Pi` with the options in the
+- mise: `github:ylstack1/RapidPi` with the options in the
   [installation guide](https://rapid-pi.opensec.in/docs/installation.html), updated with
-  `mise upgrade --bump github:opensec-git/Rapid Pi`
+  `mise upgrade --bump github:ylstack1/RapidPi`
 - npm: `npm install -g --allow-scripts=rapid-pi rapid-pi`
 - Bun: `bun add -g --trust rapid-pi`
 - Arch Linux: the community AUR package
@@ -150,7 +150,7 @@ names the extension and gives the command that switches to the JIT build.
 <details>
 <summary><b>Manual download</b></summary>
 
-Download a build from the [latest release](https://github.com/opensec-git/Rapid Pi/releases/latest), check it against
+Download a build from the [latest release](https://github.com/ylstack1/RapidPi/releases/latest), check it against
 `SHA256SUMS`, unpack it and run `./pi` (on Windows, `rapid-pi.exe`).
 
 | Download | For |
@@ -392,7 +392,7 @@ issues privately, as described in [SECURITY.md](SECURITY.md).
 <summary><b>Build from source</b></summary>
 
 ```bash
-git clone https://github.com/opensec-git/Rapid Pi.git && cd Rapid Pi
+git clone https://github.com/ylstack1/RapidPi.git && cd Rapid Pi
 scripts/fetch-runtime.sh            # the released Rapid Pi runtime (or build it: docs/BUILDING.md)
 scripts/prepare-pi.sh               # builds the Pi in this repository
 scripts/build-pi.sh                 # out/rapid-pi/pi

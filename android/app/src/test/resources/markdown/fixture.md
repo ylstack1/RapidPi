@@ -1,7 +1,7 @@
 # Markdown fixture
 
 A paragraph with **bold**, *italic*, ***both***, ~~struck~~, `inline code`, and a [link](https://example.com "title").
-Autolinks: <https://pi.dev/docs>, bare https://github.com/opensec-git/Rapid Pi and www.example.org, mail <team@example.com>.
+Autolinks: <https://pi.dev/docs>, bare https://github.com/ylstack1/RapidPi and www.example.org, mail <team@example.com>.
 Escapes: \*not italic\*, \_no\_, \# no heading, \[no link\], a back\\slash, 1\. not a list.
 Entities: &copy; 2026 &mdash; Tom &amp; Jerry &lt;tag&gt; &#169; &#x1F680; &nbsp;done.
 Hard break with two spaces  

@@ -18,7 +18,7 @@ Rapid Pi is built in two stages:
 Needs git, Node.js 22.19 or later with npm (to build Pi), Python 3, and rsync (for plugins).
 
 ```bash
-git clone https://github.com/opensec-git/Rapid Pi.git && cd Rapid Pi
+git clone https://github.com/ylstack1/RapidPi.git && cd Rapid Pi
 scripts/fetch-runtime.sh     # the Rapid Pi runtime from the latest release -> .work/runtime/bun
 scripts/prepare-pi.sh        # builds the Pi in this repository (Rapid Pi is a fork of Pi)
 scripts/build-pi.sh          # -> out/rapid-pi/pi

@@ -1,12 +1,12 @@
 <p align="center">
-  <a href="https://github.com/opensec-git/Rapid Pi">
-    <img alt="Rapid Pi logo" src="https://raw.githubusercontent.com/opensec-git/Rapid Pi/HEAD/docs/images/logo.svg" width="112">
+  <a href="https://github.com/ylstack1/RapidPi">
+    <img alt="Rapid Pi logo" src="https://raw.githubusercontent.com/ylstack1/RapidPi/HEAD/docs/images/logo.svg" width="112">
   </a>
 </p>
 <p align="center">
   <a href="https://www.npmjs.com/package/rapid-pi"><img alt="npm" src="https://img.shields.io/npm/v/rapid-pi?style=flat-square&color=2a78d6" /></a>
-  <a href="https://github.com/opensec-git/Rapid Pi/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/opensec-git/Rapid Pi?style=flat-square&color=f0b03a" /></a>
-  <a href="https://github.com/opensec-git/Rapid Pi/blob/HEAD/LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-1baf7a?style=flat-square" /></a>
+  <a href="https://github.com/ylstack1/RapidPi/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/ylstack1/RapidPi?style=flat-square&color=f0b03a" /></a>
+  <a href="https://github.com/ylstack1/RapidPi/blob/HEAD/LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-1baf7a?style=flat-square" /></a>
 </p>
 
 # rapid-pi
@@ -17,8 +17,8 @@ about a third of its CPU over a session, with no JIT. (Measured on one Linux ser
 your machine will differ, the ratios less so.)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/opensec-git/Rapid Pi/HEAD/docs/images/bench-hero-dark.svg">
-  <img alt="Rapid Pi 0.8.0 vs Pi on Bun 1.4.2 vs Pi on Node 24: ready to type 45 / 128 / 316 ms; CPU per session 294 / 871 / 1,241 ms; CPU while streaming 348 / 572 / 528 ms; memory after a long session 187 / 275 / 576 MB" src="https://raw.githubusercontent.com/opensec-git/Rapid Pi/HEAD/docs/images/bench-hero-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ylstack1/RapidPi/HEAD/docs/images/bench-hero-dark.svg">
+  <img alt="Rapid Pi 0.8.0 vs Pi on Bun 1.4.2 vs Pi on Node 24: ready to type 45 / 128 / 316 ms; CPU per session 294 / 871 / 1,241 ms; CPU while streaming 348 / 572 / 528 ms; memory after a long session 187 / 275 / 576 MB" src="https://raw.githubusercontent.com/ylstack1/RapidPi/HEAD/docs/images/bench-hero-light.svg">
 </picture>
 
 ## Install
@@ -85,7 +85,7 @@ placeholder that the package's install script (`install.cjs`, plain Node.js) rep
 **On Linux and macOS** the install script puts a small shell script there:
 
 1. **On the first run**, it downloads the Rapid Pi build that matches the package version, from the npm registry or, failing
-   that, from the [GitHub release](https://github.com/opensec-git/Rapid Pi/releases). It checks the download against the
+   that, from the [GitHub release](https://github.com/ylstack1/RapidPi/releases). It checks the download against the
    release's SHA-256 checksums and their signature (checked with OpenSSL 3 where there is one), then keeps it in `~/.rapid-pi/npm/<version>` and removes the versions installed before it.
 2. **On every run**, it replaces itself with that native executable (`exec`). No Node.js or Bun process stays in between, and
    startup is the same as running the executable directly.
@@ -145,10 +145,10 @@ On Windows the executable is in the package's folder, and is removed with it.
 
 ## Links
 
-- Source, documentation and benchmarks: [github.com/opensec-git/Rapid Pi](https://github.com/opensec-git/Rapid Pi)
-- Compiling Pi extensions into the executable: [docs/PLUGINS.md](https://github.com/opensec-git/Rapid Pi/blob/HEAD/docs/PLUGINS.md)
-- Problems: [troubleshooting](https://github.com/opensec-git/Rapid Pi/blob/HEAD/docs/TROUBLESHOOTING.md) and
-  [issues](https://github.com/opensec-git/Rapid Pi/issues)
+- Source, documentation and benchmarks: [github.com/ylstack1/RapidPi](https://github.com/ylstack1/RapidPi)
+- Compiling Pi extensions into the executable: [docs/PLUGINS.md](https://github.com/ylstack1/RapidPi/blob/HEAD/docs/PLUGINS.md)
+- Problems: [troubleshooting](https://github.com/ylstack1/RapidPi/blob/HEAD/docs/TROUBLESHOOTING.md) and
+  [issues](https://github.com/ylstack1/RapidPi/issues)
 
 Rapid Pi is a fork of [Pi](https://github.com/earendil-works/pi) by an independent team, not affiliated with Pi's authors.
 
