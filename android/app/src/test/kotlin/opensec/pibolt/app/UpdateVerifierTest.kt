@@ -1,10 +1,10 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.update.PackageFacts
-import opensec.pibolt.app.update.PackageInspector
-import opensec.pibolt.app.update.UpdateInfo
-import opensec.pibolt.app.update.UpdateVerifier
-import opensec.pibolt.app.update.VerifyResult
+import opensec.rapidpi.app.update.PackageFacts
+import opensec.rapidpi.app.update.PackageInspector
+import opensec.rapidpi.app.update.UpdateInfo
+import opensec.rapidpi.app.update.UpdateVerifier
+import opensec.rapidpi.app.update.VerifyResult
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 class UpdateVerifierTest {
     private val ours = "f752464c8b6d5906d7fd467346b89316518e3ddfe77843f66b1fa673818a2c90"
     private val other = "0".repeat(64)
-    private val pkg = "in.opensec.pibolt"
+    private val pkg = "in.opensec.rapidpi"
     private val file: File = File.createTempFile("update", ".apk").apply { writeText("pretend apk") }
     private val sha = UpdateVerifier.sha256(file)
     private val installed = PackageFacts(pkg, 201, setOf(ours))

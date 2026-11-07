@@ -3,7 +3,7 @@
 the pace of a fast model. Each chunk makes the TUI render the message again, so what a chunk costs must not grow with the
 length of the answer.
 
-Example: bench/long_answer.py --build pi-bolt=./out/pi-bolt/pi --build bun=./out/pi-stable/pi
+Example: bench/long_answer.py --build rapid-pi=./out/rapid-pi/pi --build bun=./out/pi-stable/pi
 """
 
 import argparse

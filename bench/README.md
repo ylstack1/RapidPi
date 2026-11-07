@@ -1,6 +1,6 @@
 # Benchmark and end-to-end test tools
 
-Every tool takes the builds to compare as `--build name=command`. The command can be an executable (`out/pi-bolt/pi`) or a
+Every tool takes the builds to compare as `--build name=command`. The command can be an executable (`out/rapid-pi/pi`) or a
 command line (`"node packages/coding-agent/dist/bundle/cli.js"`). Each run gets its own scripted model server and a
 throwaway Pi home, so runs are isolated from your Pi configuration and from each other.
 
@@ -23,9 +23,9 @@ throwaway Pi home, so runs are isolated from your Pi configuration and from each
 | `tmux_load.py` | What Pi costs the multiplexer it runs in: Pi in a tmux pane with a client attached. CPU of Pi and of the tmux server, bytes Pi writes, bytes tmux sends its client. |
 | `pauses.py` | The longest stretch in which the TUI writes nothing while it should be drawing (large files written through a tool call, a streamed answer): the program busy with one thing. Also the p99 frame time (time between screen updates), and with `--gc` the garbage collector's pauses (p99, longest): JavaScriptCore's own log (`BUN_JSC_logGC=1`) for Bun builds, a preloaded `perf_hooks` observer (`gc_log.cjs`) for Node, sent to a file instead of the terminal. |
 | `plugin_bench.py` | A Pi extension compiled into the executable vs loaded at run time: launch time and the plugin's hot loop. |
-| `aot_coverage.py` | What of a Pi-Bolt build runs outside its compiled code, scenario by scenario (headless, interactive, a long answer, tool calls, the three APIs, a long session): the functions that ran without code in the image (interpreted, with the JIT off), the regular expressions compiled at run time (those missing from the training profile), and the inline cache slots filled. From the runtime's own log (`BUN_JSC_verboseAOTCompilation=1`). |
+| `aot_coverage.py` | What of a Rapid Pi build runs outside its compiled code, scenario by scenario (headless, interactive, a long answer, tool calls, the three APIs, a long session): the functions that ran without code in the image (interpreted, with the JIT off), the regular expressions compiled at run time (those missing from the training profile), and the inline cache slots filled. From the runtime's own log (`BUN_JSC_verboseAOTCompilation=1`). |
 | `run-suite.sh` | Runs all of the benchmarks above into one results folder, then `report.py`: what the README and docs/BENCHMARKS.md show. |
-| `run-suite.ps1` | The same on Windows: Pi-Bolt, Pi on stock Bun, Node 22 and Node 24; `conpty_check.py` for `tmux_check.py`, and `pauses.py` (frames and GC pauses), `long_answer.py` and `large_write.py` too. Writes `environment.txt` (CPU, Windows build, Defender, power) and `summary.md`. |
+| `run-suite.ps1` | The same on Windows: Rapid Pi, Pi on stock Bun, Node 22 and Node 24; `conpty_check.py` for `tmux_check.py`, and `pauses.py` (frames and GC pauses), `long_answer.py` and `large_write.py` too. Writes `environment.txt` (CPU, Windows build, Defender, power) and `summary.md`. |
 | `report.py` | Draws the charts (light and dark SVG) and prints the tables, from a results folder. |
 | `fake_model.py`, `fake_model_tools.py`, `fake_model_stress.py` | The scripted OpenAI-compatible model servers the tools start. |
 | `harness.py` | Shared pieces: build parsing, model server, Pi home, pseudo-terminal, CPU and memory readings. |
@@ -53,8 +53,8 @@ power. Memory is reported several ways, because Windows counts it several ways:
 
 Full suite: `powershell -ExecutionPolicy Bypass -File bench\run-suite.ps1 -Out bench\results\<date>-windows` (the builds are
 parameters; see the top of the script). `plugin_bench.py --compiled` needs a build with the plugin compiled in:
-`scripts\build-pi.ps1 -Plugins examples\plugins\plugins.ts -Out out\pi-bolt-plugins` (and `-Jit on -Out out\pi-bolt-plugins-jit`).
-The suite measures those, and `out\pi-bolt-aot-lto-jit` loaded at run time, when they are there, as run-suite.sh does.
+`scripts\build-pi.ps1 -Plugins examples\plugins\plugins.ts -Out out\rapid-pi-plugins` (and `-Jit on -Out out\rapid-pi-plugins-jit`).
+The suite measures those, and `out\rapid-pi-aot-lto-jit` loaded at run time, when they are there, as run-suite.sh does.
 
 ### The process floor
 
@@ -73,5 +73,5 @@ takes one built already, `-NoFloor` leaves it out. By hand (from a shell with C:
 
 ```powershell
 clang-cl /nologo /O2 /MT /guard:cf bench\floor\floor.c /Fo$env:TEMP\ /Fe$env:TEMP\floor.exe /link /DYNAMICBASE /HIGHENTROPYVA /NXCOMPAT /guard:cf
-python bench\benchmark.py --floor $env:TEMP\floor.exe --build pi-bolt=out\pi-bolt-aot-lto\pi.exe --build bun=out\pi-stable-upstream\pi.exe
+python bench\benchmark.py --floor $env:TEMP\floor.exe --build rapid-pi=out\rapid-pi-aot-lto\pi.exe --build bun=out\pi-stable-upstream\pi.exe
 ```

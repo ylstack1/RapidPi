@@ -1,11 +1,11 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.checkpoints.TurnRecord
-import opensec.pibolt.app.checkpoints.UndoEntry
-import opensec.pibolt.app.ui.session.review.SessionChanges
-import opensec.pibolt.app.ui.session.voice.VoiceLevel
-import opensec.pibolt.app.ui.session.voice.VoiceText
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.checkpoints.TurnRecord
+import opensec.rapidpi.app.checkpoints.UndoEntry
+import opensec.rapidpi.app.ui.session.review.SessionChanges
+import opensec.rapidpi.app.ui.session.voice.VoiceLevel
+import opensec.rapidpi.app.ui.session.voice.VoiceText
+import opensec.rapidpi.protocol.session.UserItem
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

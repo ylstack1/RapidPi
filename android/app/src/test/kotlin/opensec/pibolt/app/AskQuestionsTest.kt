@@ -1,23 +1,23 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.ui.session.ask.AskAnswer
-import opensec.pibolt.app.ui.session.ask.AskOption
-import opensec.pibolt.app.ui.session.ask.AskQuestion
-import opensec.pibolt.app.ui.session.ask.AskQuestions
-import opensec.pibolt.app.ui.session.ask.AskQuestions.Step
-import opensec.pibolt.app.ui.session.ask.AskReply
-import opensec.pibolt.app.ui.session.ask.AskResponder
-import opensec.pibolt.app.ui.session.ask.AskSubmission
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.session.DialogKind
-import opensec.pibolt.protocol.session.DialogRequest
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.ui.session.ask.AskAnswer
+import opensec.rapidpi.app.ui.session.ask.AskOption
+import opensec.rapidpi.app.ui.session.ask.AskQuestion
+import opensec.rapidpi.app.ui.session.ask.AskQuestions
+import opensec.rapidpi.app.ui.session.ask.AskQuestions.Step
+import opensec.rapidpi.app.ui.session.ask.AskReply
+import opensec.rapidpi.app.ui.session.ask.AskResponder
+import opensec.rapidpi.app.ui.session.ask.AskSubmission
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.session.DialogKind
+import opensec.rapidpi.protocol.session.DialogRequest
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -158,13 +158,13 @@ class AskQuestionsTest {
         var state = SessionState(hello = true, items = listOf(UserItem("u1", "go")))
         for (e in events) state = SessionReducer.reduce(state, e)
         val declined = state.allItems.filterIsInstance<ToolItem>().last()
-        assertTrue(opensec.pibolt.app.ui.session.isDeclinedAsk(declined))
-        assertEquals("Declined", opensec.pibolt.app.ui.session.toolLabel(declined).past)
+        assertTrue(opensec.rapidpi.app.ui.session.isDeclinedAsk(declined))
+        assertEquals("Declined", opensec.rapidpi.app.ui.session.toolLabel(declined).past)
         var answered = SessionState(hello = true, items = listOf(UserItem("u1", "go")))
         for (e in EngineFixture.events("ask-back")) answered = SessionReducer.reduce(answered, e)
         val ok = answered.allItems.filterIsInstance<ToolItem>().last()
-        assertTrue(!opensec.pibolt.app.ui.session.isDeclinedAsk(ok))
-        assertEquals("Asked", opensec.pibolt.app.ui.session.toolLabel(ok).past)
+        assertTrue(!opensec.rapidpi.app.ui.session.isDeclinedAsk(ok))
+        assertEquals("Asked", opensec.rapidpi.app.ui.session.toolLabel(ok).past)
     }
 
     @Test

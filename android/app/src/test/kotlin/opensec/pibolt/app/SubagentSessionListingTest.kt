@@ -1,6 +1,6 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.engine.SessionIndex
+import opensec.rapidpi.app.engine.SessionIndex
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test

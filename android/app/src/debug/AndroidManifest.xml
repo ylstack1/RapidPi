@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <application>
         <activity
-            android:name="opensec.pibolt.app.engine.EngineDebugActivity"
+            android:name="opensec.rapidpi.app.engine.EngineDebugActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.PiBolt"

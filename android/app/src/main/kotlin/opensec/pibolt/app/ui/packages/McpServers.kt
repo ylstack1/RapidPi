@@ -1,12 +1,12 @@
-package opensec.pibolt.app.ui.packages
+package opensec.rapidpi.app.ui.packages
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.str
 
 /** One MCP server as `pi mcp list --json` reports it (packages/coding-agent/src/extensions/mcp/cli.ts). */
 @Immutable

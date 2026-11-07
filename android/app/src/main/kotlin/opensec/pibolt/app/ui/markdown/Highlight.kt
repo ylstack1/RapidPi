@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiColors
 
 /** The style of one token kind in [colors] (DESIGN.md, Syntax). */
 fun tokenStyle(kind: Highlighter.Kind, colors: PiColors): SpanStyle {

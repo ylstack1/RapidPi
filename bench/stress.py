@@ -13,7 +13,7 @@
 
 A crash is: death by a signal Pi did not ask for, or a crash report ("panic", "has crashed", "Segmentation fault") in the output.
 
-Example: bench/stress.py --reference stable=./out/pi-stable/pi --build pi-bolt=./out/pi-bolt/pi --concurrency 32 --soak 300
+Example: bench/stress.py --reference stable=./out/pi-stable/pi --build rapid-pi=./out/rapid-pi/pi --concurrency 32 --soak 300
 """
 
 import argparse

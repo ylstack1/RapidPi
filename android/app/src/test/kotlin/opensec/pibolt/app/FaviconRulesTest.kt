@@ -1,6 +1,6 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.session.web.FaviconRules
+import opensec.rapidpi.app.ui.session.web.FaviconRules
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

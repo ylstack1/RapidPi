@@ -1,4 +1,4 @@
-package opensec.pibolt.app.secrets
+package opensec.rapidpi.app.secrets
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -43,7 +43,7 @@ class SecretBox(private val key: () -> SecretKey) {
         private const val KEYSTORE = "AndroidKeyStore"
 
         /** The app's secrets key in the Android Keystore (created on first use; it never leaves the keystore). */
-        fun keystoreKey(alias: String = "pibolt.project-secrets"): SecretKey {
+        fun keystoreKey(alias: String = "rapidpi.project-secrets"): SecretKey {
             val store = KeyStore.getInstance(KEYSTORE).apply { load(null) }
             (store.getKey(alias, null) as? SecretKey)?.let { return it }
             val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, KEYSTORE)

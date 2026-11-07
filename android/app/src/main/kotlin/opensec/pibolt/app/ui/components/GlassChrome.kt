@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -30,11 +30,11 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Tnum
 
 /**
  * Screen chrome of the redesign, built on the kit in Glass.kt (DESIGN.md "Components"): a bar of glass buttons, the

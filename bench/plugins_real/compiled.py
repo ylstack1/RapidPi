@@ -1,4 +1,4 @@
-"""OpenSec's extensions compiled into Pi-Bolt (scripts\\build-pi.ps1 -Plugins plugins\\opensec\\plugins.ts) against the same
+"""OpenSec's extensions compiled into Rapid Pi (scripts\\build-pi.ps1 -Plugins plugins\\opensec\\plugins.ts) against the same
 extensions installed from npm on the build without them: what their actions cost each way. Against fake_model.py on 127.0.0.1.
 
   python compiled.py WITHOUT_EXE WITH_EXE [--runs N] [--out FILE]

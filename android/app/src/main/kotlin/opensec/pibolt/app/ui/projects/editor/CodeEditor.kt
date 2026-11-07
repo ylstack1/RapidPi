@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.editor
+package opensec.rapidpi.app.ui.projects.editor
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
@@ -44,10 +44,10 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.markdown.Highlighter
-import opensec.pibolt.app.ui.markdown.applyTokens
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.markdown.Highlighter
+import opensec.rapidpi.app.ui.markdown.applyTokens
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
 import kotlin.math.abs
 
 /** A request to scroll an offset into view; a new [id] each time, so the same place can be asked for twice. */

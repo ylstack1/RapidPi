@@ -8,13 +8,13 @@
  *
  * The discovery rules below are Pi's, and Pi is the source of truth for them:
  * packages/coding-agent/src/core/package-manager.ts, `collectAutoExtensionEntries` and `resolveExtensionEntries`. They are
- * repeated here rather than imported because this script belongs to Pi-Bolt and those functions are Pi's, and private.
+ * repeated here rather than imported because this script belongs to Rapid Pi and those functions are Pi's, and private.
  * `assertMatchesPiRules` in scripts/gen-plugin-manifest.test.mjs covers each rule, so a change in Pi shows up as a failing
  * test rather than as a short manifest.
  *
- * It is in the coding agent's package, and its build copies it into dist, because `pi-bolt compile` imports it to plan a
+ * It is in the coding agent's package, and its build copies it into dist, because `rapid-pi compile` imports it to plan a
  * compile before it downloads anything. scripts/gen-plugin-manifest.mjs runs it in a checkout; scripts/make-kit.mjs copies it
- * into the compile kit, where `pi-bolt compile` runs it by itself.
+ * into the compile kit, where `rapid-pi compile` runs it by itself.
  *
  * Usage: scripts/gen-plugin-manifest.mjs --out DIR [options]
  *   --out DIR           where the plugin folder goes (required; replaced if a previous run wrote it)
@@ -24,8 +24,8 @@
  *   --exclude a,b       every extension except these (repeatable)
  *   --no-packages       leave out the packages `pi install` installed
  *   --packages FILE     the packages to compile in, instead of the `packages` setting's npm: packages: a JSON list of
- *                       { source, root, entries }, as `pi-bolt compile` resolves them (piBolt.packages applied)
- *   --enabled FILE      the extensions Pi loads, as `pi-bolt compile` resolves them (a JSON list of paths): any other
+ *                       { source, root, entries }, as `rapid-pi compile` resolves them (rapidPi.packages applied)
+ *   --enabled FILE      the extensions Pi loads, as `rapid-pi compile` resolves them (a JSON list of paths): any other
  *                       found is one the `extensions` setting turns off, and is passed over
  *   --no-jit            for the build without the JIT: package.json files without their "bun" conditions, and a failing
  *                       import in place of each package that needs bun:ffi, as Pi loads them from their files there
@@ -458,7 +458,7 @@ export function planPlugins(options) {
 		// (A file of its own: only it and what it imports are copied, not its whole folder, which may be the home folder.)
 		addEntry(path, "configured", dirname(path), true);
 	}
-	// The extensions Pi loads, when `pi-bolt compile` gives them (--enabled): those the `extensions` setting turns off are
+	// The extensions Pi loads, when `rapid-pi compile` gives them (--enabled): those the `extensions` setting turns off are
 	// not loaded by Pi, so not compiled in, and one that would not build does not stop the build (#8 of the loader-parity
 	// review).
 	if (options.enabled) {
@@ -543,8 +543,8 @@ export function planPlugins(options) {
 
 	const skipped = [...passedOver, ...passedOverEntries, ...roots.flatMap((root) => describeSkipped(root.root, seen))];
 
-	// Each package: its folder, the name it is known by, and its entries. `pi-bolt compile` gives the packages Pi-Bolt loads
-	// (`options.packages`: piBolt.packages applied, each with its entries as Pi resolves them); without it, the npm: packages
+	// Each package: its folder, the name it is known by, and its entries. `rapid-pi compile` gives the packages Rapid Pi loads
+	// (`options.packages`: rapidPi.packages applied, each with its entries as Pi resolves them); without it, the npm: packages
 	// of the `packages` setting.
 	const installed = [];
 	/** Each package's entry in `installed`, by its stage folder. */
@@ -777,14 +777,14 @@ function importsByName(previous, source, end) {
  * with a single warning.
  *
  * Each copy therefore has those expressions replaced with what they are in the file it was copied from: the installed
- * extension, by the path Pi loads it from when it loads it from its files. With `pi-bolt compile` that is right for as long as
- * the compiled-in extension runs: Pi-Bolt uses it only while its installed copy is unchanged (core/extensions/compiled.ts),
+ * extension, by the path Pi loads it from when it loads it from its files. With `rapid-pi compile` that is right for as long as
+ * the compiled-in extension runs: Rapid Pi uses it only while its installed copy is unchanged (core/extensions/compiled.ts),
  * and loads the installed files instead once they change. A build from `build-pi.sh --plugins-from-installed` has no such
  * check, so its extensions read those files from where they are installed, and need to stay installed. Only the copies are
  * changed. A manifest written by hand (`--plugins`) is not this script's, and is built as it is: its folder may be anywhere,
  * and the executable may go to another machine.
  *
- * The same goes for what the bundler resolves per module against the copy, which `pi-bolt compile` deletes, or leaves to
+ * The same goes for what the bundler resolves per module against the copy, which `rapid-pi compile` deletes, or leaves to
  * resolve as the program runs from the executable's own file system, `/$bunfs` (#5 of the loader-parity review): `__dirname`
  * and `__filename` (a data file, or a native addon loaded as node-gyp-build and bindings load one), `require.resolve()`,
  * `import.meta.resolve()`, and a require() or an import() of anything but a string (a module chosen as it runs, `"./" + name`
@@ -852,7 +852,7 @@ const PI_MODULE = "/^(?:typebox|@sinclair\\/typebox|@(?:earendil-works|mariozech
 
 /**
  * `text` as a JavaScript string literal for code that is made here, with the characters that can end a script or a line
- * written as escapes (as pi-bolt-compile.ts's jsStringLiteral).
+ * written as escapes (as rapid-pi-compile.ts's jsStringLiteral).
  */
 const codeString = (text) =>
 	JSON.stringify(text).replace(/[<>/\u2028\u2029]/g, (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`);
@@ -1466,7 +1466,7 @@ export function forBuildWithoutJit(dir) {
 				writeFileSync(join(path, "package.json"), `${JSON.stringify({ name, main: "index.js" })}\n`);
 				writeFileSync(
 					join(path, "index.js"),
-					`throw new Error(${JSON.stringify(`${name} needs the JIT (bun:ffi), which this build of Pi-Bolt does not have: install the -jit build`)});\n`,
+					`throw new Error(${JSON.stringify(`${name} needs the JIT (bun:ffi), which this build of Rapid Pi does not have: install the -jit build`)});\n`,
 				);
 				continue;
 			}
@@ -1687,7 +1687,7 @@ export function defaultAgentDir(env = process.env) {
 
 /**
  * Whether this file is the command being run. Both sides through their links: `/var` is `/private/var` on macOS. (Its name
- * first: `pi-bolt compile` has this module in Pi-Bolt itself, which asks this at every start, without a file system call.)
+ * first: `rapid-pi compile` has this module in Rapid Pi itself, which asks this at every start, without a file system call.)
  */
 function isCommand() {
 	if (basename(process.argv[1] ?? "") !== "gen-plugin-manifest.mjs") return false;
@@ -1728,5 +1728,5 @@ export async function main(argv) {
 	}
 }
 
-// Imported by the tests, by `pi-bolt compile` and by scripts/gen-plugin-manifest.mjs; run as a command in a compile kit.
+// Imported by the tests, by `rapid-pi compile` and by scripts/gen-plugin-manifest.mjs; run as a command in a compile kit.
 if (isCommand()) await main(process.argv.slice(2));

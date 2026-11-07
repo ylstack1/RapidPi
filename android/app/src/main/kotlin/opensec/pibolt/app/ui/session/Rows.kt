@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -80,26 +80,26 @@ import androidx.compose.ui.unit.dp
 import android.os.SystemClock
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import opensec.pibolt.app.ui.components.CopyButton
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.ShimmerText
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.WorkingLine
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.markdown.MdBlock
-import opensec.pibolt.app.ui.markdown.MdBlockView
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.NoticeKind
-import opensec.pibolt.protocol.session.ThinkingItem
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.ui.components.CopyButton
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.ShimmerText
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.WorkingLine
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.markdown.MdBlockView
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.NoticeKind
+import opensec.rapidpi.protocol.session.ThinkingItem
+import opensec.rapidpi.protocol.session.UserItem
 import kotlin.math.min
 
 /** New rows of the live turn rise into place once; history and rows seen before never animate. */

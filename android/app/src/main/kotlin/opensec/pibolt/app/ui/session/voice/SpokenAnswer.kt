@@ -1,6 +1,6 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
-import opensec.pibolt.app.ui.session.ask.AskQuestion
+import opensec.rapidpi.app.ui.session.ask.AskQuestion
 import java.util.Locale
 
 /** What a spoken answer to a question card means ([SpokenAnswers.match]). */

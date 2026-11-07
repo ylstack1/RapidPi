@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "opensec.pibolt.baselineprofile"
+    namespace = "opensec.rapidpi.baselineprofile"
     compileSdk = 36
 
     defaultConfig {

@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.protocol.backend.DisconnectReason
-import opensec.pibolt.app.session.LinkState
-import opensec.pibolt.app.ui.settings.RemoteRows
-import opensec.pibolt.app.ui.settings.SettingsGroup
-import opensec.pibolt.app.ui.settings.SettingsIndex
-import opensec.pibolt.app.ui.settings.thinkingLabel
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.protocol.backend.DisconnectReason
+import opensec.rapidpi.app.session.LinkState
+import opensec.rapidpi.app.ui.settings.RemoteRows
+import opensec.rapidpi.app.ui.settings.SettingsGroup
+import opensec.rapidpi.app.ui.settings.SettingsIndex
+import opensec.rapidpi.app.ui.settings.thinkingLabel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

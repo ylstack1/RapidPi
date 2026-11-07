@@ -153,8 +153,8 @@ case_close_no_leftovers() {
 	uid_procs >"$OUT_DIR/procs-after-close.txt"
 	log "processes after close: $(tr '\n' ';' <"$OUT_DIR/procs-after-close.txt")"
 	local engines others
-	engines=$(grep -c 'libpibolt' "$OUT_DIR/procs-after-close.txt")
-	others=$(grep -v 'libpibolt' "$OUT_DIR/procs-after-close.txt" | grep -c .)
+	engines=$(grep -c 'librapidpi' "$OUT_DIR/procs-after-close.txt")
+	others=$(grep -v 'librapidpi' "$OUT_DIR/procs-after-close.txt" | grep -c .)
 	[ "$others" = 0 ] || fail "non-engine processes left after closing the session: $(tr '\n' ';' <"$OUT_DIR/procs-after-close.txt")"
 	[ "$engines" -le 2 ] || fail "$engines engine processes after closing the session (expected the new session's and one spare): $(tr '\n' ';' <"$OUT_DIR/procs-after-close.txt")"
 	# Leaving the app (force-stop) ends every engine.

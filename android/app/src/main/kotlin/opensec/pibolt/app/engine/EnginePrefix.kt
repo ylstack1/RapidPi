@@ -1,14 +1,14 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.app.data.SafeFiles
-import opensec.pibolt.protocol.int
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.app.data.SafeFiles
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -189,11 +189,11 @@ class EnginePaths(
     val bin = File(prefix, "bin")
 
     /** PI_PACKAGE_DIR: theme/, export-html/, assets/, package.json from APK assets `engine/package/`. */
-    val packageDir = File(prefix, "share/pi-bolt")
+    val packageDir = File(prefix, "share/rapid-pi")
 
     /** The pack's bundled Pi extensions, one directory each, registered as packages in Pi's settings.json. */
     val extensionsDir = File(prefix, "share/pi-extensions")
-    val engine = File(nativeLibDir, "libpibolt.so")
+    val engine = File(nativeLibDir, "librapidpi.so")
     val stamp = File(prefix, ".pack")
 
     companion object {
@@ -441,7 +441,7 @@ class EnginePrefix(
         const val SYSTEM_SH = "/system/bin/sh"
 
         /** In an unpacked tree or node_modules: what it was unpacked from, written once it was complete. */
-        const val UNPACKED = ".pibolt-unpacked"
+        const val UNPACKED = ".rapidpi-unpacked"
 
         /** Under the prefix: the zips being unpacked, gone afterwards. */
         private const val STAGING = ".unpack"
@@ -463,7 +463,7 @@ class EnginePrefix(
  *
  * - [abis]: the engine is linux-arm64 only.
  * - [sdk]: only API 29+ is supported (the spike ran API 36; below 29 nothing is proven).
- * - the pack: the manifest and `libpibolt.so` must be in this build.
+ * - the pack: the manifest and `librapidpi.so` must be in this build.
  * - the prefix: glibc's paths name `/data/data/<applicationId>`, which is user 0's data. In another user or a work
  *   profile, the app's real data dir differs ([dataDirReal] vs [prefixDataReal]), so the engine could not find its loader.
  */

@@ -1,8 +1,8 @@
-"""Shared pieces of the Pi-Bolt benchmark and test tools.
+"""Shared pieces of the Rapid Pi benchmark and test tools.
 
 A *build* is a name and the command that starts Pi, given as ``name=command`` on the command line, e.g.::
 
-    --build pi-bolt=./dist/pi/pi --build bun=~/.bun/bin/bun ./pi/dist/bun/cli.js --build node="node ./pi/dist/cli.js"
+    --build rapid-pi=./dist/pi/pi --build bun=~/.bun/bin/bun ./pi/dist/bun/cli.js --build node="node ./pi/dist/cli.js"
 
 Every run gets its own fake model server (fake_model.py) on a free port and a throwaway Pi home that points at it, so runs are
 isolated from the user's Pi configuration and from each other.
@@ -82,7 +82,7 @@ def warm_page_cache(builds: list[Build]) -> None:
     memory than the same executable read from disk; comparing a fresh build with an old one would be unfair either way. On
     Linux each file is first dropped from the page cache, so that every build is read back from disk the same way: pages a
     file was written with sit in the cache in smaller units than pages read ahead from disk, and an executable extracted moments
-    before started 17% slower than the same bytes read back (Pi-Bolt 0.7.3, pi --version)."""
+    before started 17% slower than the same bytes read back (Rapid Pi 0.7.3, pi --version)."""
     for build in builds:
         # (A macOS build's pi is a launcher: the executable is pi-bin beside it.)
         paths = [*build.argv, *(os.path.join(os.path.dirname(p), "pi-bin") for p in build.argv if "/" in p)]
@@ -252,7 +252,7 @@ last_exit_counters: dict = {}
 
 class PeakOwnSampler:
     """Linux: the largest private memory a running process reached, the counterpart of macOS's peak footprint. ru_maxrss also
-    counts the clean pages of the files it maps (Pi-Bolt's executable maps its 114 MB static heap and compiled code; a Go
+    counts the clean pages of the files it maps (Rapid Pi's executable maps its 114 MB static heap and compiled code; a Go
     binary maps its own text), which the kernel can drop and share. RssAnon (in /proc/<pid>/status) is the process's own
     resident memory: its heaps, and file pages it has written to. Linux keeps no peak of it, so a thread samples it every
     `interval` seconds from start() until the process is gone or stop(): a spike shorter than that can be missed.

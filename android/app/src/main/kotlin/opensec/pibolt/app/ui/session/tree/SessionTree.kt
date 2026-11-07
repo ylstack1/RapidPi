@@ -1,12 +1,12 @@
-package opensec.pibolt.app.ui.session.tree
+package opensec.rapidpi.app.ui.session.tree
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 
 /** What a tree row stands for. */
 enum class TreeKind { User, Assistant, Tool, Compaction, BranchSummary, Model, Other }

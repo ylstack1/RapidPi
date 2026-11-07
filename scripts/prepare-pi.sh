@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds Pi for scripts/build-pi.sh. Pi-Bolt is a fork of Pi: by default this is the Pi of this repository, built in place and
+# Builds Pi for scripts/build-pi.sh. Rapid Pi is a fork of Pi: by default this is the Pi of this repository, built in place and
 # offline. Its model catalog (packages/ai/src/providers/data) is part of the repository, so the build needs no network and
 # gives the same Pi every time. --refresh-models first fetches the catalog again from the model providers (every provider must
 # answer); commit what it changes. With --tag, it clones another Pi release from upstream and builds that instead: upstream Pi
@@ -21,18 +21,18 @@ done
 BUILD=build:offline
 if [ -n "$TAG" ]; then
 	need git
-	DIR="${DIR:-$PIBOLT_WORK/pi-${TAG#v}}"
+	DIR="${DIR:-$RAPIDPI_WORK/pi-${TAG#v}}"
 	if [ ! -d "$DIR/.git" ]; then
 		log "cloning Pi $TAG from $(source_field pi upstream)"
 		git clone -q --depth 1 --branch "$TAG" "$(source_field pi upstream)" "$DIR"
 	fi
 	BUILD=build
 else
-	DIR="$PIBOLT_PI"
+	DIR="$RAPIDPI_PI"
 	[ -n "$REFRESH" ] && BUILD=build
 fi
-mkdir -p "$PIBOLT_WORK"
-LOG="$PIBOLT_WORK/prepare-pi.log"
+mkdir -p "$RAPIDPI_WORK"
+LOG="$RAPIDPI_WORK/prepare-pi.log"
 run() { # run STEP COMMAND...: the output goes to the log, and its end to the terminal when the step fails
 	if ! (cd "$DIR" && "$@") >"$LOG" 2>&1; then
 		tail -n 40 "$LOG" >&2

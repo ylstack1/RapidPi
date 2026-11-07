@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -72,26 +72,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.components.CopyButton
-import opensec.pibolt.app.ui.components.DiffBlock
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.StepSlot
-import opensec.pibolt.app.ui.components.StepState
-import opensec.pibolt.app.ui.components.diffText
-import opensec.pibolt.app.ui.components.horizontalEdgeFades
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.markdown.CodeInfo
-import opensec.pibolt.app.ui.markdown.highlightedCached
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.rpc.ImageAttachment
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.app.ui.components.CopyButton
+import opensec.rapidpi.app.ui.components.DiffBlock
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.StepSlot
+import opensec.rapidpi.app.ui.components.StepState
+import opensec.rapidpi.app.ui.components.diffText
+import opensec.rapidpi.app.ui.components.horizontalEdgeFades
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.markdown.CodeInfo
+import opensec.rapidpi.app.ui.markdown.highlightedCached
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.rpc.ImageAttachment
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.str
 
 /** What the full-screen viewer shows. */
 @Immutable

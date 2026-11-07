@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.theme
+package opensec.rapidpi.app.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.TextStyle
@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import opensec.pibolt.app.R
+import opensec.rapidpi.app.R
 
 /** Inter (UI and prose), bundled static weights. */
 val Inter = FontFamily(

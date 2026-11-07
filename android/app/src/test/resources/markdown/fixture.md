@@ -1,7 +1,7 @@
 # Markdown fixture
 
 A paragraph with **bold**, *italic*, ***both***, ~~struck~~, `inline code`, and a [link](https://example.com "title").
-Autolinks: <https://pi.dev/docs>, bare https://github.com/opensec-git/Pi-Bolt and www.example.org, mail <team@example.com>.
+Autolinks: <https://pi.dev/docs>, bare https://github.com/opensec-git/Rapid Pi and www.example.org, mail <team@example.com>.
 Escapes: \*not italic\*, \_no\_, \# no heading, \[no link\], a back\\slash, 1\. not a list.
 Entities: &copy; 2026 &mdash; Tom &amp; Jerry &lt;tag&gt; &#169; &#x1F680; &nbsp;done.
 Hard break with two spaces  
@@ -218,7 +218,7 @@ SELECT u.id, COUNT(*) AS n FROM users u LEFT JOIN orders o ON o.user_id = u.id W
 ```
 
 ```json
-{ "name": "pi-bolt", "version": "0.3.0", "private": true, "count": 12, "tags": ["a", null] }
+{ "name": "rapid-pi", "version": "0.3.0", "private": true, "count": 12, "tags": ["a", null] }
 ```
 
 ```jsonc
@@ -246,7 +246,7 @@ edition = 2021
 
 ```xml
 <?xml version="1.0"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="in.opensec.pibolt">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="in.opensec.rapidpi">
   <!-- comment -->
   <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

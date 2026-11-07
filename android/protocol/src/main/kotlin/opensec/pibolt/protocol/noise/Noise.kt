@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol.noise
+package opensec.rapidpi.protocol.noise
 
 import org.bouncycastle.crypto.agreement.X25519Agreement
 import org.bouncycastle.crypto.params.X25519PrivateKeyParameters

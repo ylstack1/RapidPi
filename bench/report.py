@@ -15,7 +15,7 @@ peak working set, private working set, private bytes (commit) and the rise of th
 has the process floor (benchmark.py --floor), the Time and CPU tables add its rows and each build's figures over it.
 --label name=text names a build's column (e.g. --label "bun=Pi 1.0.3 on stock Bun 1.4.2").
 
-Example: bench/report.py results/2026-10-02 --images docs/images --builds pi-bolt,bun,node
+Example: bench/report.py results/2026-10-02 --images docs/images --builds rapid-pi,bun,node
 """
 
 import argparse
@@ -25,8 +25,8 @@ import statistics
 from collections import defaultdict
 from pathlib import Path
 
-LABELS = {"pi-bolt": "Pi-Bolt", "bun": "Bun 1.4.2", "node": "Node 22", "node24": "Node 24", "pi-bolt-jit": "Pi-Bolt (JIT on)"}
-# Pi-Bolt is the accent; every other build (an earlier Pi-Bolt release too) is the same neutral, so the eye goes to Pi-Bolt and
+LABELS = {"rapid-pi": "Rapid Pi", "bun": "Bun 1.4.2", "node": "Node 22", "node24": "Node 24", "rapid-pi-jit": "Rapid Pi (JIT on)"}
+# Rapid Pi is the accent; every other build (an earlier Rapid Pi release too) is the same neutral, so the eye goes to Rapid Pi and
 # each bar's label names the rest. Checked with the dataviz palette validator against GitHub's page surfaces (#ffffff,
 # #0d1117): >= 3:1 contrast in both themes, accent and neutral >= 15.4 apart in normal vision and >= 12 for color-blind readers.
 ACCENT = {"light": "#2a78d6", "dark": "#3987e5"}
@@ -36,7 +36,7 @@ THEME = {
     "light": {"text": "#1f2328", "muted": "#59636e", "rule": "#d1d9e0"},
     "dark": {"text": "#f0f6fc", "muted": "#9198a1", "rule": "#3d444d"},
 }
-# What ratios compare Pi-Bolt with: Pi on Bun, the runtime Pi ships for.
+# What ratios compare Rapid Pi with: Pi on Bun, the runtime Pi ships for.
 REFERENCE = "bun"
 # The Pi version the results are of, from environment.txt.
 PI_VERSION = ["1.0.0"]
@@ -68,14 +68,14 @@ def fmt(value, unit):
 
 
 def color_of(build, i, theme):
-    """Pi-Bolt (and its JIT-on build) in the accent, every other build in the neutral."""
-    ours = (LABELS["pi-bolt"], LABELS["pi-bolt-jit"])
-    return ACCENT[theme] if build in ("pi-bolt", "pi-bolt-jit") or build.startswith(ours) else NEUTRAL[theme]
+    """Rapid Pi (and its JIT-on build) in the accent, every other build in the neutral."""
+    ours = (LABELS["rapid-pi"], LABELS["rapid-pi-jit"])
+    return ACCENT[theme] if build in ("rapid-pi", "rapid-pi-jit") or build.startswith(ours) else NEUTRAL[theme]
 
 
 def is_release(build):
-    """An earlier Pi-Bolt release run alongside (pi-bolt-0.7.0)."""
-    return build.startswith("pi-bolt-") and build[8:9].isdigit()
+    """An earlier Rapid Pi release run alongside (rapid-pi-0.7.0)."""
+    return build.startswith("rapid-pi-") and build[8:9].isdigit()
 
 
 def text_width(text, size):
@@ -84,7 +84,7 @@ def text_width(text, size):
 
 
 def ratio_text(mine, base, kind):
-    """Pi-Bolt against the second build: "2.9x faster" for time, "2.8x less" for CPU and memory; None when within 5%."""
+    """Rapid Pi against the second build: "2.9x faster" for time, "2.8x less" for CPU and memory; None when within 5%."""
     if not mine or not base or kind == "none":
         return None
     better, worse = ("faster", "slower") if kind == "time" else ("less", "more")
@@ -122,9 +122,9 @@ def chart(title, subtitle, panels, builds, theme, path):
         out.append(f'<text x="{x0}" y="{y0 + 18}" font-size="15" font-weight="600" fill="{t["text"]}">{name}</text>')
         top = max(v for v in values.values() if v is not None)
         bar_x = x0 + label_w
-        # Room after the longest bar for its value; Pi-Bolt's ratio sits after its own, shorter bar.
+        # Room after the longest bar for its value; Rapid Pi's ratio sits after its own, shorter bar.
         bar_w = col_w - label_w - 84
-        base = values.get(REFERENCE if REFERENCE in builds else builds[1]) if len(builds) > 1 else None  # what Pi-Bolt is compared with
+        base = values.get(REFERENCE if REFERENCE in builds else builds[1]) if len(builds) > 1 else None  # what Rapid Pi is compared with
         for i, b in enumerate(builds):
             v = values.get(b)
             y = y0 + 36 + i * row_h
@@ -150,9 +150,9 @@ def chart(title, subtitle, panels, builds, theme, path):
 
 
 def hero(tiles, builds, theme, path, title=None, subtitle=None, compare=None):
-    """The README's headline image: a column per metric, Pi-Bolt's figure large, how it compares in plain words, and a bar for
+    """The README's headline image: a column per metric, Rapid Pi's figure large, how it compares in plain words, and a bar for
     every build. tiles: [(title, unit, {build: value}, better)] where better is "faster" or "less". With a title, a heading.
-    compare: [(build, name)], the builds each column compares Pi-Bolt with, one line each (default: the reference build, then
+    compare: [(build, name)], the builds each column compares Rapid Pi with, one line each (default: the reference build, then
     an earlier release if one is among the builds).
     No backgrounds and no badges: hairlines between the columns, text in the page's ink, color only on the bars."""
     t = THEME[theme]
@@ -164,12 +164,12 @@ def hero(tiles, builds, theme, path, title=None, subtitle=None, compare=None):
         earlier = next((b for b in builds if is_release(b)), None)
         compare = [(reference, LABELS.get(reference, reference).split()[0])]
         if earlier:
-            compare.append((earlier, LABELS.get(earlier, earlier).replace("Pi-Bolt ", "")))
+            compare.append((earlier, LABELS.get(earlier, earlier).replace("Rapid Pi ", "")))
     bars_y = 96 + 18 * len(compare)
     tile_h = bars_y + 30 * len(builds)
     height = top + tile_h + 10
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" '
-           f'aria-label="{title or "Pi-Bolt compared with Bun and Node"}">',
+           f'aria-label="{title or "Rapid Pi compared with Bun and Node"}">',
            f'<style>text{{font-family:{FONT}}}</style>']
     if title:
         out.append(f'<text x="{pad}" y="32" font-size="21" font-weight="650" fill="{t["text"]}">{title}</text>')
@@ -268,13 +268,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("results", type=Path)
     ap.add_argument("--images", type=Path, required=True)
-    ap.add_argument("--builds", default="pi-bolt,bun,node", help="builds to show, in order (the first is compared with the second)")
+    ap.add_argument("--builds", default="rapid-pi,bun,node", help="builds to show, in order (the first is compared with the second)")
     ap.add_argument("--label", action="append", default=[], help="name=text: what a build's column is called (repeatable)")
     a = ap.parse_args()
     builds = a.builds.split(",")
     for b in builds:
         if is_release(b):
-            LABELS[b] = f"Pi-Bolt {b[8:]}"
+            LABELS[b] = f"Rapid Pi {b[8:]}"
     a.images.mkdir(parents=True, exist_ok=True)
     # The versions the results were taken with, where the run says (environment.txt): "bun: 1.4.2", "node: v26.10.0".
     env = a.results / "environment.txt"
@@ -284,16 +284,16 @@ def main():
             key, _, value = line.partition(": ")
             # (A line may say more than the version: "bun: Pi 1.0.0 on stock Bun 1.4.2". The runtime's own version is the label.)
             versions = re.findall(r"(?:Bun |^v?)(\d+\.\d+\.\d+)", value.strip())
-            if key == "pi-bolt":
-                # "0.7.3, Pi 1.1.0 (Pi-Bolt 0.7.3, linux-x64, JIT off)" or "1.0.0 (Pi-Bolt 0.6.1, linux-x64, JIT off), from ..."
-                bolt = re.search(r"Pi-Bolt (\d+\.\d+\.\d+)", value)
+            if key == "rapid-pi":
+                # "0.7.3, Pi 1.1.0 (Rapid Pi 0.7.3, linux-x64, JIT off)" or "1.0.0 (Rapid Pi 0.6.1, linux-x64, JIT off), from ..."
+                bolt = re.search(r"Rapid Pi (\d+\.\d+\.\d+)", value)
                 if bolt:
-                    LABELS["pi-bolt"] = f"Pi-Bolt {bolt.group(1)}"
-                pi = re.search(r"(\d+\.\d+\.\d+) \(Pi-Bolt", value)
+                    LABELS["rapid-pi"] = f"Rapid Pi {bolt.group(1)}"
+                pi = re.search(r"(\d+\.\d+\.\d+) \(Rapid Pi", value)
                 if pi:
                     PI_VERSION[0] = pi.group(1)
                 elif versions:
-                    PI_VERSION[0] = versions[0]  # ("pi-bolt: 1.0.3": the Pi it is)
+                    PI_VERSION[0] = versions[0]  # ("rapid-pi: 1.0.3": the Pi it is)
                 pi_version = PI_VERSION[0]
             elif key == "bun" and versions:
                 LABELS["bun"] = f"Bun {versions[-1]}"
@@ -373,7 +373,7 @@ def main():
         memory = [
             ("Peak memory, interactive session", "MB", vals(lambda x: b(x, "interactive", "peak_mb"))),
             # Own memory at the peak: macOS's footprint, Linux's sampled RssAnon (neither counts the clean file pages a build
-            # maps, which peak_mb does: Pi-Bolt maps a 114 MB static heap and compiled code, of which a session reads a part).
+            # maps, which peak_mb does: Rapid Pi maps a 114 MB static heap and compiled code, of which a session reads a part).
             ("Peak own memory, interactive session", "MB",
              vals(lambda x: b(x, "interactive", "peak_fp_mb") or b(x, "interactive", "peak_own_mb"))),
             (f"Own memory, {terminal} session", "MB", vals(tm_own)),
@@ -413,9 +413,9 @@ def main():
         memory.append(("Longest GC pause", "ms", vals(lambda x: max((r["gc"]["max_ms"] for s in gc_steps for r in pauses[(x, s, True)]
                                                                     if r["gc"]["max_ms"] is not None), default=None)), "amount"))
     for name, title, subtitle, panels in [
-        ("speed", "Time", f"Wall-clock time, lower is better. Ratios compare Pi-Bolt with Bun. Pi {pi_version}, medians.", speed),
-        ("cpu", "CPU time", f"All threads, lower is better. Ratios compare Pi-Bolt with Bun. Pi {pi_version}, medians.", cpu),
-        ("memory", "Memory and streaming", f"Lower is better. {own}. Ratios compare Pi-Bolt with Bun.", memory),
+        ("speed", "Time", f"Wall-clock time, lower is better. Ratios compare Rapid Pi with Bun. Pi {pi_version}, medians.", speed),
+        ("cpu", "CPU time", f"All threads, lower is better. Ratios compare Rapid Pi with Bun. Pi {pi_version}, medians.", cpu),
+        ("memory", "Memory and streaming", f"Lower is better. {own}. Ratios compare Rapid Pi with Bun.", memory),
     ]:
         for theme in ("light", "dark"):
             chart(title, subtitle, panels, builds, theme, a.images / f"bench-{name}-{theme}.svg")

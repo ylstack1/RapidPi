@@ -1,4 +1,4 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -9,8 +9,8 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.str
 import java.io.File
 import java.net.URI
 import java.nio.file.Files
@@ -42,7 +42,7 @@ data class CustomProvider(val id: String, val name: String?, val baseUrl: String
  */
 object ModelsFile {
     const val API = "openai-completions"
-    const val NO_KEY = "pi-bolt-no-key"
+    const val NO_KEY = "rapid-pi-no-key"
     const val SCHEMA = "https://pi.dev/schemas/models.schema.json"
 
     class DamagedFile(message: String) : IllegalStateException(message)

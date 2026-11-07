@@ -1,4 +1,4 @@
-package opensec.pibolt.app.checkpoints
+package opensec.rapidpi.app.checkpoints
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -17,10 +17,10 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.type
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.type
 import java.io.File
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap

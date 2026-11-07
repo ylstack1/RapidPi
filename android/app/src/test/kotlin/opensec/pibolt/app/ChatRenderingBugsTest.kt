@@ -1,4 +1,4 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
@@ -6,14 +6,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.app.ui.markdown.Markdown
-import opensec.pibolt.app.ui.markdown.MdBlock
-import opensec.pibolt.app.ui.session.features.ProjectFileIndex
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.NoticeKind
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SessionState
+import opensec.rapidpi.app.ui.markdown.Markdown
+import opensec.rapidpi.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.session.features.ProjectFileIndex
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.NoticeKind
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SessionState
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test
@@ -30,7 +30,7 @@ class ChatRenderingBugsTest {
 
     @Test
     fun oneLineTripleBacktickSpanDoesNotSwallowTheRestOfTheReply() {
-        val blocks = Markdown.parse("Install it:\n\n```npm install pibolt```\n\nThen run it.\n\n## Next steps\n\n- one\n- two").blocks
+        val blocks = Markdown.parse("Install it:\n\n```npm install rapidpi```\n\nThen run it.\n\n## Next steps\n\n- one\n- two").blocks
         assertTrue(blocks.none { it is MdBlock.Code }, "$blocks")
         assertTrue(blocks.any { it is MdBlock.Heading }, "$blocks")
         // A real fence still opens, with its info string.

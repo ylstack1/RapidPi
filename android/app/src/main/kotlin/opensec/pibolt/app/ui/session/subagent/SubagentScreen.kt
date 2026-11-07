@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.subagent
+package opensec.rapidpi.app.ui.session.subagent
 
 import android.os.SystemClock
 import androidx.activity.BackEventCompat
@@ -79,61 +79,61 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.session.LinkState
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.GlassBar
-import opensec.pibolt.app.ui.components.GlassCopyButton
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.ShimmerText
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.markdown.MdBlock
-import opensec.pibolt.app.ui.session.ActionsRow
-import opensec.pibolt.app.ui.session.FoldRow
-import opensec.pibolt.app.ui.session.FoldRowView
-import opensec.pibolt.app.ui.session.GapRow
-import opensec.pibolt.app.ui.session.MdCache
-import opensec.pibolt.app.ui.session.NoticeRow
-import opensec.pibolt.app.ui.session.NoticeRowView
-import opensec.pibolt.app.ui.session.SessionMemory
-import opensec.pibolt.app.ui.session.TRow
-import opensec.pibolt.app.ui.session.TextRow
-import opensec.pibolt.app.ui.session.TextRowView
-import opensec.pibolt.app.ui.session.TurnMetaRow
-import opensec.pibolt.app.ui.session.TurnMetaRowView
-import opensec.pibolt.app.ui.session.ThinkingRow
-import opensec.pibolt.app.ui.session.ThinkingRowView
-import opensec.pibolt.app.ui.session.SourcesRow
-import opensec.pibolt.app.ui.session.web.SourcesPill
-import opensec.pibolt.app.ui.session.ToolGroupRow
-import opensec.pibolt.app.ui.session.ToolGroupRowView
-import opensec.pibolt.app.ui.session.ToolRow
-import opensec.pibolt.app.ui.session.ToolRowView
-import opensec.pibolt.app.ui.session.TranscriptModel
-import opensec.pibolt.app.ui.session.UserBubble
-import opensec.pibolt.app.ui.session.UserRow
-import opensec.pibolt.app.ui.session.Viewer
-import opensec.pibolt.app.ui.session.ViewerContent
-import opensec.pibolt.app.ui.session.riseIn
-import opensec.pibolt.app.ui.session.staggerIn
-import opensec.pibolt.app.ui.session.stepGlyphY
-import opensec.pibolt.app.ui.session.stepRail
-import opensec.pibolt.app.ui.theme.LocalPiType
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.PiType
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.rpc.StreamingBehavior
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.Subagent
-import opensec.pibolt.protocol.session.SubagentStatus
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.session.LinkState
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.GlassBar
+import opensec.rapidpi.app.ui.components.GlassCopyButton
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.ShimmerText
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.session.ActionsRow
+import opensec.rapidpi.app.ui.session.FoldRow
+import opensec.rapidpi.app.ui.session.FoldRowView
+import opensec.rapidpi.app.ui.session.GapRow
+import opensec.rapidpi.app.ui.session.MdCache
+import opensec.rapidpi.app.ui.session.NoticeRow
+import opensec.rapidpi.app.ui.session.NoticeRowView
+import opensec.rapidpi.app.ui.session.SessionMemory
+import opensec.rapidpi.app.ui.session.TRow
+import opensec.rapidpi.app.ui.session.TextRow
+import opensec.rapidpi.app.ui.session.TextRowView
+import opensec.rapidpi.app.ui.session.TurnMetaRow
+import opensec.rapidpi.app.ui.session.TurnMetaRowView
+import opensec.rapidpi.app.ui.session.ThinkingRow
+import opensec.rapidpi.app.ui.session.ThinkingRowView
+import opensec.rapidpi.app.ui.session.SourcesRow
+import opensec.rapidpi.app.ui.session.web.SourcesPill
+import opensec.rapidpi.app.ui.session.ToolGroupRow
+import opensec.rapidpi.app.ui.session.ToolGroupRowView
+import opensec.rapidpi.app.ui.session.ToolRow
+import opensec.rapidpi.app.ui.session.ToolRowView
+import opensec.rapidpi.app.ui.session.TranscriptModel
+import opensec.rapidpi.app.ui.session.UserBubble
+import opensec.rapidpi.app.ui.session.UserRow
+import opensec.rapidpi.app.ui.session.Viewer
+import opensec.rapidpi.app.ui.session.ViewerContent
+import opensec.rapidpi.app.ui.session.riseIn
+import opensec.rapidpi.app.ui.session.staggerIn
+import opensec.rapidpi.app.ui.session.stepGlyphY
+import opensec.rapidpi.app.ui.session.stepRail
+import opensec.rapidpi.app.ui.theme.LocalPiType
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.PiType
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.rpc.StreamingBehavior
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.Subagent
+import opensec.rapidpi.protocol.session.SubagentStatus
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
 
 /**
  * Which subagent's transcript is open, over the whole app (it covers the session screen, which stays composed below
@@ -196,7 +196,7 @@ fun SubagentOverlay(app: PiBoltApp, nav: SubagentNav) {
  * One subagent, full screen: its messages, thinking, tool calls with results and answer, live while it runs (the list
  * follows the newest row while the reader is at the bottom; otherwise "jump to latest"). On this phone they come from
  * its session file (and the message it writes from the engine, when it streams it); over remote control the computer
- * streams them while the screen is open (Pi-Bolt 1.1.5 and later). An older computer sends only the prompt, progress
+ * streams them while the screen is open (Rapid Pi 1.1.5 and later). An older computer sends only the prompt, progress
  * and answer, which the screen says.
  * Below: steer a running background agent or continue a finished one (both through Pi), or stop a foreground one.
  */

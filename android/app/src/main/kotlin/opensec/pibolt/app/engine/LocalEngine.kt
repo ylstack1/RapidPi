@@ -1,4 +1,4 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import android.content.Context
 import android.content.res.AssetManager
@@ -23,26 +23,26 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.session.features2.AppExtension
+import opensec.rapidpi.app.ui.session.features2.AppExtension
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.cost.Cost
-import opensec.pibolt.app.checkpoints.Git
-import opensec.pibolt.app.checkpoints.ShadowRepo
-import opensec.pibolt.app.checkpoints.TurnCheckpoints
-import opensec.pibolt.app.data.SafeFiles
-import opensec.pibolt.app.preview.PreviewExtension
-import opensec.pibolt.app.secrets.SecretEnv
-import opensec.pibolt.app.secrets.SecretStore
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.protocol.backend.ConnectionState
-import opensec.pibolt.protocol.backend.DisconnectReason
-import opensec.pibolt.protocol.backend.EngineLauncher
-import opensec.pibolt.protocol.backend.EngineStartException
-import opensec.pibolt.protocol.backend.LocalBackend
-import opensec.pibolt.protocol.backend.LocalConfig
-import opensec.pibolt.protocol.backend.SessionTarget
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.cost.Cost
+import opensec.rapidpi.app.checkpoints.Git
+import opensec.rapidpi.app.checkpoints.ShadowRepo
+import opensec.rapidpi.app.checkpoints.TurnCheckpoints
+import opensec.rapidpi.app.data.SafeFiles
+import opensec.rapidpi.app.preview.PreviewExtension
+import opensec.rapidpi.app.secrets.SecretEnv
+import opensec.rapidpi.app.secrets.SecretStore
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.protocol.backend.ConnectionState
+import opensec.rapidpi.protocol.backend.DisconnectReason
+import opensec.rapidpi.protocol.backend.EngineLauncher
+import opensec.rapidpi.protocol.backend.EngineStartException
+import opensec.rapidpi.protocol.backend.LocalBackend
+import opensec.rapidpi.protocol.backend.LocalConfig
+import opensec.rapidpi.protocol.backend.SessionTarget
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
@@ -59,7 +59,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * The engine on this phone (android/engine/CONTRACT.md): sets up the prefix, runs `libpibolt.so --mode rpc` processes
+ * The engine on this phone (android/engine/CONTRACT.md): sets up the prefix, runs `librapidpi.so --mode rpc` processes
  * and hands sessions to the UI as [SessionController]s over [LocalBackend]s.
  *
  * Fast opens: once ready, idle engines are kept started ([IdlePool]): a fresh spare (a new empty session in the last
@@ -477,7 +477,7 @@ class LocalEngine(private val app: PiBoltApp) : EngineApi {
                 }
             }.getOrDefault(0L)
             Log.i(TAG, "prefetched ${bytes / (1 shl 20)} MB of the engine in ${SystemClock.elapsedRealtime() - started} ms")
-        }, "pibolt-engine-prefetch").apply {
+        }, "rapidpi-engine-prefetch").apply {
             isDaemon = true
             start()
         }

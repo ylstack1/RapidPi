@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -30,9 +30,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Tnum
 
 /**
  * The top bar while searching the transcript: back closes, the field searches as you type, "3 of 12" and up/down

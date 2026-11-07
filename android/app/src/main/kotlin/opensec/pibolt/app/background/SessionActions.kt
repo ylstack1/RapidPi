@@ -1,24 +1,24 @@
-package opensec.pibolt.app.background
+package opensec.rapidpi.app.background
 
 import android.app.PendingIntent
-import opensec.pibolt.protocol.session.DialogKind
-import opensec.pibolt.protocol.session.DialogRequest
+import opensec.rapidpi.protocol.session.DialogKind
+import opensec.rapidpi.protocol.session.DialogRequest
 
 /**
  * The buttons and inline replies of session notifications: what each one carries ([encode], [decode]) and what it does
  * to the live sessions ([route]). Pure; SessionActionReceiver runs the result.
  */
 object SessionActions {
-    const val STOP_ALL = "opensec.pibolt.session.STOP_ALL"
-    const val ANSWER = "opensec.pibolt.session.ANSWER"
-    const val CONFIRM = "opensec.pibolt.session.CONFIRM"
-    const val REPLY = "opensec.pibolt.session.REPLY"
+    const val STOP_ALL = "opensec.rapidpi.session.STOP_ALL"
+    const val ANSWER = "opensec.rapidpi.session.ANSWER"
+    const val CONFIRM = "opensec.rapidpi.session.CONFIRM"
+    const val REPLY = "opensec.rapidpi.session.REPLY"
 
-    const val EXTRA_KEY = "opensec.pibolt.session.key"
-    const val EXTRA_DIALOG = "opensec.pibolt.session.dialog"
-    const val EXTRA_VALUE = "opensec.pibolt.session.value"
-    const val EXTRA_YES = "opensec.pibolt.session.yes"
-    const val EXTRA_SESSION_ID = "opensec.pibolt.session.id"
+    const val EXTRA_KEY = "opensec.rapidpi.session.key"
+    const val EXTRA_DIALOG = "opensec.rapidpi.session.dialog"
+    const val EXTRA_VALUE = "opensec.rapidpi.session.value"
+    const val EXTRA_YES = "opensec.rapidpi.session.yes"
+    const val EXTRA_SESSION_ID = "opensec.rapidpi.session.id"
 
     /**
      * The PendingIntent mutability of an action on API [sdk]. A [typed] (inline reply) action must let the system add
@@ -32,7 +32,7 @@ object SessionActions {
     }
 
     /** The RemoteInput result key of every inline reply. */
-    const val REPLY_KEY = "opensec.pibolt.session.reply"
+    const val REPLY_KEY = "opensec.rapidpi.session.reply"
 
     /** Select options shown as buttons when there are at most this many (a notification has three action slots). */
     const val OPTION_BUTTONS = 3

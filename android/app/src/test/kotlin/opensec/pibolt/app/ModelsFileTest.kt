@@ -1,15 +1,15 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import opensec.pibolt.app.engine.CustomEndpoint
-import opensec.pibolt.app.engine.CustomProvider
-import opensec.pibolt.app.engine.ModelsFile
-import opensec.pibolt.app.ui.providers.Brand
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.protocol.ProtocolJson
+import opensec.rapidpi.app.engine.CustomEndpoint
+import opensec.rapidpi.app.engine.CustomProvider
+import opensec.rapidpi.app.engine.ModelsFile
+import opensec.rapidpi.app.ui.providers.Brand
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.protocol.ProtocolJson
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test

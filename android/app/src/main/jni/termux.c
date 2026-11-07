@@ -12,7 +12,7 @@
  *
  * Copyright the Termux developers; derived from Terminal Emulator for Android by Jack Palevich (Apache-2.0).
  *
- * Pi-Bolt builds it itself (CMakeLists.txt) so the library is 16 KB page aligned; the AAR's prebuilt libtermux.so is
+ * Rapid Pi builds it itself (CMakeLists.txt) so the library is 16 KB page aligned; the AAR's prebuilt libtermux.so is
  * 4 KB aligned and is excluded from the APK.
  */
 #include <dirent.h>

@@ -11,7 +11,7 @@ system's commit charge.
 garbage collection, while it is idle). The wait is not counted in ms/prompt; what Pi does meanwhile is counted in cpu.
 
 Example (300 tool calls, a context well past a million tokens):
-  bench/long_session.py --prompts 75 --every 25 --build pi-bolt=./out/pi/pi --build bun=./out/pi-stable/pi
+  bench/long_session.py --prompts 75 --every 25 --build rapid-pi=./out/pi/pi --build bun=./out/pi-stable/pi
 """
 
 import argparse

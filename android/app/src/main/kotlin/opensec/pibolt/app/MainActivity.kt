@@ -1,4 +1,4 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import android.content.Intent
 import android.graphics.Color
@@ -12,13 +12,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.ui.nav.AppNav
-import opensec.pibolt.app.ui.projects.transfer.SharedContent
-import opensec.pibolt.app.ui.projects.transfer.sharedContent
-import opensec.pibolt.app.ui.session.features2.SessionAlerts
-import opensec.pibolt.app.ui.theme.PiBoltTheme
-import opensec.pibolt.app.update.UpdateNotifications
-import opensec.pibolt.protocol.PairingPayload
+import opensec.rapidpi.app.ui.nav.AppNav
+import opensec.rapidpi.app.ui.projects.transfer.SharedContent
+import opensec.rapidpi.app.ui.projects.transfer.sharedContent
+import opensec.rapidpi.app.ui.session.features2.SessionAlerts
+import opensec.rapidpi.app.ui.theme.PiBoltTheme
+import opensec.rapidpi.app.update.UpdateNotifications
+import opensec.rapidpi.protocol.PairingPayload
 
 class MainActivity : ComponentActivity() {
     /** A pairing link from a deep link, waiting for the UI to pick it up. */

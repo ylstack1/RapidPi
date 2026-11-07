@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.ProtocolJson
+import opensec.rapidpi.protocol.ProtocolJson
 
 /**
- * RPC events recorded from the real engine (Pi-Bolt 1.1.2 linux-arm64) with the bundled extensions, a fake model
+ * RPC events recorded from the real engine (Rapid Pi 1.1.2 linux-arm64) with the bundled extensions, a fake model
  * calling their tools (test/resources/fixtures/engine/<name>.jsonl). The first line describes the run: its engine
  * flags (`args`), the tools the model was offered (`modelTools`) and the dialog answers the client sent (`answers`,
  * null for a cancel).

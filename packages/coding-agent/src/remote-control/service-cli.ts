@@ -1,6 +1,6 @@
 /**
- * `pi-bolt service`: remote control as a login item of this user, so paired phones reach the computer with no terminal
- * open (service-host.ts is what runs). Opt-in: nothing is installed until `pi-bolt service install`.
+ * `rapid-pi service`: remote control as a login item of this user, so paired phones reach the computer with no terminal
+ * open (service-host.ts is what runs). Opt-in: nothing is installed until `rapid-pi service install`.
  *
  * - install: writes the service file (a LaunchAgent, a systemd user unit, or a Task Scheduler task) in the user's own
  *   directories, and starts it. Nothing needs administrator rights.
@@ -15,7 +15,7 @@ import { homedir, userInfo } from "node:os";
 import { dirname, isAbsolute, resolve } from "node:path";
 import { COMMAND_NAME, ENV_AGENT_DIR, ENV_SESSION_DIR, isBunBinary } from "../config.ts";
 import { SettingsManager } from "../core/settings-manager.ts";
-import { PIBOLT, piBoltExecutableIn, piBoltInstallDir, piBoltInstallMethod } from "../pi-bolt.ts";
+import { RAPIDPI, rapidPiExecutableIn, rapidPiInstallDir, rapidPiInstallMethod } from "../rapid-pi.ts";
 import { findExecutableOnPath, spawnProcess } from "../utils/child-process.ts";
 import { createInterface } from "../utils/readline.ts";
 import { endpointLabel } from "./controller.ts";
@@ -40,7 +40,7 @@ import { describeTunnel, type ServiceStatus, servicePort, serviceTunnelSetting }
 import { readLogTail, serviceLogPaths } from "./service-log.ts";
 import { cloudflaredInstallCommand, cloudflaredInstallHint, installCloudflared } from "./tunnel.ts";
 
-/** What the commands touch outside Pi-Bolt's own files; tests replace it. */
+/** What the commands touch outside Rapid Pi's own files; tests replace it. */
 export interface ServiceSystem {
 	platform: NodeJS.Platform;
 	home: string;
@@ -70,7 +70,7 @@ export interface ServiceCommandContext {
 const USAGE = [
 	`Usage: ${COMMAND_NAME} service <command>`,
 	"",
-	"Remote control for paired phones while no terminal runs Pi-Bolt: a login item of this user (opt-in).",
+	"Remote control for paired phones while no terminal runs Rapid Pi: a login item of this user (opt-in).",
 	"",
 	"Commands:",
 	"  install [--no-tunnel]   Start it now and at every login (--no-tunnel: local network and Tailscale only)",
@@ -160,13 +160,13 @@ function askYesNo(question: string): Promise<boolean> {
 
 /**
  * The executable the service manager starts, one that survives updates: the installer's in place (not a versioned
- * folder), else `pi-bolt` on PATH (a package manager's link or shim), else this executable. From a source checkout, Node
+ * folder), else `rapid-pi` on PATH (a package manager's link or shim), else this executable. From a source checkout, Node
  * with this script.
  */
 export function serviceProgram(): string[] {
-	if (PIBOLT) {
-		const installDir = piBoltInstallMethod() === "installer" ? piBoltInstallDir() : undefined;
-		const installed = installDir ? piBoltExecutableIn(installDir) : undefined;
+	if (RAPIDPI) {
+		const installDir = rapidPiInstallMethod() === "installer" ? rapidPiInstallDir() : undefined;
+		const installed = installDir ? rapidPiExecutableIn(installDir) : undefined;
 		if (installed && existsSync(installed)) return [installed];
 		const onPath = findExecutableOnPath(process.platform === "win32" ? `${COMMAND_NAME}.exe` : COMMAND_NAME);
 		return [onPath ?? process.execPath];
@@ -426,7 +426,7 @@ function printStatus(reply: ControlMessage, out: (line: string) => void): void {
 	}
 	const status = reply as unknown as ServiceStatus;
 	out(
-		`Remote control service: ${STATE_TEXT[status.state] ?? status.state} (pid ${status.pid}, Pi-Bolt ${status.version})`,
+		`Remote control service: ${STATE_TEXT[status.state] ?? status.state} (pid ${status.pid}, Rapid Pi ${status.version})`,
 	);
 	out(`  Port ${status.port}`);
 	for (const endpoint of status.endpoints) out(`  ${endpointLabel(endpoint)}  ${endpoint}`);
@@ -497,7 +497,7 @@ async function pair(args: string[], agentDir: string, out: (line: string) => voi
 			out(`Could not pair: ${typeof reply?.error === "string" ? reply.error : "no answer from the service"}`);
 			return 1;
 		}
-		out("Pair a phone: scan with the Pi-Bolt app");
+		out("Pair a phone: scan with the Rapid Pi app");
 		out("");
 		for (const line of renderQrLines(reply.uri).lines) out(line);
 		out("");
@@ -507,7 +507,7 @@ async function pair(args: string[], agentDir: string, out: (line: string) => voi
 		out("");
 		out("The code pairs one phone and expires in 10 minutes. Waiting for the phone (Ctrl+C to stop)...");
 		if (args.includes("--link")) {
-			out("Pairing link (paste it only into the Pi-Bolt app):");
+			out("Pairing link (paste it only into the Rapid Pi app):");
 			out(reply.uri);
 		}
 		const expiresAt = typeof reply.expiresAt === "number" ? reply.expiresAt * 1000 : Date.now() + 10 * 60_000;

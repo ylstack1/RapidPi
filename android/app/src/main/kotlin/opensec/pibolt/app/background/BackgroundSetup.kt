@@ -1,4 +1,4 @@
-package opensec.pibolt.app.background
+package opensec.rapidpi.app.background
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
@@ -68,7 +68,7 @@ object BackgroundSetup {
         }
     }.getOrDefault(emptyList()).mapNotNull { it.activityInfo?.let { a -> a.packageName to a.name } }
 
-    private fun label(context: Context): String = runCatching { context.applicationInfo.loadLabel(context.packageManager).toString() }.getOrDefault("Pi-Bolt")
+    private fun label(context: Context): String = runCatching { context.applicationInfo.loadLabel(context.packageManager).toString() }.getOrDefault("Rapid Pi")
 
     // The one-time prompt: armed the first time a local run continues with the app away, shown when the user is back.
 

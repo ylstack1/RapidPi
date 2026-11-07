@@ -1,6 +1,6 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.components.TableWidthCache
+import opensec.rapidpi.app.ui.components.TableWidthCache
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals

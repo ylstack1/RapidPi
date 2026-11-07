@@ -1,9 +1,9 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.session.ComposerKeys
-import opensec.pibolt.app.ui.session.ComposerLayout
+import opensec.rapidpi.app.ui.session.ComposerKeys
+import opensec.rapidpi.app.ui.session.ComposerLayout
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

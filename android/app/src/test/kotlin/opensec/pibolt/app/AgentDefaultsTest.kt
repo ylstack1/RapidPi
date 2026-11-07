@@ -1,4 +1,4 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.jsonObject
@@ -6,9 +6,9 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import opensec.pibolt.app.data.AgentDefaults
-import opensec.pibolt.app.data.AgentSettingsFile
-import opensec.pibolt.protocol.ProtocolJson
+import opensec.rapidpi.app.data.AgentDefaults
+import opensec.rapidpi.app.data.AgentSettingsFile
+import opensec.rapidpi.protocol.ProtocolJson
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test
@@ -61,7 +61,7 @@ class AgentDefaultsTest {
     @Test
     fun removingAProviderForgetsTheDefaultModelItHeld() = runBlocking {
         // Anthropic was the default, then its key was removed: Settings must not keep naming a model Pi cannot use.
-        val file = File(Files.createTempDirectory("pibolt-agent").toFile(), "settings.json")
+        val file = File(Files.createTempDirectory("rapidpi-agent").toFile(), "settings.json")
         file.writeText("""{"defaultProvider":"anthropic","defaultModel":"claude-sonnet-4-5","defaultThinkingLevel":"high","packages":["npm:x"]}""")
         val settings = AgentSettingsFile(file)
         settings.forgetDefaultModelOf("openai")
@@ -78,7 +78,7 @@ class AgentDefaultsTest {
     @Test
     fun twoQuickSwitchesInSettingsBothReachTheFileInOrder() = runBlocking {
         // Auto-compact then Auto-retry flipped at once: each change is written in turn, and the newer one lands last.
-        val file = File(Files.createTempDirectory("pibolt-agent").toFile(), "settings.json")
+        val file = File(Files.createTempDirectory("rapidpi-agent").toFile(), "settings.json")
         val settings = AgentSettingsFile(file)
         coroutineScope {
             repeat(40) { round ->

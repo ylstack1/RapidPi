@@ -1,4 +1,4 @@
-package opensec.pibolt.app.session
+package opensec.rapidpi.app.session
 
 import android.net.ConnectivityManager
 import android.net.Network
@@ -26,51 +26,51 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonObjectBuilder
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.checkpoints.TurnCheckpoints
-import opensec.pibolt.app.cost.CapCard
-import opensec.pibolt.app.cost.Cost
-import opensec.pibolt.app.cost.SessionSpending
-import opensec.pibolt.app.cost.SpendCaps
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.app.engine.ChatSpace
-import opensec.pibolt.app.engine.LivePolicy
-import opensec.pibolt.protocol.Base64Url
-import opensec.pibolt.protocol.backend.ConnectionState
-import opensec.pibolt.protocol.backend.DisconnectReason
-import opensec.pibolt.protocol.backend.LocalBackend
-import opensec.pibolt.protocol.backend.RemoteBackend
-import opensec.pibolt.protocol.backend.RemoteConfig
-import opensec.pibolt.protocol.backend.SessionBackend
-import opensec.pibolt.protocol.rpc.ImageAttachment
-import opensec.pibolt.protocol.RemoteEndpoints
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.rpc.RemoteProject
-import opensec.pibolt.protocol.rpc.RemoteSessionInfo
-import opensec.pibolt.protocol.rpc.RpcClient
-import opensec.pibolt.protocol.rpc.RpcResponse
-import opensec.pibolt.protocol.rpc.StreamingBehavior
-import opensec.pibolt.protocol.rpc.clearedQueue
-import opensec.pibolt.protocol.rpc.thinkingLevels
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.SUBAGENT_STREAM_FEATURE
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SubagentReducer
-import opensec.pibolt.app.ui.session.ask.AskReply
-import opensec.pibolt.app.ui.session.ask.AskResponder
-import opensec.pibolt.app.ui.session.ask.AskSubmission
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.type
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.checkpoints.TurnCheckpoints
+import opensec.rapidpi.app.cost.CapCard
+import opensec.rapidpi.app.cost.Cost
+import opensec.rapidpi.app.cost.SessionSpending
+import opensec.rapidpi.app.cost.SpendCaps
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.app.engine.ChatSpace
+import opensec.rapidpi.app.engine.LivePolicy
+import opensec.rapidpi.protocol.Base64Url
+import opensec.rapidpi.protocol.backend.ConnectionState
+import opensec.rapidpi.protocol.backend.DisconnectReason
+import opensec.rapidpi.protocol.backend.LocalBackend
+import opensec.rapidpi.protocol.backend.RemoteBackend
+import opensec.rapidpi.protocol.backend.RemoteConfig
+import opensec.rapidpi.protocol.backend.SessionBackend
+import opensec.rapidpi.protocol.rpc.ImageAttachment
+import opensec.rapidpi.protocol.RemoteEndpoints
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.rpc.RemoteProject
+import opensec.rapidpi.protocol.rpc.RemoteSessionInfo
+import opensec.rapidpi.protocol.rpc.RpcClient
+import opensec.rapidpi.protocol.rpc.RpcResponse
+import opensec.rapidpi.protocol.rpc.StreamingBehavior
+import opensec.rapidpi.protocol.rpc.clearedQueue
+import opensec.rapidpi.protocol.rpc.thinkingLevels
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.SUBAGENT_STREAM_FEATURE
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SubagentReducer
+import opensec.rapidpi.app.ui.session.ask.AskReply
+import opensec.rapidpi.app.ui.session.ask.AskResponder
+import opensec.rapidpi.app.ui.session.ask.AskSubmission
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.type
 import java.io.File
-import opensec.pibolt.app.data.AgentDefaults
-import opensec.pibolt.app.ui.session.features.SessionStats
-import opensec.pibolt.app.ui.session.features.ShellCommand
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
+import opensec.rapidpi.app.data.AgentDefaults
+import opensec.rapidpi.app.ui.session.features.SessionStats
+import opensec.rapidpi.app.ui.session.features.ShellCommand
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonObject
@@ -240,7 +240,7 @@ class SessionController private constructor(
      */
     private val watchedSubagents = MutableStateFlow<Set<String>>(emptySet())
 
-    /** A local engine that refused `subagent_subscribe` (before Pi-Bolt 1.1.5): not asked again. */
+    /** A local engine that refused `subagent_subscribe` (before Rapid Pi 1.1.5): not asked again. */
     @Volatile
     private var engineStreamsSubagents = true
 
@@ -471,7 +471,7 @@ class SessionController private constructor(
         }
         DisconnectReason.HostStopped -> "Remote control stopped on ${_hostName.value}."
         DisconnectReason.Handoff -> HANDOFF_NOTICE
-        DisconnectReason.Malformed -> "The computer could not read this app's messages. Update Pi-Bolt or the app."
+        DisconnectReason.Malformed -> "The computer could not read this app's messages. Update Rapid Pi or the app."
         DisconnectReason.RateLimited -> "Too many failed attempts from this network. Wait a minute and retry."
         DisconnectReason.Unreachable -> "Can't reach ${_hostName.value}. Check that /remote-control is running and the phone is on the same network."
         DisconnectReason.HandshakeTimeout -> "The computer took too long to answer."
@@ -867,7 +867,7 @@ class SessionController private constructor(
     /** A new session in the computer's project [cwd] (from [listProjects]). */
     fun newSessionIn(cwd: String) = sessionCommand("Could not start a new session") { rpc.newSession(cwd = cwd) }
 
-    /** Open a saved session ([opensec.pibolt.app.engine.EngineApi.sessions]) in this engine. */
+    /** Open a saved session ([opensec.rapidpi.app.engine.EngineApi.sessions]) in this engine. */
     fun switchSession(sessionFile: String) = sessionCommand("Could not open that session") { rpc.switchSession(sessionFile) }
 
     /** Duplicate the current session (same history, new file). */
@@ -1087,7 +1087,7 @@ class SessionController private constructor(
 
         /**
          * A session with the engine on this phone, in [project]. [release] takes the backend back when it stops. A [chat]
-         * runs in the chats' directory (engine.ChatSpace), named [opensec.pibolt.app.engine.ChatSpace.NAME].
+         * runs in the chats' directory (engine.ChatSpace), named [opensec.rapidpi.app.engine.ChatSpace.NAME].
          */
         fun local(app: PiBoltApp, project: File, backend: LocalBackend, release: (LocalBackend, Boolean) -> Unit, checkpoints: TurnCheckpoints? = null, chat: Boolean = false, slot: Int = 0) =
             SessionController(app, localId(project, slot), if (chat) ChatSpace.NAME else project.name, Origin.Local(project, backend, release, checkpoints, chat, slot))

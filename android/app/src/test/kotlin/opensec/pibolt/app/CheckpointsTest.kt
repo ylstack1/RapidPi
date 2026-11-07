@@ -1,14 +1,14 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.runBlocking
-import opensec.pibolt.app.checkpoints.ChangeKind
-import opensec.pibolt.app.checkpoints.CheckpointIndex
-import opensec.pibolt.app.checkpoints.Git
-import opensec.pibolt.app.checkpoints.RestoreKind
-import opensec.pibolt.app.checkpoints.ShadowRepo
-import opensec.pibolt.app.checkpoints.TurnCheckpoints
-import opensec.pibolt.app.checkpoints.TurnRecord
-import opensec.pibolt.app.checkpoints.UndoEntry
+import opensec.rapidpi.app.checkpoints.ChangeKind
+import opensec.rapidpi.app.checkpoints.CheckpointIndex
+import opensec.rapidpi.app.checkpoints.Git
+import opensec.rapidpi.app.checkpoints.RestoreKind
+import opensec.rapidpi.app.checkpoints.ShadowRepo
+import opensec.rapidpi.app.checkpoints.TurnCheckpoints
+import opensec.rapidpi.app.checkpoints.TurnRecord
+import opensec.rapidpi.app.checkpoints.UndoEntry
 import org.junit.After
 import org.junit.Assume.assumeTrue
 import org.junit.Before

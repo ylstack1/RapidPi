@@ -32,5 +32,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "pibolt-android"
+rootProject.name = "rapidpi-android"
 include(":protocol", ":app", ":baselineprofile")

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.session
+package opensec.rapidpi.app.session
 
 import android.app.Service
 import android.content.Context
@@ -20,14 +20,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.R
-import opensec.pibolt.app.background.AgentLocks
-import opensec.pibolt.app.background.BackgroundSetup
-import opensec.pibolt.app.background.WakePolicy
-import opensec.pibolt.app.engine.BackgroundJobs
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.R
+import opensec.rapidpi.app.background.AgentLocks
+import opensec.rapidpi.app.background.BackgroundSetup
+import opensec.rapidpi.app.background.WakePolicy
+import opensec.rapidpi.app.engine.BackgroundJobs
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.UserItem
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**

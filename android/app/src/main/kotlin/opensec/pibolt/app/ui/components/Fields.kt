@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -34,11 +34,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
 
 /** A form field's label: metaStrong ink2, 4dp in from the field's edge. */
 @Composable

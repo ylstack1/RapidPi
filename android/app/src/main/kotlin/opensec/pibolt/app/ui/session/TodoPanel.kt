@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -54,18 +54,18 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.session.TodoState
-import opensec.pibolt.protocol.session.TodoStatus
-import opensec.pibolt.protocol.session.TodoTask
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.session.TodoState
+import opensec.rapidpi.protocol.session.TodoStatus
+import opensec.rapidpi.protocol.session.TodoTask
 
 /** Task rows the open panel shows, the "+n more" line included; past it completed rows go first. */
 const val TODO_ROWS = 6

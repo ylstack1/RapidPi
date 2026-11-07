@@ -48,7 +48,7 @@ plans/
 collect.sh
 packages/agent/docs/extensions/pi-server-artifact/index.md
 
-# --- Pi-Bolt ---
+# --- Rapid Pi ---
 # Sources, toolchains and builds made by the scripts (see docs/BUILDING.md)
 /.work/
 /.toolchain/

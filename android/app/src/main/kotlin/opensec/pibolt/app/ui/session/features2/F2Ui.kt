@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features2
+package opensec.rapidpi.app.ui.session.features2
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -10,14 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.EmptyState
-import opensec.pibolt.app.ui.components.ListRow
-import opensec.pibolt.app.ui.components.LoadingRow
-import opensec.pibolt.app.ui.components.PiCard
-import opensec.pibolt.app.ui.components.SwitchRow
-import opensec.pibolt.app.ui.components.Tag
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.EmptyState
+import opensec.rapidpi.app.ui.components.ListRow
+import opensec.rapidpi.app.ui.components.LoadingRow
+import opensec.rapidpi.app.ui.components.PiCard
+import opensec.rapidpi.app.ui.components.SwitchRow
+import opensec.rapidpi.app.ui.components.Tag
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
 
 // The features2 sheets' names for the shared components (ui/components): kept so their call sites stay as they are.
 

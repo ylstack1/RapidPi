@@ -5,8 +5,8 @@
 #   android/engine/scripts/verify-pack.sh [--engine-only]
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")/.." && pwd)
-OUT=$(cd "${PIBOLT_PACK_OUT:-$HERE/out}" && pwd -P)
-NLD=/data/app/~~pack/in.opensec.pibolt-1/lib/arm64
+OUT=$(cd "${RAPIDPI_PACK_OUT:-$HERE/out}" && pwd -P)
+NLD=/data/app/~~pack/in.opensec.rapidpi-1/lib/arm64
 SETUP=$(mktemp)
 trap 'rm -f "$SETUP"' EXIT
 # The app's setup step (CONTRACT.md "Runtime setup" 1-2) as a shell script.

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.preview
+package opensec.rapidpi.app.preview
 
 import kotlinx.serialization.json.JsonPrimitive
 
@@ -143,8 +143,8 @@ return { ok: true, value: s === undefined ? String(v) : s };
      */
     val ERROR_HOOK = """
 (() => {
-  if (window.__piboltHook || !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;
-  window.__piboltHook = true;
+  if (window.__rapidpiHook || !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;
+  window.__rapidpiHook = true;
   const mark = ${lit(ConsoleBuffer.HOOK_MARK)};
   const send = (o) => { try { console.error(mark + JSON.stringify(o)); } catch (e) {} };
   addEventListener('error', (e) => {

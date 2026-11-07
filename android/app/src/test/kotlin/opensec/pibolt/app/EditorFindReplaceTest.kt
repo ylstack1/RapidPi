@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.projects.editor.EditHistory
-import opensec.pibolt.app.ui.projects.editor.EditKind
-import opensec.pibolt.app.ui.projects.editor.FindOptions
-import opensec.pibolt.app.ui.projects.editor.FindReplace
-import opensec.pibolt.app.ui.projects.editor.Interruptible
-import opensec.pibolt.app.ui.projects.editor.TextEdit
-import opensec.pibolt.app.ui.projects.editor.TextMatch
+import opensec.rapidpi.app.ui.projects.editor.EditHistory
+import opensec.rapidpi.app.ui.projects.editor.EditKind
+import opensec.rapidpi.app.ui.projects.editor.FindOptions
+import opensec.rapidpi.app.ui.projects.editor.FindReplace
+import opensec.rapidpi.app.ui.projects.editor.Interruptible
+import opensec.rapidpi.app.ui.projects.editor.TextEdit
+import opensec.rapidpi.app.ui.projects.editor.TextMatch
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull

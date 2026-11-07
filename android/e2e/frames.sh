@@ -98,11 +98,11 @@ home_() {
 	local i
 	for i in 1 2 3 4; do
 		dump_ui
-		if ui find "text=Pi-Bolt" >/dev/null && ui find "desc=Settings" >/dev/null; then return 0; fi
+		if ui find "text=Rapid Pi" >/dev/null && ui find "desc=Settings" >/dev/null; then return 0; fi
 		tap_on "desc=Project" "desc=Projects" "desc=Back" "desc=Close sheet" || relaunch
 		sleep 1
 	done
-	ui_find "text=Pi-Bolt" >/dev/null
+	ui_find "text=Rapid Pi" >/dev/null
 }
 open_bench() {
 	home_ || return 1

@@ -1,6 +1,6 @@
-# Pi-Bolt 1.0.0 against Pi as released on stock Bun, Node 22 and Node 24
+# Rapid Pi 1.0.0 against Pi as released on stock Bun, Node 22 and Node 24
 
-Pi-Bolt 1.0.0 (branch `perf/v1.0.0` at d35149cb0, built with `scripts/build-pi.sh` on the runtimes of CI run 39894603087: the
+Rapid Pi 1.0.0 (branch `perf/v1.0.0` at d35149cb0, built with `scripts/build-pi.sh` on the runtimes of CI run 39894603087: the
 release's code and runtimes) against Pi 1.4.0 as released on npm (`@earendil-works/pi-coding-agent`, `dist/bundle/cli.js`), run
 by stock Bun 1.4.4, by Node 22 and by Node 24. Same work against the same local model.
 

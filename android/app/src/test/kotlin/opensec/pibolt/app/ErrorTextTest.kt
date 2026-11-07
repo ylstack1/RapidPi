@@ -1,14 +1,14 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.session.ErrorAction
-import opensec.pibolt.app.ui.session.ErrorClass
-import opensec.pibolt.app.ui.session.ErrorNotices
-import opensec.pibolt.app.ui.session.ErrorText
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.NoticeKind
-import opensec.pibolt.protocol.session.RetryInfo
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.ui.session.ErrorAction
+import opensec.rapidpi.app.ui.session.ErrorClass
+import opensec.rapidpi.app.ui.session.ErrorNotices
+import opensec.rapidpi.app.ui.session.ErrorText
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.NoticeKind
+import opensec.rapidpi.protocol.session.RetryInfo
+import opensec.rapidpi.protocol.session.UserItem
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

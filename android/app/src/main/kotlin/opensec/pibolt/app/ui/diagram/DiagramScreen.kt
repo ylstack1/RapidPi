@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.diagram
+package opensec.rapidpi.app.ui.diagram
 
 import android.content.ClipData
 import android.content.Context
@@ -54,10 +54,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.components.GlassBar
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.components.GlassBar
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.theme.Pi
 import java.io.ByteArrayOutputStream
 import java.io.File
 

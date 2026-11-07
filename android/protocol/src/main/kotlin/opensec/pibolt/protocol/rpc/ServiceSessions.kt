@@ -1,13 +1,13 @@
-package opensec.pibolt.protocol.rpc
+package opensec.rapidpi.protocol.rpc
 
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.str
 import java.time.Instant
 
-/** A folder with Pi-Bolt sessions on the computer, from the background service's `list_projects`. */
+/** A folder with Rapid Pi sessions on the computer, from the background service's `list_projects`. */
 data class RemoteProject(val cwd: String, val name: String, val sessions: Int, val updatedAt: String) {
     val updatedAtMs: Long get() = isoMillis(updatedAt)
 

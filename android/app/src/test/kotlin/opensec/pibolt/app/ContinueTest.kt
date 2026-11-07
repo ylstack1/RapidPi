@@ -1,13 +1,13 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.ProjectMeta
-import opensec.pibolt.app.data.ProjectsCodec
-import opensec.pibolt.app.data.ProjectsFile
-import opensec.pibolt.app.engine.SessionIndex
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.ui.projects.GroupPos
-import opensec.pibolt.app.ui.projects.ProjectEntry
-import opensec.pibolt.app.ui.projects.ProjectRules
+import opensec.rapidpi.app.data.ProjectMeta
+import opensec.rapidpi.app.data.ProjectsCodec
+import opensec.rapidpi.app.data.ProjectsFile
+import opensec.rapidpi.app.engine.SessionIndex
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.ui.projects.GroupPos
+import opensec.rapidpi.app.ui.projects.ProjectEntry
+import opensec.rapidpi.app.ui.projects.ProjectRules
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test

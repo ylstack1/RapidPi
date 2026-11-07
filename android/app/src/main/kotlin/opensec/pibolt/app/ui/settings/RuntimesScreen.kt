@@ -1,13 +1,13 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import androidx.compose.material.icons.rounded.Terminal
-import opensec.pibolt.app.ui.components.ButtonSize
-import opensec.pibolt.app.ui.components.GroupDivider
-import opensec.pibolt.app.ui.components.InsetGroup
-import opensec.pibolt.app.ui.components.LargeTitlePage
-import opensec.pibolt.app.ui.components.EmptyState
-import opensec.pibolt.app.ui.components.LoadingRow
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.components.ButtonSize
+import opensec.rapidpi.app.ui.components.GroupDivider
+import opensec.rapidpi.app.ui.components.InsetGroup
+import opensec.rapidpi.app.ui.components.LargeTitlePage
+import opensec.rapidpi.app.ui.components.EmptyState
+import opensec.rapidpi.app.ui.components.LoadingRow
+import opensec.rapidpi.app.ui.theme.Tnum
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -39,16 +39,16 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.engine.EngineManifest
-import opensec.pibolt.app.engine.RuntimeStorage
-import opensec.pibolt.app.engine.RuntimesReport
-import opensec.pibolt.app.engine.formatBytes
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.engine.EngineManifest
+import opensec.rapidpi.app.engine.RuntimeStorage
+import opensec.rapidpi.app.engine.RuntimesReport
+import opensec.rapidpi.app.engine.formatBytes
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
 
 /**
  * Settings → Runtimes (also from a project's menu): the language runtimes the app ships (Node.js with npm, Python

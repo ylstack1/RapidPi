@@ -2,32 +2,32 @@
 
 startup
   build                          wall_ms          cpu_ms         peak_mb     peak_own_mb
-  pi-bolt                      12 (-96%)       11 (-96%)       45 (-58%)        5 (-91%)
+  rapid-pi                      12 (-96%)       11 (-96%)       45 (-58%)        5 (-91%)
   bun                         272 (-10%)      271 (-10%)       91 (-16%)       42 (-25%)
   node22                       279 (-7%)       279 (-7%)        99 (-8%)       48 (-14%)
   node24                             300             300             108              56
 
 headless
   build                          wall_ms          cpu_ms         peak_mb     peak_own_mb
-  pi-bolt                      65 (-89%)       57 (-90%)       95 (-31%)       20 (-75%)
+  rapid-pi                      65 (-89%)       57 (-90%)       95 (-31%)       20 (-75%)
   bun                         519 (-11%)      514 (-11%)       128 (-8%)       71 (-13%)
   node22                       574 (-2%)       572 (-1%)       129 (-7%)        76 (-8%)
   node24                             583             579             138              82
 
 interactive
   build                           tti_ms        turns_ms         wall_ms          cpu_ms         peak_mb     peak_own_mb
-  pi-bolt                      41 (-90%)      199 (-73%)      500 (-67%)      167 (-86%)      111 (-49%)       33 (-80%)
+  rapid-pi                      41 (-90%)      199 (-73%)      500 (-67%)      167 (-86%)      111 (-49%)       33 (-80%)
   bun                         366 (-14%)       707 (-5%)      1383 (-8%)      1087 (-8%)      179 (-18%)      120 (-26%)
   node22                       396 (-6%)      829 (+12%)      1560 (+4%)      1248 (+6%)       217 (-0%)       163 (+1%)
   node24                             423             742            1500            1180             218             162
 ## long_answer
 build        characters   wall s    cpu s  of a core  own MB
-pi-bolt           60000     50.5     2.34         5%      34
+rapid-pi           60000     50.5     2.34         5%      34
 bun               60000     50.8    21.92        43%     104
 node22            60000     50.7    22.17        44%     236
 node24            60000     50.7    18.62        37%     235
 ## long_session
-== pi-bolt (exit 0)
+== rapid-pi (exit 0)
      20:   104.4 ms/prompt   cpu    28.3 ms/prompt   memory 112.5 MB (own 34.6 MB)   request   4.5 MB (~1.1M tokens)
      40:   188.3 ms/prompt   cpu    45.6 ms/prompt   memory 117.1 MB (own 39.2 MB)   request   9.0 MB (~2.2M tokens)
 == bun (exit 0)
@@ -41,8 +41,8 @@ node24            60000     50.7    18.62        37%     235
      40:   479.9 ms/prompt   cpu   351.9 ms/prompt   memory 521.2 MB (own 465.6 MB)   request   9.0 MB (~2.2M tokens)
 ## large_write
 build           file   wall s    cpu s  result
-pi-bolt        200 KB      0.5      0.1  ok
-pi-bolt        400 KB      1.2      0.2  ok
+rapid-pi        200 KB      0.5      0.1  ok
+rapid-pi        400 KB      1.2      0.2  ok
 bun            200 KB     39.5     39.2  ok
 bun            400 KB    194.8    194.0  ok
 node22         200 KB     42.8     42.4  ok
@@ -51,8 +51,8 @@ node24         200 KB     35.4     35.1  ok
 node24         400 KB    143.7    142.7  ok
 ## tmux_load
 build          step        wall s  pi cpu s tmux cpu s pi wrote KB to client KB  own MB
-pi-bolt        md:20000      16.9      0.75       0.17         528          282      22
-pi-bolt        write:50      65.6      1.11       0.23         505          442      26
+rapid-pi        md:20000      16.9      0.75       0.17         528          282      22
+rapid-pi        write:50      65.6      1.11       0.23         505          442      26
 bun            md:20000      17.0      8.53       0.67        3563         1439     127
 bun            write:50      65.8     17.73       0.46         835          626      99
 node22         md:20000      17.0      7.79       0.69        3570         1441     145

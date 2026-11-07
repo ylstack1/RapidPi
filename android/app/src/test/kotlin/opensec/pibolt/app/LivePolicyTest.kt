@@ -1,11 +1,11 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.engine.LivePolicy
-import opensec.pibolt.app.engine.LivePolicy.Here
-import opensec.pibolt.app.engine.LivePolicy.Live
-import opensec.pibolt.app.engine.LivePolicy.Plan
-import opensec.pibolt.app.engine.LivePolicy.Room
-import opensec.pibolt.app.engine.LivePolicy.Want
+import opensec.rapidpi.app.engine.LivePolicy
+import opensec.rapidpi.app.engine.LivePolicy.Here
+import opensec.rapidpi.app.engine.LivePolicy.Live
+import opensec.rapidpi.app.engine.LivePolicy.Plan
+import opensec.rapidpi.app.engine.LivePolicy.Room
+import opensec.rapidpi.app.engine.LivePolicy.Want
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

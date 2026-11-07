@@ -19,7 +19,7 @@ screen and sends the changes, at most once a frame, so prompt_kb_written is smal
 console's frame interval as a floor; frames are counted by the synchronized-update marks (CSI ?2026h) Pi writes, which ConPTY
 passes on. The console host (conhost) that does this work is not Pi's and is not counted in Pi's CPU.
 
-Example: python bench\\conpty_check.py --prompts 4 --rounds 3 --build pi-bolt=out\\pi-bolt\\pi.exe --build bun=out\\pi-stable\\pi.exe
+Example: python bench\\conpty_check.py --prompts 4 --rounds 3 --build rapid-pi=out\\rapid-pi\\pi.exe --build bun=out\\pi-stable\\pi.exe
 """
 
 import argparse

@@ -79,7 +79,7 @@ import {
 	handleConfigCommand,
 	handlePackageCommand,
 } from "./package-manager-cli.ts";
-import { PIBOLT } from "./pi-bolt.ts";
+import { RAPIDPI } from "./rapid-pi.ts";
 import { loadRemoteControl } from "./remote-control/remote-control.lazy.ts";
 import { isLocalPath, normalizePath, resolvePath } from "./utils/paths.ts";
 import { createInterface } from "./utils/readline.ts";
@@ -584,7 +584,7 @@ async function promptForMissingSessionCwd(
 
 export interface MainOptions {
 	extensionFactories?: InlineExtension[];
-	/** Pi-Bolt: the extensions `pi-bolt compile` built into this executable (core/extensions/compiled.ts). */
+	/** Rapid Pi: the extensions `rapid-pi compile` built into this executable (core/extensions/compiled.ts). */
 	compiledExtensions?: CompiledExtension[];
 }
 
@@ -597,8 +597,8 @@ export async function main(args: string[], options?: MainOptions) {
 	}
 	ttiTrace("main.entered");
 	resetTimings();
-	// Pi-Bolt reports to Herdr itself (extensions/herdr); keep pi-herdr's report of the same pane out of its way.
-	if (PIBOLT) quietOtherHerdrReporters();
+	// Rapid Pi reports to Herdr itself (extensions/herdr); keep pi-herdr's report of the same pane out of its way.
+	if (RAPIDPI) quietOtherHerdrReporters();
 	// Commands and startup selectors can load user-authored themes before runtime creation.
 	setThemeJsonValidator(validateThemeJson);
 	const extensionFactories = [...builtInExtensions, ...(options?.extensionFactories ?? [])];
@@ -652,8 +652,8 @@ export async function main(args: string[], options?: MainOptions) {
 		return;
 	}
 
-	// `pi-bolt doctor` (Pi-Bolt only): a report for an issue. It exits: the extensions it loaded may keep timers running.
-	if (PIBOLT && args[0] === "doctor") {
+	// `rapid-pi doctor` (Rapid Pi only): a report for an issue. It exits: the extensions it loaded may keep timers running.
+	if (RAPIDPI && args[0] === "doctor") {
 		const { runDoctor } = await loadDoctor();
 		process.exit(await runDoctor(args.slice(1), { cwd, agentDir, extensionFactories }));
 	}
@@ -699,8 +699,8 @@ export async function main(args: string[], options?: MainOptions) {
 			process.exit(1);
 		}
 		console.log(
-			PIBOLT
-				? `${VERSION} (Pi-Bolt ${PIBOLT.version}, ${process.platform}-${PIBOLT.variant}, JIT ${PIBOLT.jit ? "on" : "off"})`
+			RAPIDPI
+				? `${VERSION} (Rapid Pi ${RAPIDPI.version}, ${process.platform}-${RAPIDPI.variant}, JIT ${RAPIDPI.jit ? "on" : "off"})`
 				: VERSION,
 		);
 		process.exit(0);

@@ -1,9 +1,9 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
 import androidx.compose.runtime.Immutable
-import opensec.pibolt.app.ui.session.ask.AskAnswer
-import opensec.pibolt.app.ui.session.ask.AskQuestion
-import opensec.pibolt.app.ui.session.ask.AskSubmission
+import opensec.rapidpi.app.ui.session.ask.AskAnswer
+import opensec.rapidpi.app.ui.session.ask.AskQuestion
+import opensec.rapidpi.app.ui.session.ask.AskSubmission
 import java.util.Locale
 
 /**

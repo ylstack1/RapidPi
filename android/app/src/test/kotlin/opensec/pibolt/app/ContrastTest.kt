@@ -1,15 +1,15 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
-import opensec.pibolt.app.data.AccentId
-import opensec.pibolt.app.data.ThemeId
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.components.noticeStyle
-import opensec.pibolt.app.ui.session.subagent.SubagentFormat
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.SELECTION_ALPHA
+import opensec.rapidpi.app.data.AccentId
+import opensec.rapidpi.app.data.ThemeId
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.noticeStyle
+import opensec.rapidpi.app.ui.session.subagent.SubagentFormat
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.SELECTION_ALPHA
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals

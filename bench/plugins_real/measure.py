@@ -1,5 +1,5 @@
-"""Real extensions (installed by bench/plugins_real/install.ps1, each in an agent directory of its own) on Pi-Bolt with the JIT
-off, Pi-Bolt with the JIT on, and Pi on stock Bun: whether each loads, what launching with it costs, what a typical action of it
+"""Real extensions (installed by bench/plugins_real/install.ps1, each in an agent directory of its own) on Rapid Pi with the JIT
+off, Rapid Pi with the JIT on, and Pi on stock Bun: whether each loads, what launching with it costs, what a typical action of it
 costs, and what it costs per prompt and per frame. Against bench/plugins_real/fake_model.py on 127.0.0.1: no provider is called.
 
   python measure.py load    [--out FILE]
@@ -27,8 +27,8 @@ from harness import Tty, cpu_ms, memory_mb  # noqa: E402
 
 WORK = ROOT / ".work" / "plugins-real"
 BUILDS = {
-    "pi-bolt": [str(ROOT / "out" / "pi-bolt" / "pi.exe")],
-    "pi-bolt-jit": [str(ROOT / "out" / "pi-bolt-aot-lto-jit" / "pi.exe")],
+    "rapid-pi": [str(ROOT / "out" / "rapid-pi" / "pi.exe")],
+    "rapid-pi-jit": [str(ROOT / "out" / "rapid-pi-aot-lto-jit" / "pi.exe")],
     "bun": [str(ROOT / "out" / "pi-stable-upstream" / "pi.exe")],
 }
 EXTENSIONS = ["none", "opensec-pi-subagents", "opensec-pi-todo", "pi-mcp-adapter", "pi-subagents", "pi-powerline-footer",
@@ -101,7 +101,7 @@ def agent_dir(extension, port, build=None):
 
 def make_pdf(path, pages=300):
     """A text PDF of about 1.5 MB (no compression), for pi-docparser."""
-    line = "Pi-Bolt measures what an extension costs when its code is interpreted rather than compiled. "
+    line = "Rapid Pi measures what an extension costs when its code is interpreted rather than compiled. "
     objects = []
     kids = []
     for p in range(pages):
@@ -159,7 +159,7 @@ ACTIONS = {
     "pi-permission-system": 'CALL read {"path":"note.txt"}',
     "pi-lens": 'CALL module_report {"path":"src/app.ts","view":"compact"}',
     # pi-docparser 4.0.0's parse runs its worker as `spawn(process.execPath, [worker])` (native-executor.ts), which in any
-    # compiled Pi (Pi-Bolt's or stock Bun's) is pi.exe, not a JavaScript runtime: "Native document worker protocol error"
+    # compiled Pi (Rapid Pi's or stock Bun's) is pi.exe, not a JavaScript runtime: "Native document worker protocol error"
     # on all three builds. Measured only for loading: python measure.py actions --docparser to see it fail.
 }
 if "--docparser" in sys.argv:

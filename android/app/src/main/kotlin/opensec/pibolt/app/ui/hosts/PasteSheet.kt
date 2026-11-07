@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.hosts
+package opensec.rapidpi.app.ui.hosts
 
 import android.content.ClipboardManager
 import android.content.Context
@@ -22,17 +22,17 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.FieldHint
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.protocol.PairingPayload
+import opensec.rapidpi.app.ui.components.FieldHint
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.protocol.PairingPayload
 
 /**
- * Paste a `pibolt://pair#…` link. Prefilled from the clipboard when it holds one. [onSubmit] returns an error to show,
+ * Paste a `rapidpi://pair#…` link. Prefilled from the clipboard when it holds one. [onSubmit] returns an error to show,
  * or null when the link was used (the sheet then closes). Pasting is one step: the user brought the link here.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +57,7 @@ fun PasteSheet(onDismiss: () -> Unit, onSubmit: (String) -> String?) {
                 text = it
                 error = null
             },
-            placeholder = "pibolt://pair#…",
+            placeholder = "rapidpi://pair#…",
             style = Pi.type.monoSmall,
             maxLines = 4,
             isError = error != null,

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.session
+package opensec.rapidpi.app.session
 
 /**
  * What the foreground notification says while sessions work: one line per busy session, and a title naming the only

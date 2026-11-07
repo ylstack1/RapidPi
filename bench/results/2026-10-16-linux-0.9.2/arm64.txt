@@ -81,12 +81,12 @@ node24       write:400    222.2 220.93      15449      20188   11%     504
 {'build': 'node22', 'cpu_ms_per_s': 4.789, 'own_mb': [90.1, 68.5], 'threads': {'pi': (1.41, 1.2), 'DelayedTaskSche': (0.011, 0.2), 'node': (3.368, 3.6)}}
 {'build': 'node24', 'cpu_ms_per_s': 5.109, 'own_mb': [91.8, 68.8], 'threads': {'pi': (1.726, 0.8), 'V8Worker': (3.383, 4.6)}}
 Traceback (most recent call last):
-  File "/home/runner/work/Pi-Bolt/Pi-Bolt/bench/idle.py", line 84, in <module>
+  File "/home/runner/work/Rapid Pi/Rapid Pi/bench/idle.py", line 84, in <module>
     main()
-  File "/home/runner/work/Pi-Bolt/Pi-Bolt/bench/idle.py", line 74, in main
+  File "/home/runner/work/Rapid Pi/Rapid Pi/bench/idle.py", line 74, in main
     r = run(b, args.seconds)
         ^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Pi-Bolt/Pi-Bolt/bench/idle.py", line 45, in run
+  File "/home/runner/work/Rapid Pi/Rapid Pi/bench/idle.py", line 45, in run
     assert tty.wait_for(done(1), start, deadline), "no answer"
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: no answer

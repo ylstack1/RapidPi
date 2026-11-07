@@ -1,7 +1,7 @@
-package opensec.pibolt.app.ui.packages
+package opensec.rapidpi.app.ui.packages
 
 import androidx.compose.material.icons.rounded.Cable
-import opensec.pibolt.app.ui.components.ErrorState
+import opensec.rapidpi.app.ui.components.ErrorState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,26 +32,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.engine.EngineApi
+import opensec.rapidpi.app.engine.EngineApi
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import opensec.pibolt.app.ui.components.ButtonRow
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.FieldHint
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.session.features2.F2Empty
-import opensec.pibolt.app.ui.session.features2.F2Loading
-import opensec.pibolt.app.ui.session.features2.F2Row
-import opensec.pibolt.app.ui.session.features2.F2Section
-import opensec.pibolt.app.ui.session.features2.F2Tag
-import opensec.pibolt.app.ui.session.features2.F2Well
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.components.ButtonRow
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.FieldHint
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.session.features2.F2Empty
+import opensec.rapidpi.app.ui.session.features2.F2Loading
+import opensec.rapidpi.app.ui.session.features2.F2Row
+import opensec.rapidpi.app.ui.session.features2.F2Section
+import opensec.rapidpi.app.ui.session.features2.F2Tag
+import opensec.rapidpi.app.ui.session.features2.F2Well
+import opensec.rapidpi.app.ui.theme.Pi
 
 /**
  * MCP servers (docs/mcp.md) through Pi's own commands: `pi mcp list --json` (it connects to each enabled server and

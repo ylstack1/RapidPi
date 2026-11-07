@@ -1,11 +1,11 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Space
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
@@ -19,7 +19,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.theme.Tnum
 import androidx.compose.foundation.rememberScrollState
 import android.os.SystemClock
 import androidx.compose.animation.AnimatedVisibility
@@ -59,10 +59,10 @@ import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.LinkOff
 import androidx.compose.material.icons.rounded.MoreHoriz
-import opensec.pibolt.app.ui.components.GlassBarInset
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.PiMenu
-import opensec.pibolt.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.GlassBarInset
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.PiMenu
+import opensec.rapidpi.app.ui.components.InsetRow
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.ContentCopy
@@ -92,24 +92,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import opensec.pibolt.app.session.LinkState
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.protocol.backend.DisconnectReason
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SharedKeys
-import opensec.pibolt.app.ui.components.StatusDot
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.sharedHostElement
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.protocol.session.QueueState
+import opensec.rapidpi.app.session.LinkState
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.protocol.backend.DisconnectReason
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SharedKeys
+import opensec.rapidpi.app.ui.components.StatusDot
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.sharedHostElement
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.protocol.session.QueueState
 
 fun linkColor(link: LinkState?, colors: PiColors): Color = when (link) {
     is LinkState.Connected -> colors.success
@@ -354,7 +354,7 @@ private fun MenuRow(text: String, icon: ImageVector, color: Color, onClick: () -
 
 /**
  * Under the top bar while not connected: Quad Connect, what is happening (with a live countdown), Retry. For an
- * on-device session ([local]) the "connection" is the engine process: "Starting Pi-Bolt…", then "Engine stopped" with
+ * on-device session ([local]) the "connection" is the engine process: "Starting Rapid Pi…", then "Engine stopped" with
  * Restart.
  */
 @Composable
@@ -384,7 +384,7 @@ fun ConnectionBanner(link: LinkState, pairing: Boolean, local: Boolean, onRetry:
                 Spacer(Modifier.width(12.dp))
                 val text = when {
                     link is LinkState.Connected -> ""
-                    local && link is LinkState.Connecting -> "Starting Pi-Bolt…"
+                    local && link is LinkState.Connecting -> "Starting Rapid Pi…"
                     local -> "Engine stopped"
                     link is LinkState.Connecting -> if (pairing) "Pairing…" else "Connecting…"
                     link is LinkState.Retrying -> retryText(link)
@@ -426,7 +426,7 @@ fun LoadingState(hostName: String, link: LinkState, local: Boolean, onRetry: () 
             when {
                 failed -> if (chat) "Could not open the chat" else "Could not open the session"
                 chat -> "Starting the chat…"
-                local -> "Starting Pi-Bolt in $hostName"
+                local -> "Starting Rapid Pi in $hostName"
                 else -> "Opening the session on $hostName"
             },
             style = Pi.type.body,

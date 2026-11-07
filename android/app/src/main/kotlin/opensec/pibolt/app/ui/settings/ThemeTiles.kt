@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -17,9 +17,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.semantics.heading
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.theme.Space
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -49,18 +49,18 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.data.AccentId
-import opensec.pibolt.app.data.ThemeId
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.data.AccentId
+import opensec.rapidpi.app.data.ThemeId
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
 
 private const val THEME_TILES_PER_ROW = 4
 
 /**
- * Near-black themes look alike at tile size; their canvas hex goes under the name. Pi-Bolt (Graphite) is warm charcoal
+ * Near-black themes look alike at tile size; their canvas hex goes under the name. Rapid Pi (Graphite) is warm charcoal
  * since the redesign and reads apart without it.
  */
 private val NEAR_BLACK = setOf(ThemeId.Contrast, ThemeId.Codex, ThemeId.Vercel)

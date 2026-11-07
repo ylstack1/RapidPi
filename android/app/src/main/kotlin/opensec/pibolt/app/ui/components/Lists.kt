@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,10 +40,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
 
 /** Inside a [CardSection] the card pads its rows; in sheets and on canvas rows bring the 20dp text inset. */
 val RowInsetSheet = PaddingValues(horizontal = Space.xl, vertical = Space.sm)

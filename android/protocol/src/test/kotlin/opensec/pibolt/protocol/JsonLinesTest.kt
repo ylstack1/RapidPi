@@ -1,6 +1,6 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
-import opensec.pibolt.protocol.transport.JsonLines
+import opensec.rapidpi.protocol.transport.JsonLines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

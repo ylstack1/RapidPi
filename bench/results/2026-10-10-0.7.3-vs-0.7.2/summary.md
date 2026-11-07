@@ -1,4 +1,4 @@
-# Pi-Bolt 0.7.3 against 0.7.2
+# Rapid Pi 0.7.3 against 0.7.2
 
 Both builds installed the same way: extracted from their release archives (the 0.7.2 archives as published, 0.7.3 from
 `scripts/package-release.sh`), except macOS `tmux.jsonl` and `big_output.jsonl`, run with the same 0.7.3 build in `out/`. On Linux both executables were dropped from the page cache before the startup runs, so that

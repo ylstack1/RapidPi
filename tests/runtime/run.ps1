@@ -1,15 +1,15 @@
-# Windows' tests/runtime/run.sh: tests of the Pi-Bolt runtime itself (the patched Bun), for what Pi and its extensions rely on:
+# Windows' tests/runtime/run.sh: tests of the Rapid Pi runtime itself (the patched Bun), for what Pi and its extensions rely on:
 #   stack       Error.captureStackTrace() and the default Error.prepareStackTrace on objects that are not Errors
 #   keepalive   a connection waits in fetch's keep-alive pool for 4 seconds, or for as long as the server's Keep-Alive header
 #               says less 2 seconds, and one that has waited longer is not used again: a connection that went dead while it
 #               waited (no FIN, no RST) is not what the next request is written to
 #   workdir     a compiled executable's embedded code resolves nothing in the directory it is started in, where a repository
 #               could supply a package or a native module for it to run; absolute paths and built-in modules still resolve
-# Usage: tests\runtime\run.ps1        Environment: PIBOLT_BUN (the runtime; default .work\runtime\bun.exe). Needs Python 3 (`py`).
+# Usage: tests\runtime\run.ps1        Environment: RAPIDPI_BUN (the runtime; default .work\runtime\bun.exe). Needs Python 3 (`py`).
 $ErrorActionPreference = 'Continue'
 $here = $PSScriptRoot
 $root = (Resolve-Path (Join-Path $here '..\..')).Path
-$bun = if ($env:PIBOLT_BUN) { $env:PIBOLT_BUN } else { Join-Path $root '.work\runtime\bun.exe' }
+$bun = if ($env:RAPIDPI_BUN) { $env:RAPIDPI_BUN } else { Join-Path $root '.work\runtime\bun.exe' }
 if (-not (Test-Path -LiteralPath $bun)) { Write-Host "no runtime at $bun (scripts\build-runtime.ps1)"; exit 1 }
 Push-Location $here
 $script:status = 0

@@ -6,8 +6,8 @@ No real provider or API key is used: the fake provider's key is the dummy string
 ## Requirements
 
 - macOS host with the Android SDK at `$HOME/Library/Android/sdk` (or `ANDROID_HOME`), Node.js, bash.
-- A debug APK of `in.opensec.pibolt` that ships the on-device engine (`lib/arm64-v8a/libpibolt.so`).
-- Emulators. `emulator-5554` (`pibolt-api36`) is shared and refused.
+- A debug APK of `in.opensec.rapidpi` that ships the on-device engine (`lib/arm64-v8a/librapidpi.so`).
+- Emulators. `emulator-5554` (`rapidpi-api36`) is shared and refused.
 
 ## Run
 
@@ -15,8 +15,8 @@ No real provider or API key is used: the fake provider's key is the dummy string
 cd android/e2e
 cp /path/to/app-debug.apk build/app-debug.apk      # or set APK=/path/to/app-debug.apk
 
-./emulators.sh create                              # pibolt-e2e-1, pibolt-e2e-2 (once)
-./emulators.sh start pibolt-bench:5556 pibolt-e2e-1:5558 pibolt-e2e-2:5560
+./emulators.sh create                              # rapidpi-e2e-1, rapidpi-e2e-2 (once)
+./emulators.sh start rapidpi-bench:5556 rapidpi-e2e-1:5558 rapidpi-e2e-2:5560
 ./run-all.sh --install emulator-5556 emulator-5558 emulator-5560
 ./emulators.sh stop 5556 5558 5560
 ```

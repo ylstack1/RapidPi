@@ -47,7 +47,7 @@ case_rename() {
 	card_more "$P"
 	tap "text=Rename"
 	assert_visible "text=Rename project"
-	assert_visible "text=Changes the name shown in Pi-Bolt. The folder stays projects/$P."
+	assert_visible "text=Changes the name shown in Rapid Pi. The folder stays projects/$P."
 	tap "text=$P"
 	clear_field 80
 	type_text "$TITLE"

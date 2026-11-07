@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.theme
+package opensec.rapidpi.app.ui.theme
 
 import android.view.View
 import androidx.compose.runtime.Stable

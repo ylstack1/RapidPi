@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features2
+package opensec.rapidpi.app.ui.session.features2
 
 import android.Manifest
 import android.app.PendingIntent
@@ -24,14 +24,14 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.MainActivity
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.R
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.engine.ChatSpace
-import opensec.pibolt.app.ui.chats.Chats
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.protocol.session.SubagentStatus
+import opensec.rapidpi.app.MainActivity
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.R
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.engine.ChatSpace
+import opensec.rapidpi.app.ui.chats.Chats
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.protocol.session.SubagentStatus
 import java.io.File
 
 /**
@@ -40,12 +40,12 @@ import java.io.File
  * opens that session and its screen. Also: a notification when a background agent finishes while the app is away.
  */
 object SessionAlerts {
-    const val EXTRA_PROJECT = "opensec.pibolt.session.project"
-    const val EXTRA_SESSION = "opensec.pibolt.session.file"
-    const val EXTRA_REMOTE = "opensec.pibolt.session.remote"
+    const val EXTRA_PROJECT = "opensec.rapidpi.session.project"
+    const val EXTRA_SESSION = "opensec.rapidpi.session.file"
+    const val EXTRA_REMOTE = "opensec.rapidpi.session.remote"
 
     /** The live plain chat (ui/chats). */
-    const val EXTRA_CHAT = "opensec.pibolt.session.chat"
+    const val EXTRA_CHAT = "opensec.rapidpi.session.chat"
     private const val AGENT_ID = 4
 
     /** Must match Notifications' alerts channel (SessionService.kt). */

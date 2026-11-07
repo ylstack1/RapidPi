@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,17 +14,17 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.backend.ConnectionState
-import opensec.pibolt.protocol.backend.DisconnectReason
-import opensec.pibolt.protocol.backend.EngineLauncher
-import opensec.pibolt.protocol.backend.LocalBackend
-import opensec.pibolt.protocol.backend.LocalConfig
-import opensec.pibolt.protocol.backend.SessionTarget
-import opensec.pibolt.protocol.rpc.RpcClient
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.protocol.backend.ConnectionState
+import opensec.rapidpi.protocol.backend.DisconnectReason
+import opensec.rapidpi.protocol.backend.EngineLauncher
+import opensec.rapidpi.protocol.backend.LocalBackend
+import opensec.rapidpi.protocol.backend.LocalConfig
+import opensec.rapidpi.protocol.backend.SessionTarget
+import opensec.rapidpi.protocol.rpc.RpcClient
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.UserItem
 import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.test.AfterTest
@@ -53,7 +53,7 @@ class LocalBackendTest {
     private fun fakeLauncher(env: Map<String, String> = emptyMap()) = EngineLauncher { target, cwd ->
         launchDirs += cwd
         val java = File(System.getProperty("java.home"), "bin/java").path
-        val command = listOf(java, "-cp", System.getProperty("java.class.path"), "opensec.pibolt.protocol.FakeEngineKt") + target.cliArgs()
+        val command = listOf(java, "-cp", System.getProperty("java.class.path"), "opensec.rapidpi.protocol.FakeEngineKt") + target.cliArgs()
         launches += target.cliArgs()
         ProcessBuilder(command).apply { environment().putAll(env) }.start()
     }

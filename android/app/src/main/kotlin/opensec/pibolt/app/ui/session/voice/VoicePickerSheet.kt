@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -20,13 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.LoadingRow
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.LoadingRow
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
 
 /**
  * Settings' voice picker for voice mode: "Default" (the engine's voice) and the engine's installed voices in the

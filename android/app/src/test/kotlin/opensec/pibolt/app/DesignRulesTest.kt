@@ -1,7 +1,7 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.theme.PiDims
+import opensec.rapidpi.app.ui.theme.PiDims
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
  * from the tokens. A rule names its fix; [ALLOWED] lists the reviewed exceptions, each with its reason.
  */
 class DesignRulesTest {
-    private val ui = File("src/main/kotlin/opensec/pibolt/app/ui")
+    private val ui = File("src/main/kotlin/opensec/rapidpi/app/ui")
 
     private data class Rule(val name: String, val pattern: Regex, val fix: String, val except: Set<String> = emptySet())
 

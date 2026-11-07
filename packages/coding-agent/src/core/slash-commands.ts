@@ -27,7 +27,7 @@ export const BUILTIN_SLASH_COMMANDS: ReadonlyArray<BuiltinSlashCommand> = [
 	{ name: "share", description: "Share session via a Radius artifact or a GitHub gist" },
 	{
 		name: "remote-control",
-		description: "Control this session from the Pi-Bolt Android app (QR pairing)",
+		description: "Control this session from the Rapid Pi Android app (QR pairing)",
 		argumentHint: "[lan|tunnel|copy|stop|devices]",
 	},
 	{ name: "bug", description: "Report a bug to the Pi developers", argumentHint: "<description>" },

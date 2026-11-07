@@ -1,13 +1,13 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.RecordVoiceOver
 import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.material.icons.rounded.VoiceChat
 import androidx.compose.ui.graphics.Color
-import opensec.pibolt.app.data.AppSettings
-import opensec.pibolt.app.ui.components.GroupRow
-import opensec.pibolt.app.ui.components.GroupSwitchRow
+import opensec.rapidpi.app.data.AppSettings
+import opensec.rapidpi.app.ui.components.GroupRow
+import opensec.rapidpi.app.ui.components.GroupSwitchRow
 
 /**
  * Voice mode in Settings > Agent: "Speak replies" (off: replies are shown, not said), "Speech rate" and "Voice" (the

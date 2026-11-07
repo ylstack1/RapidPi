@@ -1,9 +1,9 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.session.ImeRoom
-import opensec.pibolt.app.ui.session.MAX_LINES
-import opensec.pibolt.app.ui.session.SUGGESTIONS_MAX
+import opensec.rapidpi.app.ui.session.ImeRoom
+import opensec.rapidpi.app.ui.session.MAX_LINES
+import opensec.rapidpi.app.ui.session.SUGGESTIONS_MAX
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

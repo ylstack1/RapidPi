@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
 /** How a language is tokenised: most share the code tokenizer, the rest have one of their own. */
 enum class LangMode { Code, Shell, Markup, Css, Json, Yaml, Toml, Ini, Markdown, Diff, Makefile, Dockerfile, Plain }

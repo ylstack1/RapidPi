@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
 import androidx.compose.runtime.Immutable
 import java.util.Arrays

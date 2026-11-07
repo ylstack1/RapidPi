@@ -1,4 +1,4 @@
-package opensec.pibolt.app.terminal
+package opensec.rapidpi.app.terminal
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -13,8 +13,8 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
-import opensec.pibolt.app.MainActivity
-import opensec.pibolt.app.R
+import opensec.rapidpi.app.MainActivity
+import opensec.rapidpi.app.R
 
 /**
  * Keeps the process, and so every terminal's shell and what runs in it (a dev server, a build), alive while the app is
@@ -50,7 +50,7 @@ class TerminalService : Service() {
     companion object {
         private const val NOTIFICATION_ID = 41
         private const val CHANNEL = "terminal"
-        private const val ACTION_CLOSE_ALL = "opensec.pibolt.terminal.CLOSE_ALL"
+        private const val ACTION_CLOSE_ALL = "opensec.rapidpi.terminal.CLOSE_ALL"
 
         @Volatile
         private var running = false

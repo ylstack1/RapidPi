@@ -1,7 +1,7 @@
-package opensec.pibolt.app.ui.providers
+package opensec.rapidpi.app.ui.providers
 
 import androidx.compose.runtime.Immutable
-import opensec.pibolt.app.engine.CustomProvider
+import opensec.rapidpi.app.engine.CustomProvider
 import java.net.URI
 
 /** A provider that takes an API key. [id] is Pi's provider id (the key in auth.json). */

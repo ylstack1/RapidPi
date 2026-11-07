@@ -1,9 +1,9 @@
-package opensec.pibolt.app.ui.theme
+package opensec.rapidpi.app.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import opensec.pibolt.app.data.ThemeId
+import opensec.rapidpi.app.data.ThemeId
 
 /**
  * Code colours per theme, one per highlighter token kind. Punctuation uses the theme's ink2 (see [PiColors]). Every
@@ -30,7 +30,7 @@ data class SyntaxColors(
 ) {
     companion object {
         /**
-         * Graphite: Pi-Bolt Desktop's highlight.js theme (`src/styles/app.css`), its greys warmed to the default's inks. White keywords and
+         * Graphite: Rapid Pi Desktop's highlight.js theme (`src/styles/app.css`), its greys warmed to the default's inks. White keywords and
          * constants a weight up, near-white calls, warm sand types, green strings, orange numbers, greys for the rest.
          * No blue.
          */

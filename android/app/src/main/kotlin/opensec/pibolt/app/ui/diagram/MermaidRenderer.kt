@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.diagram
+package opensec.rapidpi.app.ui.diagram
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -30,8 +30,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import opensec.pibolt.app.BuildConfig
-import opensec.pibolt.app.R
+import opensec.rapidpi.app.BuildConfig
+import opensec.rapidpi.app.R
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.concurrent.ConcurrentHashMap

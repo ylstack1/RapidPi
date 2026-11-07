@@ -1,13 +1,13 @@
-package opensec.pibolt.protocol.session
+package opensec.rapidpi.protocol.session
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.int
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 
 /**
  * [SessionState.subagents] from what reaches the app of the subagents extension (opensec-pi-subagents):

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.transfer
+package opensec.rapidpi.app.ui.projects.transfer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,14 +31,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 
 /** What the export sheet asks for: a zip saved through the system's file picker, or sent through the share sheet. */
 data class ExportChoice(val share: Boolean, val skip: Set<String>)

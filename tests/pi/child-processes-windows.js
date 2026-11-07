@@ -40,7 +40,7 @@ async function run() {
 	const dir = mkdtempSync(join(tmpdir(), "pibolt-spawn-"));
 	const cd = spawnSync(cmd, ["/d", "/c", "cd"], { cwd: dir }).stdout?.toString().trim();
 	check("cwd", cd?.toLowerCase() === dir.toLowerCase(), cd);
-	const env = spawnSync(cmd, ["/d", "/c", "echo %PIBOLT_TEST%"], { env: { ...process.env, PIBOLT_TEST: "value" } }).stdout?.toString().trim();
+	const env = spawnSync(cmd, ["/d", "/c", "echo %RAPIDPI_TEST%"], { env: { ...process.env, RAPIDPI_TEST: "value" } }).stdout?.toString().trim();
 	check("environment", env === "value", env);
 	const spaced = join(dir, "a folder with spaces");
 	writeFileSync(join(dir, "args.cmd"), "@echo [%~1] [%~2]\r\n");

@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol.backend
+package opensec.rapidpi.protocol.backend
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
@@ -25,14 +25,14 @@ import kotlinx.serialization.json.JsonObjectBuilder
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.int
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.transport.JsonLines
-import opensec.pibolt.protocol.type
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.transport.JsonLines
+import opensec.rapidpi.protocol.type
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
@@ -115,7 +115,7 @@ class StderrTail(private val maxLines: Int) {
 
 /**
  * A Pi session in an engine process on this device: RPC JSON lines over the process's stdin/stdout (docs/rpc.md), no
- * Noise. It looks like [RemoteBackend] to [opensec.pibolt.protocol.rpc.RpcClient] and the session reducer: after the
+ * Noise. It looks like [RemoteBackend] to [opensec.rapidpi.protocol.rpc.RpcClient] and the session reducer: after the
  * engine starts, and again after a command switched the session (`new_session`, `switch_session`, `fork`, `clone`), it
  * asks for `get_state`, `get_messages` and `get_commands` and emits a `remote_hello`-shaped snapshot.
  *
@@ -661,7 +661,7 @@ class LocalBackend(
         }
 
         private fun thread(name: String, body: () -> Unit): Thread =
-            Thread(body, "pibolt-engine-$name").apply {
+            Thread(body, "rapidpi-engine-$name").apply {
                 isDaemon = true
                 start()
             }

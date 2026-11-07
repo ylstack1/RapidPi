@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the documentation pages of https://pi-bolt.opensec.in/docs/ into site/docs/.
+"""Builds the documentation pages of https://rapid-pi.opensec.in/docs/ into site/docs/.
 
 Each page is an HTML fragment in docs-site/pages/<slug>.html whose first line is a comment holding its title and description as
 JSON: <!-- {"title": "Installation", "description": "..."} -->. NAV below gives the order and the sidebar's groups. The script
@@ -21,8 +21,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "docs-site"
 OUT = ROOT / "site" / "docs"
-SITE = "https://pi-bolt.opensec.in"
-REPO = "https://github.com/opensec-git/Pi-Bolt"
+SITE = "https://rapid-pi.opensec.in"
+REPO = "https://github.com/opensec-git/Rapid Pi"
 
 NAV = [
     ("Get started", ["index", "installation", "quickstart"]),
@@ -129,7 +129,7 @@ def pager(order, i, pages):
 
 def render(layout, page, pages, order, i, body, toc):
     canonical = f'{SITE}/docs/{"" if page["slug"] == "index" else page["file"]}'
-    full_title = "Pi-Bolt documentation" if page["slug"] == "index" else f'{page["title"]} · Pi-Bolt documentation'
+    full_title = "Rapid Pi documentation" if page["slug"] == "index" else f'{page["title"]} · Rapid Pi documentation'
     values = {
         "TITLE": html.escape(full_title),
         "DESCRIPTION": html.escape(page["description"]),
@@ -138,7 +138,7 @@ def render(layout, page, pages, order, i, body, toc):
         "BODY": body,
         "TOC": toc_html(toc),
         "PAGER": pager(order, i, pages),
-        "EDIT": f'{REPO}/blob/pi-bolt/docs-site/pages/{page["slug"]}.html',
+        "EDIT": f'{REPO}/blob/rapid-pi/docs-site/pages/{page["slug"]}.html',
     }
     return re.sub(r"\{\{(\w+)\}\}", lambda m: values[m.group(1)], layout)
 

@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.projects.FileEntry
-import opensec.pibolt.app.ui.projects.FileKind
-import opensec.pibolt.app.ui.projects.FileMatch
-import opensec.pibolt.app.ui.projects.FileSearch
-import opensec.pibolt.app.ui.projects.FileSort
-import opensec.pibolt.app.ui.projects.FileTypes
-import opensec.pibolt.app.ui.projects.ProjectFiles
+import opensec.rapidpi.app.ui.projects.FileEntry
+import opensec.rapidpi.app.ui.projects.FileKind
+import opensec.rapidpi.app.ui.projects.FileMatch
+import opensec.rapidpi.app.ui.projects.FileSearch
+import opensec.rapidpi.app.ui.projects.FileSort
+import opensec.rapidpi.app.ui.projects.FileTypes
+import opensec.rapidpi.app.ui.projects.ProjectFiles
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

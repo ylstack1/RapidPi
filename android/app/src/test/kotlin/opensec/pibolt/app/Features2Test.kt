@@ -1,4 +1,4 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -6,31 +6,31 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import opensec.pibolt.app.engine.SessionIndex
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.ui.packages.BuiltinExtension
-import opensec.pibolt.app.ui.packages.McpServers
-import opensec.pibolt.app.ui.packages.PackageList
-import opensec.pibolt.app.ui.packages.PackageResources
-import opensec.pibolt.app.ui.packages.PackageScope
-import opensec.pibolt.app.ui.session.features.CommandPalette
-import opensec.pibolt.app.ui.session.features.Builtin
-import opensec.pibolt.app.ui.session.features2.AgentTuning
-import opensec.pibolt.app.ui.session.features2.AppExtension
-import opensec.pibolt.app.ui.session.features2.BrowsedSession
-import opensec.pibolt.app.ui.session.features2.Features2
-import opensec.pibolt.app.ui.session.features2.ModelScope
-import opensec.pibolt.app.ui.session.features2.PiJsonFile
-import opensec.pibolt.app.ui.session.features2.ProjectTrust
-import opensec.pibolt.app.ui.session.features2.Resources
-import opensec.pibolt.app.ui.session.features2.SessionBrowse
-import opensec.pibolt.app.ui.session.features2.SessionSort
-import opensec.pibolt.app.ui.session.features2.readAtMost
-import opensec.pibolt.app.ui.session.tree.SessionTree
-import opensec.pibolt.app.ui.session.tree.TreeFilter
-import opensec.pibolt.app.ui.session.tree.TreeKind
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.session.SlashCommand
+import opensec.rapidpi.app.engine.SessionIndex
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.ui.packages.BuiltinExtension
+import opensec.rapidpi.app.ui.packages.McpServers
+import opensec.rapidpi.app.ui.packages.PackageList
+import opensec.rapidpi.app.ui.packages.PackageResources
+import opensec.rapidpi.app.ui.packages.PackageScope
+import opensec.rapidpi.app.ui.session.features.CommandPalette
+import opensec.rapidpi.app.ui.session.features.Builtin
+import opensec.rapidpi.app.ui.session.features2.AgentTuning
+import opensec.rapidpi.app.ui.session.features2.AppExtension
+import opensec.rapidpi.app.ui.session.features2.BrowsedSession
+import opensec.rapidpi.app.ui.session.features2.Features2
+import opensec.rapidpi.app.ui.session.features2.ModelScope
+import opensec.rapidpi.app.ui.session.features2.PiJsonFile
+import opensec.rapidpi.app.ui.session.features2.ProjectTrust
+import opensec.rapidpi.app.ui.session.features2.Resources
+import opensec.rapidpi.app.ui.session.features2.SessionBrowse
+import opensec.rapidpi.app.ui.session.features2.SessionSort
+import opensec.rapidpi.app.ui.session.features2.readAtMost
+import opensec.rapidpi.app.ui.session.tree.SessionTree
+import opensec.rapidpi.app.ui.session.tree.TreeFilter
+import opensec.rapidpi.app.ui.session.tree.TreeKind
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.session.SlashCommand
 import java.io.File
 import java.nio.file.Files
 import java.time.Instant
@@ -121,9 +121,9 @@ class Features2Test {
     fun parsesPiListOutput() {
         val out = """
             |User packages:
-            |  /data/data/in.opensec.pibolt/files/usr/share/pi-extensions/opensec-pi-todo
+            |  /data/data/in.opensec.rapidpi/files/usr/share/pi-extensions/opensec-pi-todo
             |  npm:pi-hello@1.0.0 (filtered)
-            |    /data/data/in.opensec.pibolt/files/home/.pi/agent/npm/node_modules/pi-hello
+            |    /data/data/in.opensec.rapidpi/files/home/.pi/agent/npm/node_modules/pi-hello
             |
             |Project packages:
             |  git:github.com/u/r
@@ -135,7 +135,7 @@ class Features2Test {
         assertNull(list[0].installedPath)
         assertEquals("npm:pi-hello@1.0.0", list[1].source)
         assertTrue(list[1].filtered)
-        assertEquals("/data/data/in.opensec.pibolt/files/home/.pi/agent/npm/node_modules/pi-hello", list[1].installedPath)
+        assertEquals("/data/data/in.opensec.rapidpi/files/home/.pi/agent/npm/node_modules/pi-hello", list[1].installedPath)
         assertEquals(PackageScope.Project, list[2].scope)
         assertEquals("git", list[2].kind)
         assertTrue(PackageList.parseCli("No packages installed.").isEmpty())
@@ -317,7 +317,7 @@ class Features2Test {
         val agent = Files.createTempDirectory("f2-ext").toFile()
         assertTrue(AppExtension.install(agent))
         val file = File(agent, "extensions/${AppExtension.FILE}")
-        assertTrue(file.readText().contains("registerCommand(\"pibolt-app\""))
+        assertTrue(file.readText().contains("registerCommand(\"rapidpi-app\""))
         val modified = file.lastModified()
         Thread.sleep(10)
         assertTrue(AppExtension.install(agent))
@@ -327,9 +327,9 @@ class Features2Test {
 
     @Test
     fun paletteHidesTheHelperAndOffersTheNewCommands() {
-        val host = listOf(SlashCommand("pibolt-app", "helper", "extension"), SlashCommand("todo", null, "extension"))
+        val host = listOf(SlashCommand("rapidpi-app", "helper", "extension"), SlashCommand("todo", null, "extension"))
         val names = CommandPalette.entries(host, local = true).map { it.name }
-        assertFalse("pibolt-app" in names)
+        assertFalse("rapidpi-app" in names)
         assertTrue(listOf("tree", "packages", "mcp-servers", "skills", "trust", "reload", "scoped-models", "tuning", "import", "share", "bug").all { it in names })
         assertEquals(Builtin.Tree, CommandPalette.parse("/tree", host, local = true)?.builtin)
         assertNull(CommandPalette.parse("/tree", host, local = false))

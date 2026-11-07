@@ -1,9 +1,9 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.engine.CustomProvider
-import opensec.pibolt.app.ui.providers.Brand
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.app.ui.providers.ProviderLogos
+import opensec.rapidpi.app.engine.CustomProvider
+import opensec.rapidpi.app.ui.providers.Brand
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.ui.providers.ProviderLogos
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals

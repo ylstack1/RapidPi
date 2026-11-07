@@ -1,13 +1,13 @@
-package opensec.pibolt.app.ui.nav
+package opensec.rapidpi.app.ui.nav
 
-import opensec.pibolt.app.ui.settings.BackgroundRunPrompt
+import opensec.rapidpi.app.ui.settings.BackgroundRunPrompt
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.text.style.TextOverflow
-import opensec.pibolt.app.ui.components.ButtonRow
-import opensec.pibolt.app.ui.components.Notice
-import opensec.pibolt.app.ui.components.PiCard
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.ButtonRow
+import opensec.rapidpi.app.ui.components.Notice
+import opensec.rapidpi.app.ui.components.PiCard
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.SnackKind
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -50,37 +50,37 @@ import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.ui.components.LocalNavScope
-import opensec.pibolt.app.ui.components.LocalSharedScope
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.chats.ChatSessionScreen
-import opensec.pibolt.app.ui.chats.ChatsScreen
-import opensec.pibolt.app.ui.home.HomeScreen
-import opensec.pibolt.app.ui.projects.transfer.ShareInHost
-import opensec.pibolt.app.ui.projects.transfer.SharedContent
-import opensec.pibolt.app.ui.projects.ProjectScreen
-import opensec.pibolt.app.ui.scan.ScanScreen
-import opensec.pibolt.app.ui.secrets.SecretsScreen
-import opensec.pibolt.app.ui.session.SessionScreen
-import opensec.pibolt.app.ui.session.features2.SessionAlerts
-import opensec.pibolt.app.ui.session.subagent.LocalSubagentNav
-import opensec.pibolt.app.ui.session.subagent.SubagentNav
-import opensec.pibolt.app.ui.session.subagent.SubagentOverlay
-import opensec.pibolt.app.ui.settings.ProvidersScreen
-import opensec.pibolt.app.ui.settings.RuntimesScreen
-import opensec.pibolt.app.ui.settings.SettingsScreen
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.terminal.PreviewScreen
-import opensec.pibolt.app.ui.terminal.TerminalScreen
-import opensec.pibolt.app.ui.update.UpdateSheets
-import opensec.pibolt.protocol.PairingPayload
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.ui.components.LocalNavScope
+import opensec.rapidpi.app.ui.components.LocalSharedScope
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.chats.ChatSessionScreen
+import opensec.rapidpi.app.ui.chats.ChatsScreen
+import opensec.rapidpi.app.ui.home.HomeScreen
+import opensec.rapidpi.app.ui.projects.transfer.ShareInHost
+import opensec.rapidpi.app.ui.projects.transfer.SharedContent
+import opensec.rapidpi.app.ui.projects.ProjectScreen
+import opensec.rapidpi.app.ui.scan.ScanScreen
+import opensec.rapidpi.app.ui.secrets.SecretsScreen
+import opensec.rapidpi.app.ui.session.SessionScreen
+import opensec.rapidpi.app.ui.session.features2.SessionAlerts
+import opensec.rapidpi.app.ui.session.subagent.LocalSubagentNav
+import opensec.rapidpi.app.ui.session.subagent.SubagentNav
+import opensec.rapidpi.app.ui.session.subagent.SubagentOverlay
+import opensec.rapidpi.app.ui.settings.ProvidersScreen
+import opensec.rapidpi.app.ui.settings.RuntimesScreen
+import opensec.rapidpi.app.ui.settings.SettingsScreen
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.terminal.PreviewScreen
+import opensec.rapidpi.app.ui.terminal.TerminalScreen
+import opensec.rapidpi.app.ui.update.UpdateSheets
+import opensec.rapidpi.protocol.PairingPayload
 import java.io.File
 
 object Routes {
@@ -126,7 +126,7 @@ fun AppNav(app: PiBoltApp, pendingLink: String?, consumeLink: () -> Unit, pendin
         val payload = try {
             PairingPayload.parse(text)
         } catch (e: Exception) {
-            return e.message ?: "Not a Pi-Bolt pairing code"
+            return e.message ?: "Not a Rapid Pi pairing code"
         }
         if (payload.isExpired() && app.hosts.get(payload.hostKeyId) == null) {
             return "This pairing code has expired. Run /remote-control on the computer for a new one."
@@ -145,7 +145,7 @@ fun AppNav(app: PiBoltApp, pendingLink: String?, consumeLink: () -> Unit, pendin
         linkToConfirm = try {
             PairingPayload.parse(link)
         } catch (e: Exception) {
-            linkError = e.message ?: "Not a Pi-Bolt pairing code"
+            linkError = e.message ?: "Not a Rapid Pi pairing code"
             null
         }
     }

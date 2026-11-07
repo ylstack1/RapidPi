@@ -57,7 +57,7 @@ import {
 	streamSimple,
 } from "@earendil-works/pi-ai/compat";
 import { getThemeByName, theme } from "../modes/interactive/theme/theme.ts";
-import { PIBOLT } from "../pi-bolt.ts";
+import { RAPIDPI } from "../rapid-pi.ts";
 import { stripFrontmatter } from "../utils/frontmatter.ts";
 import { processImage } from "../utils/image-process.ts";
 import { sleep } from "../utils/sleep.ts";
@@ -214,7 +214,7 @@ export function parseSkillBlock(text: string): ParsedSkillBlock | null {
  * Built-in tools whose calls may start before the model's message ends: they only read. grep and find only when they
  * search in-process; otherwise they may first download ripgrep or fd, which would stay if the early run is dropped.
  */
-const EARLY_TOOL_NAMES: ReadonlySet<string> = new Set(PIBOLT ? ["read", "ls", "grep", "find"] : ["read", "ls"]);
+const EARLY_TOOL_NAMES: ReadonlySet<string> = new Set(RAPIDPI ? ["read", "ls", "grep", "find"] : ["read", "ls"]);
 
 /**
  * Extensions whose `tool_call` handlers let calls of the tools in EARLY_TOOL_NAMES through unchanged. The built-in MCP

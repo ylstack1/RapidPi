@@ -1,4 +1,4 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import java.io.File
 
@@ -60,7 +60,7 @@ fun engineEnvironment(
 
 /** `etc/resolv.conf` for glibc from the default network's DNS servers (glibc reads at most three). */
 fun resolvConf(servers: List<String>, searchDomains: String?): String = buildString {
-    append("# Written by Pi-Bolt from the active network's DNS servers\n")
+    append("# Written by Rapid Pi from the active network's DNS servers\n")
     for (server in servers.distinct().take(3)) append("nameserver ").append(server).append('\n')
     searchDomains?.split(',', ' ')?.map { it.trim() }?.filter { it.isNotEmpty() }?.takeIf { it.isNotEmpty() }?.let {
         append("search ").append(it.joinToString(" ")).append('\n')

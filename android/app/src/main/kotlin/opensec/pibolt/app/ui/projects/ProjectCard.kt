@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.background
@@ -31,21 +31,21 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
-import opensec.pibolt.app.engine.SessionSummary
+import opensec.rapidpi.app.engine.SessionSummary
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.QuadMath
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SharedKeys
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.rememberSettledMode
-import opensec.pibolt.app.ui.components.sharedHostBounds
-import opensec.pibolt.app.ui.components.sharedHostElement
-import opensec.pibolt.app.ui.session.TranscriptModel
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.QuadMath
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SharedKeys
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.rememberSettledMode
+import opensec.rapidpi.app.ui.components.sharedHostBounds
+import opensec.rapidpi.app.ui.components.sharedHostElement
+import opensec.rapidpi.app.ui.session.TranscriptModel
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
 
 /** What a project's menu can do. */
 sealed interface ProjectAction {

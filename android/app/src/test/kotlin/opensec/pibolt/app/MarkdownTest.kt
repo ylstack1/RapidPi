@@ -1,10 +1,10 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.markdown.Highlighter
-import opensec.pibolt.app.ui.markdown.Inline
-import opensec.pibolt.app.ui.markdown.InlineSpan
-import opensec.pibolt.app.ui.markdown.Markdown
-import opensec.pibolt.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.markdown.Highlighter
+import opensec.rapidpi.app.ui.markdown.Inline
+import opensec.rapidpi.app.ui.markdown.InlineSpan
+import opensec.rapidpi.app.ui.markdown.Markdown
+import opensec.rapidpi.app.ui.markdown.MdBlock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

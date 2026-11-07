@@ -1,4 +1,4 @@
-package opensec.pibolt.app.session
+package opensec.rapidpi.app.session
 
 import android.Manifest
 import android.app.Notification
@@ -13,13 +13,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.content.ContextCompat
-import opensec.pibolt.app.MainActivity
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.R
-import opensec.pibolt.app.background.SessionActionReceiver
-import opensec.pibolt.app.background.SessionActions
-import opensec.pibolt.app.ui.session.features2.SessionAlerts
-import opensec.pibolt.protocol.session.DialogRequest
+import opensec.rapidpi.app.MainActivity
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.R
+import opensec.rapidpi.app.background.SessionActionReceiver
+import opensec.rapidpi.app.background.SessionActions
+import opensec.rapidpi.app.ui.session.features2.SessionAlerts
+import opensec.rapidpi.protocol.session.DialogRequest
 import java.io.File
 
 object Notifications {
@@ -150,7 +150,7 @@ object Notifications {
         val id = RunningSummary.notificationId(key, RunningSummary.SETTLED)
         val title = if (aborted || capped != null) "Pi stopped on $host" else "Pi finished on $host"
         val text = capped ?: lastText.lineSequence().map { it.trim() }.firstOrNull { it.isNotEmpty() }?.take(200) ?: "Tap to see the result"
-        val big = capped?.let { "$it Open Pi-Bolt to raise it or continue once." } ?: lastText.take(1000).ifBlank { text }
+        val big = capped?.let { "$it Open Rapid Pi to raise it or continue once." } ?: lastText.take(1000).ifBlank { text }
         post(
             context,
             id,
@@ -176,7 +176,7 @@ object Notifications {
      */
     fun interrupted(context: Context, run: RunMarks.Run) {
         val id = RunningSummary.notificationId(run.key, RunningSummary.SETTLED)
-        val text = "Android closed Pi-Bolt while Pi was working. Open the session to continue."
+        val text = "Android closed Rapid Pi while Pi was working. Open the session to continue."
         post(
             context,
             id,

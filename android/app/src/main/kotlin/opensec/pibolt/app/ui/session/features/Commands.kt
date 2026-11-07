@@ -1,7 +1,7 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
 import androidx.compose.runtime.Immutable
-import opensec.pibolt.protocol.session.SlashCommand
+import opensec.rapidpi.protocol.session.SlashCommand
 
 /**
  * The app's own slash commands: the terminal's built-ins that make sense on a phone. The host never sees these; the
@@ -70,7 +70,7 @@ object CommandPalette {
         val builtins = Builtin.entries.filter { (local || !it.localOnly) && !(chat && it.projectOnly) && it.command !in hostNames }
             .map { PaletteEntry(it.command, it.inChat?.takeIf { chat } ?: it.description, CommandSource.App, it.hint, it) }
         // The app's own helper extension (features2.AppExtension) is not for people.
-        val fromHost = host.filterNot { it.name == "pibolt-app" || it.name.startsWith("pibolt-app:") || (chat && sourceOf(it.source) != CommandSource.Prompt) }.map { c ->
+        val fromHost = host.filterNot { it.name == "rapidpi-app" || it.name.startsWith("rapidpi-app:") || (chat && sourceOf(it.source) != CommandSource.Prompt) }.map { c ->
             PaletteEntry(c.name, c.description?.takeIf { it.isNotBlank() }.orEmpty(), sourceOf(c.source), c.argumentHint)
         }
         return builtins + fromHost

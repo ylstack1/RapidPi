@@ -1,21 +1,21 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
-import opensec.pibolt.app.ui.session.subagent.SubagentFormat
+import opensec.rapidpi.app.ui.session.subagent.SubagentFormat
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.int
-import opensec.pibolt.app.engine.ChatSpace.ASK_TOOL
-import opensec.pibolt.app.ui.session.ask.AskQuestions
-import opensec.pibolt.app.ui.session.web.WebTools
-import opensec.pibolt.protocol.session.SessionReducer.TODO_TOOL
-import opensec.pibolt.protocol.session.SubagentReducer
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.toDisplayString
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.app.engine.ChatSpace.ASK_TOOL
+import opensec.rapidpi.app.ui.session.ask.AskQuestions
+import opensec.rapidpi.app.ui.session.web.WebTools
+import opensec.rapidpi.protocol.session.SessionReducer.TODO_TOOL
+import opensec.rapidpi.protocol.session.SubagentReducer
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.toDisplayString
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -76,7 +76,7 @@ fun toolLabel(item: ToolItem): ToolLabel {
         "source_check" -> ToolLabel(ToolKind.Web, "Check sources", firstLine(arg("claim")), "Checked sources")
         "fetch_content" -> ToolLabel(ToolKind.Web, "Read", WebTools.fetchUrls(item).joinToString(", ").ifBlank { arg("url").orEmpty() }, "Read")
         "get_search_content" -> ToolLabel(ToolKind.Web, "Read results", arg("query", "url").orEmpty(), "Read results")
-        // The app's preview tools (assets/extensions/pibolt-preview.js).
+        // The app's preview tools (assets/extensions/rapidpi-preview.js).
         "preview_open" -> ToolLabel(ToolKind.Other, "Open preview", arg("url") ?: "dev server", "Opened preview")
         "preview_screenshot" -> ToolLabel(ToolKind.Other, "Screenshot", "preview", "Took a screenshot")
         "preview_console" -> ToolLabel(ToolKind.Other, "Read console", "preview", "Read the console")

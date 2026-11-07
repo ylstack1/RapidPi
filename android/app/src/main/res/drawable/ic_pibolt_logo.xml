@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The Pi-Bolt logo (docs/images/logo.svg), cropped to the bolt: x 210..610, y 90..710 of the 800 grid. -->
+<!-- The Rapid Pi logo (docs/images/logo.svg), cropped to the bolt: x 210..610, y 90..710 of the 800 grid. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="26dp"
     android:height="40dp"

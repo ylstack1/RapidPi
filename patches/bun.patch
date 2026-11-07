@@ -5593,9 +5593,9 @@ index 00000000..eca91d71
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: OpenSec <contactus@opensec.in>
 Date: Mon, 12 Oct 2026 02:57:13 +0000
-Subject: [PATCH] Pi-Bolt: ahead-of-time compiled executables
+Subject: [PATCH] Rapid Pi: ahead-of-time compiled executables
 
-Bun's changes for Pi-Bolt's executables, on Linux x86-64, macOS ARM64 and Windows x64:
+Bun's changes for Rapid Pi's executables, on Linux x86-64, macOS ARM64 and Windows x64:
 
 - Executables with a prebuilt heap and a code image, made by `bun build --compile` and mapped from the
   executable when it starts (bundler, StandaloneModuleGraph, ZigSourceProvider).
@@ -5609,7 +5609,7 @@ Bun's changes for Pi-Bolt's executables, on Linux x86-64, macOS ARM64 and Window
 - fetch: an idle connection waits in the keep-alive pool for 4 seconds, or as long as the server says.
 - macOS: the prebuilt heap and code image mapped from the __BUN section, with the executable where it
   was linked to be; SharedArrayBuffer with the JIT off; a terminal reopened by its own device, which
-  kqueue can watch; the programs an executable starts are started by Pi-Bolt's launcher helper.
+  kqueue can watch; the programs an executable starts are started by Rapid Pi's launcher helper.
 
 - Windows x64: the prebuilt heap and code image in the executable's PE sections, mapped read-only where
   nothing writes; DLLs that are delay-loaded only from System32 (a delay-load hook, the dependent load
@@ -5620,13 +5620,13 @@ Bun's changes for Pi-Bolt's executables, on Linux x86-64, macOS ARM64 and Window
   looks like an address of the blocks or the build's scratch memory for a number unless it is aligned and its page committed,
   and says so.
 
-Includes the engine changes of Pi-Bolt 0.7.1 to 0.7.3 on pi-bolt (5f6ad773e, c9bde4b67): writev for
+Includes the engine changes of Rapid Pi 0.7.1 to 0.7.3 on rapid-pi (5f6ad773e, c9bde4b67): writev for
 queued writes, mimalloc from upstream, less idle work, an idle keep-alive's age on a clock nobody sets,
 fetch through a TLS 1.2 renegotiation.
 
-Includes the engine changes of Pi-Bolt 0.7.4 (bolt-v0.7.4): code built into an executable resolves no module or package in the working directory (absolute paths and require.resolve paths still do); internal names and messages cleaned up. Builds on Linux and macOS: the executable's bytes mutable only where Windows rewrites them.
+Includes the engine changes of Rapid Pi 0.7.4 (bolt-v0.7.4): code built into an executable resolves no module or package in the working directory (absolute paths and require.resolve paths still do); internal names and messages cleaned up. Builds on Linux and macOS: the executable's bytes mutable only where Windows rewrites them.
 
-Includes the engine changes of Pi-Bolt 0.8.5: Latin-1 strings are converted to UTF-8 in one pass into
+Includes the engine changes of Rapid Pi 0.8.5: Latin-1 strings are converted to UTF-8 in one pass into
 a buffer of the exact size (request bodies). From upstream Bun: sliceAnsi and stripANSI of huge input;
 FileSink kept alive until its close callback returns, and its microtask checkpoint; PipeReader stops
 after a failed read; stdio with no FileSink writes synchronously; a blob owns its string; children's
@@ -5635,7 +5635,7 @@ waits on; the idle full collection also has mimalloc give back the memory it kee
 
 Windows (0.8.5): the sockets' sweep timer stops with the last socket, so an idle process no longer wakes every 4 seconds
 (oven-sh/bun#37096), and a task left queued after a tick wakes the poll (oven-sh/bun#42968). On every platform the
-runtime transpiler cache's default folder is @t@pi-bolt, beside stock Bun's @t@, whose entries the two runtimes took for
+runtime transpiler cache's default folder is @t@rapid-pi, beside stock Bun's @t@, whose entries the two runtimes took for
 stale and rewrote in turn.
 ---
  Cargo.lock                                    |    1 +
@@ -5992,7 +5992,7 @@ index f18a60b0..fabdf349 100644
 -          // executable (-fno-pic, see flags.ts). No RELRO / BIND_NOW anywhere:
 -          // flags.ts links `-z norelro -z lazy` (a startup-time choice from
 -          // the CMake era, kept as is); recorded so a change is deliberate.
-+          // executable (-fno-pic, see flags.ts). Pi-Bolt links Linux with
++          // executable (-fno-pic, see flags.ts). Rapid Pi links Linux with
 +          // `-z relro -z now` (flags.ts); FreeBSD keeps `-z norelro -z lazy`.
            type: android ? "DYN" : "EXEC",
            execStack: false,
@@ -6075,7 +6075,7 @@ index edcd6bf3..2dc2c347 100644
 +  patches: [
 +    "patches/libuv/win-poll-rearm-before-callback.patch",
 +    "patches/libuv/win-poll-abort-with-disconnect.patch",
-+    // Pi-Bolt: a thread's stack size is a reservation, as on Unix, not 8 MB committed per threadpool thread.
++    // Rapid Pi: a thread's stack size is a reservation, as on Unix, not 8 MB committed per threadpool thread.
 +    "patches/libuv/win-thread-stack-reservation.patch",
 +  ],
  
@@ -6089,7 +6089,7 @@ index f162fdf9..fac6b037 100644
      commit: MIMALLOC_COMMIT,
    }),
  
-+  // Pi-Bolt: page_commit_on_demand's default as a define (MI_DEFAULT_PAGE_COMMIT_ON_DEMAND), set for Windows below.
++  // Rapid Pi: page_commit_on_demand's default as a define (MI_DEFAULT_PAGE_COMMIT_ON_DEMAND), set for Windows below.
 +  patches: ["patches/mimalloc/page-commit-on-demand-default.patch"],
 +
    build: cfg => {
@@ -6099,7 +6099,7 @@ index f162fdf9..fac6b037 100644
      // bun_alloc's lazy arena opt out the same way on their side.
      if (cfg.linux) defines.MI_DEFAULT_ALLOW_THP = 0;
  
-+    // Pi-Bolt: on Windows, commit a medium or large page (512 KB, 4 MB) as it fills rather than all at once. Windows
++    // Rapid Pi: on Windows, commit a medium or large page (512 KB, 4 MB) as it fills rather than all at once. Windows
 +    // charges commit for all of it whether it is touched or not (Linux overcommits, so there it costs nothing, and 2 leaves
 +    // it as it is there). Measured on Pi (bench's TUI session): peak private bytes 246 -> 173 MB, headless 200 -> 125 MB,
 +    // with the same CPU, working set and time to interactive.
@@ -6364,7 +6364,7 @@ index 3d40f647..59befe77 100644
    },
    {
 -    flag: ["/STACK:0x1200000,0x200000", "/errorlimit:0"],
-+    // Pi-Bolt: 256 KB committed of each thread's 18 MB, not 2 MB. The header's commit is every thread's default (Rust's,
++    // Rapid Pi: 256 KB committed of each thread's 18 MB, not 2 MB. The header's commit is every thread's default (Rust's,
 +    // WTF's, mimalloc's and the system's thread pools create theirs with a reservation size only), and Windows charges it
 +    // whether it is used or not; the rest is committed as a thread's stack grows, through its guard page. A thread that runs
 +    // JavaScript commits JSC's 5 MB itself (VM.cpp, preCommitStackMemory).
@@ -6402,7 +6402,7 @@ index 3d40f647..59befe77 100644
 +    // anything in the executable.
 +    flag: `-Wl,--dynamic-linker=/lib${"/".repeat(200)}ld-linux-aarch64.so.1`,
 +    when: c => c.linux && c.abi === "gnu" && c.arm64,
-+    desc: "Pi-Bolt: room in PT_INTERP for another loader's path",
++    desc: "Rapid Pi: room in PT_INTERP for another loader's path",
 +  },
    {
      flag: [
@@ -6410,7 +6410,7 @@ index 3d40f647..59befe77 100644
        "-Wl,-z,stack-size=12800000",
 -      "-Wl,-z,lazy",
 -      "-Wl,-z,norelro",
-+      // Pi-Bolt: RELRO with immediate binding (the GOT read-only after startup), at the cost of resolving the few hundred
++      // Rapid Pi: RELRO with immediate binding (the GOT read-only after startup), at the cost of resolving the few hundred
 +      // imports at startup instead of on first call.
 +      "-Wl,-z,relro",
 +      "-Wl,-z,now",
@@ -7382,18 +7382,18 @@ index 91e2ee80..f4246de1 100644
          })
      }
  
-+    /// An executable that runs code compiled ahead of time (Pi-Bolt) is not a Bun that Bun's team can decode a trace of: its
-+    /// crashes go to Pi-Bolt, with the trace in the same encoding, which Pi-Bolt decodes against its own symbols.
-+    const PI_BOLT_REPORT_BASE_URL: &str = "https://pi-bolt.opensec.in/crash";
-+    const PI_BOLT_CRASH_MESSAGE: &[u8] = b"Pi-Bolt has crashed. This is a bug in Pi-Bolt, not in your code.\n\n\
-+        Please report it at https://github.com/opensec-git/Pi-Bolt/issues/new\n\
++    /// An executable that runs code compiled ahead of time (Rapid Pi) is not a Bun that Bun's team can decode a trace of: its
++    /// crashes go to Rapid Pi, with the trace in the same encoding, which Rapid Pi decodes against its own symbols.
++    const PI_BOLT_REPORT_BASE_URL: &str = "https://rapid-pi.opensec.in/crash";
++    const PI_BOLT_CRASH_MESSAGE: &[u8] = b"Rapid Pi has crashed. This is a bug in Rapid Pi, not in your code.\n\n\
++        Please report it at https://github.com/opensec-git/Rapid Pi/issues/new\n\
 +        with the link below and what you were doing:\n\n";
-+    const PI_BOLT_OOM_MESSAGE: &[u8] = b"Pi-Bolt has run out of memory.\n\n\
-+        Please report it at https://github.com/opensec-git/Pi-Bolt/issues/new\n\
++    const PI_BOLT_OOM_MESSAGE: &[u8] = b"Rapid Pi has run out of memory.\n\n\
++        Please report it at https://github.com/opensec-git/Rapid Pi/issues/new\n\
 +        with the link below and what you were doing:\n\n";
 +
-+    // A Pi-Bolt executable: one that carries code compiled ahead of time, whether it uses it or not (on a CPU it was not
-+    // compiled for, or with BUN_AOT=0, it runs its bytecode, and is Pi-Bolt all the same).
++    // A Rapid Pi executable: one that carries code compiled ahead of time, whether it uses it or not (on a CPU it was not
++    // compiled for, or with BUN_AOT=0, it runs its bytecode, and is Rapid Pi all the same).
 +    fn is_ahead_of_time_executable() -> bool {
 +        unsafe extern "C" {
 +            fn Bun__AOTImage__executableHasImage() -> bool;
@@ -7426,7 +7426,7 @@ index 91e2ee80..f4246de1 100644
              return enable_crash_reporting;
          }
  
-+        // Pi-Bolt's runtime is a canary build, which below would `curl <report URL>/ack` on every crash on Linux too: a request
++        // Rapid Pi's runtime is a canary build, which below would `curl <report URL>/ack` on every crash on Linux too: a request
 +        // nobody opted into, to an endpoint that does not answer it (curl prints "The requested URL returned error: 404" under
 +        // the crash message). The link is still printed for the user to follow; uploading is opt-in (BUN_ENABLE_CRASH_REPORTING=1
 +        // or BUN_CRASH_REPORT_URL).
@@ -7713,7 +7713,7 @@ index 4b949b9d..63304d51 100644
          // Runtime page size of the host.
 +        #[cfg(not(windows))]
          let page = bun_core::page_size();
-+        // Pi-Bolt: on Windows a terminal frame comes through here on every write (the console's synchronous path resets
++        // Rapid Pi: on Windows a terminal frame comes through here on every write (the console's synchronous path resets
 +        // after each one): shrinking to a page made every frame grow it again (reallocations and a copy), and mimalloc
 +        // decommit and recommit the pages. Up to 256 KB is kept there.
 +        #[cfg(windows)]
@@ -8508,7 +8508,7 @@ index 1ba5bf2d..4ee93843 100644
 +/// runtimes' entries differ in version, so each took the other's for stale and wrote it again (pi-subagents, 165 entries,
 +/// ~3 s on Windows, where Defender also checks each new file; ~200 ms per start with three extensions on Linux and macOS).
 +/// BUN_RUNTIME_TRANSPILER_CACHE_PATH still names one.
-+const CACHE_FOLDER: &[u8] = b"@t@pi-bolt";
++const CACHE_FOLDER: &[u8] = b"@t@rapid-pi";
 +
  /// Source files smaller than this are not written to / read from the on-disk
  /// transpiler cache. Originally 50 KiB, which excluded almost every file in a
@@ -9616,7 +9616,7 @@ index fbfaa2ff..5198ef8b 100644
 +            indexOfRegion = i;
 +    }
 +    if (indexOfRegion == notFound)
-+        return fail("the executable has no .pbreg section (it is not the Pi-Bolt runtime)");
++        return fail("the executable has no .pbreg section (it is not the Rapid Pi runtime)");
 +    PESection regionSection = sections[indexOfRegion];
 +
 +    // ---- This process: the runtime the heap was built in, which must be the same executable (its region at the same RVA).
@@ -10103,7 +10103,7 @@ index fbfaa2ff..5198ef8b 100644
 +                layoutOffset = s.header.pointerToRawData + (layoutRVA - s.header.virtualAddress);
 +        }
 +        if (!layoutOffset)
-+            return fail("the executable has no .pblay section for the static region's layout (it is not the Pi-Bolt runtime)");
++            return fail("the executable has no .pblay section for the static region's layout (it is not the Rapid Pi runtime)");
 +        bmalloc::StaticRegionLayout layout = Region::layout();
 +        layout.magic = bmalloc::StaticRegionLayout::expectedMagic;
 +        layout.offset[static_cast<unsigned>(Region::Arena::Scratch)] = endOfRegion - regionRVA;
@@ -10132,7 +10132,7 @@ index fbfaa2ff..5198ef8b 100644
 +    if (!registered) {
 +        // The static heap, which is mapped and was built with this code, cannot run without it (short-form executables point into
 +        // it), and the engine is initialized by now: stop here, rather than at the first call.
-+        fprintf(stderr, "pi-bolt: the executable's ahead-of-time code image was rejected by the engine; run with BUN_AOT=0 to use the bytecode instead\n");
++        fprintf(stderr, "rapid-pi: the executable's ahead-of-time code image was rejected by the engine; run with BUN_AOT=0 to use the bytecode instead\n");
 +        exit(70); // EX_SOFTWARE
 +    }
 +}
@@ -10172,7 +10172,7 @@ index fbfaa2ff..5198ef8b 100644
 +static void noteNotUsed(const char* why)
 +{
 +    // One line, once: the program still runs, from its bytecode, with the JIT; only slower to start.
-+    fprintf(stderr, "pi-bolt: the executable's ahead-of-time compiled code is not used (%s); running from bytecode\n", why);
++    fprintf(stderr, "rapid-pi: the executable's ahead-of-time compiled code is not used (%s); running from bytecode\n", why);
 +}
 +
 +// The executable was built to run without the JIT (AOTImageTrailer::withoutJIT): so it runs whether its code is used or not
@@ -10184,7 +10184,7 @@ index fbfaa2ff..5198ef8b 100644
 +    return s_executableRunsWithoutJIT;
 +}
 +
-+// The executable carries code compiled ahead of time (a Pi-Bolt executable), used or not: what the crash handler and the notices
++// The executable carries code compiled ahead of time (a Rapid Pi executable), used or not: what the crash handler and the notices
 +// below call it by.
 +static bool s_executableHasImage;
 +extern "C" bool Bun__AOTImage__executableHasImage()
@@ -10402,7 +10402,7 @@ index a3fd0268..acdd2f0e 100644
 +        if (ttyname_r(fd, pathbuf, sizeof(pathbuf)) != 0)
 +            return -1;
 +    }
-+    // A terminal opened as /dev/tty (`pi-bolt </dev/tty`, as a script piped to sh starts a program) has that path, and
++    // A terminal opened as /dev/tty (`rapid-pi </dev/tty`, as a script piped to sh starts a program) has that path, and
 +    // ttyname_r() says the same; kqueue cannot watch a file opened from it (EINVAL). The device behind it is the
 +    // controlling terminal's.
 +    if (!strcmp(pathbuf, "/dev/tty")) {
@@ -10427,9 +10427,9 @@ index a3fd0268..acdd2f0e 100644
 +#if OS(LINUX) && CPU(ARM64) && !OS(ANDROID)
 +// (Android: SIGSYS stays the runtime's, which returns ENOSYS for a call the system call filter refused, below.)
 +extern "C" bool Bun__filteredCallsReturnENOSYS();
-+#define PIBOLT_FORWARDS_SIGNAL(SIG) (SIG != SIGSYS || !Bun__filteredCallsReturnENOSYS())
++#define RAPIDPI_FORWARDS_SIGNAL(SIG) (SIG != SIGSYS || !Bun__filteredCallsReturnENOSYS())
 +#else
-+#define PIBOLT_FORWARDS_SIGNAL(SIG) true
++#define RAPIDPI_FORWARDS_SIGNAL(SIG) true
 +#endif
 +
  extern "C" void Bun__registerSignalsForForwarding()
@@ -10442,7 +10442,7 @@ index a3fd0268..acdd2f0e 100644
 -#define REGISTER_SIGNAL(SIG)                                 \
 -    if (sigaction(SIG, &sa, &previous_actions[SIG]) == -1) { \
 +#define REGISTER_SIGNAL(SIG)                                                               \
-+    if (PIBOLT_FORWARDS_SIGNAL(SIG) && sigaction(SIG, &sa, &previous_actions[SIG]) == -1) { \
++    if (RAPIDPI_FORWARDS_SIGNAL(SIG) && sigaction(SIG, &sa, &previous_actions[SIG]) == -1) { \
      }
  
      FOR_EACH_SIGNAL(REGISTER_SIGNAL)
@@ -10453,7 +10453,7 @@ index a3fd0268..acdd2f0e 100644
 -#define UNREGISTER_SIGNAL(SIG)                                \
 -    if (sigaction(SIG, &previous_actions[SIG], NULL) == -1) { \
 +#define UNREGISTER_SIGNAL(SIG)                                                              \
-+    if (PIBOLT_FORWARDS_SIGNAL(SIG) && sigaction(SIG, &previous_actions[SIG], NULL) == -1) { \
++    if (RAPIDPI_FORWARDS_SIGNAL(SIG) && sigaction(SIG, &previous_actions[SIG], NULL) == -1) { \
      }
  
      FOR_EACH_SIGNAL(UNREGISTER_SIGNAL)
@@ -10494,7 +10494,7 @@ index a3fd0268..acdd2f0e 100644
 +    return flags & hasStaticHeapFlag;
 +}
 +
-+// macOS passes how this executable was started on to every process it starts. Pi-Bolt's launcher
++// macOS passes how this executable was started on to every process it starts. Rapid Pi's launcher
 +// (scripts/lib/darwin-launcher.c) forks a helper, started the usual way, before it starts this executable, and says so in
 +// BUN_INTERNAL_SPAWN_HELPER: <pid>:<socket>:<path of pi-spawn>. posix_spawn.rs then starts pi-spawn in the place of a program,
 +// which has the helper start it.
@@ -10803,7 +10803,7 @@ index 16951a2b..615ebea9 100644
  }
  
 +#if OS(WINDOWS) && CPU(X86_64)
-+// Pi-Bolt: the Rust side's call of its writer callback (a SYSV_ABI function), made here, where Control Flow Guard can check it
++// Rapid Pi: the Rust side's call of its writer callback (a SYSV_ABI function), made here, where Control Flow Guard can check it
 +// correctly (wtf/SysVCall.h); rustc's LLVM would pass the target in the wrong register (generated_classes::call_write_bytes).
 +extern "C" void Bun__StructuredClone__writeBytes(void(SYSV_ABI* writeBytes)(CloneSerializer*, const uint8_t*, uint32_t), CloneSerializer* ctx, const uint8_t* data, uint32_t size)
 +{
@@ -11044,7 +11044,7 @@ index f701bbd1..6d7a3f70 100644
          // https://github.com/nodejs/node/blob/f552c86fecd6c2ba9e832ea129b731dd63abdbe2/src/env.cc#L1512
 +        #[cfg(not(windows))]
          let wait_ms = core::cmp::max(1, wait.ms_unsigned());
-+        // Pi-Bolt: on Windows, rounded up. libuv's clock there is in whole milliseconds, and a wait rounded down woke the loop
++        // Rapid Pi: on Windows, rounded up. libuv's clock there is in whole milliseconds, and a wait rounded down woke the loop
 +        // before the timer was due, to wait again for 1 ms: two wakeups for each timer, and each fired up to 1 ms late.
 +        #[cfg(windows)]
 +        let wait_ms = core::cmp::max(1, wait.ns().div_ceil(1_000_000));
@@ -11526,9 +11526,9 @@ index 6555894c..af311836 100644
          Ok((posix_actions, posix_attr))
      }
  
-+    /// pi-bin, Pi-Bolt's executable on macOS, runs at its linked address, and macOS passes how it was started on to every
-+    /// process it starts. When Pi-Bolt's launcher has made a helper (see `Bun__spawnHelperFd` in c-bindings.cpp), the program
-+    /// is started by it: this starts pi-spawn (Pi-Bolt's scripts/lib/darwin-spawn-proxy.c) in the program's place, with
++    /// pi-bin, Rapid Pi's executable on macOS, runs at its linked address, and macOS passes how it was started on to every
++    /// process it starts. When Rapid Pi's launcher has made a helper (see `Bun__spawnHelperFd` in c-bindings.cpp), the program
++    /// is started by it: this starts pi-spawn (Rapid Pi's scripts/lib/darwin-spawn-proxy.c) in the program's place, with
 +    /// everything the program would get, and two more files: the helper's socket, and a pipe on which pi-spawn says how it
 +    /// went. pi-spawn then waits for the program and exits as it did, so its pid is the one to wait for; the program's pid is
 +    /// the one to signal. `None`: start the program directly.
@@ -12019,7 +12019,7 @@ index a1cfe230..e59bd771 100644
 +            let Some((file, offset)) = macho::open_file_of(self.static_heap.as_ptr() as usize) else {
 +                // (Bun__StaticHeap__map() says why for every other reason.)
 +                if !std::env::var_os("BUN_AOT").is_some_and(|value| value.as_encoded_bytes().starts_with(b"0")) {
-+                    eprintln!("pi-bolt: the executable's ahead-of-time compiled code is not used (the executable's file could not be opened); running from bytecode");
++                    eprintln!("rapid-pi: the executable's ahead-of-time compiled code is not used (the executable's file could not be opened); running from bytecode");
 +                }
 +                return false;
 +            };
@@ -12184,7 +12184,7 @@ index a1cfe230..e59bd771 100644
          }
 +        // With a static heap the program runs from its code image, not from these bytes: reading them ahead only competes
 +        // with the pages it does need (macOS, 0.7.2, pi-bin dropped from memory: `pi -p` 172 ms with this read, 163 without).
-+        // Pi-Bolt's macOS launcher reads ahead what a start does touch (pi-bin.hot). (If the heap is then declined, the
++        // Rapid Pi's macOS launcher reads ahead what a start does touch (pi-bin.hot). (If the heap is then declined, the
 +        // program decodes from these bytes as they fault in, as without this read.)
 +        #[cfg(target_os = "macos")]
 +        if !self.static_heap.is_empty() {
@@ -12268,10 +12268,10 @@ index 606582c1..f4a18285 100644
      // Stand-in for the shared, world-writable system temp dir. Pre-create
 -    // bun/@t@ inside it the way another local user could on a multi-user host.
 +    // the cache folders inside it the way another local user could on a multi-user host:
-+    // Pi-Bolt's (bun/@t@pi-bolt) and stock Bun's (bun/@t@).
++    // Rapid Pi's (bun/@t@rapid-pi) and stock Bun's (bun/@t@).
      const shared_tmp = join(temp_dir, "shared-tmp");
 -    const shared_cache = join(shared_tmp, "bun", "@t@");
-+    const shared_cache = join(shared_tmp, "bun", "@t@pi-bolt");
++    const shared_cache = join(shared_tmp, "bun", "@t@rapid-pi");
 +    const shared_stock_cache = join(shared_tmp, "bun", "@t@");
      mkdirSync(shared_cache, { recursive: true });
 +    mkdirSync(shared_stock_cache, { recursive: true });
@@ -15430,9 +15430,9 @@ index fac6b03715..d5fb477744 100644
      commit: MIMALLOC_COMMIT,
    }),
  
--  // Pi-Bolt: page_commit_on_demand's default as a define (MI_DEFAULT_PAGE_COMMIT_ON_DEMAND), set for Windows below.
+-  // Rapid Pi: page_commit_on_demand's default as a define (MI_DEFAULT_PAGE_COMMIT_ON_DEMAND), set for Windows below.
 -  patches: ["patches/mimalloc/page-commit-on-demand-default.patch"],
-+  // Pi-Bolt: page_commit_on_demand's default as a define (MI_DEFAULT_PAGE_COMMIT_ON_DEMAND), set for Windows below; the
++  // Rapid Pi: page_commit_on_demand's default as a define (MI_DEFAULT_PAGE_COMMIT_ON_DEMAND), set for Windows below; the
 +  // scavenger's 30 s safety-net wait, when nothing is scheduled, doubles while nothing interrupts it (up to an hour).
 +  patches: ["patches/mimalloc/page-commit-on-demand-default.patch", "patches/mimalloc/scavenger-idle-backoff.patch"],
  
@@ -16911,7 +16911,7 @@ index d5fb4777..232e2d56 100644
 @@ -25,8 +25,9 @@ export const mimalloc: Dependency = {
    }),
  
-   // Pi-Bolt: page_commit_on_demand's default as a define (MI_DEFAULT_PAGE_COMMIT_ON_DEMAND), set for Windows below; the
+   // Rapid Pi: page_commit_on_demand's default as a define (MI_DEFAULT_PAGE_COMMIT_ON_DEMAND), set for Windows below; the
 -  // scavenger's 30 s safety-net wait, when nothing is scheduled, doubles while nothing interrupts it (up to an hour).
 -  patches: ["patches/mimalloc/page-commit-on-demand-default.patch", "patches/mimalloc/scavenger-idle-backoff.patch"],
 +  // scavenger waits with no timeout when nothing is scheduled and no parked thread is due to be swept again, instead of
@@ -16936,7 +16936,7 @@ prompt or two resident at once (BUN_JSC_logGC: first collection at 24.7 MB alloc
 An eden collection keeps that allowance for the next cycle (Heap::updateAllocationLimits sets it anew only after a
 full collection), so the cycles after it allowed 24.6 MB as well.
 
-Linux now caps it at 16 MB. Measured on GitHub's ubuntu-24.04 x64 with Pi-Bolt 1.0.2, pinned to one CPU, with the
+Linux now caps it at 16 MB. Measured on GitHub's ubuntu-24.04 x64 with Rapid Pi 1.0.2, pinned to one CPU, with the
 allowance of every cycle capped at 16 MB (BUN_JSC_gcMaxHeapSize; this caps the later cycles too, so the cost is an
 upper bound), 15 interleaved runs and a second copy of the release as the noise floor:
 - TUI session, 5 prompts: peak own memory 32 -> 29 MB (copy: 33), CPU 155 -> 151 ms (copy: 152);
@@ -17063,7 +17063,7 @@ interpreted CodeBlocks survive the 10 s collection and stay alive, so "no code t
 2-min collection found the heap as the first one left it: ~33 M instructions (~14 ms of CPU on an M5), its marking
 threads and the allocator's purges after it, for no memory.
 
-An executable compiled ahead of time without the JIT (Pi-Bolt's default build) now defaults to "10,590": 10 s and
+An executable compiled ahead of time without the JIT (Rapid Pi's default build) now defaults to "10,590": 10 s and
 10 min of quiet. The code that can age there is interpreted code, which the 10 s collection already lets go of. With the
 JIT (the -jit builds, stock Bun) the default stays "10,110,480": optimized code, such as a plugin's DFG/FTL code, ages out
 at idle collections only, and keeps aging out at 2 min. BUN_IDLE_GC_SECONDS still overrides both.
@@ -17109,7 +17109,7 @@ index 35eddf7ee6..393a056056 100644
          // thread, for its own heap: a Worker that has finished a burst gives its garbage back too.
          // The second at 2 min: what a program does next compiles again what that collection aged out.
 -        let spec = env_var::BUN_IDLE_GC_SECONDS::get().unwrap_or(b"10,110,480");
-+        // Without the JIT (an executable compiled ahead of time with the JIT off, Pi-Bolt's default build), the 2-min one is
++        // Without the JIT (an executable compiled ahead of time with the JIT off, Rapid Pi's default build), the 2-min one is
 +        // left out: the code that can age there is interpreted code, and what the first one leaves of it stays alive (Pi
 +        // at its prompt: ~35 CodeBlocks before and after the 2-min collection, which then found the heap as the first one
 +        // left it: 33 M instructions, ~14 ms of CPU on an M5, plus the allocator's purges after it, for no memory). With the
@@ -17344,7 +17344,7 @@ index 393a056056..be814008b9 100644
          }
          self.idle_gc_at_ms.set(at);
 +
-+        // An executable compiled ahead of time, with idle full collections (Pi-Bolt): those collect what a burst of work
++        // An executable compiled ahead of time, with idle full collections (Rapid Pi): those collect what a burst of work
 +        // left once the program has been quiet for the first entry, so JSC's own allocation-paced full-collection timer,
 +        // which ran a full collection a few seconds after every burst (Pi after an answer: one full collection, its
 +        // sweeping, then the idle one with the same result), goes (`BUN_GC_JSC_FULL_TIMER=1` keeps it). A full collection
@@ -17626,7 +17626,7 @@ client and `node:quic`.
 - Not run against a local build of this branch, so CI is the first run
 of the new code and tests.
 
-Pi-Bolt: ported onto the pinned engine. Only the blocked-key check, its testing
+Rapid Pi: ported onto the pinned engine. Only the blocked-key check, its testing
 hooks and the NSS 3.131.1 roots: not selectServerName or the self-issued leaf
 rule (#44365), which came with later upstream commits. us_x509_verify_chain
 is exported for quic.c (fetch over HTTP/3), which verifies chains itself.

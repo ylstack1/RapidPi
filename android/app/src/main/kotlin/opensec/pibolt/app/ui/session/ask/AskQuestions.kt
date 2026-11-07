@@ -1,20 +1,20 @@
-package opensec.pibolt.app.ui.session.ask
+package opensec.rapidpi.app.ui.session.ask
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.engine.ChatSpace
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.DialogKind
-import opensec.pibolt.protocol.session.DialogRequest
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.engine.ChatSpace
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.DialogKind
+import opensec.rapidpi.protocol.session.DialogRequest
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.UserItem
 
 @Immutable
 data class AskOption(val label: String, val description: String, val preview: String? = null)

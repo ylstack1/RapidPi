@@ -1,6 +1,6 @@
 name: bench-windows
 
-# bench.yml's comparison on GitHub's windows-2025 runner: rel (pi-bolt-win32-x64.zip of bolt-v0.9.9, checked against the
+# bench.yml's comparison on GitHub's windows-2025 runner: rel (rapid-pi-win32-x64.zip of bolt-v0.9.9, checked against the
 # release's signed SHA256SUMS), cand (perf/v1.0.0 built by scripts\build-pi.ps1 on the runtime of RUNTIME_RUN) and pig (pig-0.5.1-windows-amd64.zip, SHA256SUMS and sigstore bundle). The tools of bench.yml that
 # run on Windows (no tmux); the TUI runs in a ConPTY.
 on:
@@ -53,21 +53,21 @@ jobs:
           }
           # rel: 0.9.9 as released; its checksums are signed by the release key.
           $openssl = 'C:\Program Files\Git\usr\bin\openssl.exe'
-          gh release download bolt-v0.9.9 --repo $env:GITHUB_REPOSITORY --pattern pi-bolt-win32-x64.zip --pattern SHA256SUMS --pattern SHA256SUMS.sig --dir .work\rel-dl --clobber
+          gh release download bolt-v0.9.9 --repo $env:GITHUB_REPOSITORY --pattern rapid-pi-win32-x64.zip --pattern SHA256SUMS --pattern SHA256SUMS.sig --dir .work\rel-dl --clobber
           if ($LASTEXITCODE -ne 0) { exit 1 }
           & $openssl pkeyutl -verify -pubin -inkey keys\release.pub -rawin -in .work\rel-dl\SHA256SUMS -sigfile .work\rel-dl\SHA256SUMS.sig
           if ($LASTEXITCODE -ne 0) { throw "bolt-v0.9.9's signature does not verify" }
-          if ((Get-Content .work\rel-dl\SHA256SUMS)[0] -ne '# pi-bolt 0.9.9') { throw "the checksums are not 0.9.9's" }
-          Check-Sum .work\rel-dl pi-bolt-win32-x64.zip
-          Expand-Archive .work\rel-dl\pi-bolt-win32-x64.zip -DestinationPath .work\rel-dl -Force
-          Move-Item .work\rel-dl\pi-bolt-win32-x64 .work\rel
-          $env_lines += "rel: pi-bolt-win32-x64.zip of bolt-v0.9.9 (SHA256SUMS signature and sum verified)"
+          if ((Get-Content .work\rel-dl\SHA256SUMS)[0] -ne '# rapid-pi 0.9.9') { throw "the checksums are not 0.9.9's" }
+          Check-Sum .work\rel-dl rapid-pi-win32-x64.zip
+          Expand-Archive .work\rel-dl\rapid-pi-win32-x64.zip -DestinationPath .work\rel-dl -Force
+          Move-Item .work\rel-dl\rapid-pi-win32-x64 .work\rel
+          $env_lines += "rel: rapid-pi-win32-x64.zip of bolt-v0.9.9 (SHA256SUMS signature and sum verified)"
           # The candidate's runtime.
           New-Item -ItemType Directory -Force .work\rt, .work\runtime | Out-Null
           gh run download $env:RUNTIME_RUN --repo $env:GITHUB_REPOSITORY --name runtime-win32-x64 --dir .work\rt
           if ($LASTEXITCODE -ne 0) { exit 1 }
-          Expand-Archive .work\rt\pi-bolt-runtime-win32-x64.zip -DestinationPath .work\rt -Force
-          Copy-Item .work\rt\pi-bolt-runtime-win32-x64\bun.exe .work\runtime\bun.exe
+          Expand-Archive .work\rt\rapid-pi-runtime-win32-x64.zip -DestinationPath .work\rt -Force
+          Copy-Item .work\rt\rapid-pi-runtime-win32-x64\bun.exe .work\runtime\bun.exe
           $env_lines += "runtime: run $($env:RUNTIME_RUN), $(& .work\runtime\bun.exe --version), sha256 $((Get-FileHash .work\runtime\bun.exe -Algorithm SHA256).Hash.ToLowerInvariant())"
           npm ci --ignore-scripts --no-audit --no-fund
           if ($LASTEXITCODE -ne 0) { exit 1 }
@@ -76,12 +76,12 @@ jobs:
             if ($LASTEXITCODE -ne 0) { throw "build:offline failed for $name" }
             & scripts\build-pi.ps1 -Out "out\$name"
             if ($LASTEXITCODE -ne 0) { throw "build-pi.ps1 failed for $name" }
-            # As package-release.ps1 lays it out: pi-bolt.exe beside its assets; zipped for the archive's size.
+            # As package-release.ps1 lays it out: rapid-pi.exe beside its assets; zipped for the archive's size.
             Copy-Item -Recurse "out\$name" ".work\$name"
-            Move-Item ".work\$name\pi.exe" ".work\$name\pi-bolt.exe"
+            Move-Item ".work\$name\pi.exe" ".work\$name\rapid-pi.exe"
             Copy-Item LICENSE, THIRD_PARTY_NOTICES.md ".work\$name"
             New-Item -ItemType Directory -Force ".work\$name-dl" | Out-Null
-            Compress-Archive -Path ".work\$name" -DestinationPath ".work\$name-dl\pi-bolt-win32-x64.zip" -CompressionLevel Optimal
+            Compress-Archive -Path ".work\$name" -DestinationPath ".work\$name-dl\rapid-pi-win32-x64.zip" -CompressionLevel Optimal
           }
           Build-Variant cand
           $env_lines += "cand: perf/v1.0.0 ($env:CAND_COMMIT) by scripts\build-pi.ps1 on that runtime; zip by Compress-Archive, for its size"
@@ -97,7 +97,7 @@ jobs:
           $cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
           $nt = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
           $defender = try { $mp = Get-MpComputerStatus; "real-time protection $($mp.RealTimeProtectionEnabled), mode $($mp.AMRunningMode)" } catch { "unknown" }
-          foreach ($b in 'rel', 'cand') { $env_lines += "${b}: $(& .work\$b\pi-bolt.exe --version | Select-Object -First 1)" }
+          foreach ($b in 'rel', 'cand') { $env_lines += "${b}: $(& .work\$b\rapid-pi.exe --version | Select-Object -First 1)" }
           $env_lines += "pig: $(& .work\pig\pig.exe --version | Select-Object -First 1)"
           $env_lines += "runner: windows-2025, $($cpu.Name.Trim()), $($cpu.NumberOfCores) cores, $($cpu.NumberOfLogicalProcessors) threads; $((Get-CimInstance Win32_OperatingSystem).Caption) build $($nt.CurrentBuild).$($nt.UBR); defender: $defender"
           $env_lines += "python: $(python --version)"
@@ -108,8 +108,8 @@ jobs:
           function Bytes($p) { if (Test-Path -PathType Leaf $p) { (Get-Item $p).Length } else { (Get-ChildItem -Recurse -File $p | Measure-Object -Sum Length).Sum } }
           $rows = @("build    what         bytes  path")
           foreach ($r in @(
-              @('rel', 'archive.zip', '.work\rel-dl\pi-bolt-win32-x64.zip'), @('rel', 'binary', '.work\rel\pi-bolt.exe'), @('rel', 'installed', '.work\rel'),
-              @('cand', 'archive.zip', '.work\cand-dl\pi-bolt-win32-x64.zip'), @('cand', 'binary', '.work\cand\pi-bolt.exe'), @('cand', 'installed', '.work\cand'),
+              @('rel', 'archive.zip', '.work\rel-dl\rapid-pi-win32-x64.zip'), @('rel', 'binary', '.work\rel\rapid-pi.exe'), @('rel', 'installed', '.work\rel'),
+              @('cand', 'archive.zip', '.work\cand-dl\rapid-pi-win32-x64.zip'), @('cand', 'binary', '.work\cand\rapid-pi.exe'), @('cand', 'installed', '.work\cand'),
               @('pig', 'archive.zip', '.work\pig-dl\pig-0.5.1-windows-amd64.zip'), @('pig', 'binary', '.work\pig\pig.exe'), @('pig', 'installed', '.work\pig'))) {
             $rows += "{0,-8} {1,-12} {2,14}  {3}" -f $r[0], $r[1], (Bytes $r[2]), $r[2]
           }
@@ -119,7 +119,7 @@ jobs:
         run: |
           $env:PYTHONUTF8 = '1'
           $ErrorActionPreference = 'Continue'
-          $B = @('--build', "rel=$PWD\.work\rel\pi-bolt.exe", '--build', "cand=$PWD\.work\cand\pi-bolt.exe", '--build', "pig=$PWD\.work\pig\pig.exe")
+          $B = @('--build', "rel=$PWD\.work\rel\rapid-pi.exe", '--build', "cand=$PWD\.work\cand\rapid-pi.exe", '--build', "pig=$PWD\.work\pig\pig.exe")
           function Run($name, $file, [string[]]$cmd) {
             "## $name" | Add-Content -Encoding utf8 results\all.txt
             $out = & python @cmd 2>&1 | ForEach-Object { "$_" } | Where-Object { $_ -notmatch 'round [0-9]+/' }

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
@@ -10,9 +10,9 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
 
 /** The navigation host's shared-transition scope, and the destination's own visibility scope. */
 val LocalSharedScope = compositionLocalOf<SharedTransitionScope?> { null }

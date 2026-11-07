@@ -4,7 +4,7 @@ Pi highlights (scripts/lib/training.md) streams into the TUI, in tmux, a few cha
 (text and colors) must be what the reference build shows. The TUI renders a streaming message from what it kept of the last
 render; this is the check that what it keeps changes nothing on screen.
 
-Example: bench/e2e_screen.py --reference bun=./out/pi-stable/pi --build pi-bolt=./out/pi-bolt/pi
+Example: bench/e2e_screen.py --reference bun=./out/pi-stable/pi --build rapid-pi=./out/rapid-pi/pi
 """
 
 import argparse
@@ -55,7 +55,7 @@ def screen(build, width, pace_ms):
     # The working directory is in the footer, with a name of its own each time.
     text = re.sub(r"[^\s\x1b]*/pibolt-work-\w+", "<work>", text)  # (/tmp/... on Linux, /private/var/folders/... on macOS)
     # So is the share of the context used, which the system prompt counts in: it names the folder the build is installed in
-    # (out/pi-stable, out/pi-bolt), a few characters that can move the rounded figure.
+    # (out/pi-stable, out/rapid-pi), a few characters that can move the rounded figure.
     return done, re.sub(r"\d+(?:\.\d+)?%/(\d+k)", r"<ctx>%/\1", text)
 
 

@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol.cli
+package opensec.rapidpi.protocol.cli
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
-import opensec.pibolt.protocol.Base64Url
-import opensec.pibolt.protocol.PairingPayload
-import opensec.pibolt.protocol.backend.ConnectionState
-import opensec.pibolt.protocol.backend.DisconnectReason
-import opensec.pibolt.protocol.backend.RemoteBackend
-import opensec.pibolt.protocol.backend.RemoteConfig
-import opensec.pibolt.protocol.noise.KeyPair
-import opensec.pibolt.protocol.rpc.RpcClient
-import opensec.pibolt.protocol.rpc.StreamingBehavior
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.type
+import opensec.rapidpi.protocol.Base64Url
+import opensec.rapidpi.protocol.PairingPayload
+import opensec.rapidpi.protocol.backend.ConnectionState
+import opensec.rapidpi.protocol.backend.DisconnectReason
+import opensec.rapidpi.protocol.backend.RemoteBackend
+import opensec.rapidpi.protocol.backend.RemoteConfig
+import opensec.rapidpi.protocol.noise.KeyPair
+import opensec.rapidpi.protocol.rpc.RpcClient
+import opensec.rapidpi.protocol.rpc.StreamingBehavior
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.type
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.PosixFilePermissions
@@ -26,16 +26,16 @@ import kotlin.system.exitProcess
  * Interop test client: pair or reconnect with a host, print every message as one JSON line, optionally send a prompt.
  *
  * ```
- * ./gradlew :protocol:run --args='<pibolt://pair#...> [prompt text] [--steer|--follow-up] [--state DIR] [--quiet]'
+ * ./gradlew :protocol:run --args='<rapidpi://pair#...> [prompt text] [--steer|--follow-up] [--state DIR] [--quiet]'
  * ```
- * The device key and the list of paired hosts live in `--state` (default `~/.pibolt-rc-cli`), so a second run
+ * The device key and the list of paired hosts live in `--state` (default `~/.rapidpi-rc-cli`), so a second run
  * reconnects without the pairing secret. With a prompt, the client exits after `agent_settled`.
  */
 fun main(args: Array<String>) {
     var pairing: String? = null
     var prompt: String? = null
     var behavior: StreamingBehavior? = null
-    var stateDir = File(System.getProperty("user.home"), ".pibolt-rc-cli")
+    var stateDir = File(System.getProperty("user.home"), ".rapidpi-rc-cli")
     var quiet = false
     var i = 0
     while (i < args.size) {
@@ -68,7 +68,7 @@ fun main(args: Array<String>) {
             hostKey = payload.hostKey,
             endpoints = payload.endpoints,
             identity = identity,
-            deviceName = "pibolt-rc-cli on ${System.getProperty("os.name")}",
+            deviceName = "rapidpi-rc-cli on ${System.getProperty("os.name")}",
             appVersion = "cli",
             pairSecret = if (alreadyPaired) null else payload.secret,
         ),
@@ -127,7 +127,7 @@ fun main(args: Array<String>) {
 }
 
 private fun usage(): Nothing {
-    System.err.println("usage: pibolt-rc-cli '<pibolt://pair#...>' [prompt text] [--steer|--follow-up] [--state DIR] [--quiet]")
+    System.err.println("usage: rapidpi-rc-cli '<rapidpi://pair#...>' [prompt text] [--steer|--follow-up] [--state DIR] [--quiet]")
     exitProcess(2)
 }
 

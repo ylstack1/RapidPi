@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol.transport
+package opensec.rapidpi.protocol.transport
 
 /**
  * Splits a byte stream into JSONL records as Pi's RPC mode writes them (docs/rpc.md, Framing): records end at LF only,

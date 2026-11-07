@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.transfer
+package opensec.rapidpi.app.ui.projects.transfer
 
 import androidx.core.net.toUri
 import androidx.compose.foundation.layout.Box
@@ -17,18 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.ui.components.PiSnackHost
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.components.show
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.projects.Projects
-import opensec.pibolt.app.ui.session.ImageSizing
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.ui.components.PiSnackHost
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.show
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.projects.Projects
+import opensec.rapidpi.app.ui.session.ImageSizing
 import java.io.File
 
 /**
- * Content shared into Pi-Bolt from another app ([pending], from MainActivity): the [ShareInSheet], then the choice.
+ * Content shared into Rapid Pi from another app ([pending], from MainActivity): the [ShareInSheet], then the choice.
  * Images and text go to the composer of the project's session (the live one, else its latest, else a new one) and
  * that session opens ([onSession]); files are copied into the project's root, a zip becomes a new project, and the
  * project opens ([onProject]). Copies stream with a [TransferBar] and can be cancelled.

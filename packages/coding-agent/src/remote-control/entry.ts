@@ -1,6 +1,6 @@
 /**
  * Remote control as it loads on first use (remote-control.lazy.ts): `/remote-control` in the terminal and the
- * `pi-bolt service` commands. Everything here stays off Pi's startup.
+ * `rapid-pi service` commands. Everything here stays off Pi's startup.
  */
 
 export { RemoteControlController } from "./controller.ts";

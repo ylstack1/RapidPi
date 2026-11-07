@@ -1,8 +1,8 @@
-# Pi-Bolt on Windows x64: design notes
+# Rapid Pi on Windows x64: design notes
 
 The design notes of the Windows port, which shipped in 0.8.0: keeping the prebuilt heap and the code image with every Windows
 mitigation on, and what it rests on: measurements on the port's machine (Intel Core i5-1335U, Windows 11 26200, Defender on),
-written while the port was being built. For installing and using Pi-Bolt on Windows, see the README and
+written while the port was being built. For installing and using Rapid Pi on Windows, see the README and
 [Troubleshooting: Windows](TROUBLESHOOTING.md#windows).
 
 ## What has to be at a fixed address today
@@ -158,7 +158,7 @@ Reading every page of the section; 3 fresh copies each. (Clock-tick CPU times ar
 ## The other mitigations
 
 Stock Bun 1.4.2 for Windows is linked with `/DYNAMICBASE`, `/HIGHENTROPYVA` and `/NXCOMPAT`, but **without Control Flow Guard**
-(no `GUARD_CF`, an empty function table) and **without `/CETCOMPAT`**. Pi-Bolt must add both:
+(no `GUARD_CF`, an empty function table) and **without `/CETCOMPAT`**. Rapid Pi must add both:
 
 - **CFG: linked in, and verified** (`GUARD_CF` is required of the executable by the build's binary checks): every C and C++
   object with `/guard:cf`, Rust with `-C control-flow-guard`, the link with `/guard:cf`; tests\aot passes all 58 checks with it,
@@ -193,7 +193,7 @@ Stock Bun 1.4.2 for Windows is linked with `/DYNAMICBASE`, `/HIGHENTROPYVA` and 
   program loads by name itself (`bun:ffi`, an addon's own libraries) is looked for as upstream has it.
 - **The prebuilt heap stays read-only.** A write to its immutable arenas ends the process (fail closed). The variable that turned
   that into a write that goes through, `BUN_STATIC_HEAP_WRITES`, exists only in a runtime built for diagnostics (a debug build,
-  or `-DPIBOLT_STATIC_HEAP_WRITES`): tests\aot's `=all` run needs one. Read once at startup.
+  or `-DRAPIDPI_STATIC_HEAP_WRITES`): tests\aot's `=all` run needs one. Read once at startup.
 - **A build without the JIT stays without it.** When its compiled code is not used (`BUN_AOT=0`, a CPU without the
   instructions it was compiled for, no room for the region), the program interprets its bytecode, slower, rather than turn the
   JIT on and with it a writable and executable 1 GB pool; `BUN_JSC_useJIT=1` does not put it back. In a program compiled ahead of

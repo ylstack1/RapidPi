@@ -1,8 +1,8 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.ui.graphics.graphicsLayer
-import opensec.pibolt.app.ui.components.glass
+import opensec.rapidpi.app.ui.components.glass
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.runtime.LaunchedEffect
@@ -35,11 +35,11 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.PiMenu
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.PiMenu
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
 
 /**
  * One tab of the workspace's tab strips (open files in the editor, shells in the terminal): a 36dp capsule drawn

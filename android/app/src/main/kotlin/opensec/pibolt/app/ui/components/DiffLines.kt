@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -34,12 +34,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.markdown.UnifiedDiff
-import opensec.pibolt.app.ui.markdown.highlightedCached
-import opensec.pibolt.app.ui.session.DiffKind
-import opensec.pibolt.app.ui.session.DiffLine
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.markdown.UnifiedDiff
+import opensec.rapidpi.app.ui.markdown.highlightedCached
+import opensec.rapidpi.app.ui.session.DiffKind
+import opensec.rapidpi.app.ui.session.DiffLine
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
 
 private val BAR = 3.dp
 private val SIGN = 14.dp

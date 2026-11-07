@@ -1,15 +1,15 @@
-package opensec.pibolt.app.ui.home
+package opensec.rapidpi.app.ui.home
 
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.ui.graphics.vector.ImageVector
-import opensec.pibolt.app.ui.components.EmptyState
+import opensec.rapidpi.app.ui.components.EmptyState
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import opensec.pibolt.app.ui.projects.transfer.SafTransfer
-import opensec.pibolt.app.ui.projects.transfer.TransferBar
-import opensec.pibolt.app.ui.projects.transfer.TransferRunner
+import opensec.rapidpi.app.ui.projects.transfer.SafTransfer
+import opensec.rapidpi.app.ui.projects.transfer.TransferBar
+import opensec.rapidpi.app.ui.projects.transfer.TransferRunner
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -74,18 +74,18 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.semantics.contentDescription
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.components.StatusTile
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.PillComposerShell
-import opensec.pibolt.app.ui.components.ComposerPrimary
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.session.entrance
-import opensec.pibolt.app.ui.session.waitingSessions
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.components.StatusTile
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.PillComposerShell
+import opensec.rapidpi.app.ui.components.ComposerPrimary
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.session.entrance
+import opensec.rapidpi.app.ui.session.waitingSessions
 import androidx.compose.foundation.layout.Arrangement
-import opensec.pibolt.app.ui.components.SOFT_PRESS
+import opensec.rapidpi.app.ui.components.SOFT_PRESS
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.material.icons.rounded.CreateNewFolder
 import androidx.compose.material.icons.automirrored.rounded.CallSplit
@@ -93,14 +93,14 @@ import androidx.compose.material.icons.rounded.Archive
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.foundation.layout.widthIn
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.projects.WorkspaceMenu
-import opensec.pibolt.app.ui.projects.WorkspaceMenuRow
-import opensec.pibolt.app.ui.hosts.AddComputerSheet
-import opensec.pibolt.app.ui.hosts.ManageComputerSheet
-import opensec.pibolt.app.data.ProjectMeta
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.projects.WorkspaceMenu
+import opensec.rapidpi.app.ui.projects.WorkspaceMenuRow
+import opensec.rapidpi.app.ui.hosts.AddComputerSheet
+import opensec.rapidpi.app.ui.hosts.ManageComputerSheet
+import opensec.rapidpi.app.data.ProjectMeta
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -108,76 +108,76 @@ import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.foundation.layout.width
-import opensec.pibolt.app.ui.components.GlassPill
-import opensec.pibolt.app.ui.components.ComposerCircle
-import opensec.pibolt.app.ui.components.PiMenu
-import opensec.pibolt.app.ui.components.PiMenuItem
-import opensec.pibolt.app.ui.projects.PillPlus
-import opensec.pibolt.app.ui.session.ImageSizing
-import opensec.pibolt.app.ui.session.clipboardHasImage
-import opensec.pibolt.app.ui.session.clipboardImage
+import opensec.rapidpi.app.ui.components.GlassPill
+import opensec.rapidpi.app.ui.components.ComposerCircle
+import opensec.rapidpi.app.ui.components.PiMenu
+import opensec.rapidpi.app.ui.components.PiMenuItem
+import opensec.rapidpi.app.ui.projects.PillPlus
+import opensec.rapidpi.app.ui.session.ImageSizing
+import opensec.rapidpi.app.ui.session.clipboardHasImage
+import opensec.rapidpi.app.ui.session.clipboardImage
 import android.net.Uri
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.material.icons.rounded.ContentPaste
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Mic
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.engine.EngineStatus
-import opensec.pibolt.app.ui.components.BrandMark
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.PiSnackHost
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.components.StatusBarScrim
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.chats.ChatList
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.engine.EngineStatus
+import opensec.rapidpi.app.ui.components.BrandMark
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.PiSnackHost
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.StatusBarScrim
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.chats.ChatList
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Forum
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.cost.SpendLimitsSheet
-import opensec.pibolt.app.ui.cost.SpendSheet
-import opensec.pibolt.app.ui.cost.rememberTodayLine
-import opensec.pibolt.app.ui.components.show
-import opensec.pibolt.app.ui.hosts.HostCard
-import opensec.pibolt.app.ui.hosts.PasteSheet
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.chats.Chats
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.cost.SpendLimitsSheet
+import opensec.rapidpi.app.ui.cost.SpendSheet
+import opensec.rapidpi.app.ui.cost.rememberTodayLine
+import opensec.rapidpi.app.ui.components.show
+import opensec.rapidpi.app.ui.hosts.HostCard
+import opensec.rapidpi.app.ui.hosts.PasteSheet
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.chats.Chats
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import opensec.pibolt.app.engine.ChatSpace
+import opensec.rapidpi.app.engine.ChatSpace
 import androidx.compose.material.icons.rounded.ChatBubbleOutline
-import opensec.pibolt.app.ui.session.RunningRow
-import opensec.pibolt.app.ui.session.runningSessions
-import opensec.pibolt.app.ui.projects.NewProjectSheet
-import opensec.pibolt.app.ui.projects.ProjectClone
-import opensec.pibolt.app.ui.projects.ProjectAction
-import opensec.pibolt.app.ui.projects.ProjectActionSheets
-import opensec.pibolt.app.ui.projects.ContinueRow
+import opensec.rapidpi.app.ui.session.RunningRow
+import opensec.rapidpi.app.ui.session.runningSessions
+import opensec.rapidpi.app.ui.projects.NewProjectSheet
+import opensec.rapidpi.app.ui.projects.ProjectClone
+import opensec.rapidpi.app.ui.projects.ProjectAction
+import opensec.rapidpi.app.ui.projects.ProjectActionSheets
+import opensec.rapidpi.app.ui.projects.ContinueRow
 import androidx.compose.foundation.layout.height
-import opensec.pibolt.app.secrets.SecretStore
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.projects.HomeHead
+import opensec.rapidpi.app.secrets.SecretStore
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.projects.HomeHead
 import androidx.compose.material.icons.rounded.Add
-import opensec.pibolt.app.ui.projects.ProjectCard
-import opensec.pibolt.app.ui.projects.ProjectEntry
-import opensec.pibolt.app.ui.projects.ProjectRules
-import opensec.pibolt.app.ui.projects.Projects
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.app.ui.providers.ProviderSheet
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.update.UpdateCard
-import opensec.pibolt.app.update.UpdateJob
-import opensec.pibolt.app.update.UpdateRules
+import opensec.rapidpi.app.ui.projects.ProjectCard
+import opensec.rapidpi.app.ui.projects.ProjectEntry
+import opensec.rapidpi.app.ui.projects.ProjectRules
+import opensec.rapidpi.app.ui.projects.Projects
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.ui.providers.ProviderSheet
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.update.UpdateCard
+import opensec.rapidpi.app.update.UpdateJob
+import opensec.rapidpi.app.update.UpdateRules
 
 /**
- * Home: projects on this phone first (Pi-Bolt runs here), then the computers this phone controls, folded away by
+ * Home: projects on this phone first (Rapid Pi runs here), then the computers this phone controls, folded away by
  * default once there are projects. Disk work (listing folders, reading sessions) runs off the main thread; the list
  * is ordered and decorated in memory, so pins and renames apply without touching the disk again.
  */
@@ -440,7 +440,7 @@ fun HomeScreen(
             modifier = Modifier.align(Alignment.TopCenter).fillMaxHeight().widthIn(max = HOME_MAX_WIDTH).fillMaxWidth(),
         ) {
             item(key = "header", contentType = "header") {
-                // The brand is the title: the bare bolt at the title's cap height and "Pi-Bolt" in largeTitle, with
+                // The brand is the title: the bare bolt at the title's cap height and "Rapid Pi" in largeTitle, with
                 // Settings and + as glass buttons on the same centre line. Today's spending, when there is any, follows.
                 val spent = rememberTodayLine(app) != null
                 Row(
@@ -449,7 +449,7 @@ fun HomeScreen(
                 ) {
                     BrandMark(size = 26.dp, play = false, modifier = Modifier.clearAndSetSemantics { })
                     Spacer(Modifier.width(Space.sm))
-                    Text("Pi-Bolt", style = type.largeTitle, color = colors.ink1, maxLines = 1, modifier = Modifier.weight(1f).semantics { heading() })
+                    Text("Rapid Pi", style = type.largeTitle, color = colors.ink1, maxLines = 1, modifier = Modifier.weight(1f).semantics { heading() })
                     GlassIconButton(Icons.Rounded.Settings, "Settings", onClick = onSettings)
                     if (hasProjects) {
                         Box {
@@ -467,7 +467,7 @@ fun HomeScreen(
                     }
                 }
             }
-            // Today's spending: a quiet meta line under "Pi-Bolt" once Pi used anything today; a tap opens the details.
+            // Today's spending: a quiet meta line under "Rapid Pi" once Pi used anything today; a tap opens the details.
             item(key = "today", contentType = "today") {
                 val today = rememberTodayLine(app) ?: return@item
                 Text(
@@ -689,7 +689,7 @@ fun HomeScreen(
                         InsetRow(
                             "Add a computer",
                             onClick = { addComputer = true },
-                            meta = "Run Pi-Bolt there, from this phone",
+                            meta = "Run Rapid Pi there, from this phone",
                             divider = false,
                             modifier = Modifier.animateItem(),
                             leading = { Icon(Icons.Rounded.Add, contentDescription = null, tint = colors.ink2, modifier = Modifier.size(IconSize.md)) },

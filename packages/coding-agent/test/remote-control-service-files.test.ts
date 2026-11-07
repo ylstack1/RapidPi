@@ -66,11 +66,11 @@ describe("service files", () => {
 		it("quotes arguments, doubles % and $ where systemd expands them, and restarts on failure", () => {
 			const unit = systemdUserUnit({
 				...spec,
-				program: ['/home/me/my "pi"/pi-bolt', "service", "run", "50%$HOME"],
+				program: ['/home/me/my "pi"/rapid-pi', "service", "run", "50%$HOME"],
 				env: { PATH: "/usr/bin:/home/me/100%" },
 				home: "/home/me",
 			});
-			expect(unit).toContain('ExecStart="/home/me/my \\"pi\\"/pi-bolt" "service" "run" "50%%$$HOME"');
+			expect(unit).toContain('ExecStart="/home/me/my \\"pi\\"/rapid-pi" "service" "run" "50%%$$HOME"');
 			expect(unit).toContain('Environment="PATH=/usr/bin:/home/me/100%%"');
 			expect(unit).toContain('WorkingDirectory="/home/me"');
 			expect(unit).toContain("Restart=on-failure");
@@ -114,7 +114,7 @@ describe("service files", () => {
 
 		it("runs the service from a script that sets its environment: PATH and Pi's directories", () => {
 			const text = windowsTaskScript({
-				program: ["C:\\Users\\Me\\Pi Bolt\\pi-bolt.exe", "service", "run"],
+				program: ["C:\\Users\\Me\\Pi Bolt\\rapid-pi.exe", "service", "run"],
 				env: {
 					PATH: "C:\\Windows\\System32;C:\\Tools & Co\\100%",
 					PI_CODING_AGENT_DIR: "D:\\pi agent",
@@ -125,13 +125,13 @@ describe("service files", () => {
 			});
 			expect(text.split("\r\n")).toEqual([
 				"@echo off",
-				"rem Pi-Bolt remote control: written by pi-bolt service install, removed by pi-bolt service uninstall.",
+				"rem Rapid Pi remote control: written by rapid-pi service install, removed by rapid-pi service uninstall.",
 				"chcp 65001 >nul",
 				'set "PATH=C:\\Windows\\System32;C:\\Tools & Co\\100%%"',
 				'set "PI_CODING_AGENT_DIR=D:\\pi agent"',
 				'set "PI_CODING_AGENT_SESSION_DIR=D:\\sessions"',
 				'cd /d "C:\\Users\\Me"',
-				'"C:\\Users\\Me\\Pi Bolt\\pi-bolt.exe" "service" "run"',
+				'"C:\\Users\\Me\\Pi Bolt\\rapid-pi.exe" "service" "run"',
 				"exit /b %ERRORLEVEL%",
 				"",
 			]);
@@ -163,7 +163,7 @@ describe("service files", () => {
 	});
 });
 
-describe("pi-bolt service install and uninstall", () => {
+describe("rapid-pi service install and uninstall", () => {
 	const cleanups: Array<() => void> = [];
 
 	afterEach(() => {
@@ -189,7 +189,7 @@ describe("pi-bolt service install and uninstall", () => {
 				return { code: args[0] === "print" ? 113 : 0, stdout: "", stderr: "" };
 			},
 			confirm: async () => false,
-			program: () => ["/opt/pi-bolt/pi"],
+			program: () => ["/opt/rapid-pi/pi"],
 			hasCloudflared: () => true,
 			sleep: async () => {},
 		};
@@ -209,7 +209,7 @@ describe("pi-bolt service install and uninstall", () => {
 		const { home, agentDir, commands, run } = setup("darwin");
 		expect(await run(["install"])).toBe(0);
 		const plist = join(home, "Library", "LaunchAgents", `${LAUNCH_AGENT_LABEL}.plist`);
-		expect(readFileSync(plist, "utf8")).toContain("<string>/opt/pi-bolt/pi</string>\n\t\t<string>service</string>");
+		expect(readFileSync(plist, "utf8")).toContain("<string>/opt/rapid-pi/pi</string>\n\t\t<string>service</string>");
 		// An earlier install is unloaded first, and bootstrap waits until it is gone.
 		expect(commands).toEqual([
 			`launchctl bootout gui/501/${LAUNCH_AGENT_LABEL}`,
@@ -229,7 +229,7 @@ describe("pi-bolt service install and uninstall", () => {
 		const { home, commands, run } = setup("linux");
 		expect(await run(["install"])).toBe(0);
 		const unit = join(home, ".config", "systemd", "user", SYSTEMD_UNIT);
-		expect(readFileSync(unit, "utf8")).toContain('ExecStart="/opt/pi-bolt/pi" "service" "run"');
+		expect(readFileSync(unit, "utf8")).toContain('ExecStart="/opt/rapid-pi/pi" "service" "run"');
 		expect(commands).toEqual([
 			"systemctl --user daemon-reload",
 			`systemctl --user enable ${SYSTEMD_UNIT}`,
@@ -251,7 +251,7 @@ describe("pi-bolt service install and uninstall", () => {
 		const script = readFileSync(scriptFile, "utf8");
 		expect(script).toContain('set "PATH=/usr/bin:/bin"\r\n');
 		expect(script).toContain(`set "PI_CODING_AGENT_DIR=${agentDir}"\r\n`);
-		expect(script).toContain('"/opt/pi-bolt/pi" "service" "run"\r\n');
+		expect(script).toContain('"/opt/rapid-pi/pi" "service" "run"\r\n');
 		expect(readFileSync(xmlFile).subarray(2).toString("utf16le")).toContain(`/c call ${scriptFile}</Arguments>`);
 		expect(commands).toEqual([
 			`schtasks /Create /TN ${WINDOWS_TASK_NAME} /XML ${xmlFile} /F`,
@@ -296,7 +296,7 @@ describe("pi-bolt service install and uninstall", () => {
 					asked++;
 					return true;
 				},
-				program: () => ["/opt/pi-bolt/pi"],
+				program: () => ["/opt/rapid-pi/pi"],
 				hasCloudflared: () => false,
 				sleep: async () => {},
 			},
@@ -319,7 +319,7 @@ describe("pi-bolt service install and uninstall", () => {
 					args.includes("daemon-reload")
 						? { code: 1, stdout: "", stderr: "Failed to connect to bus: No medium found" }
 						: { code: 0, stdout: "", stderr: "" },
-				program: () => ["/opt/pi-bolt/pi"],
+				program: () => ["/opt/rapid-pi/pi"],
 				hasCloudflared: () => true,
 				sleep: async () => {},
 			},

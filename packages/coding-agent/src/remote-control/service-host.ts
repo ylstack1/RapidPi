@@ -1,9 +1,9 @@
 /**
- * The background service (`pi-bolt service run`): remote control with no terminal open. It is the server of
+ * The background service (`rapid-pi service run`): remote control with no terminal open. It is the server of
  * `/remote-control` (the same Noise handshake, pairing store and revocation) with sessions of its own, built by the same
  * runtime factory as every other mode, so settings, extensions, skills and project trust apply as usual.
  *
- * - Only paired phones get in; it never shows a pairing code itself. `pi-bolt service pair` asks it for one.
+ * - Only paired phones get in; it never shows a pairing code itself. `rapid-pi service pair` asks it for one.
  * - It listens on the LAN (Tailscale included) on a fixed port, and runs the Cloudflare tunnel of
  *   `remoteControl.service.tunnel` (default: `remoteControl.tunnel`). Phones get the current addresses on every
  *   connection (`remote_endpoints`), so a quick tunnel's new address reaches them.
@@ -33,7 +33,7 @@ import { SettingsManager } from "../core/settings-manager.ts";
 import type { RemoteControlSettings } from "../core/settings-schema.ts";
 import { clientUIContext } from "../extensions/client-ui.ts";
 import type { RpcExtensionUIResponse } from "../modes/rpc/rpc-types.ts";
-import { PIBOLT } from "../pi-bolt.ts";
+import { RAPIDPI } from "../rapid-pi.ts";
 import { pathsEqual } from "../utils/paths.ts";
 import { killTrackedDetachedChildren } from "../utils/shell.ts";
 import { hostDisplayName, lanEndpoints } from "./controller.ts";
@@ -99,7 +99,7 @@ export interface ServiceTunnelStatus {
 	error?: string;
 }
 
-/** What `status` answers (`pi-bolt service status` prints it). */
+/** What `status` answers (`rapid-pi service status` prints it). */
 export interface ServiceStatus {
 	role: "service";
 	pid: number;
@@ -199,7 +199,7 @@ export class ServiceHost {
 	private readonly sleeps = new Set<() => void>();
 	/** The terminal that has the port. */
 	private yieldedTo: ControlConnection | undefined;
-	/** `pi-bolt service pair` connections waiting for a phone to pair. */
+	/** `rapid-pi service pair` connections waiting for a phone to pair. */
 	private readonly pairWaiters = new Set<ControlConnection>();
 	/** The session phones see. */
 	private runtime: AgentSessionRuntime | undefined;
@@ -460,7 +460,7 @@ export class ServiceHost {
 			if (error instanceof TunnelError && error.missing) {
 				this.tunnelStatus = { state: "missing" };
 				this.log.warn(
-					"cloudflared was not found: serving the local network and Tailscale only. Install it, then run pi-bolt service install again.",
+					"cloudflared was not found: serving the local network and Tailscale only. Install it, then run rapid-pi service install again.",
 				);
 				return;
 			}
@@ -519,7 +519,7 @@ export class ServiceHost {
 		}
 	}
 
-	/** A pairing code for `pi-bolt service pair`; the connection hears `paired` when a phone uses it. */
+	/** A pairing code for `rapid-pi service pair`; the connection hears `paired` when a phone uses it. */
 	private pair(connection: ControlConnection): void {
 		const server = this.server;
 		if (this.stateValue !== "serving" || !server) {
@@ -528,7 +528,7 @@ export class ServiceHost {
 				error:
 					this.stateValue === "yielded" || this.stateValue === "waiting"
 						? "A terminal's /remote-control serves remote control now: pair there, or stop it first"
-						: "The service is not listening yet; see pi-bolt service logs",
+						: "The service is not listening yet; see rapid-pi service logs",
 			});
 			return;
 		}
@@ -540,7 +540,7 @@ export class ServiceHost {
 		const uri = server.pairingUri(endpoints);
 		this.pairWaiters.add(connection);
 		void connection.closed.then(() => this.pairWaiters.delete(connection));
-		this.log.info("Made a pairing code (pi-bolt service pair)");
+		this.log.info("Made a pairing code (rapid-pi service pair)");
 		connection.send({ ok: true, uri, expiresAt: decodePairingUri(uri).x, endpoints });
 	}
 
@@ -934,10 +934,10 @@ export class ServiceHost {
 			});
 	}
 
-	/** `cwd` when Pi-Bolt has sessions there: a phone starts sessions only in projects used before. */
+	/** `cwd` when Rapid Pi has sessions there: a phone starts sessions only in projects used before. */
 	private async knownProject(cwd: string): Promise<string> {
 		const project = (await this.listProjects()).find((candidate) => pathsEqual(candidate.cwd, cwd));
-		if (!project) throw new Error(`${cwd} is not a project Pi-Bolt has worked in on this computer`);
+		if (!project) throw new Error(`${cwd} is not a project Rapid Pi has worked in on this computer`);
 		return project.cwd;
 	}
 
@@ -981,12 +981,12 @@ export interface RunServiceHostOptions {
 	offline?: boolean;
 }
 
-/** `pi-bolt service run`: serves until the service manager stops it (SIGTERM), then exits 0. */
+/** `rapid-pi service run`: serves until the service manager stops it (SIGTERM), then exits 0. */
 export async function runServiceHost(options: RunServiceHostOptions): Promise<never> {
 	const log = new ServiceLog(options.agentDir);
 	const settingsManager = SettingsManager.create(homedir(), options.agentDir, { projectTrusted: false });
 	const settings = settingsManager.getRemoteControlSettings();
-	const version = PIBOLT?.version ?? VERSION;
+	const version = RAPIDPI?.version ?? VERSION;
 	const host = new ServiceHost({
 		createRuntime: options.createRuntime,
 		agentDir: options.agentDir,
@@ -1022,7 +1022,7 @@ export async function runServiceHost(options: RunServiceHostOptions): Promise<ne
 		process.exit(1);
 	});
 	log.info(
-		`Starting Pi-Bolt ${version} remote control service (pid ${process.pid}): port ${host.port}, tunnel ${describeTunnel(host.tunnelSetting)}`,
+		`Starting Rapid Pi ${version} remote control service (pid ${process.pid}): port ${host.port}, tunnel ${describeTunnel(host.tunnelSetting)}`,
 	);
 	try {
 		await host.start();

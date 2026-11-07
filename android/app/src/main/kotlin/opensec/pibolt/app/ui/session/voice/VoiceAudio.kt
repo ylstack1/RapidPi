@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
 import android.content.Context
 import android.media.AudioAttributes
@@ -74,7 +74,7 @@ internal class VoiceAudio(context: Context, private val onPause: (String) -> Uni
 object FocusRules {
     const val CALL = "Paused for a call"
     const val OTHER_AUDIO = "Paused while another app plays audio"
-    const val BACKGROUND = "Paused while Pi-Bolt is in the background"
+    const val BACKGROUND = "Paused while Rapid Pi is in the background"
 
     /** A focus loss this soon after voice mode starts listening is the recogniser's own, not another app's. */
     const val OWN_LISTEN_MS = 1_500L

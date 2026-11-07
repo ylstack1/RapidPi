@@ -1,8 +1,8 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import androidx.compose.runtime.Immutable
-import opensec.pibolt.app.data.ProjectMeta
-import opensec.pibolt.app.engine.SessionSummary
+import opensec.rapidpi.app.data.ProjectMeta
+import opensec.rapidpi.app.engine.SessionSummary
 
 /** One project folder as Home lists it. */
 @Immutable
@@ -138,7 +138,7 @@ object ProjectRules {
     }
 
     /**
-     * The short time at a list row's end (Pi-Bolt Desktop's `relShort`): "now", "5m", "3h", "2d", "3w", "4mo". TalkBack
+     * The short time at a list row's end (Rapid Pi Desktop's `relShort`): "now", "5m", "3h", "2d", "3w", "4mo". TalkBack
      * reads [ago] instead.
      */
     fun agoShort(at: Long, now: Long): String {

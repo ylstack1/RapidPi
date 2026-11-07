@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,14 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.markdown.ChipText
-import opensec.pibolt.app.ui.markdown.MdBlock
-import opensec.pibolt.app.ui.markdown.TableAlign
-import opensec.pibolt.app.ui.markdown.TableMath
-import opensec.pibolt.app.ui.markdown.inlineAnnotated
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.markdown.ChipText
+import opensec.rapidpi.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.markdown.TableAlign
+import opensec.rapidpi.app.ui.markdown.TableMath
+import opensec.rapidpi.app.ui.markdown.inlineAnnotated
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.Tnum
 
 private val CELL_X = 12.dp
 private val CELL_Y = 9.dp

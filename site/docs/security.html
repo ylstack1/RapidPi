@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#050505">
-<title>Security · Pi-Bolt documentation</title>
-<meta name="description" content="How Pi-Bolt releases are signed and verified, what the installer does and does not do, and how to report a vulnerability.">
-<meta property="og:title" content="Security · Pi-Bolt documentation">
-<meta property="og:description" content="How Pi-Bolt releases are signed and verified, what the installer does and does not do, and how to report a vulnerability.">
-<meta property="og:url" content="https://pi-bolt.opensec.in/docs/security.html">
-<link rel="canonical" href="https://pi-bolt.opensec.in/docs/security.html">
+<title>Security · Rapid Pi documentation</title>
+<meta name="description" content="How Rapid Pi releases are signed and verified, what the installer does and does not do, and how to report a vulnerability.">
+<meta property="og:title" content="Security · Rapid Pi documentation">
+<meta property="og:description" content="How Rapid Pi releases are signed and verified, what the installer does and does not do, and how to report a vulnerability.">
+<meta property="og:url" content="https://rapid-pi.opensec.in/docs/security.html">
+<link rel="canonical" href="https://rapid-pi.opensec.in/docs/security.html">
 <link rel="icon" href="../logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
     </button>
     <nav class="top" aria-label="Main">
       <a href="../#benchmarks">Benchmarks</a>
-      <a href="https://github.com/opensec-git/Pi-Bolt/releases/latest">Releases</a>
-      <a class="gh" href="https://github.com/opensec-git/Pi-Bolt"><span>GitHub</span><i aria-hidden="true">↗</i></a>
+      <a href="https://github.com/opensec-git/Rapid Pi/releases/latest">Releases</a>
+      <a class="gh" href="https://github.com/opensec-git/Rapid Pi"><span>GitHub</span><i aria-hidden="true">↗</i></a>
     </nav>
   </div>
 </header>
@@ -68,17 +68,17 @@
     <article class="doc">
       <p class="eyebrow">Reference</p>
 <h1>Security</h1>
-<p class="lede">Every Pi-Bolt release is signed. The installers verify what they download before installing it, need no
+<p class="lede">Every Rapid Pi release is signed. The installers verify what they download before installing it, need no
   administrator rights, and change nothing outside your own folders.</p>
 
 <h2 id="signed-releases">Signed releases<a class="anchor" href="#signed-releases" aria-label="Link to this section">#</a></h2>
 <p>Each release publishes <code>SHA256SUMS</code>, the SHA-256 checksum of every file, and <code>SHA256SUMS.sig</code>, an
-  Ed25519 signature of that file made with Pi-Bolt's release key. The public key is in the repository as
+  Ed25519 signature of that file made with Rapid Pi's release key. The public key is in the repository as
   <code>keys/release.pub</code> and inside the installers:</p>
 <pre data-label="keys/release.pub">-----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY=
 -----END PUBLIC KEY-----</pre>
-<p>The installers and <code>pi-bolt update</code> refuse a download whose checksum or signature does not verify. Checksums and
+<p>The installers and <code>rapid-pi update</code> refuse a download whose checksum or signature does not verify. Checksums and
   signatures always come from the GitHub release, so a download from the npm registry's CDN is checked against them too.</p>
 
 <h2 id="verify-a-download-yourself">Verify a download yourself<a class="anchor" href="#verify-a-download-yourself" aria-label="Link to this section">#</a></h2>
@@ -89,22 +89,22 @@ MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY=
 
 <h2 id="what-the-installer-does">What the installer does<a class="anchor" href="#what-the-installer-does" aria-label="Link to this section">#</a></h2>
 <ul>
-  <li>Installs into your home folder (<code>~/.pi-bolt</code>, or <code>%USERPROFILE%\.pi-bolt</code> on Windows) and links one
+  <li>Installs into your home folder (<code>~/.rapid-pi</code>, or <code>%USERPROFILE%\.rapid-pi</code> on Windows) and links one
     command. It needs no administrator rights and changes no security setting.</li>
-  <li>On Windows, asks before adding Pi-Bolt to your PATH.</li>
+  <li>On Windows, asks before adding Rapid Pi to your PATH.</li>
   <li>Installs OpenSec's optional extensions only when you say yes, at the versions the release pins, and only if the registry's
     package matches the pinned integrity hash.</li>
   <li>Does not touch your Pi installation. In <code>~/.pi/agent</code> it only installs the extensions you accepted.</li>
 </ul>
 
 <h2 id="running-pi-safely">Running Pi safely<a class="anchor" href="#running-pi-safely" aria-label="Link to this section">#</a></h2>
-<p>Pi-Bolt runs Pi's tools with your permissions, as Pi does: the agent can read and write files and run commands in your
+<p>Rapid Pi runs Pi's tools with your permissions, as Pi does: the agent can read and write files and run commands in your
   project. Pi's <a href="https://pi.dev/docs/latest/security">Run Pi safely</a> and
-  <a href="https://pi.dev/docs/latest/containerization">Isolate Pi</a> apply to Pi-Bolt.</p>
+  <a href="https://pi.dev/docs/latest/containerization">Isolate Pi</a> apply to Rapid Pi.</p>
 <ul>
   <li><strong>Extensions</strong> run inside the Pi process with your permissions. Only install extensions from sources you
     trust.</li>
-  <li><strong>A project's <code>.env</code></strong> is not loaded into Pi-Bolt's environment. See
+  <li><strong>A project's <code>.env</code></strong> is not loaded into Rapid Pi's environment. See
     <a href="configuration.html#env-files">.env files</a>.</li>
   <li><strong>Crash reports</strong> contain an encoded stack trace and nothing else: no file names, paths or data of yours. See
     <a href="troubleshooting.html#a-crash">A crash</a>.</li>
@@ -112,15 +112,15 @@ MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY=
 
 <h2 id="report-a-vulnerability">Report a vulnerability<a class="anchor" href="#report-a-vulnerability" aria-label="Link to this section">#</a></h2>
 <p>Report security issues privately through GitHub's
-  <a href="https://github.com/opensec-git/Pi-Bolt/security/advisories/new">private vulnerability reporting</a>, not in public
+  <a href="https://github.com/opensec-git/Rapid Pi/security/advisories/new">private vulnerability reporting</a>, not in public
   issues. We acknowledge the report, investigate, and coordinate a fix and disclosure with you.</p>
-<p>In scope: the Pi-Bolt runtime and engine changes, the release executables, and the scripts and installers in the repository.
+<p>In scope: the Rapid Pi runtime and engine changes, the release executables, and the scripts and installers in the repository.
   Vulnerabilities in Pi itself belong to <a href="https://github.com/earendil-works/pi">Pi</a>; vulnerabilities in Bun or
-  JavaScriptCore that Pi-Bolt does not change belong to their projects.</p>
+  JavaScriptCore that Rapid Pi does not change belong to their projects.</p>
 
     </article>
     <div class="doc-foot">
-      <a class="edit" href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs-site/pages/security.html">Edit this page on GitHub</a>
+      <a class="edit" href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs-site/pages/security.html">Edit this page on GitHub</a>
     </div>
     <nav class="pager" aria-label="Previous and next page"><a class="prev" href="how-it-works.html"><span>Previous</span>How it works</a><a class="next" href="troubleshooting.html"><span>Next</span>Troubleshooting</a></nav>
   </main>
@@ -132,10 +132,10 @@ MCowBQYDK2VwAyEAoLboJqtKaoISPqffk03vHZr+1sRBG3uIRIWeKOew+aY=
 
 <footer>
   <div class="foot">
-    <p>© 2026 OpenSec · <strong>Pi-Bolt</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
+    <p>© 2026 OpenSec · <strong>Rapid Pi</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
       affiliated with Pi's authors or with Oven. MIT licensed.</p>
-    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Pi-Bolt">GitHub</a> ·
-      <a href="https://www.npmjs.com/package/pi-bolt">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
+    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Rapid Pi">GitHub</a> ·
+      <a href="https://www.npmjs.com/package/rapid-pi">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
   </div>
 </footer>
 

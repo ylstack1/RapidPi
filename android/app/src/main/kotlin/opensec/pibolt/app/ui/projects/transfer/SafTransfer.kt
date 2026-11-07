@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.transfer
+package opensec.rapidpi.app.ui.projects.transfer
 
 import android.content.Context
 import android.database.Cursor
@@ -9,8 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.data.SafeFiles
-import opensec.pibolt.app.ui.session.features.ShareFiles
+import opensec.rapidpi.app.data.SafeFiles
+import opensec.rapidpi.app.ui.session.features.ShareFiles
 import java.io.File
 import java.io.IOException
 
@@ -125,7 +125,7 @@ object SafTransfer {
 
     /** Streams [uri] into [out] through a part file renamed at the end; the part file is removed on failure. */
     private suspend fun copyInto(context: Context, uri: Uri, out: File, onBytes: (Long) -> Unit): Long {
-        val part = File(out.parentFile, ".${out.name}.pibolt-part")
+        val part = File(out.parentFile, ".${out.name}.rapidpi-part")
         try {
             val n = (context.contentResolver.openInputStream(uri) ?: throw IOException("Could not open ${out.name}")).use { input ->
                 part.outputStream().use { os -> ZipTransfer.copy(input, os, onBytes) }

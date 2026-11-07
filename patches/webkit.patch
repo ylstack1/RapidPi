@@ -1,9 +1,9 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: OpenSec <contactus@opensec.in>
 Date: Mon, 12 Oct 2026 02:57:13 +0000
-Subject: [PATCH] Pi-Bolt: JavaScriptCore's ahead-of-time compiler
+Subject: [PATCH] Rapid Pi: JavaScriptCore's ahead-of-time compiler
 
-JavaScriptCore's changes for Pi-Bolt's executables, on Linux x86-64, macOS ARM64 and Windows x64:
+JavaScriptCore's changes for Rapid Pi's executables, on Linux x86-64, macOS ARM64 and Windows x64:
 
 - An x86-64 back end for ahead-of-time code, and the runtime work it needs.
 - Optimizations: inlining of helpers held in module constants and of methods by name, variables
@@ -24,13 +24,13 @@ JavaScriptCore's changes for Pi-Bolt's executables, on Linux x86-64, macOS ARM64
   indirect calls to SysV-convention functions through callSysV() (Control Flow Guard checks them),
   addresses told apart from numbers by what is committed.
 
-Includes the engine changes of Pi-Bolt 0.7.1 to 0.7.3 on pi-bolt (5f6ad773e, c9bde4b67): image builds
+Includes the engine changes of Rapid Pi 0.7.1 to 0.7.3 on rapid-pi (5f6ad773e, c9bde4b67): image builds
 that fit in 16 GB (MAP_NORESERVE), no false addresses on macOS, threads that give back their free
 memory when idle, Linux's randomness from getrandom(2), an FTL fix for wrong NaNs.
 
-Includes the engine changes of Pi-Bolt 0.7.4 (bolt-v0.7.4): internal names and comments cleaned up. Builds on Linux and macOS: VariableEnvironment's packed pointer traits named as WTF::PackedPtrTraits.
+Includes the engine changes of Rapid Pi 0.7.4 (bolt-v0.7.4): internal names and comments cleaned up. Builds on Linux and macOS: VariableEnvironment's packed pointer traits named as WTF::PackedPtrTraits.
 
-Includes the engine changes of Pi-Bolt 0.8.5: from upstream WebKit, a non-global replace() with an
+Includes the engine changes of Rapid Pi 0.8.5: from upstream WebKit, a non-global replace() with an
 empty string returns a substring, find8 scans its first bytes in one step, parseInt avoids resolving
 ropes, ToNumber rejects strings that are not numbers quickly, microtasks are queued without copies,
 and clearing an exception keeps a termination. x86-64: property lookups by a name held in a variable,
@@ -10158,7 +10158,7 @@ index 6af090ce50..b911c57744 100644
  RemoteInspector::RemoteInspector()
  {
 -    Socket::init();
-+    // (Pi-Bolt: no Socket::init() here. Every global object makes this singleton, and on Windows Socket::init() is
++    // (Rapid Pi: no Socket::init() here. Every global object makes this singleton, and on Windows Socket::init() is
 +    // WSAStartup: wsock32, ws2_32, rpcrt4 and msvcrt loaded at every start of every program. What uses a socket initializes
 +    // them itself first: RemoteInspectorSocketEndpoint and RemoteInspectorServer, in their constructors.)
      start();
@@ -12190,7 +12190,7 @@ index e55096c301..dab6862830 100644
  // By touching every page up to the stack limit with a dummy operation,
  // we force the system to move the guard page, and commit memory.
 +//
-+// Pi-Bolt: commit those pages instead of touching them, and do what the system does when it moves the guard page: put it
++// Rapid Pi: commit those pages instead of touching them, and do what the system does when it moves the guard page: put it
 +// below them, and lower the thread's stack limit in its TEB (which exception dispatch and _chkstk read) to them. Committed
 +// pages are there when touched, as the touched ones were, and charge the same commit; but they take no physical memory and
 +// no page fault until something uses them (touched, the 5MB of maxPerThreadStackUsage took about 1,260 faults and stayed
@@ -13015,7 +13015,7 @@ index 198bc88761..12b9c8f44e 100644
      {
          ASSERT(m_ptr);
 +#if OS(WINDOWS) && CPU(X86_64)
-+        // (Pi-Bolt: a SYSV_ABI function, called so that Control Flow Guard checks it correctly: wtf/SysVCall.h.)
++        // (Rapid Pi: a SYSV_ABI function, called so that Control Flow Guard checks it correctly: wtf/SysVCall.h.)
 +        if constexpr (attr != FunctionAttributes::None)
 +            return callSysV(get(), std::forward<In>(in)...);
 +        else
@@ -13189,7 +13189,7 @@ index 0000000000..1c31756902
 +++ b/Source/WTF/wtf/SysVCall.h
 @@ -0,0 +1,49 @@
 +/*
-+ * Pi-Bolt: an indirect call to a SYSV_ABI function that Control Flow Guard checks correctly on Windows x64.
++ * Rapid Pi: an indirect call to a SYSV_ABI function that Control Flow Guard checks correctly on Windows x64.
 + *
 + * With /guard:cf, LLVM turns an indirect call on x64 into a call to the loader's dispatch function (__guard_dispatch_icall_fptr),
 + * with the target in RAX: the target is an extra argument of the call, which the Win64 calling convention assigns to RAX
@@ -13612,14 +13612,14 @@ index 77260b2296..f34fc8e5d8 100644
 +// they are private mappings of the file; about 5 µs a page), and says where the first write to it was: the code's address as an
 +// offset in the executable, and where in which arena. BUN_STATIC_HEAP_WRITES=all says where every write is: the page is writable
 +// for the one instruction (the trap flag), then read-only again. Both are for finding out what belongs in a mutable arena, and
-+// only a runtime built for it has them (debug builds, or PIBOLT_STATIC_HEAP_WRITES defined): in a release runtime the environment
++// only a runtime built for it has them (debug builds, or RAPIDPI_STATIC_HEAP_WRITES defined): in a release runtime the environment
 +// cannot turn the fault into a write that goes through. Read once, at startup (initializeLayout()), not in the handler.
 +static std::atomic<size_t> s_pagesMadeWritable { 0 };
 +static thread_local uintptr_t t_pageToMakeReadOnly { 0 };
 +static const char* s_writesMode { nullptr };
 +static const char* writesModeFromEnvironment()
 +{
-+#if !defined(NDEBUG) || defined(PIBOLT_STATIC_HEAP_WRITES)
++#if !defined(NDEBUG) || defined(RAPIDPI_STATIC_HEAP_WRITES)
 +    return getenv("BUN_STATIC_HEAP_WRITES");
 +#else
 +    return nullptr;
@@ -13653,7 +13653,7 @@ index 77260b2296..f34fc8e5d8 100644
 +    size_t inArena = static_cast<size_t>(address - StaticRegion::startOf(static_cast<StaticRegion::Arena>(arena)));
 +    size_t from = static_cast<size_t>(reinterpret_cast<uintptr_t>(record->ExceptionAddress) - image);
 +    if (!mode) {
-+        fprintf(stderr, "pi-bolt: a write to the read-only prebuilt heap (%s+%zx from +%zx)\n", names[arena], inArena, from);
++        fprintf(stderr, "rapid-pi: a write to the read-only prebuilt heap (%s+%zx from +%zx)\n", names[arena], inArena, from);
 +        return EXCEPTION_CONTINUE_SEARCH;
 +    }
 +    uintptr_t page = address & ~static_cast<uintptr_t>(4095);
@@ -15297,7 +15297,7 @@ The image's code was in source order (module, then position in the text), so the
 functions a session runs were spread over all of the 35-48 MB of code. A page of code
 that is touched is resident, and on Linux the kernel also maps the pages around a fault
 that are in the page cache (fault-around, 64 KB): code used and code not used side by
-side both count in the process's RSS. Measured on GitHub's runners (Pi-Bolt 0.9.9, TUI
+side both count in the process's RSS. Measured on GitHub's runners (Rapid Pi 0.9.9, TUI
 start + 5 tool turns + a 20,000-character answer, pagemap): image code resident 25.9 MB
 (x64) / 20.4 MB (arm64), of which touched 11.7 / 8.6 MB.
 
@@ -15952,7 +15952,7 @@ Tests: Source/JavaScriptCore/b3/testb3_1.cpp
 
 Canonical link: https://commits.webkit.org/323859@main
 
-Backported to Pi-Bolt's WebKit pin from oven-sh/WebKit a54d5f756c (WebKit 323859@main); test context adjusted.
+Backported to Rapid Pi's WebKit pin from oven-sh/WebKit a54d5f756c (WebKit 323859@main); test context adjusted.
 ---
  .../JavaScriptCore/b3/B3FoldPathConstants.cpp |  4 +-
  Source/JavaScriptCore/b3/testb3.h             |  1 +
@@ -16105,7 +16105,7 @@ Tests: Source/JavaScriptCore/b3/testb3_1.cpp
 
 Canonical link: https://commits.webkit.org/324247@main
 
-Backported to Pi-Bolt's WebKit pin from oven-sh/WebKit df5a49f70d (WebKit 324247@main).
+Backported to Rapid Pi's WebKit pin from oven-sh/WebKit df5a49f70d (WebKit 324247@main).
 ---
  Source/JavaScriptCore/b3/B3ReduceStrength.cpp | 41 +++++++++++++++++--
  Source/JavaScriptCore/b3/testb3.h             |  1 +
@@ -16394,7 +16394,7 @@ Tests: JSTests/stress/b3-specialize-select-should-not-clone-phis.js
 
 Canonical link: https://commits.webkit.org/321956@main
 
-Backported to Pi-Bolt's WebKit pin from oven-sh/WebKit 6dd325c7d0 (WebKit 321956@main). At the pin specializeSelect is still part of B3ReduceStrength.cpp; the same check is added to its cloneability loop.
+Backported to Rapid Pi's WebKit pin from oven-sh/WebKit 6dd325c7d0 (WebKit 321956@main). At the pin specializeSelect is still part of B3ReduceStrength.cpp; the same check is added to its cloneability loop.
 ---
  ...specialize-select-should-not-clone-phis.js |  21 ++++
  Source/JavaScriptCore/b3/B3ReduceStrength.cpp |   8 ++
@@ -16641,7 +16641,7 @@ Tests: JSTests/wasm/stress/omg-select-i64-test-high-bits.js
 
 Canonical link: https://commits.webkit.org/323931@main
 
-Backported to Pi-Bolt's WebKit pin from oven-sh/WebKit a1b4772be7.
+Backported to Rapid Pi's WebKit pin from oven-sh/WebKit a1b4772be7.
 ---
  .../stress/omg-select-i64-test-high-bits.js   | 30 +++++++++++++++++++
  .../JavaScriptCore/b3/air/AirOpcode.opcodes   |  2 +-
@@ -16792,7 +16792,7 @@ and we make it fired when Baseline JIT code is installed.
 
 Canonical link: https://commits.webkit.org/323860@main
 
-Backported to Pi-Bolt's WebKit pin from oven-sh/WebKit ad96437625 (WebKit 323860@main). The pin's checkIfJITThresholdReached() keeps its startup JIT deferral scale, and the pin enqueues Baseline plans through g_compilerHooks.
+Backported to Rapid Pi's WebKit pin from oven-sh/WebKit ad96437625 (WebKit 323860@main). The pin's checkIfJITThresholdReached() keeps its startup JIT deferral scale, and the pin enqueues Baseline plans through g_compilerHooks.
 ---
  Source/JavaScriptCore/bytecode/CodeBlock.cpp  | 11 ++++++
  Source/JavaScriptCore/bytecode/CodeBlock.h    |  5 +--
@@ -17090,7 +17090,7 @@ class. A lost merge costs a narrower prediction, which only chooses which checks
 * Source/JavaScriptCore/bytecode/ValueProfile.h:
 (JSC::ValueProfileAndVirtualRegister::sample):
 
-Backported to Pi-Bolt's WebKit pin from oven-sh/WebKit f590e0d0fe.
+Backported to Rapid Pi's WebKit pin from oven-sh/WebKit f590e0d0fe.
 ---
  JSTests/stress/catch-osr-entry-is-made.js     | 35 +++++++
  .../catch-osr-entry-operand-without-sample.js | 98 +++++++++++++++++++
@@ -17391,7 +17391,7 @@ DirectTailCall now reserves the call argument area like the other calls.
 CallFrameShuffler::prepareForTailCall asserts that the new frame does
 not reach below the stack pointer.
 
-Backported to Pi-Bolt's WebKit pin from oven-sh/WebKit#887 (three commits: the fix and its two tests, squashed).
+Backported to Rapid Pi's WebKit pin from oven-sh/WebKit#887 (three commits: the fix and its two tests, squashed).
 ---
  ...l-call-callee-frame-below-stack-pointer.js | 45 +++++++++++
  ...il-call-stack-check-covers-callee-frame.js | 77 +++++++++++++++++++

@@ -579,7 +579,7 @@ describe("remote control", () => {
 
 		it("shows the QR code and footer status", async () => {
 			const { lines, statuses } = await controllerSetup();
-			expect(lines[0]?.[0]).toBe("Remote control: scan with the Pi-Bolt app");
+			expect(lines[0]?.[0]).toBe("Remote control: scan with the Rapid Pi app");
 			expect(lines[0]?.some((line) => line.includes("▀"))).toBe(true);
 			expect(statuses.at(-1)).toBe("remote lan: waiting");
 		});

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import android.content.Intent
 import android.graphics.Color
@@ -18,11 +18,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.ui.session.SessionScreen
-import opensec.pibolt.app.ui.theme.PiBoltTheme
-import opensec.pibolt.protocol.rpc.StreamingBehavior
-import opensec.pibolt.protocol.session.AssistantTextItem
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.ui.session.SessionScreen
+import opensec.rapidpi.app.ui.theme.PiBoltTheme
+import opensec.rapidpi.protocol.rpc.StreamingBehavior
+import opensec.rapidpi.protocol.session.AssistantTextItem
 import java.io.File
 
 /**
@@ -30,7 +30,7 @@ import java.io.File
  * screens exist. Examples:
  *
  * ```
- * adb shell am start -n in.opensec.pibolt/opensec.pibolt.app.engine.EngineDebugActivity --es project demo
+ * adb shell am start -n in.opensec.rapidpi/opensec.rapidpi.app.engine.EngineDebugActivity --es project demo
  * adb shell am start -n ... --es project demo --ez fresh true
  * adb shell am start -n ... --es prompt "hello"
  * adb shell am start -n ... --es bash "git status"

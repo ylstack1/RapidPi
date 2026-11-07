@@ -1,6 +1,6 @@
 name: bench-stock-bun
 
-# The Pi-Bolt 1.0.0 candidate (perf/v1.0.0 at CAND_COMMIT, built by scripts/build-pi.sh on the runtimes of RUNTIME_RUN, as
+# The Rapid Pi 1.0.0 candidate (perf/v1.0.0 at CAND_COMMIT, built by scripts/build-pi.sh on the runtimes of RUNTIME_RUN, as
 # bench.yml on bench/v1.0.0 builds it) against Pi 1.4.0 as released on npm (@earendil-works/pi-coding-agent, dist/bundle/cli.js),
 # run by stock Bun 1.4.4, by Node 22 and by Node 24, on GitHub's Linux x86-64 and ARM64 (one CPU each) and Windows runners.
 # The tools are bench/ of the candidate's tree. macOS is measured on an Apple M5 instead.
@@ -57,8 +57,8 @@ jobs:
           mkdir -p results .work
           # cand: perf/v1.0.0 at CAND_COMMIT, built by its scripts/build-pi.sh on the runtime of RUNTIME_RUN.
           gh run download "$RUNTIME_RUN" --repo "$GITHUB_REPOSITORY" --name "runtime-$PLAT" --dir .work/rt
-          tar -C .work/rt -xzf ".work/rt/pi-bolt-runtime-$PLAT.tar.gz"
-          mkdir -p cand-src/.work/runtime && install -m 755 ".work/rt/pi-bolt-runtime-$PLAT/bun" cand-src/.work/runtime/bun
+          tar -C .work/rt -xzf ".work/rt/rapid-pi-runtime-$PLAT.tar.gz"
+          mkdir -p cand-src/.work/runtime && install -m 755 ".work/rt/rapid-pi-runtime-$PLAT/bun" cand-src/.work/runtime/bun
           (cd cand-src && scripts/prepare-pi.sh && scripts/build-pi.sh --out "$GITHUB_WORKSPACE/out/cand")
           npm install --prefix .work/vanilla --ignore-scripts --no-audit --no-fund "@earendil-works/pi-coding-agent@$PI_VERSION" >/dev/null
           for v in 22 24; do
@@ -72,7 +72,7 @@ jobs:
           {
             echo "runner: ${{ matrix.runner }} ($(uname -srm)), $(nproc) CPUs"
             grep -m1 'model name' /proc/cpuinfo || lscpu | grep -m1 'Model name'
-            echo "pi-bolt: perf/v1.0.0 ($CAND_COMMIT), the Pi-Bolt 1.0.0 candidate, by scripts/build-pi.sh on the runtime of run $RUNTIME_RUN ($(.work/rt/pi-bolt-runtime-$PLAT/bun --version), sha256 $(sha .work/rt/pi-bolt-runtime-$PLAT/bun | cut -d' ' -f1)): $(out/cand/pi --version </dev/null)"
+            echo "rapid-pi: perf/v1.0.0 ($CAND_COMMIT), the Rapid Pi 1.0.0 candidate, by scripts/build-pi.sh on the runtime of run $RUNTIME_RUN ($(.work/rt/rapid-pi-runtime-$PLAT/bun --version), sha256 $(sha .work/rt/rapid-pi-runtime-$PLAT/bun | cut -d' ' -f1)): $(out/cand/pi --version </dev/null)"
             echo "bun: Pi $(bun $VAN --version </dev/null) as released on npm, run by stock Bun $(bun --version)"
             for v in 22 24; do echo "node$v: Pi $(.work/node$v/bin/node $VAN --version </dev/null) as released on npm, on Node $(.work/node$v/bin/node --version)"; done
             echo "tools: bench/ of $CAND_COMMIT; python: $(python3 --version), tmux: $(tmux -V)"
@@ -82,7 +82,7 @@ jobs:
           CPUS: ${{ matrix.cpus }}
         run: |
           VAN=".work/vanilla/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js"
-          B=(--build pi-bolt=out/cand/pi --build "bun=$(command -v bun) $VAN" --build "node22=.work/node22/bin/node $VAN" --build "node24=.work/node24/bin/node $VAN")
+          B=(--build rapid-pi=out/cand/pi --build "bun=$(command -v bun) $VAN" --build "node22=.work/node22/bin/node $VAN" --build "node24=.work/node24/bin/node $VAN")
           C=(); [ -n "$CPUS" ] && C=(--cpus "$CPUS")
           T=cand-src/bench
           run() { name=$1; shift; echo "## $name" | tee -a results/all.txt; "$@" 2>&1 | grep -vE 'round [0-9]+/' | tee -a results/all.txt || echo "$name failed" | tee -a results/all.txt; }
@@ -136,11 +136,11 @@ jobs:
             Add-Content -Encoding utf8 $env:GITHUB_PATH $shim
           }
           # cand: perf/v1.0.0 at CAND_COMMIT, built by its scripts\build-pi.ps1 on the runtime of RUNTIME_RUN, laid out as
-          # package-release.ps1 lays it out (pi-bolt.exe beside its assets).
+          # package-release.ps1 lays it out (rapid-pi.exe beside its assets).
           gh run download $env:RUNTIME_RUN --repo $env:GITHUB_REPOSITORY --name runtime-win32-x64 --dir .work\rt
           if ($LASTEXITCODE -ne 0) { exit 1 }
-          Expand-Archive .work\rt\pi-bolt-runtime-win32-x64.zip -DestinationPath .work\rt -Force
-          Copy-Item .work\rt\pi-bolt-runtime-win32-x64\bun.exe cand-src\.work\runtime\bun.exe
+          Expand-Archive .work\rt\rapid-pi-runtime-win32-x64.zip -DestinationPath .work\rt -Force
+          Copy-Item .work\rt\rapid-pi-runtime-win32-x64\bun.exe cand-src\.work\runtime\bun.exe
           $rtline = "$(& cand-src\.work\runtime\bun.exe --version), sha256 $((Get-FileHash cand-src\.work\runtime\bun.exe -Algorithm SHA256).Hash.ToLowerInvariant())"
           Push-Location cand-src
           npm ci --ignore-scripts --no-audit --no-fund
@@ -151,7 +151,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit 1 }
           Pop-Location
           Copy-Item -Recurse out\cand .work\cand
-          Move-Item .work\cand\pi.exe .work\cand\pi-bolt.exe
+          Move-Item .work\cand\pi.exe .work\cand\rapid-pi.exe
           npm install --prefix .work\vanilla --ignore-scripts --no-audit --no-fund "@earendil-works/pi-coding-agent@$env:PI_VERSION" | Out-Null
           $env_lines = @()
           foreach ($v in 22, 24) {
@@ -167,7 +167,7 @@ jobs:
           $van = ".work\vanilla\node_modules\@earendil-works\pi-coding-agent\dist\bundle\cli.js"
           $cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
           $env_lines += "runner: windows-2025, $($cpu.Name.Trim()), $($cpu.NumberOfCores) cores, $($cpu.NumberOfLogicalProcessors) threads"
-          $env_lines += "pi-bolt: perf/v1.0.0 ($env:CAND_COMMIT), the Pi-Bolt 1.0.0 candidate, by scripts\build-pi.ps1 on the runtime of run $($env:RUNTIME_RUN) ($rtline): $(& .work\cand\pi-bolt.exe --version | Select-Object -First 1)"
+          $env_lines += "rapid-pi: perf/v1.0.0 ($env:CAND_COMMIT), the Rapid Pi 1.0.0 candidate, by scripts\build-pi.ps1 on the runtime of run $($env:RUNTIME_RUN) ($rtline): $(& .work\cand\rapid-pi.exe --version | Select-Object -First 1)"
           $env_lines += "bun: Pi $(& bun $van --version | Select-Object -First 1) as released on npm, run by stock Bun $(bun --version)"
           foreach ($v in 22, 24) { $env_lines += "node${v}: Pi $(& .work\node$v\node.exe $van --version | Select-Object -First 1) as released on npm, on Node $(& .work\node$v\node.exe --version)" }
           $env_lines += "tools: bench\ of $($env:CAND_COMMIT); $(python --version)"
@@ -179,7 +179,7 @@ jobs:
           $ErrorActionPreference = 'Continue'
           $VAN = "$PWD\.work\vanilla\node_modules\@earendil-works\pi-coding-agent\dist\bundle\cli.js"
           $BUN = (Get-Command bun).Source
-          $B = @('--build', "pi-bolt=$PWD\.work\cand\pi-bolt.exe", '--build', "bun=$BUN $VAN",
+          $B = @('--build', "rapid-pi=$PWD\.work\cand\rapid-pi.exe", '--build', "bun=$BUN $VAN",
                  '--build', "node22=$PWD\.work\node22\node.exe $VAN", '--build', "node24=$PWD\.work\node24\node.exe $VAN")
           function Run($name, $file, [string[]]$cmd) {
             "## $name" | Add-Content -Encoding utf8 results\all.txt

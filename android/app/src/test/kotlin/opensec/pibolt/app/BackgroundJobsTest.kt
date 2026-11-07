@@ -1,8 +1,8 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.engine.BackgroundJobs
-import opensec.pibolt.app.engine.ChatSpace
-import opensec.pibolt.app.session.RunningSummary
+import opensec.rapidpi.app.engine.BackgroundJobs
+import opensec.rapidpi.app.engine.ChatSpace
+import opensec.rapidpi.app.session.RunningSummary
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -10,9 +10,9 @@ import org.junit.Test
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.app.ui.session.toolLabel
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
+import opensec.rapidpi.app.ui.session.toolLabel
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
 import java.io.File
 
 class BackgroundJobsTest {
@@ -46,7 +46,7 @@ class BackgroundJobsTest {
 
     @Test
     fun stateFileIsPerEngine() {
-        assertEquals(File("/tmp/pibolt-bg/77/jobs.json"), BackgroundJobs.stateFile(File("/tmp"), 77))
+        assertEquals(File("/tmp/rapidpi-bg/77/jobs.json"), BackgroundJobs.stateFile(File("/tmp"), 77))
     }
 
     @Test

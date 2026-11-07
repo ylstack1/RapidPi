@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.editor
+package opensec.rapidpi.app.ui.projects.editor
 
 /** A text and its selection `[start, end)` (start == end is a cursor). Plain, so the rules are unit-tested. */
 data class EditState(val text: String, val start: Int, val end: Int = start) {

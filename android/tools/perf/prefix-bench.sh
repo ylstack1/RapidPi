@@ -19,17 +19,17 @@ WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 APP=app/build/intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes
 TEST=app/build/intermediates/built_in_kotlinc/debugUnitTest/compileDebugUnitTestKotlin/classes
-(cd "$APP" && "$JAR" cf "$WORK/app.jar" opensec/pibolt/app/engine/EnginePrefix*.class opensec/pibolt/app/engine/EngineManifest*.class \
-	opensec/pibolt/app/engine/EnginePaths*.class opensec/pibolt/app/engine/AssetSource*.class opensec/pibolt/app/engine/BundledExtensions*.class \
-	opensec/pibolt/app/data/SafeFiles*.class)
-(cd "$TEST" && "$JAR" cf "$WORK/bench.jar" opensec/pibolt/app/bench/)
+(cd "$APP" && "$JAR" cf "$WORK/app.jar" opensec/rapidpi/app/engine/EnginePrefix*.class opensec/rapidpi/app/engine/EngineManifest*.class \
+	opensec/rapidpi/app/engine/EnginePaths*.class opensec/rapidpi/app/engine/AssetSource*.class opensec/rapidpi/app/engine/BundledExtensions*.class \
+	opensec/rapidpi/app/data/SafeFiles*.class)
+(cd "$TEST" && "$JAR" cf "$WORK/bench.jar" opensec/rapidpi/app/bench/)
 C=$HOME/.gradle/caches/modules-2/files-2.1
 LIBS=$(find "$C/org.jetbrains.kotlin/kotlin-stdlib" "$C/org.jetbrains.kotlinx/kotlinx-serialization-json-jvm" "$C/org.jetbrains.kotlinx/kotlinx-serialization-core-jvm" \
 	-name '*.jar' ! -name '*sources*' | grep -E 'kotlin-stdlib-2\.4\.21\.jar|serialization-(json|core)-jvm-1\.12\.0\.jar')
 mkdir -p "$WORK/dex"
 "$BT/d8" --release --min-api 31 --lib "$SDK/platforms/android-36/android.jar" --output "$WORK/dex" \
 	"$WORK/app.jar" "$WORK/bench.jar" protocol/build/libs/protocol.jar $LIBS 2>/dev/null >/dev/null
-APK=$(a shell pm path --user 0 in.opensec.pibolt | head -1 | sed 's/package://' | tr -d '\r')
-a push -q "$WORK/dex/classes.dex" /data/local/tmp/pibolt-prefix-bench.dex
-a shell "CLASSPATH=/data/local/tmp/pibolt-prefix-bench.dex app_process /system/bin opensec.pibolt.app.bench.PrefixBench $APK /data/local/tmp/pibolt-prefix-bench $ROUNDS $WORKERS"
-a shell rm -rf /data/local/tmp/pibolt-prefix-bench /data/local/tmp/pibolt-prefix-bench.dex
+APK=$(a shell pm path --user 0 in.opensec.rapidpi | head -1 | sed 's/package://' | tr -d '\r')
+a push -q "$WORK/dex/classes.dex" /data/local/tmp/rapidpi-prefix-bench.dex
+a shell "CLASSPATH=/data/local/tmp/rapidpi-prefix-bench.dex app_process /system/bin opensec.rapidpi.app.bench.PrefixBench $APK /data/local/tmp/rapidpi-prefix-bench $ROUNDS $WORKERS"
+a shell rm -rf /data/local/tmp/rapidpi-prefix-bench /data/local/tmp/rapidpi-prefix-bench.dex

@@ -1,8 +1,8 @@
-package opensec.pibolt.app.ui.update
+package opensec.rapidpi.app.ui.update
 
-import opensec.pibolt.app.ui.components.Notice
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.components.Notice
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.theme.Tnum
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
@@ -50,30 +50,30 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.ui.components.ButtonRow
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.ProgressLine
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.update.NetworkKind
-import opensec.pibolt.app.update.UpdateInfo
-import opensec.pibolt.app.update.UpdateJob
-import opensec.pibolt.app.update.UpdateNotifications
-import opensec.pibolt.app.update.UpdatePrompt
-import opensec.pibolt.app.update.UpdateRules
-import opensec.pibolt.app.update.UpdateState
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.ui.components.ButtonRow
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.ProgressLine
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.update.NetworkKind
+import opensec.rapidpi.app.update.UpdateInfo
+import opensec.rapidpi.app.update.UpdateJob
+import opensec.rapidpi.app.update.UpdateNotifications
+import opensec.rapidpi.app.update.UpdatePrompt
+import opensec.rapidpi.app.update.UpdateRules
+import opensec.rapidpi.app.update.UpdateState
 
 /**
- * The update card on Home: an offer ("Pi-Bolt 0.2.2 is available", Later / Update) while nothing runs, then the
+ * The update card on Home: an offer ("Rapid Pi 0.2.2 is available", Later / Update) while nothing runs, then the
  * download, the check, the install and any failure in the same place. Hidden when there is nothing to say.
  */
 @Composable
@@ -85,7 +85,7 @@ fun UpdateCard(app: PiBoltApp, modifier: Modifier = Modifier) {
     when (val job = state.job) {
         UpdateJob.Idle -> offer?.let { info ->
             UpdateRow(
-                title = "Pi-Bolt ${info.version}",
+                title = "Rapid Pi ${info.version}",
                 detail = "Update available · ${UpdateRules.formatSize(info.size)}",
                 modifier = modifier,
             ) {
@@ -94,7 +94,7 @@ fun UpdateCard(app: PiBoltApp, modifier: Modifier = Modifier) {
             }
         }
         is UpdateJob.Downloading -> UpdateRow(
-            title = "Downloading Pi-Bolt ${job.info.version}",
+            title = "Downloading Rapid Pi ${job.info.version}",
             detail = UpdateNotifications.progressText(job),
             progress = job.bytes.toFloat() / job.total.coerceAtLeast(1),
             modifier = modifier,
@@ -102,19 +102,19 @@ fun UpdateCard(app: PiBoltApp, modifier: Modifier = Modifier) {
             TextAction("Cancel", onClick = updates::cancelDownload, color = colors.ink2)
         }
         is UpdateJob.Verifying -> UpdateRow(
-            title = "Checking Pi-Bolt ${job.info.version}",
+            title = "Checking Rapid Pi ${job.info.version}",
             detail = "Checksum and signature",
             modifier = modifier,
         )
         is UpdateJob.Ready -> UpdateRow(
-            title = "Pi-Bolt ${job.info.version} is ready",
+            title = "Rapid Pi ${job.info.version} is ready",
             detail = job.message ?: "Signed by OpenSec · checksum matches",
             modifier = modifier,
         ) {
             TextAction("Install", onClick = updates::requestInstall, color = colors.accent)
         }
         is UpdateJob.Installing -> UpdateRow(
-            title = "Installing Pi-Bolt ${job.info.version}",
+            title = "Installing Rapid Pi ${job.info.version}",
             detail = "Confirm in Android's dialog",
             modifier = modifier,
         )
@@ -177,7 +177,7 @@ fun updateStatus(state: UpdateState): Pair<String, String?> {
         state.checkError != null -> state.checkError to null
         else -> when (val d = state.decision) {
             is UpdateRules.Decision.Available -> "${d.info.version} is available · ${UpdateRules.formatSize(d.info.size)}" to null
-            is UpdateRules.Decision.TestBuild -> "Test build · updates from the website" to "${d.info.version} is on pi-bolt.opensec.in"
+            is UpdateRules.Decision.TestBuild -> "Test build · updates from the website" to "${d.info.version} is on rapid-pi.opensec.in"
             UpdateRules.Decision.UpToDate -> if (state.latest != null) "Up to date (${state.installed})" to null else "Not checked yet" to null
         }
     }
@@ -214,7 +214,7 @@ private fun DownloadSheet(app: PiBoltApp, info: UpdateInfo) {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { network = updates.network() }
     val size = UpdateRules.formatSize(info.size)
     PiSheet(onDismiss = updates::dismissPrompt, state = state) {
-        SheetHeader("Update to Pi-Bolt ${info.version}")
+        SheetHeader("Update to Rapid Pi ${info.version}")
         Spacer(Modifier.height(8.dp))
         val (icon, text, tint) = when (network) {
             NetworkKind.Wifi -> Triple(Icons.Rounded.Wifi, "$size over Wi-Fi", colors.ink2)
@@ -225,7 +225,7 @@ private fun DownloadSheet(app: PiBoltApp, info: UpdateInfo) {
             NetworkKind.Unknown -> Triple(Icons.Rounded.Wifi, "$size download", colors.ink2)
         }
         InfoBox(icon, text, tint)
-        if (info.page?.startsWith("https://github.com/opensec-git/Pi-Bolt/releases/") == true) {
+        if (info.page?.startsWith("https://github.com/opensec-git/Rapid Pi/releases/") == true) {
             TextAction("Release notes", onClick = { runCatching { uri.openUri(info.page) } }, color = colors.accent, modifier = Modifier.padding(start = 8.dp))
         }
         Spacer(Modifier.height(12.dp))
@@ -257,14 +257,14 @@ private fun InstallSheet(app: PiBoltApp, info: UpdateInfo) {
         }
     }
     PiSheet(onDismiss = updates::dismissPrompt, state = state) {
-        SheetHeader("Install Pi-Bolt ${info.version}")
+        SheetHeader("Install Rapid Pi ${info.version}")
         Spacer(Modifier.height(8.dp))
         InfoBox(Icons.Rounded.GppGood, "Signed by OpenSec · checksum matches", colors.success)
         if (working != null) InfoBox(Icons.Rounded.WarningAmber, working, colors.warning)
         if (!allowed) {
             InfoBox(
                 Icons.Rounded.SystemUpdate,
-                "Turn on “Allow from this source” for Pi-Bolt, then come back.",
+                "Turn on “Allow from this source” for Rapid Pi, then come back.",
                 colors.ink2,
             )
         }

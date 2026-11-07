@@ -65,7 +65,7 @@ export function encodePairingUri(payload: PairingPayload): string {
 }
 
 /**
- * A code that carries the host's current addresses but pairs nothing (`pi-bolt service status`): its secret is all zeros
+ * A code that carries the host's current addresses but pairs nothing (`rapid-pi service status`): its secret is all zeros
  * and it expired at the epoch. A phone that knows the host takes the addresses; any other phone says it has expired.
  */
 export function encodeReconnectUri(hostName: string, hostPublicKey: Buffer, endpoints: string[]): string {
@@ -80,7 +80,7 @@ export function encodeReconnectUri(hostName: string, hostPublicKey: Buffer, endp
 }
 
 export function decodePairingUri(uri: string): PairingPayload {
-	if (!uri.startsWith(PAIRING_URI_PREFIX)) throw new Error("Not a Pi-Bolt pairing code");
+	if (!uri.startsWith(PAIRING_URI_PREFIX)) throw new Error("Not a Rapid Pi pairing code");
 	const payload = JSON.parse(fromBase64Url(uri.slice(PAIRING_URI_PREFIX.length)).toString("utf8")) as PairingPayload;
 	if (payload.v !== PROTOCOL_VERSION) throw new Error(`Unsupported pairing code version ${payload.v}`);
 	return payload;

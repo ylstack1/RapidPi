@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.git.Change
-import opensec.pibolt.app.git.GitErrors
-import opensec.pibolt.app.git.GitLogFormat
-import opensec.pibolt.app.git.GitProgress
-import opensec.pibolt.app.git.PorcelainV2
-import opensec.pibolt.app.git.UnifiedDiffParser
-import opensec.pibolt.app.git.github.GitHubRemote
+import opensec.rapidpi.app.git.Change
+import opensec.rapidpi.app.git.GitErrors
+import opensec.rapidpi.app.git.GitLogFormat
+import opensec.rapidpi.app.git.GitProgress
+import opensec.rapidpi.app.git.PorcelainV2
+import opensec.rapidpi.app.git.UnifiedDiffParser
+import opensec.rapidpi.app.git.github.GitHubRemote
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -202,7 +202,7 @@ class GitParseTest {
 
     @Test
     fun githubRemotes() {
-        assertEquals("opensec-git" to "Pi-Bolt", GitHubRemote.parse("https://github.com/opensec-git/Pi-Bolt.git"))
+        assertEquals("opensec-git" to "Rapid Pi", GitHubRemote.parse("https://github.com/opensec-git/Rapid Pi.git"))
         assertEquals("o" to "r", GitHubRemote.parse("https://user@github.com/o/r"))
         assertEquals("o" to "r.js", GitHubRemote.parse("git@github.com:o/r.js.git"))
         assertEquals("o" to "r", GitHubRemote.parse("ssh://git@github.com/o/r.git"))

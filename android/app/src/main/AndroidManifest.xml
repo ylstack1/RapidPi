@@ -71,12 +71,12 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- The phone camera opens pairing codes (pibolt://pair#...) in the app. -->
+            <!-- The phone camera opens pairing codes (rapidpi://pair#...) in the app. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="pibolt" android:host="pair" />
+                <data android:scheme="rapidpi" android:host="pair" />
             </intent-filter>
             <!-- Files, images and text shared from other apps: imported into a project or put in its composer. -->
             <intent-filter>

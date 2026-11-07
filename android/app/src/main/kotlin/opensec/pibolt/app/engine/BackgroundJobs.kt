@@ -1,4 +1,4 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import android.content.res.AssetManager
 import android.system.Os
@@ -7,22 +7,22 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.longOrNull
-import opensec.pibolt.protocol.ProtocolJson
+import opensec.rapidpi.protocol.ProtocolJson
 import java.io.File
 import java.io.RandomAccessFile
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
 /**
- * Background shell jobs (the app's `pibolt-bg` extension, assets/extensions/pibolt-bg.js): the tools `bash_background`,
+ * Background shell jobs (the app's `rapidpi-bg` extension, assets/extensions/rapidpi-bg.js): the tools `bash_background`,
  * `bash_output`, `bash_kill` and `bash_jobs` in project sessions. Chats never get them (ChatSpace's `--tools`
- * allowlist). The extension mirrors its jobs to `$TMPDIR/pibolt-bg/<engine pid>/jobs.json` (logs beside it, `<id>.log`)
+ * allowlist). The extension mirrors its jobs to `$TMPDIR/rapidpi-bg/<engine pid>/jobs.json` (logs beside it, `<id>.log`)
  * and sets the extension status [STATUS_KEY] while any runs, which keeps the session busy (SessionController) and the
  * foreground service up (SessionService). The app reads the file for the Background sheet and stops a job by signalling
  * its process group, as `bash_kill` does.
  */
 object BackgroundJobs {
-    const val FILE = "pibolt-bg.js"
+    const val FILE = "rapidpi-bg.js"
     const val STATUS_KEY = "bg-jobs"
     val TOOLS = listOf("bash_background", "bash_output", "bash_kill", "bash_jobs")
 
@@ -67,7 +67,7 @@ object BackgroundJobs {
     }.getOrDefault(false)
 
     /** The jobs file of the engine [pid], under the engine's TMPDIR [tmp]. */
-    fun stateFile(tmp: File, pid: Long): File = File(tmp, "pibolt-bg/$pid/jobs.json")
+    fun stateFile(tmp: File, pid: Long): File = File(tmp, "rapidpi-bg/$pid/jobs.json")
 
     /** The jobs in a jobs.json text; empty when it cannot be read. */
     fun parse(text: String): List<Job> = runCatching {

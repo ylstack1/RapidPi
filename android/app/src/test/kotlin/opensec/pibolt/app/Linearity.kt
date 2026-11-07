@@ -1,4 +1,4 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlin.test.assertTrue
 

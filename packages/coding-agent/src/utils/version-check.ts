@@ -1,13 +1,13 @@
 import { compare, valid } from "semver";
 import {
-	PIBOLT,
-	PIBOLT_LATEST_RELEASE_API,
-	PIBOLT_LATEST_RELEASE_URL,
-	PIBOLT_RELEASES_API,
-	PIBOLT_RELEASES_FEED,
-	piBoltChannel,
-	piBoltVersionOfTag,
-} from "../pi-bolt.ts";
+	RAPIDPI,
+	RAPIDPI_LATEST_RELEASE_API,
+	RAPIDPI_LATEST_RELEASE_URL,
+	RAPIDPI_RELEASES_API,
+	RAPIDPI_RELEASES_FEED,
+	rapidPiChannel,
+	rapidPiVersionOfTag,
+} from "../rapid-pi.ts";
 import { fetchWithRetry } from "./management-http.ts";
 import { getPiUserAgent } from "./pi-user-agent.ts";
 
@@ -62,7 +62,7 @@ export async function getLatestPiRelease(
 	options: { timeoutMs?: number; retry?: boolean } = {},
 ): Promise<LatestPiRelease | undefined> {
 	if (process.env.PI_OFFLINE) return undefined;
-	if (PIBOLT) return getLatestPiBoltRelease(currentVersion, options);
+	if (RAPIDPI) return getLatestPiBoltRelease(currentVersion, options);
 
 	const response = await fetchWithRetry(
 		LATEST_VERSION_URL,
@@ -106,34 +106,34 @@ function highestVersion(versions: Iterable<string | undefined>): string | undefi
 	return highest;
 }
 
-/** The newest Pi-Bolt version among GitHub's releases (pre-releases too; drafts never). */
+/** The newest Rapid Pi version among GitHub's releases (pre-releases too; drafts never). */
 export function newestPiBoltVersion(releases: unknown): string | undefined {
 	if (!Array.isArray(releases)) return undefined;
 	return highestVersion(
 		(releases as Array<{ tag_name?: unknown; draft?: unknown }>).map((release) =>
-			release?.draft === true ? undefined : piBoltVersionOfTag(release?.tag_name),
+			release?.draft === true ? undefined : rapidPiVersionOfTag(release?.tag_name),
 		),
 	);
 }
 
 /** The version of a release page's address (".../releases/tag/bolt-v1.0.2" -> "1.0.2"), or undefined for any other. */
-export function piBoltVersionOfReleaseUrl(url: string | null | undefined): string | undefined {
+export function rapidPiVersionOfReleaseUrl(url: string | null | undefined): string | undefined {
 	if (!url) return undefined;
 	try {
-		const tag = /\/releases\/tag\/([^/]+)$/.exec(new URL(url, PIBOLT_LATEST_RELEASE_URL).pathname)?.[1];
-		return tag ? piBoltVersionOfTag(decodeURIComponent(tag)) : undefined;
+		const tag = /\/releases\/tag\/([^/]+)$/.exec(new URL(url, RAPIDPI_LATEST_RELEASE_URL).pathname)?.[1];
+		return tag ? rapidPiVersionOfTag(decodeURIComponent(tag)) : undefined;
 	} catch {
 		return undefined;
 	}
 }
 
 /**
- * The newest Pi-Bolt version GitHub's releases feed (releases.atom) lists, pre-releases included: each release is an entry
+ * The newest Rapid Pi version GitHub's releases feed (releases.atom) lists, pre-releases included: each release is an entry
  * whose link is its page. (Release notes are in the feed as escaped HTML, so links in them are not taken for entries.)
  */
 export function newestPiBoltVersionInFeed(feed: string): string | undefined {
 	const links = feed.matchAll(/<link\b[^>]*\bhref="([^"]*\/releases\/tag\/[^"]*)"/g);
-	return highestVersion(Array.from(links, (link) => piBoltVersionOfReleaseUrl(link[1])));
+	return highestVersion(Array.from(links, (link) => rapidPiVersionOfReleaseUrl(link[1])));
 }
 
 /** "HTTP 403 (rate limit exceeded)": an unsuccessful response, in a message. */
@@ -145,7 +145,7 @@ function describeResponse(response: Response): string {
 }
 
 /**
- * Pi-Bolt updates as a whole (its Pi and its engine together), so a Pi-Bolt build looks at Pi-Bolt's releases, by Pi-Bolt
+ * Rapid Pi updates as a whole (its Pi and its engine together), so a Rapid Pi build looks at Rapid Pi's releases, by Rapid Pi
  * version: the latest release, or on the beta channel the newest, pre-releases included.
  *
  * The latest release is the one github.com/.../releases/latest redirects to, as the installers find it (#149): GitHub's API
@@ -163,14 +163,14 @@ async function getLatestPiBoltRelease(
 	const signal = AbortSignal.timeout(options.timeoutMs ?? DEFAULT_VERSION_CHECK_TIMEOUT_MS);
 	const retry = { maxRetries: options.retry ? 2 : 0 };
 	const latestRedirect = async (): Promise<string | undefined> => {
-		const response = await fetchWithRetry(PIBOLT_LATEST_RELEASE_URL, { headers, redirect: "manual", signal }, retry);
+		const response = await fetchWithRetry(RAPIDPI_LATEST_RELEASE_URL, { headers, redirect: "manual", signal }, retry);
 		try {
 			await response.body?.cancel();
 		} catch {
 			// Only the status and the Location header are read.
 		}
 		const location = response.status >= 300 && response.status < 400 ? response.headers.get("location") : null;
-		const version = piBoltVersionOfReleaseUrl(location);
+		const version = rapidPiVersionOfReleaseUrl(location);
 		if (!version) throw new Error(location ? `redirected to ${location}` : describeResponse(response));
 		return version;
 	};
@@ -182,29 +182,29 @@ async function getLatestPiBoltRelease(
 		);
 		if (!response.ok) throw new Error(describeResponse(response));
 		const version = versionOf(await response.json());
-		if (!version) throw new Error("no Pi-Bolt release in the answer");
+		if (!version) throw new Error("no Rapid Pi release in the answer");
 		return version;
 	};
 	const feed = async (): Promise<string | undefined> => {
-		const response = await fetchWithRetry(PIBOLT_RELEASES_FEED, { headers, signal }, retry);
+		const response = await fetchWithRetry(RAPIDPI_RELEASES_FEED, { headers, signal }, retry);
 		if (!response.ok) throw new Error(describeResponse(response));
 		const version = newestPiBoltVersionInFeed(await response.text());
-		if (!version) throw new Error("no Pi-Bolt release in the feed");
+		if (!version) throw new Error("no Rapid Pi release in the feed");
 		return version;
 	};
 	const sources: Array<[string, () => Promise<string | undefined>]> =
-		piBoltChannel() === "beta"
+		rapidPiChannel() === "beta"
 			? [
-					[PIBOLT_RELEASES_API, () => api(PIBOLT_RELEASES_API, newestPiBoltVersion)],
-					[PIBOLT_RELEASES_FEED, feed],
+					[RAPIDPI_RELEASES_API, () => api(RAPIDPI_RELEASES_API, newestPiBoltVersion)],
+					[RAPIDPI_RELEASES_FEED, feed],
 				]
 			: [
-					[PIBOLT_LATEST_RELEASE_URL, latestRedirect],
+					[RAPIDPI_LATEST_RELEASE_URL, latestRedirect],
 					[
-						PIBOLT_LATEST_RELEASE_API,
+						RAPIDPI_LATEST_RELEASE_API,
 						() =>
-							api(PIBOLT_LATEST_RELEASE_API, (data) =>
-								piBoltVersionOfTag((data as { tag_name?: unknown } | null)?.tag_name),
+							api(RAPIDPI_LATEST_RELEASE_API, (data) =>
+								rapidPiVersionOfTag((data as { tag_name?: unknown } | null)?.tag_name),
 							),
 					],
 				];
@@ -229,7 +229,7 @@ export async function getLatestPiVersion(
 
 export async function checkForNewPiVersion(currentVersion: string): Promise<LatestPiRelease | undefined> {
 	if (process.env.PI_SKIP_VERSION_CHECK) return undefined;
-	if (PIBOLT) currentVersion = PIBOLT.version;
+	if (RAPIDPI) currentVersion = RAPIDPI.version;
 
 	try {
 		const latestRelease = await getLatestPiRelease(currentVersion);

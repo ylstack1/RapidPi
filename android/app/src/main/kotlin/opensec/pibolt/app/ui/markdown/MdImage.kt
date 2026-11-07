@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
 import android.graphics.BitmapFactory
 import android.util.LruCache
@@ -39,12 +39,12 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.RadiusMedia
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.RadiusMedia
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL

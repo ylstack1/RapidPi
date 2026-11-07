@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.web
+package opensec.rapidpi.app.ui.session.web
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -109,7 +109,7 @@ object Favicons {
                 connection.connectTimeout = 4_000
                 connection.readTimeout = 6_000
                 connection.setRequestProperty("Accept", if (html) "text/html" else "image/*")
-                connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android) Pi-Bolt")
+                connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android) Rapid Pi")
                 val code = connection.responseCode
                 if (code in 300..399) {
                     target = FaviconRules.redirectTarget(target, connection.getHeaderField("Location")) ?: return null

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.runtime.Immutable
 import android.os.SystemClock
@@ -49,10 +49,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberUpdatedState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.projects.FileDoc
-import opensec.pibolt.app.ui.projects.ProjectFiles
-import opensec.pibolt.app.ui.session.features.ViewerImages
-import opensec.pibolt.protocol.rpc.ImageAttachment
+import opensec.rapidpi.app.ui.projects.FileDoc
+import opensec.rapidpi.app.ui.projects.ProjectFiles
+import opensec.rapidpi.app.ui.session.features.ViewerImages
+import opensec.rapidpi.protocol.rpc.ImageAttachment
 import java.io.File
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.withFrameNanos
@@ -66,26 +66,26 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
-import opensec.pibolt.app.ui.session.features.SearchJump
-import opensec.pibolt.app.ui.session.features.TranscriptSearch
+import opensec.rapidpi.app.ui.session.features.SearchJump
+import opensec.rapidpi.app.ui.session.features.TranscriptSearch
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.markdown.MdBlock
-import opensec.pibolt.app.ui.session.review.TurnReviewEntry
-import opensec.pibolt.app.ui.session.web.SourcesPill
-import opensec.pibolt.app.ui.session.subagent.SubagentCard
-import opensec.pibolt.app.ui.session.subagent.SubagentNoticeRowView
-import opensec.pibolt.app.ui.session.subagent.SubagentStack
-import opensec.pibolt.app.ui.theme.LocalPiType
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.PiType
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.ToolStatus
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.session.review.TurnReviewEntry
+import opensec.rapidpi.app.ui.session.web.SourcesPill
+import opensec.rapidpi.app.ui.session.subagent.SubagentCard
+import opensec.rapidpi.app.ui.session.subagent.SubagentNoticeRowView
+import opensec.rapidpi.app.ui.session.subagent.SubagentStack
+import opensec.rapidpi.app.ui.theme.LocalPiType
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.PiType
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.ToolStatus
 
 /**
  * True while the live status line is on screen. It owns the one animated spinner then: step rows, the todo row and

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""What of a Pi-Bolt build runs outside its compiled code: per scenario, the functions that ran without code in the image (in the
+"""What of a Rapid Pi build runs outside its compiled code: per scenario, the functions that ran without code in the image (in the
 interpreter, with the JIT off), the regular expressions compiled at run time because the image has none for them, and how many
 inline cache slots were filled (each fill is a call into the runtime, ~700 instructions on Apple M-series).
 
@@ -12,7 +12,7 @@ A regular expression that the profile lists but the image still lacks is a plain
 string search and needs no code, so it is listed apart. Any other one missing is worth adding to the training (scripts/lib/
 train_session.py, then scripts/train-profile.sh).
 
-Example: bench/aot_coverage.py --build pi-bolt=./out/pi-bolt/pi [--profile profiles/pi-1.3.0] [--out DIR] [--only headless,...]
+Example: bench/aot_coverage.py --build rapid-pi=./out/rapid-pi/pi [--profile profiles/pi-1.3.0] [--out DIR] [--only headless,...]
 """
 
 import argparse
@@ -96,7 +96,7 @@ def read_log(path):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--build", required=True, help="name=command: a Pi-Bolt build")
+    ap.add_argument("--build", required=True, help="name=command: a Rapid Pi build")
     ap.add_argument("--profile", help="the training profile the build was made with (its regexps.txt tells atoms apart)")
     ap.add_argument("--only", help="scenarios, separated by commas: " + ",".join(SCENARIOS))
     ap.add_argument("--out", help="keep each scenario's log here (default: a temporary folder)")

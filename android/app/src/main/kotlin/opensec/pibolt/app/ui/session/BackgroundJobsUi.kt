@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -32,16 +32,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.engine.BackgroundJobs
-import opensec.pibolt.app.engine.EnginePaths
-import opensec.pibolt.app.terminal.DevServerPorts
-import opensec.pibolt.app.ui.components.GhostButton
-import opensec.pibolt.app.ui.components.GlassPill
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.ButtonSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.engine.BackgroundJobs
+import opensec.rapidpi.app.engine.EnginePaths
+import opensec.rapidpi.app.terminal.DevServerPorts
+import opensec.rapidpi.app.ui.components.GhostButton
+import opensec.rapidpi.app.ui.components.GlassPill
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.ButtonSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
 import java.io.File
 
 /**

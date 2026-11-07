@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import android.content.ClipData
 import androidx.compose.animation.AnimatedContent
@@ -35,9 +35,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
 
 /** How long the check and "Copied" stay before the button returns to its copy state. */
 const val COPIED_FEEDBACK_MS = 1500L
@@ -53,7 +53,7 @@ fun CopyButton(
     text: () -> String,
     modifier: Modifier = Modifier,
     label: Boolean = true,
-    clipLabel: String = "Pi-Bolt",
+    clipLabel: String = "Rapid Pi",
     description: String = "Copy",
 ) {
     val clipboard = LocalClipboard.current
@@ -117,7 +117,7 @@ fun CopyButton(
  * [COPIED_FEEDBACK_MS], with the same haptic and TalkBack announcement ("Copied").
  */
 @Composable
-fun GlassCopyButton(text: () -> String, modifier: Modifier = Modifier, clipLabel: String = "Pi-Bolt", description: String = "Copy") {
+fun GlassCopyButton(text: () -> String, modifier: Modifier = Modifier, clipLabel: String = "Rapid Pi", description: String = "Copy") {
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
     val haptics = Pi.haptics

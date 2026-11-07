@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.tree
+package opensec.rapidpi.app.ui.session.tree
 
 import androidx.compose.material.icons.rounded.AccountTree
 import androidx.compose.material.icons.automirrored.rounded.Label
@@ -43,19 +43,19 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.Segmented
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.session.ActionsSheet
-import opensec.pibolt.app.ui.session.SheetAction
-import opensec.pibolt.app.ui.session.TextPromptSheet
-import opensec.pibolt.app.ui.session.features2.F2Empty
-import opensec.pibolt.app.ui.session.features2.F2Loading
-import opensec.pibolt.app.ui.session.features2.F2Tag
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.Segmented
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.session.ActionsSheet
+import opensec.rapidpi.app.ui.session.SheetAction
+import opensec.rapidpi.app.ui.session.TextPromptSheet
+import opensec.rapidpi.app.ui.session.features2.F2Empty
+import opensec.rapidpi.app.ui.session.features2.F2Loading
+import opensec.rapidpi.app.ui.session.features2.F2Tag
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 
 /**
  * The session tree (the terminal's `/tree`): every branch of this session, the active one marked, forks indented.

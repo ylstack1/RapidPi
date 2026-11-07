@@ -1,4 +1,4 @@
-package opensec.pibolt.app.data
+package opensec.rapidpi.app.data
 
 import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,12 +9,12 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.Base64Url
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.Base64Url
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.str
 
 /** A computer this phone paired with. [id] is the host's public key (base64url). */
 data class Host(

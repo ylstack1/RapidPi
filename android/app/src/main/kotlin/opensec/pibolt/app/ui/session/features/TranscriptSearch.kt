@@ -1,24 +1,24 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
 import androidx.compose.runtime.Immutable
-import opensec.pibolt.app.ui.session.FoldRow
-import opensec.pibolt.app.ui.session.NoticeRow
-import opensec.pibolt.app.ui.session.TRow
-import opensec.pibolt.app.ui.session.TextRow
-import opensec.pibolt.app.ui.session.ThinkingRow
-import opensec.pibolt.app.ui.session.SourcesRow
-import opensec.pibolt.app.ui.session.ToolGroupRow
-import opensec.pibolt.app.ui.session.ToolRow
-import opensec.pibolt.app.ui.session.UserRow
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.SubagentNoticeItem
-import opensec.pibolt.protocol.session.ThinkingItem
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.ui.session.FoldRow
+import opensec.rapidpi.app.ui.session.NoticeRow
+import opensec.rapidpi.app.ui.session.TRow
+import opensec.rapidpi.app.ui.session.TextRow
+import opensec.rapidpi.app.ui.session.ThinkingRow
+import opensec.rapidpi.app.ui.session.SourcesRow
+import opensec.rapidpi.app.ui.session.ToolGroupRow
+import opensec.rapidpi.app.ui.session.ToolRow
+import opensec.rapidpi.app.ui.session.UserRow
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.SubagentNoticeItem
+import opensec.rapidpi.protocol.session.ThinkingItem
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.UserItem
 
-/** A conversation item containing the query; [turnKey] is its turn (as [opensec.pibolt.app.ui.session.TranscriptModel] keys them). */
+/** A conversation item containing the query; [turnKey] is its turn (as [opensec.rapidpi.app.ui.session.TranscriptModel] keys them). */
 @Immutable
 data class SearchHit(val itemKey: String, val turnKey: String, val snippet: String)
 

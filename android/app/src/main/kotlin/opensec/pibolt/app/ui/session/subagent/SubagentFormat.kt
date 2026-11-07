@@ -1,19 +1,19 @@
-package opensec.pibolt.app.ui.session.subagent
+package opensec.rapidpi.app.ui.session.subagent
 
 import android.os.SystemClock
-import opensec.pibolt.app.ui.session.formatDuration
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.NoticeKind
-import opensec.pibolt.protocol.session.Subagent
-import opensec.pibolt.protocol.session.SubagentStatus
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.ui.session.formatDuration
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.NoticeKind
+import opensec.rapidpi.protocol.session.Subagent
+import opensec.rapidpi.protocol.session.SubagentStatus
+import opensec.rapidpi.protocol.session.UserItem
 import kotlin.math.abs
 
 /** Text and colour choices of subagent cards and the detail screen. Pure, so they are unit tested. */
 object SubagentFormat {
-    /** How many subagent tints the theme has (`PiColors.tints`, Pi-Bolt Desktop's five): colour slots wrap at it. */
+    /** How many subagent tints the theme has (`PiColors.tints`, Rapid Pi Desktop's five): colour slots wrap at it. */
     const val HUE_COUNT = 5
 
     /** The colour slot of the run [key]: its order among the session's runs ([keys], first seen first), wrapped. */
@@ -51,7 +51,7 @@ object SubagentFormat {
 
     /**
      * The activity a card works from: the line read from the run's session file ([fromFile], from
-     * [opensec.pibolt.protocol.session.SubagentReducer.activityOf], which names the file or command) while both it and
+     * [opensec.rapidpi.protocol.session.SubagentReducer.activityOf], which names the file or command) while both it and
      * the extension's report are a tool, else the report.
      */
     fun liveActivity(reported: String?, fromFile: String?): String? {
@@ -142,7 +142,7 @@ object SubagentFormat {
         /** The computer streams them while the screen is open (`subagent_subscribe`). */
         Stream,
 
-        /** The computer cannot stream them (before Pi-Bolt 1.1.5): only the prompt, progress and answer. */
+        /** The computer cannot stream them (before Rapid Pi 1.1.5): only the prompt, progress and answer. */
         Unavailable,
     }
 
@@ -151,7 +151,7 @@ object SubagentFormat {
      * a finished run without a readable file, that only the prompt and answer are shown.
      */
     fun note(run: Subagent, source: Source): String? = when {
-        source == Source.Unavailable -> "Live view needs Pi-Bolt 1.1.5 on the computer"
+        source == Source.Unavailable -> "Live view needs Rapid Pi 1.1.5 on the computer"
         run.transcript?.allItems.isNullOrEmpty() && run.isActive -> "Loading messages…"
         run.transcript?.items.isNullOrEmpty() && !run.isActive -> "Messages weren't saved. Showing the prompt and answer."
         else -> null

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
 import android.Manifest
 import android.content.Context
@@ -17,7 +17,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import opensec.pibolt.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.ConfirmSheet
 
 /**
  * Dictation for the composer, held above it so the pill's mic, its voice button and the voice surface share one
@@ -219,7 +219,7 @@ fun VoiceRationale(voice: VoiceInput) {
     if (!voice.rationale) return
     ConfirmSheet(
         title = "Dictate with the microphone?",
-        message = "Pi-Bolt listens only while the mic is on and turns speech into text, on the phone when it can. Android asks for access next.",
+        message = "Rapid Pi listens only while the mic is on and turns speech into text, on the phone when it can. Android asks for access next.",
         confirmLabel = "Continue",
         destructive = false,
         onConfirm = {

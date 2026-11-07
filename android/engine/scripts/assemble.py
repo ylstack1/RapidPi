@@ -330,7 +330,7 @@ def write_licenses(extensions):
                 shutil.copyfileobj(src, dst)
     shutil.copyfile(f"/dl/glibc-packages-{V['TERMUX_GLIBC_COMMIT']}/LICENSE.md", f"{lic}/glibc/termux-LICENSE.md")
     lines = [
-        f"Pi-Bolt engine {V['ENGINE_VERSION']} ({V['ENGINE_URL']}, sha256 {V['ENGINE_SHA256']})",
+        f"Rapid Pi engine {V['ENGINE_VERSION']} ({V['ENGINE_URL']}, sha256 {V['ENGINE_SHA256']})",
         f"glibc {V['GLIBC_VERSION']} + termux-pacman/glibc-packages {V['TERMUX_GLIBC_COMMIT']}",
     ]
     for e in extensions:
@@ -422,16 +422,16 @@ def main():
     tree_members = {}  # runtime tree -> [(path inside the tree, source)]
     trees = []  # manifest entries of the runtime tree zips
 
-    # Engine: exec'd directly as nativeLibraryDir/libpibolt.so; PT_INTERP rewritten in place, never patchelf'd or
+    # Engine: exec'd directly as nativeLibraryDir/librapidpi.so; PT_INTERP rewritten in place, never patchelf'd or
     # stripped (its embedded code and static heap are read from /proc/self/exe).
     engine_root = fetch_engine()
-    shutil.copyfile(f"{engine_root}/pi", f"{JNI}/libpibolt.so")
-    set_interp_in_place(f"{JNI}/libpibolt.so", LOADER)
+    shutil.copyfile(f"{engine_root}/pi", f"{JNI}/librapidpi.so")
+    set_interp_in_place(f"{JNI}/librapidpi.so", LOADER)
     package = copy_package(engine_root)
-    os.makedirs(f"{ASSETS}/licenses/pi-bolt")
+    os.makedirs(f"{ASSETS}/licenses/rapid-pi")
     for fn in ["LICENSE", "THIRD_PARTY_NOTICES.md"]:
-        shutil.copyfile(f"{engine_root}/{fn}", f"{ASSETS}/licenses/pi-bolt/{fn}")
-    _, engine_needed, _, _ = elf_info(f"{JNI}/libpibolt.so")
+        shutil.copyfile(f"{engine_root}/{fn}", f"{ASSETS}/licenses/rapid-pi/{fn}")
+    _, engine_needed, _, _ = elf_info(f"{JNI}/librapidpi.so")
 
     # Candidate shared libraries by soname: glibc first, then the userland's.
     libs = {}

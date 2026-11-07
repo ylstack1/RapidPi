@@ -1,4 +1,4 @@
-package opensec.pibolt.baselineprofile
+package opensec.rapidpi.baselineprofile
 
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
@@ -7,7 +7,7 @@ import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 
 /** The release app's package; the benchmark variants keep it. */
-const val PACKAGE = "in.opensec.pibolt"
+const val PACKAGE = "in.opensec.rapidpi"
 
 /**
  * What a user does first: start the app, scroll Home, open the newest recent session and its transcript, the chats,

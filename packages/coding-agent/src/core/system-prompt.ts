@@ -4,7 +4,7 @@
 
 import { getSystemMessageText } from "@earendil-works/pi-ai";
 import { getDocsPath, getExamplesPath, getReadmePath } from "../config.ts";
-import { PIBOLT } from "../pi-bolt.ts";
+import { RAPIDPI } from "../rapid-pi.ts";
 import { formatSkillsForPrompt, type Skill } from "./skills.ts";
 
 export interface BuildSystemPromptOptions {
@@ -262,8 +262,8 @@ function buildSystemPromptSectionsUncached(input: BuildSystemPromptOptions): Sys
 	if (customPrompt) {
 		promptSections.preamble = customPrompt;
 	} else {
-		promptSections.preamble = PIBOLT
-			? "You are a coding assistant running inside Pi-Bolt, a build of pi (a coding agent harness) compiled ahead of time. Help users inspect files, run commands, and modify code."
+		promptSections.preamble = RAPIDPI
+			? "You are a coding assistant running inside Rapid Pi, a build of pi (a coding agent harness) compiled ahead of time. Help users inspect files, run commands, and modify code."
 			: "You are a coding assistant running inside pi, a coding agent harness. Help users inspect files, run commands, and modify code.";
 		const visibleTools = declaredTools.filter((name) => !!toolSnippets[name]);
 		const tools =
@@ -277,8 +277,8 @@ function buildSystemPromptSectionsUncached(input: BuildSystemPromptOptions): Sys
 - When reading pi docs or examples, resolve docs/... under Additional docs and examples/... under Examples, not the current working directory
 - When asked about: extensions (docs/extensions.md, examples/extensions/), themes (docs/themes.md), skills (docs/skills.md), prompt templates (docs/prompt-templates.md), TUI components (docs/tui.md), keybindings (docs/keybindings.md), SDK integrations (docs/sdk.md), custom providers (docs/custom-provider.md), adding models (docs/models.md), packages (docs/packages.md), environment variables (docs/environment-variables.md), MCP servers (docs/mcp.md), codemode scripts and non-LLM models such as classifiers and image models (docs/codemode.md)
 - Before implementing harness changes, read the relevant docs and examples in full, following related cross-references.${
-			PIBOLT
-				? "\n- This is Pi-Bolt: its command is `pi-bolt`, and it is updated with `pi-bolt update` (https://github.com/opensec-git/Pi-Bolt). The install and update commands in pi's README install pi itself, not Pi-Bolt: do not suggest them."
+			RAPIDPI
+				? "\n- This is Rapid Pi: its command is `rapid-pi`, and it is updated with `rapid-pi update` (https://github.com/opensec-git/Rapid Pi). The install and update commands in pi's README install pi itself, not Rapid Pi: do not suggest them."
 				: ""
 		}`;
 	}

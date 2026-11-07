@@ -95,20 +95,20 @@ static void work(int stream, int directory, int count, int* fds, const int32_t* 
     struct pibolt_spawn_params params;
     // pi-spawn keeps its copy of this end of the stream until it has an answer: every way out answers.
     if (readFully(stream, &params, sizeof(params))) {
-        reply(stream, PIBOLT_SPAWN_UNAVAILABLE, 0);
+        reply(stream, RAPIDPI_SPAWN_UNAVAILABLE, 0);
         _exit(0);
     }
     char* path = readStrings(stream, params.path_len);
     char* arguments = path ? readStrings(stream, params.argv_len) : NULL;
     char* environment = arguments ? readStrings(stream, params.envp_len) : NULL;
     if (!environment || !params.path_len || path[params.path_len - 1]) {
-        reply(stream, PIBOLT_SPAWN_UNAVAILABLE, 0);
+        reply(stream, RAPIDPI_SPAWN_UNAVAILABLE, 0);
         _exit(0);
     }
     char** argv = splitStrings(arguments, params.argv_len, params.argc);
     char** envp = splitStrings(environment, params.envp_len, params.envc);
     if (!argv || !envp || !params.argc) {
-        reply(stream, PIBOLT_SPAWN_UNAVAILABLE, 0);
+        reply(stream, RAPIDPI_SPAWN_UNAVAILABLE, 0);
         _exit(0);
     }
 
@@ -121,7 +121,7 @@ static void work(int stream, int directory, int count, int* fds, const int32_t* 
             continue;
         int moved = fcntl(fds[i], F_DUPFD_CLOEXEC, highest + 1);
         if (moved < 0) {
-            reply(stream, PIBOLT_SPAWN_UNAVAILABLE, 0);
+            reply(stream, RAPIDPI_SPAWN_UNAVAILABLE, 0);
             _exit(0);
         }
         close(fds[i]);
@@ -131,7 +131,7 @@ static void work(int stream, int directory, int count, int* fds, const int32_t* 
     posix_spawn_file_actions_t actions;
     posix_spawnattr_t attributes;
     if (posix_spawn_file_actions_init(&actions) || posix_spawnattr_init(&attributes)) {
-        reply(stream, PIBOLT_SPAWN_UNAVAILABLE, 0);
+        reply(stream, RAPIDPI_SPAWN_UNAVAILABLE, 0);
         _exit(0);
     }
     int failed = posix_spawn_file_actions_addfchdir_np(&actions, directory);
@@ -155,39 +155,39 @@ static void work(int stream, int directory, int count, int* fds, const int32_t* 
             sigaddset(&reset, signal);
     }
     short flags = POSIX_SPAWN_CLOEXEC_DEFAULT | POSIX_SPAWN_SETSIGDEF | POSIX_SPAWN_SETSIGMASK;
-    if (params.mode == PIBOLT_SPAWN_NEW_SESSION)
+    if (params.mode == RAPIDPI_SPAWN_NEW_SESSION)
         flags |= POSIX_SPAWN_SETSID;
     else {
         flags |= POSIX_SPAWN_SETPGROUP;
-        posix_spawnattr_setpgroup(&attributes, params.mode == PIBOLT_SPAWN_SHARE_GROUP ? params.pgid : 0);
+        posix_spawnattr_setpgroup(&attributes, params.mode == RAPIDPI_SPAWN_SHARE_GROUP ? params.pgid : 0);
     }
     failed = failed || posix_spawnattr_setflags(&attributes, flags) || posix_spawnattr_setsigdefault(&attributes, &reset)
         || posix_spawnattr_setsigmask(&attributes, &blocked);
     if (failed) {
-        reply(stream, PIBOLT_SPAWN_UNAVAILABLE, 0);
+        reply(stream, RAPIDPI_SPAWN_UNAVAILABLE, 0);
         _exit(0);
     }
     umask((mode_t)params.umask);
-    for (int resource = 0; resource < PIBOLT_SPAWN_RLIMITS; resource++) {
+    for (int resource = 0; resource < RAPIDPI_SPAWN_RLIMITS; resource++) {
         struct rlimit limit = { (rlim_t)params.rlimits[resource][0], (rlim_t)params.rlimits[resource][1] };
         setrlimit(resource, &limit);
     }
 
     pid_t pid;
     int error = posix_spawn(&pid, path, &actions, &attributes, argv, envp);
-    if (error == EPERM && params.mode == PIBOLT_SPAWN_SHARE_GROUP) {
+    if (error == EPERM && params.mode == RAPIDPI_SPAWN_SHARE_GROUP) {
         // Not allowed into pi-bin's process group: pi-spawn starts the program itself, where it belongs.
-        reply(stream, PIBOLT_SPAWN_UNAVAILABLE, 0);
+        reply(stream, RAPIDPI_SPAWN_UNAVAILABLE, 0);
         _exit(0);
     }
     if (error) {
-        reply(stream, PIBOLT_SPAWN_FAILED, error);
+        reply(stream, RAPIDPI_SPAWN_FAILED, error);
         _exit(0);
     }
     for (int i = 0; i < count; i++)
         close(fds[i]);
     close(directory);
-    reply(stream, PIBOLT_SPAWN_STARTED, pid);
+    reply(stream, RAPIDPI_SPAWN_STARTED, pid);
 
     // Until the program exits, or pi-spawn is gone (killed with SIGKILL, so the program is too).
     int queue = kqueue();
@@ -231,8 +231,8 @@ static void work(int stream, int directory, int count, int* fds, const int32_t* 
         usage.max_resident_bytes = (int64_t)used.ri_lifetime_max_phys_footprint;
         usage.page_ins = (int64_t)used.ri_pageins;
     }
-    reply(stream, PIBOLT_SPAWN_EXITED, status);
-    reply(stream, PIBOLT_SPAWN_USAGE, 0);
+    reply(stream, RAPIDPI_SPAWN_EXITED, status);
+    reply(stream, RAPIDPI_SPAWN_USAGE, 0);
     writeFully(stream, &usage, sizeof(usage));
     // The program's pid stays taken until pi-spawn has exited (pi-bin may signal the pid until it learns that).
     char discard[64];
@@ -258,7 +258,7 @@ static int serve(int socket_)
     struct pibolt_spawn_request request;
     union {
         struct cmsghdr header;
-        char space[CMSG_SPACE((PIBOLT_SPAWN_MAX_FDS + 2) * sizeof(int))];
+        char space[CMSG_SPACE((RAPIDPI_SPAWN_MAX_FDS + 2) * sizeof(int))];
     } control;
     struct iovec vector = { &request, sizeof(request) };
     struct msghdr message = { .msg_iov = &vector, .msg_iovlen = 1, .msg_control = &control, .msg_controllen = sizeof(control) };
@@ -266,18 +266,18 @@ static int serve(int socket_)
     if (size < 0)
         return errno == EINTR ? 0 : -1;
 
-    int fds[PIBOLT_SPAWN_MAX_FDS + 2];
+    int fds[RAPIDPI_SPAWN_MAX_FDS + 2];
     int count = 0;
     for (struct cmsghdr* header = CMSG_FIRSTHDR(&message); header; header = CMSG_NXTHDR(&message, header)) {
         if (header->cmsg_level != SOL_SOCKET || header->cmsg_type != SCM_RIGHTS)
             continue;
         int n = (int)((header->cmsg_len - CMSG_LEN(0)) / sizeof(int));
-        for (int i = 0; i < n && count < PIBOLT_SPAWN_MAX_FDS + 2; i++)
+        for (int i = 0; i < n && count < RAPIDPI_SPAWN_MAX_FDS + 2; i++)
             memcpy(&fds[count++], CMSG_DATA(header) + i * sizeof(int), sizeof(int));
     }
     size_t header = offsetof(struct pibolt_spawn_request, targets);
-    int valid = !(message.msg_flags & (MSG_CTRUNC | MSG_TRUNC)) && (size_t)size >= header && request.magic == PIBOLT_SPAWN_MAGIC
-        && request.version == PIBOLT_SPAWN_VERSION && request.nfds >= 0 && request.nfds <= PIBOLT_SPAWN_MAX_FDS
+    int valid = !(message.msg_flags & (MSG_CTRUNC | MSG_TRUNC)) && (size_t)size >= header && request.magic == RAPIDPI_SPAWN_MAGIC
+        && request.version == RAPIDPI_SPAWN_VERSION && request.nfds >= 0 && request.nfds <= RAPIDPI_SPAWN_MAX_FDS
         && (size_t)size == header + (size_t)request.nfds * sizeof(int32_t) && count == request.nfds + 2;
     for (int i = 0; valid && i < request.nfds; i++)
         valid = request.targets[i] >= 0 && request.targets[i] < 4096;
@@ -285,7 +285,7 @@ static int serve(int socket_)
         // pi-spawn waits for an answer on the stream, the first descriptor (it keeps its own copy of it until then), and
         // then starts the program itself.
         if (count > 0)
-            reply(fds[0], PIBOLT_SPAWN_UNAVAILABLE, 0);
+            reply(fds[0], RAPIDPI_SPAWN_UNAVAILABLE, 0);
         closeDescriptors(fds, count);
         return 0;
     }
@@ -295,7 +295,7 @@ static int serve(int socket_)
         work(fds[0], fds[1], request.nfds, fds + 2, request.targets);
     }
     if (worker < 0)
-        reply(fds[0], PIBOLT_SPAWN_UNAVAILABLE, 0);
+        reply(fds[0], RAPIDPI_SPAWN_UNAVAILABLE, 0);
     closeDescriptors(fds, count);
     return 0;
 }
@@ -366,7 +366,7 @@ int pibolt_spawn_helper_start(void)
     int pair[2];
     if (socketpair(AF_UNIX, SOCK_DGRAM, 0, pair))
         return -1;
-    int kept = fcntl(pair[0], F_DUPFD, PIBOLT_SPAWN_HELPER_MIN_FD);
+    int kept = fcntl(pair[0], F_DUPFD, RAPIDPI_SPAWN_HELPER_MIN_FD);
     close(pair[0]);
     // The helper's end above 2 as well: the helper puts /dev/null on 0 to 2 (pi may be started with them closed).
     int served = fcntl(pair[1], F_DUPFD, 3);

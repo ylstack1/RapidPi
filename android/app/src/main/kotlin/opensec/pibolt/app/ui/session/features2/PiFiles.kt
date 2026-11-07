@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features2
+package opensec.rapidpi.app.ui.session.features2
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -7,9 +7,9 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.obj
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.obj
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files

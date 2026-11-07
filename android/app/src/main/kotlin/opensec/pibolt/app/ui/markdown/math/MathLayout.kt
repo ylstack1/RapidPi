@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown.math
+package opensec.rapidpi.app.ui.markdown.math
 
 /** Ink metrics of a glyph run, in pixels: advance [width], [ascent] above and [descent] below the baseline. */
 data class GlyphMetrics(val width: Float, val ascent: Float, val descent: Float)

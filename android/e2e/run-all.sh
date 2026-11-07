@@ -23,7 +23,7 @@ done
 [ $# -gt 0 ] || { echo "usage: $0 [--areas a,b] [--install] [--skip-engine] <serial>..." >&2; exit 2; }
 SERIALS="$*"
 for s in $SERIALS; do
-	[ "$s" = emulator-5554 ] && [ "${E2E_ALLOW_5554:-}" != "yes-i-own-it" ] && { echo "refusing emulator-5554 (shared pibolt-api36)" >&2; exit 2; }
+	[ "$s" = emulator-5554 ] && [ "${E2E_ALLOW_5554:-}" != "yes-i-own-it" ] && { echo "refusing emulator-5554 (shared rapidpi-api36)" >&2; exit 2; }
 done
 
 RUN="$SUITE/out/run-$(date +%Y%m%d-%H%M%S)"

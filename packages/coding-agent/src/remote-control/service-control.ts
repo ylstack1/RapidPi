@@ -1,12 +1,12 @@
 /**
  * The local control channel of remote control: one process at a time holds it, the background service
- * (`pi-bolt service run`) or a terminal running `/remote-control`. It is a Unix socket in the agent directory (a named pipe
+ * (`rapid-pi service run`) or a terminal running `/remote-control`. It is a Unix socket in the agent directory (a named pipe
  * on Windows) carrying one JSON object per line, and every request carries the token in `remote-control/service.token`, so
  * only the user who owns the agent directory gets an answer.
  *
  * What goes over it:
- * - `status`: the holder describes itself (`pi-bolt service status`).
- * - `pair`: the service makes a pairing code and later reports `paired` (`pi-bolt service pair`).
+ * - `status`: the holder describes itself (`rapid-pi service status`).
+ * - `pair`: the service makes a pairing code and later reports `paired` (`rapid-pi service pair`).
  * - `yield`: a terminal's `/remote-control` asks the service for its port. The service stops listening, answers with the
  *   port (and its tunnel's address when asked to keep it), and listens again when this connection closes.
  */
@@ -44,9 +44,9 @@ export function controlPaths(agentDir: string, platform: NodeJS.Platform = proce
 	const dir = join(agentDir, "remote-control");
 	const id = createHash("sha256").update(dir).digest("hex").slice(0, 16);
 	const token = join(dir, "service.token");
-	if (platform === "win32") return { socket: `\\\\.\\pipe\\pi-bolt-rc-${id}`, token };
+	if (platform === "win32") return { socket: `\\\\.\\pipe\\rapid-pi-rc-${id}`, token };
 	const socket = join(dir, "service.sock");
-	return { socket: socket.length <= MAX_SOCKET_PATH ? socket : join(tmpdir(), `pi-bolt-rc-${id}.sock`), token };
+	return { socket: socket.length <= MAX_SOCKET_PATH ? socket : join(tmpdir(), `rapid-pi-rc-${id}.sock`), token };
 }
 
 /** The token, made on first use (mode 0600, next to the host key). */

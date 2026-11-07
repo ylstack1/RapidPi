@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.editor
+package opensec.rapidpi.app.ui.projects.editor
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern

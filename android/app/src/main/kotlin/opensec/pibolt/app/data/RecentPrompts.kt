@@ -1,4 +1,4 @@
-package opensec.pibolt.app.data
+package opensec.rapidpi.app.data
 
 import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.ProtocolJson
+import opensec.rapidpi.protocol.ProtocolJson
 
 /**
  * Prompts sent from this phone, per computer, most recent first, in a small JSON file (`{ hostId: [prompt, …] }`),

@@ -1,16 +1,16 @@
-package opensec.pibolt.app.cost
+package opensec.rapidpi.app.cost
 
 import androidx.compose.runtime.Immutable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.SubagentReducer
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.type
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.SubagentReducer
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.type
 
 /** The card a limit shows in the session: [stopped] when it stopped a run, else it held a prompt back. */
 @Immutable

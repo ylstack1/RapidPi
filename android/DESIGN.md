@@ -1,4 +1,4 @@
-# Pi-Bolt Android: design language
+# Rapid Pi Android: design language
 
 Dark first, with one light theme (Paper). Ink-first hierarchy: text in four grey levels does the work, colour is reserved for state (success,
 warning, danger, diff), and one accent marks what you can act on. Motion is quiet and purposeful: only the live turn
@@ -10,7 +10,7 @@ One `PiColors` set per theme, provided through `LocalPiColors` and mapped onto M
 (`surfaceTint = Transparent`, tonal elevation 0) so stock components match. Elevation = a surface step plus a 1dp
 line; no shadows.
 
-| Role | Pi-Bolt (default, id `Graphite`) | Ember (warm) | Claude | Codex | Vercel | GitHub |
+| Role | Rapid Pi (default, id `Graphite`) | Ember (warm) | Claude | Codex | Vercel | GitHub |
 |---|---|---|---|---|---|---|
 | canvas | `#1C1B19` | `#15130F` | `#1F1E1D` | `#0D0D0D` | `#000000` | `#0D1117` |
 | surface1 (cards, composer) | `#232220` | `#1C1A16` | `#262624` | `#171717` | `#0F0F0F` | `#151B23` |
@@ -25,7 +25,7 @@ line; no shadows.
 
 Claude, Codex, Vercel and GitHub are palettes in the spirit of those products' dark modes, not their assets. Void
 (a black AMOLED theme with the old blue-grey inks) was removed in 0.5.2, since the default is now black; a saved Void
-choice loads as Pi-Bolt (`SettingsCodec` falls back on unknown names).
+choice loads as Rapid Pi (`SettingsCodec` falls back on unknown names).
 
 The app's own themes besides the default, each built in full by `Palette.kt`'s `full()` (surfaces, inks, lines and
 overlays, accent, status, diff, syntax, ANSI, tints), and each held to the role checks below:
@@ -58,10 +58,10 @@ overlays, accent, status, diff, syntax, ANSI, tints), and each held to the role 
 On a light theme the Iris and Glacier accents take deep variants of the same hue (`#5B4BD1`, `#0B6E9E`, white on
 them). The pastels would not read as links on white.
 
-**Pi-Bolt (the default)** is a warm charcoal (the owner's 2026-11-07 references, `~/pbw/research/UI-REFERENCES.md`):
+**Rapid Pi (the default)** is a warm charcoal (the owner's 2026-11-07 references, `~/pbw/research/UI-REFERENCES.md`):
 a charcoal canvas with surfaces a warm step above it, quiet warm-grey ink, hairlines and overlays as white alphas, the
 warm white ink as the only accent, green, amber and red for state only, and no blue. The enum id stays `Graphite`, so
-saved settings keep the default; its label is "Pi-Bolt". True black stays available as Contrast and Vercel.
+saved settings keep the default; its label is "Rapid Pi". True black stays available as Contrast and Vercel.
 
 | Role | Value |
 |---|---|
@@ -80,7 +80,7 @@ ink3 to `#9C9A94` so it stays AA on surface3 (4.62:1). Danger is lifted from the
 on its 12% fill over sheets (4.69:1 on surface2). The text selection is the accent at 28% (`SELECTION_ALPHA`, every
 theme): at 32% ink1 measured 4.34:1 on a warm surface3. The splash (`splash_bg`) is the canvas.
 
-Before the redesign the default was Pi-Bolt Desktop's pure black (`#000000`, `#0E0E0E` / `#161616` / `#1D1D1D`, ink
+Before the redesign the default was Rapid Pi Desktop's pure black (`#000000`, `#0E0E0E` / `#161616` / `#1D1D1D`, ink
 `#EDEDED` / `#A1A1A1` / `#858585` / `#595959`, white accent); before 0.5.2 a blue-grey Graphite (`#0B0C0E`, ink2 `#A3A8B0`).
 `defaultThemeHasNoBlueCast` lets the default's greys lean warm but never cool (blue ≤ green ≤ red, channels at most 10
 apart).
@@ -101,23 +101,23 @@ passes 3:1 as a glyph on every surface, and AA as an initial on its own 16% fill
 Paper uses `LightTints`: the same hues at lightness 0.50 (seafoam 0.47, chroma 0.09), which are `#994A00`,
 `#A33460`, `#8E3B94`, `#6F4BAC` and `#006B61`. The desktop's light tints (L 0.54 to 0.60) are 3.1 to 4.3:1 as an initial.
 
-Overlays: press = ink1 @ 7%, selected = ink1 @ 11%, focus line = ink1 @ 40% (Pi-Bolt: white @ 8.5%, 10%, 32%).
+Overlays: press = ink1 @ 7%, selected = ink1 @ 11%, focus line = ink1 @ 40% (Rapid Pi: white @ 8.5%, 10%, 32%).
 
-Accent (independent of theme): **Theme** (default: the theme's own accent: Pi-Bolt white `#FAFAFA` / `#000000`, Claude coral `#E08566` / `#1F1E1D` (lifted
+Accent (independent of theme): **Theme** (default: the theme's own accent: Rapid Pi white `#FAFAFA` / `#000000`, Claude coral `#E08566` / `#1F1E1D` (lifted
 from `#D97757`, which measured 4.24:1 as link text on Claude's sheets),
 GitHub blue `#4493F8` / `#0D1117`, ink1 / canvas for the others), **Ink** (accent = ink1, onAccent = canvas),
 **Iris** `#A99CFF` / `#120F2A`, **Glacier** `#7CC4F0` / `#06202E`. Accent marks the primary button, send button, focus ring, selection, links and
 the working hairline. Never status.
 
-Brand: the Pi-Bolt logo's colours, only on the app mark (launcher, splash, Home, empty state). The mark is the logo's
-bolt (`ic_pibolt_logo`, cropped from docs/images/logo.svg): an upper blade in yellow (`#F7C04A` lit face, `#E9A42C`
+Brand: the Rapid Pi logo's colours, only on the app mark (launcher, splash, Home, empty state). The mark is the logo's
+bolt (`ic_rapidpi_logo`, cropped from docs/images/logo.svg): an upper blade in yellow (`#F7C04A` lit face, `#E9A42C`
 shaded face) and a lower blade in blue (`#4C96EA` lit, `#2A78D6` shaded). Yellow and blue are both brand colours and
 never stand for state or action. `PiColors.brand` (`#FFD84D`) is the single-colour fallback where the logo can't be drawn.
 
 Status: success `#5FD39A`, warning `#E8B04B` (needs you, steer), danger `#F2706B` (Claude: `#FF8681`, its
-lighter canvas needs it); soft fills @ 14% (Claude's danger fill @ 12%). Pi-Bolt uses the desktop's `#4CC38A`,
+lighter canvas needs it); soft fills @ 14% (Claude's danger fill @ 12%). Rapid Pi uses the desktop's `#4CC38A`,
 `#D4A64A`, `#EF6461` with soft fills @ 12%.
-Diff: add bg success @ 11% / fg `#9BE6BF`, delete bg danger @ 11% / fg `#F7A9A5` (Pi-Bolt: @ 9%, `#86DFB0`, `#F5A3A1`); changed words in paired lines
+Diff: add bg success @ 11% / fg `#9BE6BF`, delete bg danger @ 11% / fg `#F7A9A5` (Rapid Pi: @ 9%, `#86DFB0`, `#F5A3A1`); changed words in paired lines
 success / danger @ 22%. Add and delete never differ by hue alone: a `+` / `−` sign column, a solid 3dp gutter bar
 (success @ 60%) for additions and a hatched one (2dp stripes every 4dp, danger @ 70%) for deletions. Context rows
 ink2, line numbers ink3, hunk rows monoMeta ink3 on surface2.
@@ -125,7 +125,7 @@ Syntax: one palette per theme (`SyntaxColors`): keyword, type (capitalised names
 function (calls and declarations), string, number, constant (`true`, `null`, ALL_CAPS), operator, attribute
 (annotations, decorators, object and YAML keys, HTML attributes), tag, regex, escape (escapes and `${…}`), variable
 (`$x`, `@x`), comments italic; punctuation ink2, base text ink1, the shell `$` prompt success SemiBold, diff lines in
-the diff colours. Pi-Bolt uses the desktop's monochrome highlight.js theme: white keywords and constants in Medium
+the diff colours. Rapid Pi uses the desktop's monochrome highlight.js theme: white keywords and constants in Medium
 weight (`keywordWeight`), near-white calls, sand types, green strings, orange numbers, greys for the rest, no blue.
 Codex uses the "Pi" palette (violet keywords, yellow types, blue calls, green strings, orange numbers, a neutral
 comment grey); Paper is the desktop's light highlight.js colours, deepened for AA; Contrast is bright hues at 7:1 with
@@ -133,7 +133,7 @@ SemiBold keywords; Lime is lavender / apricot / mint / coral (no lime in code); 
 clay; Ember is warm and earthy, Claude coral / sand / sage, Vercel pink / purple / blue /
 green, GitHub uses its dark "prettylights" roles. Only `text`, `log` and `output` fences stay plain.
 
-| Role | Pi-Bolt | Pi | Ember | Claude | Vercel | GitHub |
+| Role | Rapid Pi | Pi | Ember | Claude | Vercel | GitHub |
 |---|---|---|---|---|---|---|
 | keyword | `#FFFFFF` Medium | `#C9A0F5` | `#F28E7E` | `#E8956F` | `#FF6B98` | `#FF7B72` |
 | type | `#DCC38C` | `#E8C67E` | `#F2C46A` | `#E3C590` | `#C49BFF` | `#FFA657` |
@@ -160,7 +160,7 @@ green, GitHub uses its dark "prettylights" roles. Only `text`, `log` and `output
 
 Contrast (WCAG 2.1, checked by `ContrastTest` for every theme and accent):
 - ink1, ink2 and ink3 pass AA (4.5:1) on canvas, surface1, surface2 and surface3. ink3 is the lowest text and was
-  raised where it missed AA on surface2 or surface3 (old Graphite `#7D838C` → `#878D96`, Pi-Bolt `#808080` →
+  raised where it missed AA on surface2 or surface3 (old Graphite `#7D838C` → `#878D96`, Rapid Pi `#808080` →
   `#858585`, Ember `#8E877B` → `#979084`, Claude `#9C9A92` → `#A6A49C`, Codex `#8F8F8F` → `#929292`). ink3 on surface3
   (menus, snackbars, inline code) now measures 4.57 to 5.38:1; it was 4.03 to 4.44 in Graphite, Ember, Claude and Codex.
 - Rule: no text below ink3, and no ink4 text anywhere. On surface3 prefer ink2 for anything longer than a meta line.
@@ -171,7 +171,7 @@ Contrast (WCAG 2.1, checked by `ContrastTest` for every theme and accent):
 - A Notice's text (ink1, ink2 under a title) passes on its fill over canvas, cards and sheets; its glyph passes 3:1.
 - Button labels pass: secondary ink1 on surface2, danger on dangerSoft, the disabled primary's ink3 on surface3.
 - Vercel cards (surface1) are one step lighter (`#0F0F0F`) so they stand off the pure-black canvas.
-- The app's own themes (Pi-Bolt, Paper, Contrast, Lime, Moss) are checked by role in every accent (`ownThemesRolesPass`): ink1 and ink2 AA on each surface,
+- The app's own themes (Rapid Pi, Paper, Contrast, Lime, Moss) are checked by role in every accent (`ownThemesRolesPass`): ink1 and ink2 AA on each surface,
   plain, pressed and selected; ink3 at least 3:1 as a glyph on all of those; the accent's label AA on it, its fill 3:1
   against the surface (a button's shape) and AA as link text; ink1 AA on the text selection. `defaultThemeHasNoBlueCast`
   keeps the default's greys and everything drawn from them free of a cool cast, `defaultThemeIsTheWarmCharcoal` pins
@@ -247,7 +247,7 @@ Strokes: 1dp lines, 1.5dp focus ring, 2dp queue bars, 3dp diff gutter.
 
 ## Logos
 
-Providers and model makers show their mark, as Pi-Bolt Desktop does (`src/lib/modelLogos.tsx`): monochrome only,
+Providers and model makers show their mark, as Rapid Pi Desktop does (`src/lib/modelLogos.tsx`): monochrome only,
 tinted with the theme's ink, never a brand colour, so every theme and accent keeps one palette and passes contrast.
 - Source: Lobe Icons (`@lobehub/icons-static-svg`, MIT; the `<name>.svg` monochrome marks), converted to
   `res/drawable/ic_provider_<slug>.xml` by `android/tools/provider-logos.mjs` (pinned version and sha512, strict
@@ -488,11 +488,11 @@ a selectable group; 48dp in Settings and forms, 36dp only in dense bars.
 **Home.** The redesign's Inbox (the owner's 2026-11-07 references), built from the kit; production copy only, no
 explanatory lines. Top to bottom, on the 20dp page gutter:
 - The title row under the status bar: the brand is the title, the bare bolt (`BrandMark` 26dp, unchanged, no circle) at
-  the cap height and "Pi-Bolt" in largeTitle (a heading), then `GlassIconButton`s on the same centre line: Settings
+  the cap height and "Rapid Pi" in largeTitle (a heading), then `GlassIconButton`s on the same centre line: Settings
   (gear) and + ("Add", once there are projects) whose menu holds New project, Clone from git, Import a zip and Add a
   computer.
 - Engine banner (only when it has something to say), as before, on the gutter.
-- The update offer as a slim line (`UpdateCard`): "Pi-Bolt 0.5.3" (rowTitle ink1) over "Update available · 109 MB"
+- The update offer as a slim line (`UpdateCard`): "Rapid Pi 0.5.3" (rowTitle ink1) over "Update available · 109 MB"
   (rowMeta ink3), Later (ink2) and Update (accent) at the end; downloading adds the 2dp progress line; only a failure is
   filled (dangerSoft, danger @ 40% line). No glyph, no card.
 - First run (no model or no project): the setup steps on the canvas: two 56dp numbered steps ("Connect a model" with
@@ -581,7 +581,7 @@ as a shared element, like host card to session).
   a still ink4 frame otherwise), the session name or first prompt (rowTitle ink1), and under it "Working · main",
   "Waiting for you · main" or "Open · 24 messages" for the open session (which sits on the row highlight) and
   "2h · 24 messages" for the others (`SessionRowRules`); new activity is the 8dp accent unread dot at the end. TalkBack
-  reads the line in words. While Pi-Bolt cannot run, a tap says so. Without any, "No sessions yet"
+  reads the line in words. While Rapid Pi cannot run, a tap says so. Without any, "No sessions yet"
   (EmptyCard, chat glyph). Tap resumes; the live one resumes without reopening. The search sheet stacks its two
   48dp segmented controls (Names | Messages, then the sort) so neither clips at 360dp and font scale 1.3.
 - Files: one folder at a time, under a sticky glass toolbar (56dp on the canvas): the breadcrumb (rowMeta; the folder
@@ -697,14 +697,14 @@ Files over 1 MB open read-only. Leaving or closing a tab with unsaved edits asks
 fill runs under the navigation bar with its keys above it, and sits on the keyboard when it is up. "Opening x…"
 (LoadingRow) while a file loads. Markdown's Rendered | Source is a 48dp segmented control.
 
-**Share into Pi-Bolt.** Another app's share sheet lists Pi-Bolt for files, images and text. A sheet: "Share to
-Pi-Bolt" with "2 images" / "1 file" / "Text"; a segmented choice when there is more than one (Attach to chat |
+**Share into Rapid Pi.** Another app's share sheet lists Rapid Pi for files, images and text. A sheet: "Share to
+Rapid Pi" with "2 images" / "1 file" / "Text"; a segmented choice when there is more than one (Attach to chat |
 Import files, New project | Import files, Import files | Add to chat), the projects as 52dp radio rows (folder glyph,
 title, accent check), then the primary action. Attach and Add to chat open the project's session with the images in
 the tray or the text in the composer.
 
 **Provider sheet (first run and Add provider).** Opens by itself once, 450 ms after the first frame of Home, when no
-provider has a key. First run: the bolt on a 56dp glass disc, then "Connect a model" (largeTitle) and one line ("Pi-Bolt
+provider has a key. First run: the bolt on a 56dp glass disc, then "Connect a model" (largeTitle) and one line ("Rapid Pi
 runs on this phone with your API key. The key stays here."); Add provider: the same title, "The key stays on this
 phone." A `PillSearchField`, then plain `InsetRow`s under "Popular" and "More providers" (rowMeta ink3 heads): the
 provider's mark (20dp ink2), name, note, a success check for configured ones; last, "Custom endpoint" with the server
@@ -786,7 +786,7 @@ opens the app's system page and the camera starts on return.
     rest in place (up to 400 lines), past that "Open output / file / diff" goes to the full-screen viewer.
     - bash: `$` (success, danger on a failing exit), command, exit badge, Copy (the output). The output is a terminal
       on the canvas: SGR colours mapped to tokens (red danger, green success, yellow warning, blue/magenta/cyan
-      `ansiBlue` / `ansiMagenta` / `ansiCyan`: the syntax function/keyword/operator colours, Pi-Bolt's off-blue greys; 256 and 24-bit as given), bold SemiBold, dim 60%; other escapes are
+      `ansiBlue` / `ansiMagenta` / `ansiCyan`: the syntax function/keyword/operator colours, Rapid Pi's off-blue greys; 256 and 24-bit as given), bold SemiBold, dim 60%; other escapes are
       dropped and a bare CR rewinds the line. Plain output stays ink2 whatever the exit code; without colours of its
       own, lines starting FAIL/ERROR/Error:/✗ get danger and ok/PASS/✓ success at 80%. Pi's "Command exited with
       code N" line is dropped (the badge says it). The tail shows first (summaries come last).
@@ -932,7 +932,7 @@ opens the app's system page and the camera starts on return.
 - Top bar: glass back, search and more (`GlassIconButton`, 44dp in 48dp targets); the Quad shows beside them only while
   Pi works (the live line off screen) or the link has failed, never as a resting grid that reads as a button.
 - Connection banner under the top bar: Quad Connect + "Reconnecting in 3s" countdown + Retry; slides down/up. Not
-  while the session first connects: the centred loading state (Quad Connect 44dp, "Starting Pi-Bolt in x") says that
+  while the session first connects: the centred loading state (Quad Connect 44dp, "Starting Rapid Pi in x") says that
   alone, so one spinner and one sentence show at a time.
 - Top bar actions, left to right: the Quad (only while Pi is busy and the live status line is off screen: ink1,
   warning while Pi asks; or danger while the link has failed), the session switcher (while other sessions are open; its
@@ -940,13 +940,13 @@ opens the app's system page and the camera starts on return.
   "Other sessions, 1 open"; `SwitcherRules`), Search and More (glass). The Quad
   is not a control: no press, and TalkBack hears what it reports. Search and
   overflow always sit together. Overflow on a computer: Session and usage, Export or share,
-  Disconnect, Forget computer. With a Pi-Bolt that offers review (`host.review`), Changes and Files follow Projects
+  Disconnect, Forget computer. With a Rapid Pi that offers review (`host.review`), Changes and Files follow Projects
   and sessions: the project's Changes and Files views, full screen and read-only, over the computer's working tree (no
   staging, commit, branch, push or edit; Refresh in the bar). The working tree's "Changes +N −M" pill in the
   composer's slim row opens Changes too (ui/session/remote).
 - On this phone (a project's session): the title is the project's name and the subtitle drops the folder (session
   name and context only); back reads "Project". Overflow: New session, Resume a session, Fork from a message,
-  Duplicate session, Rename session, Session and usage, Export or share (no Disconnect or Forget computer). The banner reads "Starting Pi-Bolt…" (Quad Connect) and "Engine stopped" with Restart (danger
+  Duplicate session, Rename session, Session and usage, Export or share (no Disconnect or Forget computer). The banner reads "Starting Rapid Pi…" (Quad Connect) and "Engine stopped" with Restart (danger
   soft, power glyph). Long press on a user message adds "Fork from here": Pi forks the session at that message and
   its text comes back to the composer to edit and send. Recent prompts are kept per project.
 - Sheets (ModalBottomSheet, predictive back): model picker (the Thinking pills when the model reasons, then search,
@@ -1078,7 +1078,7 @@ in the phone's language, on-device first, each tried with a sample).
 
 **Image viewer.** A tap on an image in a user message or the composer tray opens it full screen on black: swipe
 between images, pinch or double-tap (2.5x) to zoom up to 6x, drag to pan a zoomed image (kept on screen), Back or ✕
-to close. Save puts a PNG in Pictures/Pi-Bolt (Android 10+); Share sends it. The full image is kept for the six most
+to close. Save puts a PNG in Pictures/Rapid Pi (Android 10+); Share sends it. The full image is kept for the six most
 recent messages; older ones open their thumbnail.
 
 **Compaction.** The status line names why it runs: "Compacting" (manual), "Auto-compacting" (threshold) or
@@ -1124,7 +1124,7 @@ Subagent session files (a `parentSession` header and that name) are not listed o
 Remote control gets the events only: progress of foreground runs, the start and end of background runs, never their
 messages. Pi has no RPC to read or steer a subagent: steering and resuming go through a prompt to Pi.
 
-- Each agent has its own colour, Pi-Bolt Desktop's five subagent tints (the theme tokens `PiColors.tints`: apricot `#FEA668`,
+- Each agent has its own colour, Rapid Pi Desktop's five subagent tints (the theme tokens `PiColors.tints`: apricot `#FEA668`,
   rose `#FF8FB4`, orchid `#E08EE5`, violet `#B696F7`, seafoam `#5CD5C7`; each 3:1 or more on surface1 and surface2 in
   every theme, `ContrastTest`), given by its order among the session's runs (`hueSlot`), never by its type: two
   general-purpose agents differ. No letters or avatars.
@@ -1229,20 +1229,20 @@ you close them"). Lock screens show only a public title and "Unlock to see it".
 
 ## Updates
 
-The app is sideloaded, so it updates itself from GitHub releases. Source of truth: `pi-bolt.opensec.in/android.json`
+The app is sideloaded, so it updates itself from GitHub releases. Source of truth: `rapid-pi.opensec.in/android.json`
 (written by the Android release workflow), or GitHub's newest `android-v*` release when the site is down. Both are a
-plain GET with no identifiers. The APK URL must be under `github.com/opensec-git/Pi-Bolt/releases/download/`.
+plain GET with no identifiers. The APK URL must be under `github.com/opensec-git/Rapid Pi/releases/download/`.
 - Check: on launch at most once a day (on IO, "Check for updates automatically", on by default) and from Settings >
   About > "Check for updates". About shows "Up to date (0.2.1)" or "0.2.2 is available · 109 MB", then "Checked 3 min
   ago".
-- Home card (64dp, surface1, radius md, after the engine banner): system-update glyph, "Pi-Bolt 0.2.2 is available",
+- Home card (64dp, surface1, radius md, after the engine banner): system-update glyph, "Rapid Pi 0.2.2 is available",
   the size (meta ink3), then Later (ink2, snoozes that version only) and Update (accent) end-aligned under the text, so
   the title keeps its width at large font sizes (a single action stays at the row's end). The same card then shows the job:
   Quad Write + "54 MB of 109 MB · 49%" and a 2dp accent bar (Cancel); Quad Connect + "Waiting for network" when the
   connection drops; Quad Run "Checking"; a success shield and Install; danger soft fill with the reason on failure.
 - Download sheet first: the size and the network it would use (Wi-Fi in ink2; mobile data or metered in warning).
   The download runs in a dataSync foreground service with a progress notification (Cancel), to the cache, and resumes
-  with an HTTP Range request. Finished in the background, it posts "Pi-Bolt 0.2.2 is ready to install"; back in the
+  with an HTTP Range request. Finished in the background, it posts "Rapid Pi 0.2.2 is ready to install"; back in the
   app, the install sheet opens.
 - Verify before installing, deleting the file on any failure: SHA-256 equals android.json's; the archive's signing
   certificate equals android.json's `certSha256` and the installed app's own; same package name; higher versionCode.
@@ -1317,7 +1317,7 @@ carries a value or a consequence ("Applies to new sessions"). An empty state is 
 what happened and what to do. Safety, consent, permission and privacy lines stay, kept short and true.
 
 One name per concept:
-- **Pi** the agent; **Pi-Bolt** the app; **this phone** the device; **computer** the paired machine (never desktop,
+- **Pi** the agent; **Rapid Pi** the app; **this phone** the device; **computer** the paired machine (never desktop,
   host or Mac); **remote control**, **pair**, **pairing code** / **pairing link**.
 - **project**, **session**, **provider**, **model**, **API key**, **custom endpoint** (an OpenAI-compatible server),
   **engine** (only where the user acts on it: "Restart the engine").
@@ -1425,7 +1425,7 @@ plain row ("Read results").
 
 ## Background jobs (bash_background)
 
-The app's `pibolt-bg` extension runs shell commands in the background for the agent (`engine/BackgroundJobs.kt`,
+The app's `rapidpi-bg` extension runs shell commands in the background for the agent (`engine/BackgroundJobs.kt`,
 `ui/session/BackgroundJobsUi.kt`). In a project session with jobs, a `GlassPill` sits under the Preview chips: an 8dp
 dot (success while any job runs, else ink3) and "Background · 2 running · 1 ended" (label ink1). Tap opens a `PiSheet`
 "Background": running jobs first, newest first; each row a status dot (success running, ink3 done, danger failed),

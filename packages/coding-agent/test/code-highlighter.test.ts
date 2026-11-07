@@ -63,7 +63,7 @@ describe("CodeHighlighter", () => {
 		row.render(80);
 		expect(highlight).toHaveBeenCalledTimes(1);
 
-		// Pi-Bolt: a complete row reuses the lines highlighted while streaming, which here are the whole file, collapsed
+		// Rapid Pi: a complete row reuses the lines highlighted while streaming, which here are the whole file, collapsed
 		// and expanded.
 		row.setArgsComplete();
 		row.render(80);

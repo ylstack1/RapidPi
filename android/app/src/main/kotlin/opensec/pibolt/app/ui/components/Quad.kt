@@ -1,7 +1,7 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.animation.AnimatedContent
-import opensec.pibolt.app.R
+import opensec.rapidpi.app.R
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.graphicsLayer
@@ -40,10 +40,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import opensec.pibolt.app.ui.theme.LocalQuadClock
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.LocalQuadClock
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
 import kotlin.math.roundToInt
 
 /**
@@ -88,7 +88,7 @@ fun QuadSpinner(
 }
 
 /**
- * The Pi-Bolt logo (docs/images/logo.svg as res/drawable/ic_pibolt_logo), fitted into a [size] square. When [play] is
+ * The Rapid Pi logo (docs/images/logo.svg as res/drawable/ic_rapidpi_logo), fitted into a [size] square. When [play] is
  * true it enters once per launch for each place it appears: fade in while scaling 0.82 to 1 and settling from 6dp
  * below (sheet duration, enter easing). Reduce motion shows it at rest.
  */
@@ -104,8 +104,8 @@ fun BrandMark(modifier: Modifier = Modifier, size: Dp = 44.dp, play: Boolean = t
         progress.animateTo(1f, PiMotion.enter(PiMotion.SHEET))
     }
     Image(
-        painter = painterResource(R.drawable.ic_pibolt_logo),
-        contentDescription = "Pi-Bolt",
+        painter = painterResource(R.drawable.ic_rapidpi_logo),
+        contentDescription = "Rapid Pi",
         contentScale = ContentScale.Fit,
         modifier = modifier
             .size(size)

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.cost
+package opensec.rapidpi.app.cost
 
 import androidx.compose.runtime.Immutable
 

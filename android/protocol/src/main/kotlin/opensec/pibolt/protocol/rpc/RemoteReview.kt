@@ -1,14 +1,14 @@
-package opensec.pibolt.protocol.rpc
+package opensec.rapidpi.protocol.rpc
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonObjectBuilder
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 
 /*
  * Answers of the read-only review commands (`host.review`, docs/remote-control.md "Review"): the computer's working

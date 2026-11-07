@@ -6,7 +6,7 @@
 param([string]$BuildDir = 'build/pibolt-release')
 $ErrorActionPreference = 'Continue'
 $Root = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-$Work = if ($env:PIBOLT_WORK) { $env:PIBOLT_WORK } else { Join-Path $Root '.work' }
+$Work = if ($env:RAPIDPI_WORK) { $env:RAPIDPI_WORK } else { Join-Path $Root '.work' }
 $WebKitBuild = Join-Path $Work "bun\$BuildDir\deps\WebKit"
 if (-not (Test-Path (Join-Path $WebKitBuild 'WTF\Headers\wtf\SysVCall.h'))) { Write-Host "error: no WebKit build with wtf/SysVCall.h at $WebKitBuild" -ForegroundColor Red; exit 1 }
 $Out = Join-Path $Work 'tests\cfg'

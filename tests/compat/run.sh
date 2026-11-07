@@ -9,16 +9,16 @@
 # a stock-Bun build of Pi in the same userland, or the main build on this CPU.
 #
 # Usage: tests/compat/run.sh [--builds DIR] [--stable PI] [--only userlands|cpus]
-#   --builds DIR   where the unpacked release archives are (pi-bolt-linux-x64/, -baseline/, -jit/; on ARM64
-#                  pi-bolt-linux-arm64/, -jit/). Default: out/, with the names build-pi.sh gives them (pi-bolt, pi-bolt-baseline,
-#                  pi-bolt-jit)
+#   --builds DIR   where the unpacked release archives are (rapid-pi-linux-x64/, -baseline/, -jit/; on ARM64
+#                  rapid-pi-linux-arm64/, -jit/). Default: out/, with the names build-pi.sh gives them (rapid-pi, rapid-pi-baseline,
+#                  rapid-pi-jit)
 #   --stable PI    the stock-Bun build (scripts/build-pi.sh --stable). Default: out/pi-stable/pi
 # Needs: bwrap and curl for the userlands (unprivileged user namespaces), qemu-x86_64-static (on ARM64 qemu-aarch64-static) for
 # the CPUs. What is missing is skipped, and said.
 source "$(dirname "$0")/../../scripts/lib/common.sh"
 set +e
 
-BUILDS=""; STABLE="$PIBOLT_ROOT/out/pi-stable/pi"; ONLY=""
+BUILDS=""; STABLE="$RAPIDPI_ROOT/out/pi-stable/pi"; ONLY=""
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--builds) BUILDS="$(realpath "$2")"; shift ;;
@@ -31,14 +31,14 @@ while [ $# -gt 0 ]; do
 done
 # (On ARM64 the main build is for any ARMv8.0 CPU: there is no baseline build.)
 if [ -n "$BUILDS" ]; then
-	MAIN="$BUILDS/pi-bolt-$PIBOLT_PLATFORM"; BASELINE="$BUILDS/pi-bolt-linux-x64-baseline"; JIT="$BUILDS/pi-bolt-$PIBOLT_PLATFORM-jit"
+	MAIN="$BUILDS/rapid-pi-$RAPIDPI_PLATFORM"; BASELINE="$BUILDS/rapid-pi-linux-x64-baseline"; JIT="$BUILDS/rapid-pi-$RAPIDPI_PLATFORM-jit"
 else
-	MAIN="$PIBOLT_ROOT/out/pi-bolt"; BASELINE="$PIBOLT_ROOT/out/pi-bolt-baseline"; JIT="$PIBOLT_ROOT/out/pi-bolt-jit"
+	MAIN="$RAPIDPI_ROOT/out/rapid-pi"; BASELINE="$RAPIDPI_ROOT/out/rapid-pi-baseline"; JIT="$RAPIDPI_ROOT/out/rapid-pi-jit"
 fi
-[ "$PIBOLT_ARCH" = x64 ] || BASELINE=""
+[ "$RAPIDPI_ARCH" = x64 ] || BASELINE=""
 [ -x "$MAIN/pi" ] || die "no build at $MAIN (scripts/package-release.sh, or --builds)"
-STRESS="$PIBOLT_ROOT/bench/stress.py"
-ROOTS="$PIBOLT_WORK/compat"
+STRESS="$RAPIDPI_ROOT/bench/stress.py"
+ROOTS="$RAPIDPI_WORK/compat"
 status=0
 
 # fetch IMAGE TAG DIR: the root filesystem of a Docker Hub library image, layer by layer.
@@ -52,7 +52,7 @@ fetch() {
 	digest=$(python3 -c 'import json, sys
 m = json.load(sys.stdin)
 print(next((x["digest"] for x in m.get("manifests", []) if x["platform"]["architecture"] == sys.argv[1] and x["platform"]["os"] == "linux"), ""))' \
-		"$([ "$PIBOLT_ARCH" = x64 ] && echo amd64 || echo arm64)" <<<"$manifest")
+		"$([ "$RAPIDPI_ARCH" = x64 ] && echo amd64 || echo arm64)" <<<"$manifest")
 	if [ -n "$digest" ]; then
 		manifest=$(curl -fsSL -H "Authorization: Bearer $token" -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Accept: application/vnd.oci.image.manifest.v1+json" \
 			"https://registry-1.docker.io/v2/library/$image/manifests/$digest") || return 1
@@ -101,7 +101,7 @@ if [ "$ONLY" != cpus ]; then
 fi
 
 if [ "$ONLY" != userlands ]; then
-	if [ "$PIBOLT_ARCH" = x64 ]; then
+	if [ "$RAPIDPI_ARCH" = x64 ]; then
 		qemu=$(command -v qemu-x86_64-static || command -v qemu-x86_64)
 		cpus="Haswell Skylake-Client SandyBridge Nehalem"
 	else

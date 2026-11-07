@@ -1,7 +1,7 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
-import opensec.pibolt.app.ui.session.DiffKind
-import opensec.pibolt.app.ui.session.DiffLine
+import opensec.rapidpi.app.ui.session.DiffKind
+import opensec.rapidpi.app.ui.session.DiffLine
 import java.util.Locale
 
 /**

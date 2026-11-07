@@ -1,6 +1,6 @@
 # Remote Control
 
-`/remote-control` lets a phone running the Pi-Bolt Android app attach to the session in this terminal. The phone shows
+`/remote-control` lets a phone running the Rapid Pi Android app attach to the session in this terminal. The phone shows
 the live session (messages, thinking, tool calls and their output as they stream) and can send prompts, steer, queue
 follow-ups, abort, switch model or thinking level, and answer the dialogs Pi raises. It can also [review](#review) the
 session's folder read-only: git status, diffs, history, and the files themselves.
@@ -35,38 +35,38 @@ each time it starts, so a phone away from home needs the new QR code after a res
 | `remoteControl.cloudflared` | `"cloudflared"` | Path to the `cloudflared` executable. |
 | `remoteControl.askCloudflared` | `true` | Offer to install `cloudflared` when it is missing; "Don't ask again" sets it to `false`. |
 | `remoteControl.readSecretFiles` | `false` | Let phones read files that look like secrets when [reviewing](#review) (`.env*`, keys, `.git/`, ...). |
-| `remoteControl.service.tunnel` | the `remoteControl.tunnel` value | The [background service](#background-service)'s tunnel: `"quick"`, a named tunnel as above, or `"off"` for the local network and Tailscale only. `pi-bolt service install --no-tunnel` sets `"off"`. |
+| `remoteControl.service.tunnel` | the `remoteControl.tunnel` value | The [background service](#background-service)'s tunnel: `"quick"`, a named tunnel as above, or `"off"` for the local network and Tailscale only. `rapid-pi service install --no-tunnel` sets `"off"`. |
 
 ### Install cloudflared
 
 macOS `brew install cloudflared`; Debian/Ubuntu: Cloudflare's apt repository; Windows `winget install --id Cloudflare.cloudflared`.
 `/remote-control` offers to run the macOS or Windows command for you the first time, and only runs it after you choose
-"Install it now"; Pi-Bolt never downloads it itself.
+"Install it now"; Rapid Pi never downloads it itself.
 
 ## Background service
 
-The background service keeps remote control up after you log in, with no Pi-Bolt terminal open. Paired phones connect
+The background service keeps remote control up after you log in, with no Rapid Pi terminal open. Paired phones connect
 to it as they connect to `/remote-control`. They see the computer's most recent session, and can list its projects and
-sessions, open one, or start a new one in a project Pi-Bolt has worked in before. It is opt-in: nothing is installed until
-you run `pi-bolt service install`.
+sessions, open one, or start a new one in a project Rapid Pi has worked in before. It is opt-in: nothing is installed until
+you run `rapid-pi service install`.
 
 | Command | What it does |
 |---|---|
-| `pi-bolt service install [--no-tunnel]` | Start the service now and at every login. `--no-tunnel` sets `remoteControl.service.tunnel` to `"off"`. Run it again after changing a setting, or after installing `cloudflared`. |
-| `pi-bolt service uninstall` | Stop it and remove every file it wrote (listed below). Paired phones stay paired, and settings stay as they are. |
-| `pi-bolt service status` | Show whether it runs, its port, addresses, tunnel and phones, plus a QR code with the current addresses. |
-| `pi-bolt service pair [--link]` | Pair a new phone with the running service: show a pairing QR code and wait until a phone uses it. `--link` also prints the link for "Paste pairing link". |
-| `pi-bolt service logs [-n <lines>] [-f]` | Print the service's log; `-f` follows it. |
+| `rapid-pi service install [--no-tunnel]` | Start the service now and at every login. `--no-tunnel` sets `remoteControl.service.tunnel` to `"off"`. Run it again after changing a setting, or after installing `cloudflared`. |
+| `rapid-pi service uninstall` | Stop it and remove every file it wrote (listed below). Paired phones stay paired, and settings stay as they are. |
+| `rapid-pi service status` | Show whether it runs, its port, addresses, tunnel and phones, plus a QR code with the current addresses. |
+| `rapid-pi service pair [--link]` | Pair a new phone with the running service: show a pairing QR code and wait until a phone uses it. `--link` also prints the link for "Paste pairing link". |
+| `rapid-pi service logs [-n <lines>] [-f]` | Print the service's log; `-f` follows it. |
 
 What `install` writes. It all goes in your user account's own folders, and none of it needs administrator rights:
 
 | System | Service | Files |
 |---|---|---|
-| macOS | LaunchAgent `in.opensec.pi-bolt.remote-control`: starts at login (`RunAtLoad`), and starts again unless it exited cleanly (`KeepAlive` / `SuccessfulExit`). | `~/Library/LaunchAgents/in.opensec.pi-bolt.remote-control.plist` |
-| Linux | systemd user unit `pi-bolt-remote-control.service` (`systemctl --user`): starts with your session (`default.target`), with `Restart=on-failure`. | `~/.config/systemd/user/pi-bolt-remote-control.service` (or under `$XDG_CONFIG_HOME`) |
-| Windows | Scheduled task `Pi-Bolt Remote Control`: starts at your logon with your rights (`InteractiveToken`, `LeastPrivilege`). It runs through `conhost.exe --headless`, so no console window opens, and it starts again up to 3 times after a failure. | `~/.pi/agent/remote-control/service-task.xml` (what `schtasks /Create /XML` registered) and `service-task.cmd`, the script the task runs: a task cannot set environment variables, so the script sets them and starts the service |
+| macOS | LaunchAgent `in.opensec.rapid-pi.remote-control`: starts at login (`RunAtLoad`), and starts again unless it exited cleanly (`KeepAlive` / `SuccessfulExit`). | `~/Library/LaunchAgents/in.opensec.rapid-pi.remote-control.plist` |
+| Linux | systemd user unit `rapid-pi-remote-control.service` (`systemctl --user`): starts with your session (`default.target`), with `Restart=on-failure`. | `~/.config/systemd/user/rapid-pi-remote-control.service` (or under `$XDG_CONFIG_HOME`) |
+| Windows | Scheduled task `Rapid Pi Remote Control`: starts at your logon with your rights (`InteractiveToken`, `LeastPrivilege`). It runs through `conhost.exe --headless`, so no console window opens, and it starts again up to 3 times after a failure. | `~/.pi/agent/remote-control/service-task.xml` (what `schtasks /Create /XML` registered) and `service-task.cmd`, the script the task runs: a task cannot set environment variables, so the script sets them and starts the service |
 
-The service file (on Windows, the task's script) holds the command, which is the `pi-bolt` executable followed by `service run`. It also holds `PATH`,
+The service file (on Windows, the task's script) holds the command, which is the `rapid-pi` executable followed by `service run`. It also holds `PATH`,
 plus `PI_CODING_AGENT_DIR` and `PI_CODING_AGENT_SESSION_DIR` when your shell sets them. While it runs, the service writes
 the following in `~/.pi/agent/remote-control/`:
 
@@ -87,9 +87,9 @@ How it behaves:
   phone the current addresses ([`remote_endpoints`](#messages)), on connect and whenever they change, so a phone that
   last connected at home can still reach the computer from elsewhere. Nothing outside this computer and the phone
   learns the address: there is no lookup or rendezvous server.
-- **Pairing.** Only phones that are already paired get in. The service shows no QR code itself. `pi-bolt service pair`
+- **Pairing.** Only phones that are already paired get in. The service shows no QR code itself. `rapid-pi service pair`
   asks it for a one-time pairing code (single use, 10 minutes, as with `/remote-control`).
-- **Status QR code.** `pi-bolt service status` shows a QR code with the current addresses. Its secret is all zeros and it
+- **Status QR code.** `rapid-pi service status` shows a QR code with the current addresses. Its secret is all zeros and it
   has already expired, so it pairs nothing. Scanned by a paired phone, it gives that phone the new addresses; any other
   phone says it has expired.
 - **Revocation.** `/remote-control devices` in any terminal revokes a phone. The service drops it within 10 seconds, or
@@ -115,25 +115,25 @@ gives way to the terminal:
 The other way round: if a terminal already serves `/remote-control` when the service starts, the service waits until
 that terminal lets go. Two copies of the service for one agent directory do not run: the second exits.
 
-`pi-bolt service status` shows which side has the port. While a terminal has it, `pi-bolt service pair` refuses; use
+`rapid-pi service status` shows which side has the port. While a terminal has it, `rapid-pi service pair` refuses; use
 `/remote-control` in that terminal.
 
 ## Security
 
 - The listener accepts only WebSocket connections on `/rc` and answers nothing before the client completes a Noise
   handshake. Nothing secret is ever in a URL.
-- Every connection is encrypted end to end with Noise (`Noise_IK_25519_AESGCM_SHA256`) between Pi-Bolt and the app.
+- Every connection is encrypted end to end with Noise (`Noise_IK_25519_AESGCM_SHA256`) between Rapid Pi and the app.
   A tunnel (Cloudflare terminates its own TLS) only carries ciphertext.
-- Pi-Bolt's static key lives in `~/.pi/agent/remote-control/host-key` (mode 0600). The QR code carries its public key, so
+- Rapid Pi's static key lives in `~/.pi/agent/remote-control/host-key` (mode 0600). The QR code carries its public key, so
   the app talks only to this computer.
 - Pairing needs a one-time 32-byte secret from the QR code. It travels only inside the encrypted first handshake message
-  (readable only with Pi-Bolt's private key), is single use, and expires after 10 minutes.
+  (readable only with Rapid Pi's private key), is single use, and expires after 10 minutes.
 - Paired phones are listed in `~/.pi/agent/remote-control/devices.json` by their public key. Only listed phones get past
   the handshake. `/remote-control devices` revokes a phone; it is disconnected at once.
 - A paired phone can do what you can do by typing into Pi: Pi's tools run with your permissions. Revoke phones you lose.
 - The [review commands](#review) only read. They see the session's folder and nothing outside it, cap what they send,
   run no shell, and refuse files that look like secrets unless `remoteControl.readSecretFiles` is set.
-- The background service's control channel (`pi-bolt service status`, `pair`, and the terminal handoff) is a Unix
+- The background service's control channel (`rapid-pi service status`, `pair`, and the terminal handoff) is a Unix
   socket in `~/.pi/agent/remote-control` (mode 0600, in a 0700 folder), or a named pipe on Windows. Every request
   carries the token from `service.token` (mode 0600), so only your user account gets an answer.
 
@@ -296,10 +296,10 @@ The background service (`host.service: true`) also answers these. They work befo
 
 | `type` | Fields | `data` of the response |
 |---|---|---|
-| `list_projects` | | `{ projects: [{ cwd, name, sessions, updatedAt }] }`: folders with Pi-Bolt sessions that still exist, newest first (at most 100). |
+| `list_projects` | | `{ projects: [{ cwd, name, sessions, updatedAt }] }`: folders with Rapid Pi sessions that still exist, newest first (at most 100). |
 | `list_sessions` | `cwd?` (default: the open session's folder) | `{ sessions: [{ path, id, cwd, name?, preview, updatedAt, messageCount, open?, running? }] }`, newest first (at most 100). `preview` is the first message, shortened. `open: true`: the service has it open; `running: true`: it runs a turn or a compaction now. |
 | `switch_session` | `sessionPath`: a `path` from `list_sessions` | `{ cancelled }`, then a new `remote_hello`. Any other file is refused. |
-| `new_session` | `cwd?`: a `cwd` from `list_projects` (default: the open session's folder); `parentSession?` | `{ cancelled }`, then a new `remote_hello`. A folder Pi-Bolt has no sessions in is refused. |
+| `new_session` | `cwd?`: a `cwd` from `list_projects` (default: the open session's folder); `parentSession?` | `{ cancelled }`, then a new `remote_hello`. A folder Rapid Pi has no sessions in is refused. |
 
 `switch_session` and `new_session` never abort a turn (`host.parallelSessions`). The service keeps up to 3 sessions
 open, each with its own runtime, and phones see one of them. An idle session moves to the new one, as `/resume` and

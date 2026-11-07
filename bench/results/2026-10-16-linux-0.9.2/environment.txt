@@ -2,8 +2,8 @@ GitHub Actions, workflow bench.yml on branch bench/readme-092, run 38851152342 (
 Runners: ubuntu-24.04 (Linux x86-64, transparent huge pages "always") and ubuntu-24.04-arm (Linux ARM64, "madvise").
 Each build pinned to one CPU (--cpus 1).
 
-old     Pi-Bolt 0.8.5 on x86-64, 0.8.8 on ARM64 (the first ARM64 release): pi-bolt-linux-<arch>.tar.xz from the release
-cand    Pi-Bolt 0.9.2 (Pi 1.2.0): pi-bolt-linux-<arch>.tar.xz from the release
+old     Rapid Pi 0.8.5 on x86-64, 0.8.8 on ARM64 (the first ARM64 release): rapid-pi-linux-<arch>.tar.xz from the release
+cand    Rapid Pi 0.9.2 (Pi 1.2.0): rapid-pi-linux-<arch>.tar.xz from the release
 bun     Pi 1.2.0 (this repository's Pi) on stock Bun 1.4.2: scripts/build-pi.sh --stable
 node22  Pi 1.2.0 as released on npm (@earendil-works/pi-coding-agent, dist/bundle/cli.js) on Node 22 (nodejs.org latest-v22.x)
 node24  the same on Node 24 (latest-v24.x)

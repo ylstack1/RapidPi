@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import android.net.Uri
 import kotlinx.coroutines.Dispatchers
@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.data.SafeFiles
-import opensec.pibolt.app.engine.EngineApi
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.git.GitProgress
-import opensec.pibolt.app.git.GitRepo
-import opensec.pibolt.app.git.GitRunner
-import opensec.pibolt.app.secrets.ProjectSecrets
-import opensec.pibolt.app.session.SessionController
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.data.SafeFiles
+import opensec.rapidpi.app.engine.EngineApi
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.git.GitProgress
+import opensec.rapidpi.app.git.GitRepo
+import opensec.rapidpi.app.git.GitRunner
+import opensec.rapidpi.app.secrets.ProjectSecrets
+import opensec.rapidpi.app.session.SessionController
 import java.io.File
 
 /** Project folders on this phone. Every call touches the disk, so every call runs on [Dispatchers.IO]. */

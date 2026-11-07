@@ -1,4 +1,4 @@
-package opensec.pibolt.app.terminal
+package opensec.rapidpi.app.terminal
 
 import android.os.Process
 import kotlinx.coroutines.CoroutineScope

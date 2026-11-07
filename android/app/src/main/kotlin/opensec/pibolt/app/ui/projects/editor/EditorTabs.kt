@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.editor
+package opensec.rapidpi.app.ui.projects.editor
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -11,8 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
-import opensec.pibolt.app.ui.projects.FileDoc
-import opensec.pibolt.app.ui.projects.FileStamp
+import opensec.rapidpi.app.ui.projects.FileDoc
+import opensec.rapidpi.app.ui.projects.FileStamp
 import java.io.File
 
 /**

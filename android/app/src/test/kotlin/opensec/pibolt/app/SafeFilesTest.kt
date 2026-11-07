@@ -1,6 +1,6 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.SafeFiles
+import opensec.rapidpi.app.data.SafeFiles
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.LinkOption

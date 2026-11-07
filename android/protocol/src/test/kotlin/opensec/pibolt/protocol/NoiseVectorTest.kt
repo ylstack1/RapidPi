@@ -1,10 +1,10 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.noise.IkHandshake
-import opensec.pibolt.protocol.noise.KeyPair
-import opensec.pibolt.protocol.noise.Noise
+import opensec.rapidpi.protocol.noise.IkHandshake
+import opensec.rapidpi.protocol.noise.KeyPair
+import opensec.rapidpi.protocol.noise.Noise
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

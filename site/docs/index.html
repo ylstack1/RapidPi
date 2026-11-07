@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#050505">
-<title>Pi-Bolt documentation</title>
-<meta name="description" content="Pi-Bolt is the Pi coding agent compiled ahead of time to native code. Install it, choose a build, run your extensions, and see how it performs.">
-<meta property="og:title" content="Pi-Bolt documentation">
-<meta property="og:description" content="Pi-Bolt is the Pi coding agent compiled ahead of time to native code. Install it, choose a build, run your extensions, and see how it performs.">
-<meta property="og:url" content="https://pi-bolt.opensec.in/docs/">
-<link rel="canonical" href="https://pi-bolt.opensec.in/docs/">
+<title>Rapid Pi documentation</title>
+<meta name="description" content="Rapid Pi is the Pi coding agent compiled ahead of time to native code. Install it, choose a build, run your extensions, and see how it performs.">
+<meta property="og:title" content="Rapid Pi documentation">
+<meta property="og:description" content="Rapid Pi is the Pi coding agent compiled ahead of time to native code. Install it, choose a build, run your extensions, and see how it performs.">
+<meta property="og:url" content="https://rapid-pi.opensec.in/docs/">
+<link rel="canonical" href="https://rapid-pi.opensec.in/docs/">
 <link rel="icon" href="../logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
     </button>
     <nav class="top" aria-label="Main">
       <a href="../#benchmarks">Benchmarks</a>
-      <a href="https://github.com/opensec-git/Pi-Bolt/releases/latest">Releases</a>
-      <a class="gh" href="https://github.com/opensec-git/Pi-Bolt"><span>GitHub</span><i aria-hidden="true">↗</i></a>
+      <a href="https://github.com/opensec-git/Rapid Pi/releases/latest">Releases</a>
+      <a class="gh" href="https://github.com/opensec-git/Rapid Pi"><span>GitHub</span><i aria-hidden="true">↗</i></a>
     </nav>
   </div>
 </header>
@@ -67,32 +67,32 @@
   <main id="content">
     <article class="doc">
       <p class="eyebrow">Documentation</p>
-<h1>Pi-Bolt documentation</h1>
-<p class="lede">Pi-Bolt is the <a href="https://github.com/earendil-works/pi">Pi</a> coding agent compiled ahead of time to native
+<h1>Rapid Pi documentation</h1>
+<p class="lede">Rapid Pi is the <a href="https://github.com/earendil-works/pi">Pi</a> coding agent compiled ahead of time to native
   code. It is the Pi you already use, with the same commands, sessions, settings, providers and extensions, as one executable.
   Against Pi as released on Node 24, it writes a large file through a tool call about 120 times faster, uses 8 times less CPU
   while a long answer streams, 7 times less over a session, and under a quarter of the memory.</p>
 
 <div class="cards">
-  <a class="card" href="installation.html"><strong>Install Pi-Bolt</strong><span>One command on Linux, macOS, Windows and Android, or npm.</span></a>
-  <a class="card" href="quickstart.html"><strong>Quickstart</strong><span>Run your first session, and use Pi-Bolt next to Pi.</span></a>
+  <a class="card" href="installation.html"><strong>Install Rapid Pi</strong><span>One command on Linux, macOS, Windows and Android, or npm.</span></a>
+  <a class="card" href="quickstart.html"><strong>Quickstart</strong><span>Run your first session, and use Rapid Pi next to Pi.</span></a>
   <a class="card" href="builds.html"><strong>Choose a build</strong><span>The default build, or the JIT build for heavy extensions.</span></a>
   <a class="card" href="extensions.html"><strong>Extensions</strong><span>Run Pi extensions as they are, or compile them in.</span></a>
   <a class="card" href="benchmarks.html"><strong>Benchmarks</strong><span>Time, CPU and memory against Pi on Bun and Node.</span></a>
   <a class="card" href="troubleshooting.html"><strong>Troubleshooting</strong><span>Check the compiled code, fix common problems, report a bug.</span></a>
 </div>
 
-<h2 id="what-pi-bolt-is">What Pi-Bolt is<a class="anchor" href="#what-pi-bolt-is" aria-label="Link to this section">#</a></h2>
+<h2 id="what-rapid-pi-is">What Rapid Pi is<a class="anchor" href="#what-rapid-pi-is" aria-label="Link to this section">#</a></h2>
 <p>Pi is a TypeScript program. Stock Pi runs on Bun or Node, which parse its code at every launch and compile the hot parts with a
-  just-in-time (JIT) compiler while it runs. Pi-Bolt compiles every function of Pi to machine code when the executable is built,
+  just-in-time (JIT) compiler while it runs. Rapid Pi compiles every function of Pi to machine code when the executable is built,
   and stores Pi's modules already loaded. At launch there is nothing to parse and nothing to warm up.</p>
 <p>What stays the same:</p>
 <ul>
-  <li><strong>Your configuration.</strong> Pi-Bolt reads <code>~/.pi/agent</code>: your providers and logins, settings, sessions,
+  <li><strong>Your configuration.</strong> Rapid Pi reads <code>~/.pi/agent</code>: your providers and logins, settings, sessions,
     skills, prompt templates and extensions.</li>
-  <li><strong>Pi's behavior.</strong> Pi-Bolt is Pi's own source with a small set of fixes on top, not a rewrite. Each release is
-    built on a named Pi release, and <code>pi-bolt --version</code> shows which.</li>
-  <li><strong>Your Pi installation.</strong> Pi-Bolt installs next to Pi as <code>pi-bolt</code>. Both can stay installed.</li>
+  <li><strong>Pi's behavior.</strong> Rapid Pi is Pi's own source with a small set of fixes on top, not a rewrite. Each release is
+    built on a named Pi release, and <code>rapid-pi --version</code> shows which.</li>
+  <li><strong>Your Pi installation.</strong> Rapid Pi installs next to Pi as <code>rapid-pi</code>. Both can stay installed.</li>
 </ul>
 <p>What changes is how Pi runs: it starts sooner, uses less CPU and memory over a session, and handles long answers and large file
   writes far more cheaply. See <a href="how-it-works.html">How it works</a> and <a href="benchmarks.html">Benchmarks</a>.</p>
@@ -110,9 +110,9 @@
 <p>There is no build for Intel Macs.</p>
 
 <h2 id="these-docs-and-pi-s-docs">These docs and Pi's docs<a class="anchor" href="#these-docs-and-pi-s-docs" aria-label="Link to this section">#</a></h2>
-<p>This documentation covers what is specific to Pi-Bolt: installing it, choosing a build, running extensions, performance and
-  troubleshooting. For using the agent itself, Pi's documentation applies to Pi-Bolt as written; replace <code>pi</code> with
-  <code>pi-bolt</code> in its commands.</p>
+<p>This documentation covers what is specific to Rapid Pi: installing it, choosing a build, running extensions, performance and
+  troubleshooting. For using the agent itself, Pi's documentation applies to Rapid Pi as written; replace <code>pi</code> with
+  <code>rapid-pi</code> in its commands.</p>
 <div class="table"><table>
   <thead><tr><th>To learn about</th><th>Read in Pi's documentation</th></tr></thead>
   <tbody>
@@ -127,30 +127,30 @@
 
 <div class="callout">
   <span class="title">An independent project</span>
-  Pi-Bolt is an independent fork of Pi by OpenSec, not affiliated with Pi's authors or with Oven. It is built on Pi by Mario
-  Zechner and contributors, and on Bun by Oven. Report Pi-Bolt problems to
-  <a href="https://github.com/opensec-git/Pi-Bolt/issues">Pi-Bolt's issue tracker</a>; see
+  Rapid Pi is an independent fork of Pi by OpenSec, not affiliated with Pi's authors or with Oven. It is built on Pi by Mario
+  Zechner and contributors, and on Bun by Oven. Report Rapid Pi problems to
+  <a href="https://github.com/opensec-git/Rapid Pi/issues">Rapid Pi's issue tracker</a>; see
   <a href="troubleshooting.html#reporting-a-problem">Reporting a problem</a> to tell which project a bug belongs to.
 </div>
 
     </article>
     <div class="doc-foot">
-      <a class="edit" href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs-site/pages/index.html">Edit this page on GitHub</a>
+      <a class="edit" href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs-site/pages/index.html">Edit this page on GitHub</a>
     </div>
     <nav class="pager" aria-label="Previous and next page"><span></span><a class="next" href="installation.html"><span>Next</span>Installation</a></nav>
   </main>
 
   <aside class="toc-col">
-    <nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li class="l2"><a href="#what-pi-bolt-is">What Pi-Bolt is</a></li><li class="l2"><a href="#supported-platforms">Supported platforms</a></li><li class="l2"><a href="#these-docs-and-pi-s-docs">These docs and Pi&#x27;s docs</a></li></ul></nav>
+    <nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li class="l2"><a href="#what-rapid-pi-is">What Rapid Pi is</a></li><li class="l2"><a href="#supported-platforms">Supported platforms</a></li><li class="l2"><a href="#these-docs-and-pi-s-docs">These docs and Pi&#x27;s docs</a></li></ul></nav>
   </aside>
 </div>
 
 <footer>
   <div class="foot">
-    <p>© 2026 OpenSec · <strong>Pi-Bolt</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
+    <p>© 2026 OpenSec · <strong>Rapid Pi</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
       affiliated with Pi's authors or with Oven. MIT licensed.</p>
-    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Pi-Bolt">GitHub</a> ·
-      <a href="https://www.npmjs.com/package/pi-bolt">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
+    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Rapid Pi">GitHub</a> ·
+      <a href="https://www.npmjs.com/package/rapid-pi">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
   </div>
 </footer>
 

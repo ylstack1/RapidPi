@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -34,20 +34,20 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.git.github.GitHub
-import opensec.pibolt.app.git.github.GitHubState
-import opensec.pibolt.app.ui.git.RepoPickerSheet
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.git.github.GitHub
+import opensec.rapidpi.app.git.github.GitHubState
+import opensec.rapidpi.app.ui.git.RepoPickerSheet
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.ui.components.Segmented
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.components.Segmented
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
 
 /**
  * New project: an empty folder with a name, or "Clone from git" (the URL names the folder until the user edits the

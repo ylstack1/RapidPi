@@ -1,6 +1,6 @@
 name: bench-windows-runtimes
 
-# Pi-Bolt 0.9.6 (the release's zip) against Pi 1.3.0 on stock Bun 1.4.2 (scripts\build-pi.ps1 -Stable, this repository's Pi), on
+# Rapid Pi 0.9.6 (the release's zip) against Pi 1.3.0 on stock Bun 1.4.2 (scripts\build-pi.ps1 -Stable, this repository's Pi), on
 # Node 22 and on Node 24 (as released on npm), on GitHub's windows-2025 runner: the same suites as the Linux run of bench.yml.
 on:
   push:
@@ -37,12 +37,12 @@ jobs:
           $ErrorActionPreference = 'Continue'
           New-Item -ItemType Directory -Force results, .work | Out-Null
           $env_lines = @()
-          gh release download bolt-v0.9.6 --repo $env:GITHUB_REPOSITORY --pattern pi-bolt-win32-x64.zip --pattern SHA256SUMS --dir .work\cand-dl --clobber
+          gh release download bolt-v0.9.6 --repo $env:GITHUB_REPOSITORY --pattern rapid-pi-win32-x64.zip --pattern SHA256SUMS --dir .work\cand-dl --clobber
           if ($LASTEXITCODE -ne 0) { exit 1 }
-          $sum = (Get-FileHash .work\cand-dl\pi-bolt-win32-x64.zip -Algorithm SHA256).Hash.ToLowerInvariant()
-          if ((Get-Content -LiteralPath .work\cand-dl\SHA256SUMS) -notcontains "$sum  pi-bolt-win32-x64.zip") { throw "pi-bolt-win32-x64.zip is not the one SHA256SUMS lists" }
-          Expand-Archive .work\cand-dl\pi-bolt-win32-x64.zip -DestinationPath .work\cand-dl -Force
-          Move-Item .work\cand-dl\pi-bolt-win32-x64 .work\cand
+          $sum = (Get-FileHash .work\cand-dl\rapid-pi-win32-x64.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ((Get-Content -LiteralPath .work\cand-dl\SHA256SUMS) -notcontains "$sum  rapid-pi-win32-x64.zip") { throw "rapid-pi-win32-x64.zip is not the one SHA256SUMS lists" }
+          Expand-Archive .work\cand-dl\rapid-pi-win32-x64.zip -DestinationPath .work\cand-dl -Force
+          Move-Item .work\cand-dl\rapid-pi-win32-x64 .work\cand
           npm ci --ignore-scripts --no-audit --no-fund
           if ($LASTEXITCODE -ne 0) { exit 1 }
           npm run build:offline
@@ -63,7 +63,7 @@ jobs:
           }
           $cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
           $nt = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-          $env_lines += "pi-bolt: Pi-Bolt 0.9.6, pi-bolt-win32-x64.zip from the release (checked against its SHA256SUMS): $(& .work\cand\pi-bolt.exe --version | Select-Object -First 1)"
+          $env_lines += "rapid-pi: Rapid Pi 0.9.6, rapid-pi-win32-x64.zip from the release (checked against its SHA256SUMS): $(& .work\cand\rapid-pi.exe --version | Select-Object -First 1)"
           $env_lines += "bun: Pi 1.3.0 (this repository's Pi) on stock Bun $(bun --version): scripts\build-pi.ps1 -Stable: $(& out\pi-stable\pi.exe --version | Select-Object -First 1)"
           $env_lines += "runner: windows-2025, $($cpu.Name.Trim()), $($cpu.NumberOfCores) cores, $($cpu.NumberOfLogicalProcessors) threads; $((Get-CimInstance Win32_OperatingSystem).Caption) build $($nt.CurrentBuild).$($nt.UBR)"
           $env_lines | Tee-Object -Variable shown
@@ -73,7 +73,7 @@ jobs:
           $env:PYTHONUTF8 = '1'
           $ErrorActionPreference = 'Continue'
           $VAN = "$PWD\.work\vanilla\node_modules\@earendil-works\pi-coding-agent\dist\bundle\cli.js"
-          $B = @('--build', "pi-bolt=$PWD\.work\cand\pi-bolt.exe", '--build', "bun=$PWD\out\pi-stable\pi.exe",
+          $B = @('--build', "rapid-pi=$PWD\.work\cand\rapid-pi.exe", '--build', "bun=$PWD\out\pi-stable\pi.exe",
                  '--build', "node22=$PWD\.work\node22\node.exe $VAN", '--build', "node24=$PWD\.work\node24\node.exe $VAN")
           function Run($name, $file, [string[]]$cmd) {
             "## $name" | Add-Content -Encoding utf8 results\all.txt

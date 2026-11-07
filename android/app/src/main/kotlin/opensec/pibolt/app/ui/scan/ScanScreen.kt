@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.scan
+package opensec.rapidpi.app.ui.scan
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -17,8 +17,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Radius
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -93,19 +93,19 @@ import com.google.zxing.PlanarYUVLuminanceSource
 import com.google.zxing.ReaderException
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
-import opensec.pibolt.app.ui.components.GlassBarInset
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.GlassBarInset
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.theme.Space
 import androidx.compose.foundation.layout.heightIn
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.hosts.PasteSheet
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.protocol.PairingPayload
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.hosts.PasteSheet
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.protocol.PairingPayload
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -151,7 +151,7 @@ fun ScanScreen(onBack: () -> Unit, onCode: (String) -> String?) {
             CameraPreview(onText = { text ->
                 if (!PairingPayload.looksLikePairing(text)) {
                     haptics.reject()
-                    message = "That QR code is not a Pi-Bolt pairing code."
+                    message = "That QR code is not a Rapid Pi pairing code."
                     false
                 } else {
                     val error = onCode(text)

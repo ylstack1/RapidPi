@@ -1,16 +1,16 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import android.view.KeyEvent
-import opensec.pibolt.app.ui.markdown.Highlighter
-import opensec.pibolt.app.ui.projects.editor.AskPi
-import opensec.pibolt.app.ui.projects.editor.EditState
-import opensec.pibolt.app.ui.projects.editor.EditorTab
-import opensec.pibolt.app.ui.projects.editor.EditorTabs
-import opensec.pibolt.app.ui.projects.editor.viewerPlace
-import opensec.pibolt.app.ui.projects.editor.EditorCommand
-import opensec.pibolt.app.ui.projects.editor.EditorInput
-import opensec.pibolt.app.ui.projects.editor.EditorShortcuts
-import opensec.pibolt.app.ui.projects.editor.KeyChord
+import opensec.rapidpi.app.ui.markdown.Highlighter
+import opensec.rapidpi.app.ui.projects.editor.AskPi
+import opensec.rapidpi.app.ui.projects.editor.EditState
+import opensec.rapidpi.app.ui.projects.editor.EditorTab
+import opensec.rapidpi.app.ui.projects.editor.EditorTabs
+import opensec.rapidpi.app.ui.projects.editor.viewerPlace
+import opensec.rapidpi.app.ui.projects.editor.EditorCommand
+import opensec.rapidpi.app.ui.projects.editor.EditorInput
+import opensec.rapidpi.app.ui.projects.editor.EditorShortcuts
+import opensec.rapidpi.app.ui.projects.editor.KeyChord
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

@@ -1,8 +1,8 @@
-package opensec.pibolt.protocol.session
+package opensec.rapidpi.protocol.session
 
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.rpc.ImageAttachment
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.rpc.ImageAttachment
 
 /** One row of the conversation as the app shows it. [key] is stable across updates of the same row. */
 sealed interface ChatItem {
@@ -66,7 +66,7 @@ data class HostInfo(
     val review: Boolean = false,
     val features: Set<String> = emptySet(),
 ) {
-    /** The computer streams a subagent's own conversation on request (`subagent_subscribe`, Pi-Bolt 1.1.5 and later). */
+    /** The computer streams a subagent's own conversation on request (`subagent_subscribe`, Rapid Pi 1.1.5 and later). */
     val streamsSubagents: Boolean get() = SUBAGENT_STREAM_FEATURE in features
 }
 

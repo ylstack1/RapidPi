@@ -1,4 +1,4 @@
-// The `pi` of a macOS build: starts `pi-bin`, the Pi-Bolt executable beside it, in this same process, at its linked address.
+// The `pi` of a macOS build: starts `pi-bin`, the Rapid Pi executable beside it, in this same process, at its linked address.
 //
 // An executable with a static heap must run where it was linked to be (docs/ARCHITECTURE.md, "The macOS ARM64 port"). Started
 // directly, it starts again itself, once dyld has loaded it and its libraries; from here it is started that way at once, which
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
     if (helper >= 0) {
         char value[sizeof(proxy) + 32];
         snprintf(value, sizeof(value), "%d:%d:%s", (int)getpid(), helper, proxy);
-        setenv(PIBOLT_SPAWN_HELPER_ENV, value, 1);
+        setenv(RAPIDPI_SPAWN_HELPER_ENV, value, 1);
     }
 
     // What pi-bin's own start at its linked address looks for (c-bindings.cpp in Bun): it is started that way already.

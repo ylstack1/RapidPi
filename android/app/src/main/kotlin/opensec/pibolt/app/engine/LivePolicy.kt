@@ -1,6 +1,6 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
-import opensec.pibolt.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.SessionState
 
 /**
  * The rules for several on-device sessions at once ([LocalEngine]): at most [MAX_LIVE] live sessions (each with its own
@@ -110,7 +110,7 @@ object LivePolicy {
 
     /**
      * Whether a live session restarts when a setting its engine read at start changes ("Web search"): every session not
-     * in a turn (or a compaction). Not [opensec.pibolt.app.session.SessionController.isIdle]: a lasting extension
+     * in a turn (or a compaction). Not [opensec.rapidpi.app.session.SessionController.isIdle]: a lasting extension
      * status, an open dialog or a reconnecting link does not keep the old tools (an extension command's dialog is
      * cancelled with the engine).
      */

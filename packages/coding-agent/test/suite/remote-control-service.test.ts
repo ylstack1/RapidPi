@@ -229,7 +229,7 @@ describe("remote control background service", () => {
 
 		const elsewhere = await phone.request({ type: "new_session", cwd: tmpdir() });
 		expect(elsewhere.success).toBe(false);
-		expect(String(elsewhere.error)).toContain("is not a project Pi-Bolt has worked in");
+		expect(String(elsewhere.error)).toContain("is not a project Rapid Pi has worked in");
 		const unknownFile = await phone.request({ type: "switch_session", sessionPath: "/etc/passwd" });
 		expect(unknownFile).toMatchObject({ success: false, error: "No such session on this computer" });
 	});
@@ -584,7 +584,7 @@ describe("remote control background service", () => {
 		await expect(second.start()).rejects.toBeInstanceOf(ServiceAlreadyRunningError);
 	});
 
-	describe("pi-bolt service status and pair", () => {
+	describe("rapid-pi service status and pair", () => {
 		const system = (home: string, isTTY: boolean) => ({
 			platform: "darwin" as const,
 			home,
@@ -609,7 +609,7 @@ describe("remote control background service", () => {
 			expect(lines).toContain("Not installed (pi service install starts it at every login).");
 			expect(
 				lines.some((line) =>
-					/^Remote control service: serving paired phones \(pid \d+, Pi-Bolt 9\.9\.9\)$/.test(line),
+					/^Remote control service: serving paired phones \(pid \d+, Rapid Pi 9\.9\.9\)$/.test(line),
 				),
 			).toBe(true);
 			expect(lines).toContain(`  local      ws://127.0.0.1:${port}/rc`);
@@ -652,7 +652,7 @@ describe("remote control background service", () => {
 				system: system(tempDir("pi-svc-home-"), true),
 			});
 			await until(() => lines.some((line) => line.startsWith("pibolt://pair#")), "the pairing link");
-			expect(lines[0]).toBe("Pair a phone: scan with the Pi-Bolt app");
+			expect(lines[0]).toBe("Pair a phone: scan with the Rapid Pi app");
 			expect(lines.filter((line) => line.includes("▀")).length).toBeGreaterThan(10);
 			const uri = lines.find((line) => line.startsWith("pibolt://pair#")) as string;
 			track(await connectTestClient(uri, generateKeyPair(), { device: "New phone" }));

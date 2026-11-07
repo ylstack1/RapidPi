@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.theme
+package opensec.rapidpi.app.ui.theme
 
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
@@ -10,7 +10,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Immutable
 
 /**
- * Motion tokens from DESIGN.md, Pi-Bolt Desktop's (`tokens.css`) mapped by role. Durations in ms. Small things leave in
+ * Motion tokens from DESIGN.md, Rapid Pi Desktop's (`tokens.css`) mapped by role. Durations in ms. Small things leave in
  * [EXIT] (110 ms, a step faster than they came); sheets and screens leave at 0.7x of their entrance.
  */
 object PiMotion {

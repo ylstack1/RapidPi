@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.hosts
+package opensec.rapidpi.app.ui.hosts
 
 import android.text.format.DateUtils
 import androidx.compose.material.icons.Icons
@@ -12,28 +12,28 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.app.session.LinkState
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.QuadMath
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SharedKeys
-import opensec.pibolt.app.ui.components.StatusDot
-import opensec.pibolt.app.ui.components.rememberSettledMode
-import opensec.pibolt.app.ui.components.sharedHostBounds
-import opensec.pibolt.app.ui.components.sharedHostElement
-import opensec.pibolt.app.ui.session.TranscriptModel
-import opensec.pibolt.app.ui.session.baseName
-import opensec.pibolt.app.ui.session.linkColor
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.Tag
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.app.session.LinkState
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.QuadMath
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SharedKeys
+import opensec.rapidpi.app.ui.components.StatusDot
+import opensec.rapidpi.app.ui.components.rememberSettledMode
+import opensec.rapidpi.app.ui.components.sharedHostBounds
+import opensec.rapidpi.app.ui.components.sharedHostElement
+import opensec.rapidpi.app.ui.session.TranscriptModel
+import opensec.rapidpi.app.ui.session.baseName
+import opensec.rapidpi.app.ui.session.linkColor
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.Tag
+import opensec.rapidpi.app.ui.theme.Space
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.rounded.MoreHoriz
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
 
 /**
  * A paired computer, one [InsetRow] of Home's "Computers": its status dot (the Quad while its session is live), its

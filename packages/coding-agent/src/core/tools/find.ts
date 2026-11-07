@@ -2,7 +2,7 @@ import { stat } from "node:fs/promises";
 import { spawn } from "child_process";
 import path from "path";
 import { type Static, Type } from "typebox";
-import { PIBOLT } from "../../pi-bolt.ts";
+import { RAPIDPI } from "../../rapid-pi.ts";
 import { createInterface } from "../../utils/readline.ts";
 import { ensureTool } from "../../utils/tools-manager.ts";
 import type { ExtensionContext, ToolDefinition } from "../extensions/types.ts";
@@ -154,7 +154,7 @@ const defaultFindOperations: FindOperations = {
 export interface FindToolOptions {
 	/** Custom operations for find. Default: local filesystem plus fd */
 	operations?: FindOperations;
-	/** Search in-process instead of with fd (native-search.ts). Default: in Pi-Bolt builds, without custom operations. */
+	/** Search in-process instead of with fd (native-search.ts). Default: in Rapid Pi builds, without custom operations. */
 	native?: boolean;
 }
 
@@ -193,7 +193,7 @@ export function createFindToolDefinition(
 	options?: FindToolOptions,
 ): ToolDefinition<typeof findSchema, FindToolDetails | undefined> {
 	const customOps = options?.operations;
-	const native = !customOps && (options?.native ?? PIBOLT !== undefined);
+	const native = !customOps && (options?.native ?? RAPIDPI !== undefined);
 	return {
 		name: "find",
 		label: "find",
@@ -290,7 +290,7 @@ export function createFindToolDefinition(
 							return;
 						}
 
-						// Pi-Bolt: in-process (native-search.ts), with fd's rules and output.
+						// Rapid Pi: in-process (native-search.ts), with fd's rules and output.
 						if (native) {
 							let isDirectory = false;
 							try {

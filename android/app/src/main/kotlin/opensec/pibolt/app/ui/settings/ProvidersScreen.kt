@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -15,20 +15,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.AgentSettingsFile
-import opensec.pibolt.app.engine.CustomProvider
-import opensec.pibolt.app.engine.ModelsFile
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.GroupEnd
-import opensec.pibolt.app.ui.components.GroupRow
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.LargeTitlePage
-import opensec.pibolt.app.ui.providers.LogoMark
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.app.ui.providers.ProviderSheet
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.AgentSettingsFile
+import opensec.rapidpi.app.engine.CustomProvider
+import opensec.rapidpi.app.engine.ModelsFile
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.GroupEnd
+import opensec.rapidpi.app.ui.components.GroupRow
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.LargeTitlePage
+import opensec.rapidpi.app.ui.providers.LogoMark
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.ui.providers.ProviderSheet
+import opensec.rapidpi.app.ui.theme.Pi
 import java.io.File
 
 /**

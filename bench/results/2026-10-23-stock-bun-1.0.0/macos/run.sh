@@ -1,15 +1,15 @@
 #!/bin/bash
-# The bench-stock-bun steps on this Mac: Pi-Bolt 1.0.0 against Pi 1.4.0 as released, run by stock Bun 1.4.4, Node 22 and Node 24.
+# The bench-stock-bun steps on this Mac: Rapid Pi 1.0.0 against Pi 1.4.0 as released, run by stock Bun 1.4.4, Node 22 and Node 24.
 set -u
 D=$D
 T=$T
 CLI=$D/pi/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js
 cd "$T/tools" || exit 1
 R=$D/results; mkdir -p "$R"
-B=(--build "pi-bolt=$T/cand/pi" --build "bun=$D/bun/bun-darwin-aarch64/bun $CLI" --build "node22=$D/node22/bin/node $CLI" --build "node24=$D/node24/bin/node $CLI")
+B=(--build "rapid-pi=$T/cand/pi" --build "bun=$D/bun/bun-darwin-aarch64/bun $CLI" --build "node22=$D/node22/bin/node $CLI" --build "node24=$D/node24/bin/node $CLI")
 {
   echo "machine: $(sysctl -n machdep.cpu.brand_string), $(sw_vers -productVersion), not pinned"
-  echo "pi-bolt: perf/v1.0.0 d35149cb0 by scripts/build-pi.sh on the runtime of run 39894603087 (runtime-darwin-arm64)"
+  echo "rapid-pi: perf/v1.0.0 d35149cb0 by scripts/build-pi.sh on the runtime of run 39894603087 (runtime-darwin-arm64)"
   echo "bun: Pi 1.4.0 as released on npm, run by stock Bun $($D/bun/bun-darwin-aarch64/bun --version) (bun-darwin-aarch64.zip, checked against SHASUMS256.txt)"
   echo "node22: Pi 1.4.0 as released on npm, on Node $($D/node22/bin/node --version) (nodejs.org, checked against SHASUMS256.txt)"
   echo "node24: Pi 1.4.0 as released on npm, on Node $($D/node24/bin/node --version) (nodejs.org, checked against SHASUMS256.txt)"

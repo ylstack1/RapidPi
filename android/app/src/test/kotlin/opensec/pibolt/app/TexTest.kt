@@ -1,14 +1,14 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.markdown.Markdown
-import opensec.pibolt.app.ui.markdown.MdBlock
-import opensec.pibolt.app.ui.markdown.math.GlyphMetrics
-import opensec.pibolt.app.ui.markdown.math.MathFont
-import opensec.pibolt.app.ui.markdown.math.MathLayout
-import opensec.pibolt.app.ui.markdown.math.MathMetrics
-import opensec.pibolt.app.ui.markdown.math.MathOp
-import opensec.pibolt.app.ui.markdown.math.Tex
-import opensec.pibolt.app.ui.markdown.math.TexNode
+import opensec.rapidpi.app.ui.markdown.Markdown
+import opensec.rapidpi.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.markdown.math.GlyphMetrics
+import opensec.rapidpi.app.ui.markdown.math.MathFont
+import opensec.rapidpi.app.ui.markdown.math.MathLayout
+import opensec.rapidpi.app.ui.markdown.math.MathMetrics
+import opensec.rapidpi.app.ui.markdown.math.MathOp
+import opensec.rapidpi.app.ui.markdown.math.Tex
+import opensec.rapidpi.app.ui.markdown.math.TexNode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

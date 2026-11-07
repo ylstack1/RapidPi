@@ -1,9 +1,9 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.AccentId
-import opensec.pibolt.app.data.ThemeId
-import opensec.pibolt.app.ui.components.GlyphTone
-import opensec.pibolt.app.ui.theme.PiColors
+import opensec.rapidpi.app.data.AccentId
+import opensec.rapidpi.app.data.ThemeId
+import opensec.rapidpi.app.ui.components.GlyphTone
+import opensec.rapidpi.app.ui.theme.PiColors
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

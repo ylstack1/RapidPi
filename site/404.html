@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Pi-Bolt crash report</title>
+<title>Rapid Pi crash report</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/logo.svg">
 <meta name="color-scheme" content="dark">
@@ -28,33 +28,33 @@
 </head>
 <body>
 <main>
-  <p class="brand"><a href="/"><img src="/logo.svg" alt="">Pi-Bolt</a></p>
+  <p class="brand"><a href="/"><img src="/logo.svg" alt="">Rapid Pi</a></p>
   <div id="crash" hidden>
-    <h1>Pi-Bolt crashed. Sorry about that.</h1>
+    <h1>Rapid Pi crashed. Sorry about that.</h1>
     <p>This page's address holds an encoded stack trace of the crash, and nothing else: no file names, paths or data of yours.
-    Pi-Bolt's maintainers decode it against the symbols of your release.</p>
-    <p><a class="button" id="issue" href="https://github.com/opensec-git/Pi-Bolt/issues/new">Open an issue with this trace</a></p>
-    <p class="muted">Please add what you were doing when it crashed, and the output of <code>pi-bolt --version</code>. The trace:</p>
+    Rapid Pi's maintainers decode it against the symbols of your release.</p>
+    <p><a class="button" id="issue" href="https://github.com/opensec-git/Rapid Pi/issues/new">Open an issue with this trace</a></p>
+    <p class="muted">Please add what you were doing when it crashed, and the output of <code>rapid-pi --version</code>. The trace:</p>
     <pre id="trace"></pre>
   </div>
   <div id="notfound">
     <h1>Not found</h1>
-    <p>There is no page at this address. Go to the <a href="/">Pi-Bolt home page</a>, or install Pi-Bolt with:</p>
-    <pre>curl -fsSL https://pi-bolt.opensec.in/install.sh | sh</pre>
+    <p>There is no page at this address. Go to the <a href="/">Rapid Pi home page</a>, or install Rapid Pi with:</p>
+    <pre>curl -fsSL https://rapid-pi.opensec.in/install.sh | sh</pre>
   </div>
 </main>
 <script>
-  // https://pi-bolt.opensec.in/crash/<bun version>/<encoded trace>: what a Pi-Bolt executable prints when it crashes.
+  // https://rapid-pi.opensec.in/crash/<bun version>/<encoded trace>: what a Rapid Pi executable prints when it crashes.
   var match = /^\/crash\/([^/]+)\/(.+)$/.exec(location.pathname);
   if (match) {
     var trace = location.href;
     document.getElementById("trace").textContent = trace;
-    var body = "**What happened**\n\n(what you were doing)\n\n**Version**\n\n```\n(output of pi-bolt --version)\n```\n\n**Trace**\n\n" + trace + "\n";
-    document.getElementById("issue").href = "https://github.com/opensec-git/Pi-Bolt/issues/new?title=" +
+    var body = "**What happened**\n\n(what you were doing)\n\n**Version**\n\n```\n(output of rapid-pi --version)\n```\n\n**Trace**\n\n" + trace + "\n";
+    document.getElementById("issue").href = "https://github.com/opensec-git/Rapid Pi/issues/new?title=" +
       encodeURIComponent("Crash: ") + "&body=" + encodeURIComponent(body);
     document.getElementById("crash").hidden = false;
     document.getElementById("notfound").hidden = true;
-    document.title = "Pi-Bolt crash report";
+    document.title = "Rapid Pi crash report";
   }
 </script>
 </body>

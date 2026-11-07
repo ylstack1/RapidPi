@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
@@ -70,22 +70,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.ui.markdown.CodeFold
-import opensec.pibolt.app.ui.markdown.CodeInfo
-import opensec.pibolt.app.ui.markdown.Highlighter
-import opensec.pibolt.app.ui.markdown.Languages
-import opensec.pibolt.app.ui.markdown.UnifiedDiff
-import opensec.pibolt.app.ui.markdown.applyTokens
-import opensec.pibolt.app.ui.markdown.highlightedCached
-import opensec.pibolt.app.ui.markdown.rememberHighlighted
-import opensec.pibolt.app.ui.session.DiffLine
-import opensec.pibolt.app.ui.session.diffStats
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.markdown.CodeFold
+import opensec.rapidpi.app.ui.markdown.CodeInfo
+import opensec.rapidpi.app.ui.markdown.Highlighter
+import opensec.rapidpi.app.ui.markdown.Languages
+import opensec.rapidpi.app.ui.markdown.UnifiedDiff
+import opensec.rapidpi.app.ui.markdown.applyTokens
+import opensec.rapidpi.app.ui.markdown.highlightedCached
+import opensec.rapidpi.app.ui.markdown.rememberHighlighted
+import opensec.rapidpi.app.ui.session.DiffLine
+import opensec.rapidpi.app.ui.session.diffStats
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
 
 /**
  * A fenced code block: surface1 card, 40dp header (language · file, then Lines, Wrap, Open and Copy as icons), code in

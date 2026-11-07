@@ -9,7 +9,7 @@ For each build it reports:
   - idle CPU at the prompt once the screen is still, memory (resident and own) after each stage, and a clean /quit
   - anything that looks like an error on screen
 
-Example: bench/tmux_check.py --prompts 4 --rounds 3 --build pi-bolt=./out/pi/pi --build bun=./out/pi-stable/pi
+Example: bench/tmux_check.py --prompts 4 --rounds 3 --build rapid-pi=./out/pi/pi --build bun=./out/pi-stable/pi
 
 On Windows, where there is no tmux, it runs conpty_check.py: the same steps and fields, with Pi in a ConPTY.
 """

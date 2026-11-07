@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.theme
+package opensec.rapidpi.app.ui.theme
 
 import android.app.Activity
 import android.database.ContentObserver
@@ -42,12 +42,12 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import opensec.pibolt.app.data.AccentId
-import opensec.pibolt.app.data.AppSettings
-import opensec.pibolt.app.data.Density
-import opensec.pibolt.app.data.ReduceMotion
-import opensec.pibolt.app.data.ThemeId
-import opensec.pibolt.app.ui.components.QuadMath
+import opensec.rapidpi.app.data.AccentId
+import opensec.rapidpi.app.data.AppSettings
+import opensec.rapidpi.app.data.Density
+import opensec.rapidpi.app.data.ReduceMotion
+import opensec.rapidpi.app.data.ThemeId
+import opensec.rapidpi.app.ui.components.QuadMath
 
 /** Sizes that change with the density setting. */
 @Immutable
@@ -62,7 +62,7 @@ data class PiDims(val compact: Boolean) {
 }
 
 /**
- * Corner radii (DESIGN.md "Space, shape, size"), Pi-Bolt Desktop's 4 / 6 / 10 / 14 by role: xs tags and inline code
+ * Corner radii (DESIGN.md "Space, shape, size"), Rapid Pi Desktop's 4 / 6 / 10 / 14 by role: xs tags and inline code
  * (--radius-xs), sm chips and small buttons (--radius-sm), md cards, menus, snackbars and rows (--radius-lg), lg the
  * composer, user bubble and groups (--radius-xl), xl sheets (a dialog's --radius-xl).
  */

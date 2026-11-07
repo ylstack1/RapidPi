@@ -3,7 +3,7 @@
 (fake_model_tools.py) in a fresh copy of the fixtures, and checks that each build's transcript and the files it leaves behind
 are byte for byte those of the reference build.
 
-Example: bench/e2e_tools.py --reference bun=./out/pi-stable/pi --build pi-bolt=./out/pi/pi
+Example: bench/e2e_tools.py --reference bun=./out/pi-stable/pi --build rapid-pi=./out/pi/pi
 """
 
 import argparse

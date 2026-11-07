@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 /** The groups of the Settings screen, in screen order. */
 enum class SettingsGroup(val title: String) {
@@ -21,7 +21,7 @@ object SettingsIndex {
         SettingEntry("providers", SettingsGroup.Models, "Model providers", "api key keys login sign in anthropic openai gemini openrouter account remove add custom endpoint"),
         SettingEntry("default-model", SettingsGroup.Models, "Default model", "model start new session provider"),
         SettingEntry("thinking", SettingsGroup.Models, "Thinking level", "reasoning effort think new sessions"),
-        SettingEntry("theme", SettingsGroup.Appearance, "Theme", "colour color dark light pi-bolt graphite paper white contrast lime moss ember claude codex vercel github look"),
+        SettingEntry("theme", SettingsGroup.Appearance, "Theme", "colour color dark light rapid-pi graphite paper white contrast lime moss ember claude codex vercel github look"),
         SettingEntry("accent", SettingsGroup.Appearance, "Accent", "colour color iris glacier ink"),
         SettingEntry("text-size", SettingsGroup.Appearance, "Text size", "font larger smaller zoom"),
         SettingEntry("density", SettingsGroup.Appearance, "Density", "compact comfortable spacing"),

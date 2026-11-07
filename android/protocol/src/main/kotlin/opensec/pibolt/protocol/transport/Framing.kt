@@ -1,6 +1,6 @@
-package opensec.pibolt.protocol.transport
+package opensec.rapidpi.protocol.transport
 
-import opensec.pibolt.protocol.noise.CipherState
+import opensec.rapidpi.protocol.noise.CipherState
 import java.io.ByteArrayOutputStream
 
 /**

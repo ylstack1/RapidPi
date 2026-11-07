@@ -40,7 +40,7 @@ import ignore from "ignore";
 import { minimatch } from "minimatch";
 import { gt, maxSatisfying, rcompare, satisfies, valid, validRange } from "semver";
 import { CONFIG_DIR_NAME, isBunBinary } from "../config.ts";
-import { PIBOLT } from "../pi-bolt.ts";
+import { RAPIDPI } from "../rapid-pi.ts";
 import { findExecutableOnPath, spawnProcess, spawnProcessSync } from "../utils/child-process.ts";
 import { type GitSource, parseGitUrl } from "../utils/git.ts";
 import {
@@ -144,8 +144,8 @@ export interface ConfiguredPackage {
 
 export interface PackageMutationOptions {
 	local?: boolean;
-	/** Select raw Pi-Bolt declarations instead of shared packages. Does not isolate installed files. */
-	piBolt?: boolean;
+	/** Select raw Rapid Pi declarations instead of shared packages. Does not isolate installed files. */
+	rapidPi?: boolean;
 }
 
 export interface PackageManager {
@@ -929,10 +929,10 @@ export class DefaultPackageManager implements PackageManager {
 		const scope: SourceScope = options?.local ? "project" : "user";
 		const currentSettings =
 			scope === "project" ? this.settingsManager.getProjectSettings() : this.settingsManager.getGlobalSettings();
-		const ownPackages = Array.isArray(currentSettings.piBolt?.packages) ? currentSettings.piBolt.packages : [];
-		const currentPackages = (options?.piBolt ? ownPackages : currentSettings.packages) ?? [];
+		const ownPackages = Array.isArray(currentSettings.rapidPi?.packages) ? currentSettings.rapidPi.packages : [];
+		const currentPackages = (options?.rapidPi ? ownPackages : currentSettings.packages) ?? [];
 		let normalizedSource = this.normalizePackageSourceForSettings(source, scope);
-		if (options?.piBolt) {
+		if (options?.rapidPi) {
 			// Relative local additions must not be interpreted as exclusion modifiers.
 			if (normalizedSource.startsWith("-")) normalizedSource = `./${normalizedSource}`;
 			const matches = (entry: PackageSource) =>
@@ -994,30 +994,30 @@ export class DefaultPackageManager implements PackageManager {
 
 	private removeSourceFromPackageSettings(
 		source: string,
-		currentSettings: Pick<Settings, "packages" | "piBolt">,
+		currentSettings: Pick<Settings, "packages" | "rapidPi">,
 		options?: PackageMutationOptions,
 	): boolean {
 		this.assertPackageMutationOptions(options);
 		const scope: SourceScope = options?.local ? "project" : "user";
-		const ownPackages = Array.isArray(currentSettings.piBolt?.packages) ? currentSettings.piBolt.packages : [];
-		const currentPackages = (options?.piBolt ? ownPackages : currentSettings.packages) ?? [];
+		const ownPackages = Array.isArray(currentSettings.rapidPi?.packages) ? currentSettings.rapidPi.packages : [];
+		const currentPackages = (options?.rapidPi ? ownPackages : currentSettings.packages) ?? [];
 		const nextPackages = currentPackages.filter(
 			(existing) =>
 				!this.packageSourcesMatch(
-					typeof existing === "string" && options?.piBolt && existing.startsWith("-")
+					typeof existing === "string" && options?.rapidPi && existing.startsWith("-")
 						? existing.slice(1)
 						: existing,
 					source,
 					scope,
 				),
 		);
-		if (options?.piBolt) {
+		if (options?.rapidPi) {
 			const shared = (currentSettings.packages ?? []).find((entry) =>
 				this.packageSourcesMatch(entry, source, scope),
 			);
 			if (shared) nextPackages.push(`-${this.getPackageSourceString(shared)}`);
 		}
-		const clearedOverride = !options?.piBolt && this.clearPiBoltOverride(source, currentSettings, scope);
+		const clearedOverride = !options?.rapidPi && this.clearPiBoltOverride(source, currentSettings, scope);
 		const changed = JSON.stringify(nextPackages) !== JSON.stringify(currentPackages);
 		if (!changed) {
 			return clearedOverride;
@@ -1031,18 +1031,18 @@ export class DefaultPackageManager implements PackageManager {
 	}
 
 	/**
-	 * Plain install and remove (without --pi-bolt) in Pi-Bolt change the shared list and drop Pi-Bolt's entries for the same
-	 * package in that settings file: a replacement, an addition or an exclusion. Pi-Bolt then loads exactly what the shared
-	 * list declares, so `remove X` cannot leave Pi-Bolt loading X and `install X@2` cannot leave it on X@1 or without X.
-	 * Returns whether Pi-Bolt's list changed.
+	 * Plain install and remove (without --rapid-pi) in Rapid Pi change the shared list and drop Rapid Pi's entries for the same
+	 * package in that settings file: a replacement, an addition or an exclusion. Rapid Pi then loads exactly what the shared
+	 * list declares, so `remove X` cannot leave Rapid Pi loading X and `install X@2` cannot leave it on X@1 or without X.
+	 * Returns whether Rapid Pi's list changed.
 	 */
 	private clearPiBoltOverride(
 		source: string,
-		currentSettings: Pick<Settings, "packages" | "piBolt">,
+		currentSettings: Pick<Settings, "packages" | "rapidPi">,
 		scope: SourceScope,
 	): boolean {
-		const own = currentSettings.piBolt?.packages;
-		if (PIBOLT === undefined || !Array.isArray(own)) return false;
+		const own = currentSettings.rapidPi?.packages;
+		if (RAPIDPI === undefined || !Array.isArray(own)) return false;
 		const next = own.filter(
 			(entry) =>
 				!this.packageSourcesMatch(
@@ -1052,8 +1052,8 @@ export class DefaultPackageManager implements PackageManager {
 				),
 		);
 		if (next.length === own.length) return false;
-		if (scope === "project") this.settingsManager.setProjectPackages(next, { piBolt: true });
-		else this.settingsManager.setPackages(next, { piBolt: true });
+		if (scope === "project") this.settingsManager.setProjectPackages(next, { rapidPi: true });
+		else this.settingsManager.setPackages(next, { rapidPi: true });
 		return true;
 	}
 
@@ -1246,16 +1246,16 @@ export class DefaultPackageManager implements PackageManager {
 		const scope: SourceScope = options?.local ? "project" : "user";
 		this.assertProjectTrustedForScope(scope);
 		await this.withProgress("remove", source, `Removing ${source}...`, async () => {
-			// Both runtimes share installed files: --pi-bolt keeps the files the shared list still declares. A plain remove
+			// Both runtimes share installed files: --rapid-pi keeps the files the shared list still declares. A plain remove
 			// drops the package from both lists of this settings file (clearPiBoltOverride), so no declaration keeps them.
 			// Settings that cannot be read abort before anything is deleted.
-			if (PIBOLT !== undefined) {
+			if (RAPIDPI !== undefined) {
 				const settings = await this.settingsManager.getCurrentPackageSettings(
 					scope === "project" ? "project" : "global",
 				);
 				this.assertProjectTrustedForScope(scope);
 				if (
-					options?.piBolt &&
+					options?.rapidPi &&
 					settings.packages?.some((existing) => this.packageSourcesMatch(existing, source, scope))
 				) {
 					return;
@@ -1278,7 +1278,7 @@ export class DefaultPackageManager implements PackageManager {
 
 	async removeAndPersist(source: string, options?: PackageMutationOptions): Promise<boolean> {
 		await this.remove(source, options);
-		if (PIBOLT === undefined) return this.removeSourceFromSettings(source, options);
+		if (RAPIDPI === undefined) return this.removeSourceFromSettings(source, options);
 		const settings = await this.settingsManager.getCurrentPackageSettings(options?.local ? "project" : "global");
 		return this.removeSourceFromPackageSettings(source, settings, options);
 	}
@@ -2036,7 +2036,7 @@ export class DefaultPackageManager implements PackageManager {
 	}
 
 	private assertPackageMutationOptions(options?: PackageMutationOptions): void {
-		if (options?.piBolt && PIBOLT === undefined) throw new Error("--pi-bolt requires a Pi-Bolt build");
+		if (options?.rapidPi && RAPIDPI === undefined) throw new Error("--rapid-pi requires a Rapid Pi build");
 	}
 
 	private assertProjectTrustedForScope(scope: SourceScope): void {

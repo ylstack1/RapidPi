@@ -1,6 +1,6 @@
 build           file   wall s    cpu s  result
-pi-bolt         50 KB      0.3      0.2  ok
-pi-bolt        200 KB      0.8      0.4  ok
+rapid-pi         50 KB      0.3      0.2  ok
+rapid-pi        200 KB      0.8      0.4  ok
 pig             50 KB      6.5      9.2  ok
 pig            200 KB     93.7    128.2  ok
 omp             50 KB      1.4      2.2  ok

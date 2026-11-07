@@ -1,9 +1,9 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.protocol.ProtocolJson
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.protocol.ProtocolJson
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

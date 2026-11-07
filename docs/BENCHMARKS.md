@@ -1,16 +1,16 @@
 # Benchmarks
 
-Pi-Bolt compared with the same Pi release on stock Bun and on Node.js. Every figure comes from the tools in
+Rapid Pi compared with the same Pi release on stock Bun and on Node.js. Every figure comes from the tools in
 [`bench/`](../bench), and the raw results are in [`bench/results/`](../bench/results). The charts are drawn from those files by
 [`bench/report.py`](../bench/report.py).
 
-**Versions.** [1.0.0 against PiG 0.5.1 and 0.9.9](#100-against-pig-051-and-099) is the latest: Pi-Bolt 1.0.0 against PiG 0.5.1 and Pi-Bolt 0.9.9, on GitHub's Linux and Windows runners and an M5 Mac. [0.9.7 against Pi as released](#097-against-pi-as-released) is the one before: Pi-Bolt 0.9.7 against Pi 1.3.0 as released on npm, run by stock Bun 1.4.2, Node 22 and Node 24, on GitHub's runners. [0.9.6 against PiG 0.5.1](#096-against-pig-051) is earlier: Pi-Bolt 0.9.6 against PiG 0.5.1, Pi-Bolt 0.9.5 and Pi 1.3.0 on Node 24, on GitHub's runners and an M5 Mac. [0.9.2 on GitHub's runners](#092-on-githubs-runners) is earlier: Pi-Bolt 0.9.2 (Pi 1.2.0) on GitHub's Linux
-x86-64 and ARM64 runners. The sections after it are earlier measurements: Pi-Bolt 0.8.5 (Pi 1.1.0), against Pi 1.1.0 as released on stock Bun 1.4.2 and on Node, every build installed from
-its release archive; [against PiG and oh-my-pi](#against-pig-and-oh-my-pi) in the same runs. [With a real model](#with-a-real-model) is an earlier measurement, of Pi-Bolt 0.6.1.
+**Versions.** [1.0.0 against PiG 0.5.1 and 0.9.9](#100-against-pig-051-and-099) is the latest: Rapid Pi 1.0.0 against PiG 0.5.1 and Rapid Pi 0.9.9, on GitHub's Linux and Windows runners and an M5 Mac. [0.9.7 against Pi as released](#097-against-pi-as-released) is the one before: Rapid Pi 0.9.7 against Pi 1.3.0 as released on npm, run by stock Bun 1.4.2, Node 22 and Node 24, on GitHub's runners. [0.9.6 against PiG 0.5.1](#096-against-pig-051) is earlier: Rapid Pi 0.9.6 against PiG 0.5.1, Rapid Pi 0.9.5 and Pi 1.3.0 on Node 24, on GitHub's runners and an M5 Mac. [0.9.2 on GitHub's runners](#092-on-githubs-runners) is earlier: Rapid Pi 0.9.2 (Pi 1.2.0) on GitHub's Linux
+x86-64 and ARM64 runners. The sections after it are earlier measurements: Rapid Pi 0.8.5 (Pi 1.1.0), against Pi 1.1.0 as released on stock Bun 1.4.2 and on Node, every build installed from
+its release archive; [against PiG and oh-my-pi](#against-pig-and-oh-my-pi) in the same runs. [With a real model](#with-a-real-model) is an earlier measurement, of Rapid Pi 0.6.1.
 
 **These are measurements, not guarantees.** Each set of results comes from one machine: for 0.8.5, an AMD EPYC 7B13 server for
 Linux and an M5 MacBook Air for macOS. On other hardware the milliseconds will differ, and so can the load, the terminal and the disk. What
-carries over is the comparison, because every run interleaves the runtimes on the same machine: Pi-Bolt starts three times
+carries over is the comparison, because every run interleaves the runtimes on the same machine: Rapid Pi starts three times
 sooner than Pi on Bun and uses about a quarter of its CPU over an interactive session. The ratio varies by scenario: see
 each table.
 
@@ -38,13 +38,13 @@ each table.
 
 ## 1.0.0 against PiG 0.5.1 and 0.9.9
 
-Pi-Bolt 1.0.0 against [PiG](https://github.com/MichaelKinsy/PiG) 0.5.1 (Pi 1.3.0 ported to Go) and Pi-Bolt 0.9.9 (its release
+Rapid Pi 1.0.0 against [PiG](https://github.com/MichaelKinsy/PiG) 0.5.1 (Pi 1.3.0 ported to Go) and Rapid Pi 0.9.9 (its release
 archive, checked against its SHA256SUMS). 1.0.0 is the release's code built on its runtimes (CI run 39894603087). Every build
 does the same work against the same local model: `bench/pig_verify.py` checked the requests, tool results, answers and files
 written on every platform. Times to start and sessions are medians of 21 runs, streaming of three rounds, the long session of
 two. Linux and Windows: GitHub's runners (CI runs 39939443543 and 39939443492; Linux pinned to one CPU, Windows two cores); macOS:
 an Apple M5 Mac, not pinned. Raw data: [`bench/results/2026-10-23-pig-1.0.0`](../bench/results/2026-10-23-pig-1.0.0). Lower is
-better; Pi-Bolt 1.0.0 / PiG 0.5.1 / Pi-Bolt 0.9.9.
+better; Rapid Pi 1.0.0 / PiG 0.5.1 / Rapid Pi 0.9.9.
 
 | CPU or memory | Linux x86-64 | Linux ARM64 | Windows x64 | Apple M5 |
 |---|---|---|---|---|
@@ -65,7 +65,7 @@ better; Pi-Bolt 1.0.0 / PiG 0.5.1 / Pi-Bolt 0.9.9.
   third on Linux x86-64 (69.5 to 46.9 ms) and Pi's own memory by 44% (70 to 39 MB); on ARM64 from 114 to 44 MB. A frame no
   longer costs more the longer the session: an answer streaming into a 4,000-entry session takes a tenth of 0.9.9's CPU. The
   executable is about 1 MB larger.
-- **Against PiG,** Pi-Bolt 1.0.0 uses less CPU per prompt deep into a session (Linux, Windows), less own memory after 40 prompts
+- **Against PiG,** Rapid Pi 1.0.0 uses less CPU per prompt deep into a session (Linux, Windows), less own memory after 40 prompts
   on Linux x86-64, a third of PiG's CPU writing files through a terminal (longest pause 84 against 610 ms), and less CPU on long
   sessions in fullscreen. On Windows it is also ready sooner, uses less CPU over an interactive session and idles lower.
 - **PiG** starts sooner and answers `pi -p` with less than half the CPU on Linux, streams a long answer with less CPU (1.7 to
@@ -78,13 +78,13 @@ counterpart of macOS's footprint, since `ru_maxrss` also counts the clean pages 
 
 ## 0.9.7 against Pi as released
 
-Pi-Bolt 0.9.7 against Pi 1.3.0 as released on npm (`@earendil-works/pi-coding-agent`, `dist/bundle/cli.js`), run by stock Bun
+Rapid Pi 0.9.7 against Pi 1.3.0 as released on npm (`@earendil-works/pi-coding-agent`, `dist/bundle/cli.js`), run by stock Bun
 1.4.2, by Node 22 and by Node 24. Every build was installed from its release archive or npm package and checked against its
 checksums, and does the same work against the same local model. Times to start and sessions are medians of 21 runs. Raw data,
 the runners and the workflow: [`bench/results/2026-10-21-stock-bun-0.9.7`](../bench/results/2026-10-21-stock-bun-0.9.7). Lower
 is better.
 
-Pi-Bolt / Pi on Bun / Pi on Node 22 / Pi on Node 24:
+Rapid Pi / Pi on Bun / Pi on Node 22 / Pi on Node 24:
 
 | Benchmark | Linux x86-64 | Linux ARM64 | macOS | Windows x64 |
 |---|---|---|---|---|
@@ -102,14 +102,14 @@ GitHub's Linux runners are pinned to one CPU; macOS is `macos-15` on an Apple M1
 answer and tmux), so their wall times there are not comparable; their CPU times are.
 
 In the runs of 0.9.2 to 0.9.6 ([`2026-10-16-linux-0.9.2`](../bench/results/2026-10-16-linux-0.9.2),
-[`2026-10-20-linux-0.9.6`](../bench/results/2026-10-20-linux-0.9.6)), "Bun" was this repository's Pi on stock Bun, with Pi-Bolt's
+[`2026-10-20-linux-0.9.6`](../bench/results/2026-10-20-linux-0.9.6)), "Bun" was this repository's Pi on stock Bun, with Rapid Pi's
 changes to Pi's code; here it is Pi as released.
 
 ## 0.9.6 against PiG 0.5.1
 
-Pi-Bolt 0.9.6 against [PiG](https://github.com/MichaelKinsy/PiG) 0.5.1 (Pi 1.3.0 ported to Go), with Pi-Bolt 0.9.5 and Pi 1.3.0 on
+Rapid Pi 0.9.6 against [PiG](https://github.com/MichaelKinsy/PiG) 0.5.1 (Pi 1.3.0 ported to Go), with Rapid Pi 0.9.5 and Pi 1.3.0 on
 Node 24. Every build does the same work against the same local model: `bench/pig_verify.py` checks the requests, tool results,
-answers and files written (Pi-Bolt's requests carry two more tool definitions, `grep` and `find`, enabled by default). Times to
+answers and files written (Rapid Pi's requests carry two more tool definitions, `grep` and `find`, enabled by default). Times to
 start and sessions are medians of 21 runs (15 on Windows), streaming the mean of three rounds (two on the Mac). Raw data and the
 exact builds: [`bench/results/2026-10-20-pig-0.5.1`](../bench/results/2026-10-20-pig-0.5.1). Lower is better.
 
@@ -126,13 +126,13 @@ exact builds: [`bench/results/2026-10-20-pig-0.5.1`](../bench/results/2026-10-20
 | Idle CPU, ms/s | 0.54 / **0.00** | | | 0.98 / **0.01** |
 | Download / installed, MB | 55 / **32**, 266 / **70** | | | |
 
-Pi-Bolt 0.9.6 / PiG 0.5.1. GitHub's Linux runners are pinned to one CPU; the Windows runner has two cores; the Mac was not pinned.
+Rapid Pi 0.9.6 / PiG 0.5.1. GitHub's Linux runners are pinned to one CPU; the Windows runner has two cores; the Mac was not pinned.
 GitHub's macOS runner stretches the paced tools about sixfold, so the macOS column comes from an M5 Mac; a shorter run on GitHub's
 macOS runner (`macos-github`) agrees on every row but the long session, where the two are even.
 
 - **PiG** starts sooner, streams with less CPU and uses about half the memory. It is a native Go program; on Linux it leads every
   row but writing files in the terminal.
-- **Pi-Bolt** writes 2.2–2.8 times less CPU through a terminal and sends a seventh of the bytes PiG does (528 KB against 3,573 KB
+- **Rapid Pi** writes 2.2–2.8 times less CPU through a terminal and sends a seventh of the bytes PiG does (528 KB against 3,573 KB
   for a 20,000-character answer). On macOS it uses less CPU over an interactive session (91 / 125 ms on the M5, 191 / 238 ms on
   GitHub's runner), and on the M5 over a long session (even on GitHub's runner). On Windows it starts with half PiG's CPU.
 - **Pi on Node 24** is far behind both: on Linux x86-64 it takes 362 ms to be ready, 1,026 ms of CPU over a session and 34.7 s for
@@ -140,7 +140,7 @@ macOS runner (`macos-github`) agrees on every row but the long session, where th
 
 ## 0.9.2 on GitHub's runners
 
-Pi-Bolt 0.9.2 and 0.8.5 (0.8.8 on ARM64, the first ARM64 release), from their release archives, against Pi 1.2.0 on stock Bun
+Rapid Pi 0.9.2 and 0.8.5 (0.8.8 on ARM64, the first ARM64 release), from their release archives, against Pi 1.2.0 on stock Bun
 1.4.2 (this repository's Pi) and Pi 1.2.0 as released on npm on Node 22 and Node 24. GitHub's `ubuntu-24.04` and
 `ubuntu-24.04-arm` runners, one CPU each, interleaved. Times to start, prompts and sessions are medians of 11 runs; long
 answers, files, tmux and the 40-prompt session are one run each. The tools' printed results:
@@ -177,7 +177,7 @@ answers, files, tmux and the 40-prompt session are one run each. The tools' prin
 | Own memory of a session in tmux | 26 MB | 28 MB | 82 MB | 158 MB | 214 MB |
 | Own memory after 40 prompts | 90 MB | 149 MB | 169 MB | 482 MB | 572 MB |
 
-The Bun build is this repository's Pi, with Pi-Bolt's terminal changes; the Node builds are Pi as released, so the gap on long
+The Bun build is this repository's Pi, with Rapid Pi's terminal changes; the Node builds are Pi as released, so the gap on long
 answers and large files is mostly Pi's own redrawing there. On x86-64 the runner has transparent huge pages always on, where
 0.9.2's smaller static-heap footprint shows (`pi --version` 46 against 59 MB), at a few percent of CPU on short commands.
 
@@ -212,7 +212,7 @@ resident), where 0.7.2's rose by 5 MB per 100 prompts on Linux (143-155 MB over 
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="images/bench-speed-dark.svg">
-  <img alt="Time: launch to interactive, pi --version, one prompt, and time per prompt in a long session, for Pi-Bolt, Bun and Node" src="images/bench-speed-light.svg">
+  <img alt="Time: launch to interactive, pi --version, one prompt, and time per prompt in a long session, for Rapid Pi, Bun and Node" src="images/bench-speed-light.svg">
 </picture>
 
 <picture>
@@ -225,13 +225,13 @@ resident), where 0.7.2's rose by 5 MB per 100 prompts on Linux (143-155 MB over 
   <img alt="Peak memory, own memory in tmux and after a long session, and CPU while replies stream" src="images/bench-memory-light.svg">
 </picture>
 
-Pi-Bolt 0.8.5 on Linux (AMD EPYC 7B13, pinned to four cores), against Pi 1.1.0 as released on stock Bun 1.4.2 and on Node 24.
+Rapid Pi 0.8.5 on Linux (AMD EPYC 7B13, pinned to four cores), against Pi 1.1.0 as released on stock Bun 1.4.2 and on Node 24.
 Medians of 21 runs of each scenario (after 3 warm-up runs), 3 long sessions and 5 tmux rounds per build; raw data in
 [`bench/results/2026-10-12-linux-x64-0.8.5`](../bench/results/2026-10-12-linux-x64-0.8.5), drawn by `bench/report.py`.
 
 #### Time
 
-|  | Pi-Bolt 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 24 |
+|  | Rapid Pi 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 24 |
 |---|---:|---:|---:|
 | Launch to interactive (TUI) | 38 ms | 116 ms | 296 ms |
 | pi --version | 11 ms | 72 ms | 222 ms |
@@ -241,7 +241,7 @@ Medians of 21 runs of each scenario (after 3 warm-up runs), 3 long sessions and 
 
 #### CPU
 
-|  | Pi-Bolt 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 24 |
+|  | Rapid Pi 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 24 |
 |---|---:|---:|---:|
 | Interactive session: 5 prompts | 193 ms | 746 ms | 1,093 ms |
 | pi -p: one prompt | 61 ms | 283 ms | 550 ms |
@@ -250,7 +250,7 @@ Medians of 21 runs of each scenario (after 3 warm-up runs), 3 long sessions and 
 
 #### Memory and streaming
 
-|  | Pi-Bolt 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 24 |
+|  | Rapid Pi 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 24 |
 |---|---:|---:|---:|
 | Peak memory, interactive session | 150 MB | 217 MB | 213 MB |
 | Own memory, tmux session | 22 MB | 84 MB | 185 MB |
@@ -266,15 +266,15 @@ memory the kernel may take back. The MacBook Air has no fan, so differences unde
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="images/darwin-arm64/bench-hero-dark.svg">
-  <img alt="macOS, Pi-Bolt 0.8.5 vs Pi on Bun 1.4.2 vs Pi on Node 26: ready to type 41 / 100 / 348 ms; CPU per session 139 / 561 / 937 ms; CPU while streaming 455 / 720 / 759 ms; memory after a long session 38 / 92 / 1,581 MB" src="images/darwin-arm64/bench-hero-light.svg">
+  <img alt="macOS, Rapid Pi 0.8.5 vs Pi on Bun 1.4.2 vs Pi on Node 26: ready to type 41 / 100 / 348 ms; CPU per session 139 / 561 / 937 ms; CPU while streaming 455 / 720 / 759 ms; memory after a long session 38 / 92 / 1,581 MB" src="images/darwin-arm64/bench-hero-light.svg">
 </picture>
 
-Pi-Bolt 0.8.5 against Pi 1.1.0 as released on Bun 1.4.2 and on Node 26.11 (21 runs, 3 long sessions and 5 tmux rounds per build;
+Rapid Pi 0.8.5 against Pi 1.1.0 as released on Bun 1.4.2 and on Node 26.11 (21 runs, 3 long sessions and 5 tmux rounds per build;
 raw data in [`bench/results/2026-10-12-darwin-arm64-0.8.5`](../bench/results/2026-10-12-darwin-arm64-0.8.5)):
 
 #### Time
 
-|  | Pi-Bolt 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 26 |
+|  | Rapid Pi 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 26 |
 |---|---:|---:|---:|
 | Launch to interactive (TUI) | 41 ms | 100 ms | 348 ms |
 | pi --version | 19 ms | 56 ms | 284 ms |
@@ -284,7 +284,7 @@ raw data in [`bench/results/2026-10-12-darwin-arm64-0.8.5`](../bench/results/202
 
 #### CPU
 
-|  | Pi-Bolt 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 26 |
+|  | Rapid Pi 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 26 |
 |---|---:|---:|---:|
 | Interactive session: 5 prompts | 139 ms | 561 ms | 937 ms |
 | pi -p: one prompt | 49 ms | 221 ms | 512 ms |
@@ -293,14 +293,14 @@ raw data in [`bench/results/2026-10-12-darwin-arm64-0.8.5`](../bench/results/202
 
 #### Memory and streaming
 
-|  | Pi-Bolt 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 26 |
+|  | Rapid Pi 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 26 |
 |---|---:|---:|---:|
 | Peak memory, interactive session | 94 MB | 209 MB | 230 MB |
 | Own memory, tmux session | 24 MB | 65 MB | 162 MB |
 | Own memory, end of 4.2M-token session | 38 MB | 92 MB | 1,581 MB |
 | Streaming replies (tmux), CPU | 455 ms | 720 ms | 759 ms |
 
-**What macOS adds at launch.** `pi` is a small launcher: it starts `pi-bin`, the Pi-Bolt executable, in the same process, and
+**What macOS adds at launch.** `pi` is a small launcher: it starts `pi-bin`, the Rapid Pi executable, in the same process, and
 forks the helper that starts the programs Pi runs ([ARCHITECTURE.md](ARCHITECTURE.md#the-macos-arm64-port)). The figures are of the
 release builds, launcher included. The helper adds 0.3 ms to `pi -p` (1%; nothing to `pi --version`, which starts nothing), and
 each program Pi starts takes 1.4 ms more to start and be waited for (`spawnSync` of `/usr/bin/true`: 2.1 ms against 0.7). None of
@@ -309,14 +309,14 @@ children; the programs are the helper's).
 
 ## Linux on ARM64
 
-Pi-Bolt's linux-arm64 build (Pi 1.2.0, the code for ARMv8.0 that is released) against Pi 1.2.0 on stock Bun 1.4.2 and on Node 24,
+Rapid Pi's linux-arm64 build (Pi 1.2.0, the code for ARMv8.0 that is released) against Pi 1.2.0 on stock Bun 1.4.2 and on Node 24,
 in Docker Desktop's Linux VM on an Apple M5 (arm64, 4 KB pages), pinned to four of its cores. Medians of 15 runs of each scenario
 (after 3 warm-up runs) and of 4 tmux rounds; raw data in
 [`bench/results/2026-10-15-linux-arm64-0.8.8`](../bench/results/2026-10-15-linux-arm64-0.8.8).
 
 #### Time
 
-|  | Pi-Bolt | Pi on Bun 1.4.2 | Pi on Node 24 |
+|  | Rapid Pi | Pi on Bun 1.4.2 | Pi on Node 24 |
 |---|---:|---:|---:|
 | Launch to interactive (TUI) | 29 ms | 45 ms | 114 ms |
 | pi --version | 5 ms | 10 ms | 83 ms |
@@ -325,7 +325,7 @@ in Docker Desktop's Linux VM on an Apple M5 (arm64, 4 KB pages), pinned to four 
 
 #### CPU
 
-|  | Pi-Bolt | Pi on Bun 1.4.2 | Pi on Node 24 |
+|  | Rapid Pi | Pi on Bun 1.4.2 | Pi on Node 24 |
 |---|---:|---:|---:|
 | Interactive session: 5 prompts | 115 ms | 316 ms | 401 ms |
 | pi -p: one prompt | 27 ms | 86 ms | 210 ms |
@@ -333,7 +333,7 @@ in Docker Desktop's Linux VM on an Apple M5 (arm64, 4 KB pages), pinned to four 
 
 #### Memory and streaming
 
-|  | Pi-Bolt | Pi on Bun 1.4.2 | Pi on Node 24 |
+|  | Rapid Pi | Pi on Bun 1.4.2 | Pi on Node 24 |
 |---|---:|---:|---:|
 | Peak memory, interactive session | 129 MB | 157 MB | 179 MB |
 | Own memory, tmux session | 37 MB | 75 MB | 79 MB |
@@ -342,10 +342,10 @@ in Docker Desktop's Linux VM on an Apple M5 (arm64, 4 KB pages), pinned to four 
 
 ## Windows x64
 
-Pi-Bolt 0.8.5 against 0.8.0 on the same laptop (on battery, best performance; both from their release archives; medians of 21
+Rapid Pi 0.8.5 against 0.8.0 on the same laptop (on battery, best performance; both from their release archives; medians of 21
 runs and of 3 long sessions, means of two rounds for long answers and files):
 
-| | Pi-Bolt 0.8.5 | Pi-Bolt 0.8.0 |
+| | Rapid Pi 0.8.5 | Rapid Pi 0.8.0 |
 |---|---:|---:|
 | Writing a 200 KB file through a tool call | **0.5 s** | 0.7 s |
 | CPU, streaming a 60,000-character answer | **6.9 s** | 7.0 s |
@@ -356,14 +356,14 @@ runs and of 3 long sessions, means of two rounds for long answers and files):
 | Launch to interactive (TUI) | 105 ms | 105 ms |
 
 The full suite (`bench\run-suite.ps1`) on Windows 11 25H2 (26200) on an Intel Core i5-1335U laptop (16 GB, on AC, best
-performance, Defender real-time protection on): Pi-Bolt 0.8.0 from `1d373d18b` (Pi 1.1.0; the runtime `8bcf03bc0` with ThinLTO and
+performance, Defender real-time protection on): Rapid Pi 0.8.0 from `1d373d18b` (Pi 1.1.0; the runtime `8bcf03bc0` with ThinLTO and
 Control Flow Guard, Pi compiled ahead of time for this CPU, JIT off, the prebuilt heap laid out by the Pi 1.1.0 profile), Pi
 1.1.0 as released on stock Bun 1.4.2, and Pi 1.1.0's bundle on Node 22.23.3 and Node 24.21.0. Medians of 11 runs (2 warm-up),
 4 long sessions of 75 prompts, 5 streaming rounds; streaming runs in a ConPTY rather than tmux (`bench\conpty_check.py`: ConPTY
 passes frames on at about 16 ms, which is the floor of the frame times). Raw data and charts:
 [`bench/results/2026-10-10-windows-0.8.0`](../bench/results/2026-10-10-windows-0.8.0).
 
-| | Pi-Bolt 0.8.0 | Pi 1.1.0 on Bun 1.4.2 | Node 22 | Node 24 |
+| | Rapid Pi 0.8.0 | Pi 1.1.0 on Bun 1.4.2 | Node 22 | Node 24 |
 |---|---:|---:|---:|---:|
 | Launch to interactive (TUI) | **92 ms** | 177 ms | 345 ms | 311 ms |
 | `pi --version` | **35 ms** | 98 ms | 242 ms | 219 ms |
@@ -385,12 +385,12 @@ passes frames on at about 16 ms, which is the floor of the frame times). Raw dat
 | Frame time p99 / longest stall, 200 KB file written | **18 / 63 ms** | 154 / 43,934 ms | 302 / 57,962 ms | 71 / 46,595 ms |
 | GC pause p99, 20,000-char answer / longest GC pause | 2.9 / 6.3 ms | 4.3 / 11 ms | **1.6 / 3.6 ms** | 1.6 / 8.4 ms |
 
-Pi-Bolt is the fastest and uses the least memory in every row but the garbage collector's pauses, where Node is shorter (its
+Rapid Pi is the fastest and uses the least memory in every row but the garbage collector's pauses, where Node is shorter (its
 p99 by about a millisecond, its longest pause by 2.7 ms).
 
 These come from memory committed on demand, the prebuilt heap laid out in first-use order, and the runtime's code laid out in
 the order it runs ([WINDOWS.md](WINDOWS.md)). Each 50 KB and 200 KB step ends with a `bash` tool call. The only `bash.exe` on
-this machine is the WSL launcher with no distribution installed, which takes about 0.1 s to start and fail. That is Pi-Bolt's
+this machine is the WSL launcher with no distribution installed, which takes about 0.1 s to start and fail. That is Rapid Pi's
 longest stall of the 50 KB step, and every build pays it.
 
 Plugins: the example plugin's loop takes 41 ms compiled into the executable. Loaded at run time it takes 756 ms with the JIT off,
@@ -398,7 +398,7 @@ and 32 ms in the build with the JIT on, as on Bun (32 ms).
 
 **What an executable costs Windows when it is not running.** Windows charges an image's uninitialized sections to the system's
 commit for as long as it keeps the image cached, after the process has exited (process memory does not show it;
-[WINDOWS.md](WINDOWS.md#what-was-measured)). `bench/image_commit.py`, medians of 5: Pi on Bun 1 MB; Pi-Bolt 33 MB (the 32 MB of the
+[WINDOWS.md](WINDOWS.md#what-was-measured)). `bench/image_commit.py`, medians of 5: Pi on Bun 1 MB; Rapid Pi 33 MB (the 32 MB of the
 region that has to be in the image); before that was fixed, 1,029 MB.
 
 
@@ -421,7 +421,7 @@ answering the scripted session after that, so it is left out of the long session
 ## Against OpenCode 2.0
 
 [OpenCode](https://github.com/anomalyco/opencode) 2.0.27 (`@opencode/cli`, its release binary for each platform), against
-Pi-Bolt 0.8.5 in a run of its own on the same machines, with the same tools and the same local model. `bench/opencode.sh` turns
+Rapid Pi 0.8.5 in a run of its own on the same machines, with the same tools and the same local model. `bench/opencode.sh` turns
 the tools' Pi arguments into OpenCode's and writes its configuration: an OpenAI-compatible provider pointing at the local model,
 and automatic compaction off, so that a long session sends the whole conversation as the others do. OpenCode runs with
 `--standalone`, a server of its own started by the process, so that the server's CPU is counted (`wait4` includes it) and each run
@@ -429,7 +429,7 @@ starts fresh; its memory figures are those of the process started, without the s
 the same `path` argument as Pi's, so the scripted model does the same work for both. OpenCode opens its command menu on `/`, so the
 harness waits for it before the Enter of `/quit`.
 
-| | macOS: Pi-Bolt | macOS: OpenCode | Linux: Pi-Bolt | Linux: OpenCode |
+| | macOS: Rapid Pi | macOS: OpenCode | Linux: Rapid Pi | Linux: OpenCode |
 |---|---:|---:|---:|---:|
 | Ready to type | **41 ms** | 1,489 ms | **39 ms** | 1,687 ms |
 | `pi -p`: one prompt, 4 tool calls | **55 ms** | 738 ms | **61 ms** | 1,153 ms |
@@ -454,8 +454,8 @@ OpenCode did not finish all of its answers on either machine, so it has no tmux 
 
 The tables above use a local scripted model, which answers instantly and the same way every time, so they measure Pi and its
 runtime alone. These use a hosted model over the internet, with thinking at its highest setting, as in daily use. They were
-taken with Pi-Bolt 0.6.1 against Pi 1.0.0 as released, and have not been taken again since.
-- Pi loads the provider's extension, in its Bun build for Pi-Bolt and Bun and its Node build for Node.
+taken with Rapid Pi 0.6.1 against Pi 1.0.0 as released, and have not been taken again since.
+- Pi loads the provider's extension, in its Bun build for Rapid Pi and Bun and its Node build for Node.
 - Every runtime gets the same prompts and a fresh copy of the same project, and the runtimes take turns.
 - CPU and memory are those of Pi's own process.
 
@@ -468,7 +468,7 @@ network), and it varies by several seconds from one request to the next.
 **A prompt with tools, `pi -p`:** "Use ls to list this folder (and src), read README.md, then tell me its first heading and how
 many .ts files there are." 10 rounds per runtime.
 
-| | Pi-Bolt | Bun 1.4.2 | Node 22 | Node 24 |
+| | Rapid Pi | Bun 1.4.2 | Node 22 | Node 24 |
 |---|---:|---:|---:|---:|
 | Correct answers | 10/10 | 10/10 | 10/10 | 10/10 |
 | Wall time, median | 7.96 s | 7.96 s | 8.17 s | 7.48 s |
@@ -479,11 +479,11 @@ many .ts files there are." 10 rounds per runtime.
 
 - **Wall time:** no runtime is faster or slower. In a permutation test, differences in median as large as these came out by
   chance 65–97% of the time: they are the model's variation.
-- **CPU:** the difference does not overlap. Pi-Bolt's slowest run used less than Bun's fastest.
+- **CPU:** the difference does not overlap. Rapid Pi's slowest run used less than Bun's fastest.
 
 **A long answer, `pi -p`:** about 2,500 words of Markdown with three TypeScript code blocks, answered in the chat. One run per runtime.
 
-| | Pi-Bolt | Bun 1.4.2 | Node 22 | Node 24 |
+| | Rapid Pi | Bun 1.4.2 | Node 22 | Node 24 |
 |---|---:|---:|---:|---:|
 | Answer | 19,803 characters | 20,116 characters | 19,103 characters | 20,305 characters |
 | Wall time | 51 s | 53 s | 40 s | 44 s |
@@ -492,7 +492,7 @@ many .ts files there are." 10 rounds per runtime.
 
 **The interactive TUI in tmux:** a 160×48 pane, "read README.md and summarize it in two sentences". One run per runtime.
 
-| | Pi-Bolt | Bun 1.4.2 | Node 22 | Node 24 |
+| | Rapid Pi | Bun 1.4.2 | Node 22 | Node 24 |
 |---|---:|---:|---:|---:|
 | Time to interactive | **88 ms** | 192 ms | 389 ms | 388 ms |
 | Answer on screen after | 5.2 s | 6.5 s | 6.8 s | 5.4 s |
@@ -506,7 +506,7 @@ On the M5, against Pi 1.0.0 as released on Bun 1.4.2 and on Node 26. Two rounds 
 
 **A long answer, `pi -p`:** a technical article of about 1,500 words with headings, a table and two code blocks, without tools.
 
-| | Pi-Bolt | Bun 1.4.2 | Node 26 |
+| | Rapid Pi | Bun 1.4.2 | Node 26 |
 |---|---:|---:|---:|
 | Characters streamed (answer and thinking), the two runs | 31,478 / 23,748 | 20,004 / 15,294 | 20,744 / 23,981 |
 | **Pi's CPU per 1,000 characters** | **19.1 / 18.7 ms** | 76.6 / 36.3 ms | 47.1 / 39.1 ms |
@@ -518,7 +518,7 @@ On the M5, against Pi 1.0.0 as released on Bun 1.4.2 and on Node 26. Two rounds 
 - In the fifth, it writes a design review of all four, about 1,000 words.
 - Each session took 11 to 22 tool calls, and the context grew to between 82,000 and 141,000 tokens.
 
-| | Pi-Bolt | Bun 1.4.2 | Node 26 |
+| | Rapid Pi | Bun 1.4.2 | Node 26 |
 |---|---:|---:|---:|
 | Time to interactive, with the provider's extension | **67 / 72 ms** | 96 / 95 ms | 222 / 235 ms |
 | Characters streamed, the two sessions | 74,602 / 62,691 | 61,840 / 64,547 | 68,458 / 61,331 |
@@ -529,7 +529,7 @@ On the M5, against Pi 1.0.0 as released on Bun 1.4.2 and on Node 26. Two rounds 
 
 Every prompt ended normally on every runtime. Bun's first session did not exit in time for its peak to be read.
 
-The user waits the same on every runtime: the model sets the pace. Pi-Bolt does that waiting with:
+The user waits the same on every runtime: the model sets the pace. Rapid Pi does that waiting with:
 - 40–50% of the CPU of Pi on Bun and a quarter to a half of Node's;
 - a third of Bun's memory, and less than a quarter of Node's.
 
@@ -542,7 +542,7 @@ The measurements are in [`bench/results/2026-10-04-darwin-arm64-0.6.1-real-model
 | Pi | 1.1.0 (`v1.1.0`) |
 | Linux machine | AMD EPYC 7B13 (Zen 3), Linux 7.0, every run pinned to the same 4 cores (the least busy of a shared VM) |
 | macOS machine | Apple M5 MacBook Air, macOS 27.0.1, not pinned |
-| **Pi-Bolt 0.8.5** | `pi-bolt-linux-x64` and `pi-bolt-darwin-arm64` from the release: JIT off |
+| **Rapid Pi 0.8.5** | `rapid-pi-linux-x64` and `rapid-pi-darwin-arm64` from the release: JIT off |
 | **PiG 0.4.1**, **oh-my-pi 18.8.7** | their release binaries for each platform (`pig`, `omp`) |
 | **Bun 1.4.2** | Pi 1.1.0 as released (`scripts/prepare-pi.sh --tag v1.1.0`), built with `scripts/build-pi.sh --stable`: Pi's own `bun build --compile` command plus `--bytecode` |
 | **Node 24.21** (Linux), **Node 26.11** (macOS) | Pi 1.1.0 as released: its npm bundle (`dist/bundle/cli.js`, with Node's compile cache) |
@@ -562,7 +562,7 @@ and no model latency, so the figures measure Pi and its runtime.
 - **CPU**: user plus system time of all threads, from `wait4()` or the scheduler's per-thread statistics.
 - **Peak memory**: maximum resident set.
 - **Own memory**: private dirty pages (`smaps_rollup`). This is what a process costs beyond shared and file-backed pages, which
-  matters for Pi-Bolt: its code and prebuilt heap are file-backed.
+  matters for Rapid Pi: its code and prebuilt heap are file-backed.
 
 **The machine is shared.** It is a cloud VM that other heavy jobs also use. Interleaving keeps comparisons fair, but absolute
 figures vary between sessions. Figures from sessions taken under heavy load were discarded and re-run.
@@ -572,7 +572,7 @@ figures vary between sessions. Figures from sessions taken under heavy load were
 Pi in a 160×48 tmux pane ([`bench/tmux_check.py`](../bench/tmux_check.py)): keys sent with `send-keys`, the screen read back
 with `capture-pane`, and the model streaming at human pace, one event every 10 ms.
 
-| | Pi-Bolt 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 24 |
+| | Rapid Pi 0.8.5 | Pi on Bun 1.4.2 | Pi on Node 24 |
 |---|---:|---:|---:|
 | Streaming a 20,000-character answer: CPU | **0.6 s** | 8.0 s | 6.3 s |
 | Streaming a 60,000-character answer: CPU | **2.6 s** | 40.2 s | 38.7 s |
@@ -590,12 +590,12 @@ and measures `pi -p` from start to exit. Means of two runs on Linux, pinned to 4
 
 Both come from Pi's own code, not from the runtime. Pi draws a message again each time a few more words arrive, with a new
 component that lexes the whole Markdown text, renders and wraps every block and highlights every code block, so the cost of each
-redraw grows with the length of the answer. Pi-Bolt keeps what it lexed and rendered, and does again only the last two blocks
+redraw grows with the length of the answer. Rapid Pi keeps what it lexed and rendered, and does again only the last two blocks
 (where a block ends depends on the line after it); highlighted code is kept by language and text. What is drawn is the same, line
 for line and color for color (`bench/e2e_screen.py`). Pi also parses all of a tool call's arguments each time a few more
-characters arrive; Pi-Bolt parses them again only once they have grown by an eighth while they stream, and in full when the call
+characters arrive; Rapid Pi parses them again only once they have grown by an eighth while they stream, and in full when the call
 is complete. And Pi highlights every line of a file being written, and all of it again on every redraw once it is complete;
-Pi-Bolt highlights the lines a collapsed call shows, and the rest when the call is expanded.
+Rapid Pi highlights the lines a collapsed call shows, and the rest when the call is expanded.
 
 ## Plugins
 
@@ -604,18 +604,18 @@ character loop, timed inside Pi with `performance.now()`. See [PLUGINS.md](PLUGI
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="images/bench-plugins-dark.svg">
-  <img alt="Plugin hot loop and launch time: compiled in vs loaded at run time on Pi-Bolt, Pi-Bolt with JIT on, and Bun" src="images/bench-plugins-light.svg">
+  <img alt="Plugin hot loop and launch time: compiled in vs loaded at run time on Rapid Pi, Rapid Pi with JIT on, and Bun" src="images/bench-plugins-light.svg">
 </picture>
 
 | How the plugin runs | Launch to interactive | `/words` hot loop |
 |---|---:|---:|
-| **Compiled in**, Pi-Bolt (default, JIT off) | 52 ms | 55 ms |
-| Compiled in, Pi-Bolt JIT on | **50 ms** | 68 ms |
-| Loaded at run time, Pi-Bolt JIT off (interpreted) | 91 ms | 1,315 ms |
-| Loaded at run time, Pi-Bolt JIT on | 83 ms | 48 ms |
+| **Compiled in**, Rapid Pi (default, JIT off) | 52 ms | 55 ms |
+| Compiled in, Rapid Pi JIT on | **50 ms** | 68 ms |
+| Loaded at run time, Rapid Pi JIT off (interpreted) | 91 ms | 1,315 ms |
+| Loaded at run time, Rapid Pi JIT on | 83 ms | 48 ms |
 | Loaded at run time, Bun 1.4.2 | 244 ms | **45 ms** |
 
-Linux, medians of 5 sessions, each running `/words` 5 times, Pi-Bolt 0.7.3. The hot-loop figure is the median of runs 2–5.
+Linux, medians of 5 sessions, each running `/words` 5 times, Rapid Pi 0.7.3. The hot-loop figure is the median of runs 2–5.
 
 ## Questions
 
@@ -623,33 +623,33 @@ Linux, medians of 5 sessions, each running `/words` 5 times, Pi-Bolt 0.7.3. The 
 
 Because that plugin's code is not compiled at all on that build: it runs in JavaScriptCore's bytecode interpreter.
 
-- The default Pi-Bolt executable runs with the **JIT off**. Pi's own code does not need a JIT: all of it was compiled to machine
+- The default Rapid Pi executable runs with the **JIT off**. Pi's own code does not need a JIT: all of it was compiled to machine
   code when the executable was built.
 - A plugin loaded at **run time** (from `~/.pi/agent/extensions`, a project's `.pi/extensions` or a Pi package) is not part of
   that build. `jiti` turns its TypeScript into JavaScript when Pi starts. With no JIT, JavaScriptCore can then only interpret
   it, and an interpreter runs a tight loop 20–30× slower than compiled code.
 - Stock Bun's JIT compiles the loop after a few thousand iterations, which is how it gets to 45 ms.
 
-This is not a regression. The figure is the same in every Pi-Bolt release: it is the cost of loading code at run time into a
+This is not a regression. The figure is the same in every Rapid Pi release: it is the cost of loading code at run time into a
 runtime with no JIT. There are two ways around it:
 
 | | Plugin hot loop |
 |---|---:|
 | Compile the plugin in: `scripts/build-pi.sh --plugins` ([PLUGINS.md](PLUGINS.md)) | 55 ms, and nothing measurable at launch instead of 39 ms |
-| Use the JIT-on build (`pi-bolt-linux-x64-jit`) and keep loading it at run time | 48 ms after warm-up (Bun: 45 ms) |
+| Use the JIT-on build (`rapid-pi-linux-x64-jit`) and keep loading it at run time | 48 ms after warm-up (Bun: 45 ms) |
 | Load it at run time on the default (JIT-off) build | 1,315 ms |
 
 ## Reproduce
 
 ```bash
-scripts/package-release.sh                      # out/pi-bolt, out/pi-bolt-baseline, out/pi-bolt-jit
-scripts/build-pi.sh --plugins examples/plugins/plugins.ts --out out/pi-bolt-plugins
-scripts/build-pi.sh --plugins examples/plugins/plugins.ts --jit on --out out/pi-bolt-plugins-jit
+scripts/package-release.sh                      # out/rapid-pi, out/rapid-pi-baseline, out/rapid-pi-jit
+scripts/build-pi.sh --plugins examples/plugins/plugins.ts --out out/rapid-pi-plugins
+scripts/build-pi.sh --plugins examples/plugins/plugins.ts --jit on --out out/rapid-pi-plugins-jit
 scripts/prepare-pi.sh --tag v1.1.0 --dir ../pi-1.1.0                              # Pi as released
 scripts/build-pi.sh --stable --pi ../pi-1.1.0 --out out/pi-stable-upstream
-PIBOLT_PI=../pi-1.1.0 PIBOLT_STABLE_PI=out/pi-stable-upstream/pi PIBOLT_COMPARE="pi-bolt-0.7.0=<0.7.0's pi>" \
+RAPIDPI_PI=../pi-1.1.0 RAPIDPI_STABLE_PI=out/pi-stable-upstream/pi RAPIDPI_COMPARE="rapid-pi-0.7.0=<0.7.0's pi>" \
 	bench/run-suite.sh bench/results/my-run --cpus 8-15   # about an hour; then charts and tables from bench/report.py
-B="--cpus 8-15 --build pi-bolt=out/pi-bolt/pi --build bun=out/pi-stable-upstream/pi"
+B="--cpus 8-15 --build rapid-pi=out/rapid-pi/pi --build bun=out/pi-stable-upstream/pi"
 python3 bench/long_answer.py $B --sizes 20000,60000
 python3 bench/large_write.py $B --sizes 50,200
 python3 bench/tmux_load.py $B --steps md:20000

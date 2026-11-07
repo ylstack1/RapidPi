@@ -1,20 +1,20 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.background.OemSetup
-import opensec.pibolt.app.background.OemSetup.Vendor
+import opensec.rapidpi.app.background.OemSetup
+import opensec.rapidpi.app.background.OemSetup.Vendor
 import android.app.PendingIntent
-import opensec.pibolt.app.background.SessionActions
-import opensec.pibolt.app.background.SessionActions.Request
-import opensec.pibolt.app.background.SessionActions.Route
-import opensec.pibolt.app.background.WakePolicy
-import opensec.pibolt.app.background.WakePolicy.Decision
-import opensec.pibolt.app.background.WakePolicy.Work
-import opensec.pibolt.app.session.RunningSummary
-import opensec.pibolt.app.session.KeepAlive
-import opensec.pibolt.app.engine.BackgroundJobs
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.DialogKind
-import opensec.pibolt.protocol.session.DialogRequest
+import opensec.rapidpi.app.background.SessionActions
+import opensec.rapidpi.app.background.SessionActions.Request
+import opensec.rapidpi.app.background.SessionActions.Route
+import opensec.rapidpi.app.background.WakePolicy
+import opensec.rapidpi.app.background.WakePolicy.Decision
+import opensec.rapidpi.app.background.WakePolicy.Work
+import opensec.rapidpi.app.session.RunningSummary
+import opensec.rapidpi.app.session.KeepAlive
+import opensec.rapidpi.app.engine.BackgroundJobs
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.DialogKind
+import opensec.rapidpi.protocol.session.DialogRequest
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -96,11 +96,11 @@ class BackgroundRunTest {
     fun backgroundWorkKeepsTheServiceUp() {
         fun entry(running: Boolean = false, subagents: Boolean = false, shell: Boolean = false, compacting: Boolean = false) =
             RunningSummary.Entry("api", local = true, running = running, waiting = false, compacting = compacting, connected = true, subagents = subagents, shell = shell)
-        assertNull(RunningSummary.of(listOf(entry()), "Pi-Bolt"))
-        assertEquals("Background agents working", RunningSummary.of(listOf(entry(subagents = true)), "Pi-Bolt")!!.text)
-        assertEquals("Running a command", RunningSummary.of(listOf(entry(shell = true)), "Pi-Bolt")!!.text)
-        assertEquals("Compacting context", RunningSummary.of(listOf(entry(compacting = true)), "Pi-Bolt")!!.text)
-        assertEquals("Working", RunningSummary.of(listOf(entry(running = true, subagents = true)), "Pi-Bolt")!!.text)
+        assertNull(RunningSummary.of(listOf(entry()), "Rapid Pi"))
+        assertEquals("Background agents working", RunningSummary.of(listOf(entry(subagents = true)), "Rapid Pi")!!.text)
+        assertEquals("Running a command", RunningSummary.of(listOf(entry(shell = true)), "Rapid Pi")!!.text)
+        assertEquals("Compacting context", RunningSummary.of(listOf(entry(compacting = true)), "Rapid Pi")!!.text)
+        assertEquals("Working", RunningSummary.of(listOf(entry(running = true, subagents = true)), "Rapid Pi")!!.text)
     }
 
     @Test
@@ -129,22 +129,22 @@ class BackgroundRunTest {
         assertEquals(Vendor.Samsung, OemSetup.vendor("samsung", "samsung"))
         assertNull(OemSetup.vendor("motorola", "motorola"))
         assertNull(OemSetup.vendor("Google", "google"))
-        assertTrue(OemSetup.steps(null, "in.opensec.pibolt", "Pi-Bolt").isEmpty(), "stock Android: battery optimization only")
+        assertTrue(OemSetup.steps(null, "in.opensec.rapidpi", "Rapid Pi").isEmpty(), "stock Android: battery optimization only")
     }
 
     @Test
     fun xiaomiAsksForAutostartAndNoRestrictions() {
-        val steps = OemSetup.steps(Vendor.Xiaomi, "in.opensec.pibolt", "Pi-Bolt")
+        val steps = OemSetup.steps(Vendor.Xiaomi, "in.opensec.rapidpi", "Rapid Pi")
         assertEquals(listOf("autostart", "battery-saver"), steps.map { it.id })
         assertEquals("com.miui.permcenter.autostart.AutoStartManagementActivity", steps[0].screens.single().cls)
         val saver = steps[1].screens.single()
         assertEquals("com.miui.powerkeeper", saver.pkg)
-        assertEquals(mapOf("package_name" to "in.opensec.pibolt", "package_label" to "Pi-Bolt"), saver.extras)
+        assertEquals(mapOf("package_name" to "in.opensec.rapidpi", "package_label" to "Rapid Pi"), saver.extras)
     }
 
     @Test
     fun miuiBatteryRequestGoesToItsOwnScreenNotAChooser() {
-        val steps = OemSetup.steps(Vendor.Xiaomi, "in.opensec.pibolt", "Pi-Bolt")
+        val steps = OemSetup.steps(Vendor.Xiaomi, "in.opensec.rapidpi", "Rapid Pi")
         // What MIUI 13 (Redmi Note 10 Pro, Android 12) answers ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS with.
         val miui = listOf(
             "com.miui.powerkeeper" to "com.miui.powerkeeper.ui.HiddenAppsConfigActivity",
@@ -158,7 +158,7 @@ class BackgroundRunTest {
 
     @Test
     fun theFirstScreenThatExistsElseAppDetails() {
-        val step = OemSetup.steps(Vendor.Vivo, "p", "Pi-Bolt").single()
+        val step = OemSetup.steps(Vendor.Vivo, "p", "Rapid Pi").single()
         val second = step.screens[1]
         assertEquals(OemSetup.Target.Open(step.screens[0]), OemSetup.resolve(step) { true })
         assertEquals(OemSetup.Target.Open(second), OemSetup.resolve(step) { it == second })
@@ -314,12 +314,12 @@ class BackgroundRunTest {
 
     @Test
     fun aChatsNotificationNamesNoProject() {
-        // The chats' directory is HOME/.pibolt/chats: a "needs an answer" re-posted from a notification named the project
+        // The chats' directory is HOME/.rapidpi/chats: a "needs an answer" re-posted from a notification named the project
         // "chats", so its tap opened nothing, or a project called "chats".
-        val chats = File("/data/data/in.opensec.pibolt/files/home/.pibolt/chats")
-        assertNull(opensec.pibolt.app.session.Notifications.projectOf(chats, chat = true))
-        assertEquals("app", opensec.pibolt.app.session.Notifications.projectOf(File("/p/app"), chat = false))
-        assertNull(opensec.pibolt.app.session.Notifications.projectOf(null, chat = false))
+        val chats = File("/data/data/in.opensec.rapidpi/files/home/.rapidpi/chats")
+        assertNull(opensec.rapidpi.app.session.Notifications.projectOf(chats, chat = true))
+        assertEquals("app", opensec.rapidpi.app.session.Notifications.projectOf(File("/p/app"), chat = false))
+        assertNull(opensec.rapidpi.app.session.Notifications.projectOf(null, chat = false))
     }
 
     @Test

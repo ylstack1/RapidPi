@@ -1,4 +1,4 @@
-package opensec.pibolt.app.checkpoints
+package opensec.rapidpi.app.checkpoints
 
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -102,8 +102,8 @@ class Git(
 
     companion object {
         private val KEEP = setOf("GIT_EXEC_PATH", "GIT_TEMPLATE_DIR")
-        private const val AUTHOR = "Pi-Bolt checkpoints"
-        private const val EMAIL = "checkpoints@pi-bolt.invalid"
+        private const val AUTHOR = "Rapid Pi checkpoints"
+        private const val EMAIL = "checkpoints@rapid-pi.invalid"
         private const val NULL_DEVICE = "/dev/null"
         private const val MAX_OUT = 64 * 1024 * 1024
         private const val MAX_ERR = 16 * 1024

@@ -1,15 +1,15 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.AccentId
-import opensec.pibolt.app.data.ThemeId
-import opensec.pibolt.app.ui.diagram.DiagramGate
-import opensec.pibolt.app.ui.diagram.DiagramGate.Outcome
-import opensec.pibolt.app.ui.diagram.DiagramKey
-import opensec.pibolt.app.ui.diagram.DiagramText
-import opensec.pibolt.app.ui.diagram.DiagramView
-import opensec.pibolt.app.ui.diagram.JsonText
-import opensec.pibolt.app.ui.diagram.MermaidTheme
-import opensec.pibolt.app.ui.theme.PiColors
+import opensec.rapidpi.app.data.AccentId
+import opensec.rapidpi.app.data.ThemeId
+import opensec.rapidpi.app.ui.diagram.DiagramGate
+import opensec.rapidpi.app.ui.diagram.DiagramGate.Outcome
+import opensec.rapidpi.app.ui.diagram.DiagramKey
+import opensec.rapidpi.app.ui.diagram.DiagramText
+import opensec.rapidpi.app.ui.diagram.DiagramView
+import opensec.rapidpi.app.ui.diagram.JsonText
+import opensec.rapidpi.app.ui.diagram.MermaidTheme
+import opensec.rapidpi.app.ui.theme.PiColors
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

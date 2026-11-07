@@ -18,22 +18,22 @@ val keyPassword: String? = providers.environmentVariable("ANDROID_KEY_PASSWORD")
 val canSign = listOf(keystorePath, keystorePassword, keyAlias, keyPassword).all { !it.isNullOrBlank() }
 
 // CI passes the release tag's version (v1.2.3 -> 1.2.3). versionCode is 1.2.3 -> 10203.
-val appVersion: String = providers.environmentVariable("PIBOLT_APP_VERSION").orNull?.removePrefix("android-")?.removePrefix("v") ?: "0.1.0"
+val appVersion: String = providers.environmentVariable("RAPIDPI_APP_VERSION").orNull?.removePrefix("android-")?.removePrefix("v") ?: "0.1.0"
 val appVersionCode: Int = appVersion.split(".").map { it.takeWhile(Char::isDigit).toIntOrNull() ?: 0 }
     .let { (it.getOrElse(0) { 0 } * 10000) + (it.getOrElse(1) { 0 } * 100) + it.getOrElse(2) { 0 } }
     .coerceAtLeast(1)
 
 // Debug builds only: point the in-app update at a test server (android/README.md, "Updates"). Release builds always use
-// pi-bolt.opensec.in/android.json and GitHub release downloads; these fields are empty there.
-val updateManifestOverride: String = providers.environmentVariable("PIBOLT_UPDATE_MANIFEST_URL").orNull.orEmpty()
-val updateApkPrefixOverride: String = providers.environmentVariable("PIBOLT_UPDATE_APK_PREFIX").orNull.orEmpty()
+// rapid-pi.opensec.in/android.json and GitHub release downloads; these fields are empty there.
+val updateManifestOverride: String = providers.environmentVariable("RAPIDPI_UPDATE_MANIFEST_URL").orNull.orEmpty()
+val updateApkPrefixOverride: String = providers.environmentVariable("RAPIDPI_UPDATE_APK_PREFIX").orNull.orEmpty()
 
 // GitHub sign-in through the OAuth device flow needs the client id of a GitHub OAuth App with Device Flow enabled
-// (android/README.md, "GitHub"). From the Gradle property `pibolt.githubClientId` or PIBOLT_GITHUB_CLIENT_ID; empty by
+// (android/README.md, "GitHub"). From the Gradle property `rapidpi.githubClientId` or RAPIDPI_GITHUB_CLIENT_ID; empty by
 // default, and then the app offers a personal access token instead. A client id is public (not a secret).
-val githubClientId: String = (providers.gradleProperty("pibolt.githubClientId").orNull ?: providers.environmentVariable("PIBOLT_GITHUB_CLIENT_ID").orNull)
+val githubClientId: String = (providers.gradleProperty("rapidpi.githubClientId").orNull ?: providers.environmentVariable("RAPIDPI_GITHUB_CLIENT_ID").orNull)
     .orEmpty().trim()
-    .also { require(it.all { c -> c.isLetterOrDigit() || c == '.' || c == '_' || c == '-' }) { "pibolt.githubClientId has unexpected characters" } }
+    .also { require(it.all { c -> c.isLetterOrDigit() || c == '.' || c == '_' || c == '-' }) { "rapidpi.githubClientId has unexpected characters" } }
 
 fun quoted(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
@@ -105,7 +105,7 @@ abstract class FetchMermaid : DefaultTask() {
 val fetchMermaid = tasks.register<FetchMermaid>("fetchMermaid") {
     version.set(mermaidVersion)
     integrity.set(mermaidIntegrity)
-    cacheDir.set(rootProject.layout.projectDirectory.dir(".gradle/pibolt-downloads"))
+    cacheDir.set(rootProject.layout.projectDirectory.dir(".gradle/rapidpi-downloads"))
     outputDir.set(layout.buildDirectory.dir("generated/mermaid"))
 }
 
@@ -116,13 +116,13 @@ androidComponents {
 }
 
 android {
-    namespace = "opensec.pibolt.app"
+    namespace = "opensec.rapidpi.app"
     compileSdk = 36
     // Builds libtermux.so (src/main/jni). Pinned; CI installs this exact version (.github/workflows/android.yml).
     ndkVersion = "28.2.13676358"
 
     defaultConfig {
-        applicationId = "in.opensec.pibolt"
+        applicationId = "in.opensec.rapidpi"
         minSdk = 26
         targetSdk = 36
         versionCode = appVersionCode
@@ -174,7 +174,7 @@ android {
             buildConfigField("String", "UPDATE_MANIFEST_OVERRIDE", quoted(updateManifestOverride))
             buildConfigField("String", "UPDATE_APK_PREFIX_OVERRIDE", quoted(updateApkPrefixOverride))
         }
-        // No applicationIdSuffix for debug: the engine's glibc has the data path /data/data/in.opensec.pibolt compiled in.
+        // No applicationIdSuffix for debug: the engine's glibc has the data path /data/data/in.opensec.rapidpi compiled in.
     }
 
     compileOptions {
@@ -215,9 +215,9 @@ composeCompiler {
     // :protocol's immutable data classes (and File, JsonObject) as stable: see the file's header.
     stabilityConfigurationFiles.add(layout.projectDirectory.file("compose-stability.conf"))
     // Compose compiler reports, for smoothness work (android/README.md, "Frame timing"):
-    // ./gradlew :app:compileReleaseKotlin -Ppibolt.composeReports=true writes each class's stability and each
+    // ./gradlew :app:compileReleaseKotlin -Prapidpi.composeReports=true writes each class's stability and each
     // composable's skippability to app/build/compose-reports, and the totals to app/build/compose-metrics.
-    if (providers.gradleProperty("pibolt.composeReports").orNull == "true") {
+    if (providers.gradleProperty("rapidpi.composeReports").orNull == "true") {
         reportsDestination = layout.buildDirectory.dir("compose-reports")
         metricsDestination = layout.buildDirectory.dir("compose-metrics")
     }

@@ -1,4 +1,4 @@
-# Builds the Pi-Bolt runtime on Windows: Bun on the patched WebKit (JavaScriptCore with the ahead-of-time compiler), release
+# Builds the Rapid Pi runtime on Windows: Bun on the patched WebKit (JavaScriptCore with the ahead-of-time compiler), release
 # flags. Windows' scripts/build-runtime.sh.
 # Usage: scripts\build-runtime.ps1 [-Lto on|off] [-Jobs N] [-BuildDir DIR]
 #   -Lto off    no link-time optimization: a faster build that needs less memory, for working on the engine
@@ -15,7 +15,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $Root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$Work = if ($env:PIBOLT_WORK) { $env:PIBOLT_WORK } else { Join-Path $Root '.work' }
+$Work = if ($env:RAPIDPI_WORK) { $env:RAPIDPI_WORK } else { Join-Path $Root '.work' }
 function Log($message) { Write-Host "==> $message" -ForegroundColor Cyan }
 function Die($message) { Write-Host "error: $message" -ForegroundColor Red; exit 1 }
 foreach ($tool in 'bun', 'cmake', 'cargo', 'clang-cl') { if (-not (Get-Command $tool -ErrorAction SilentlyContinue)) { Die "'$tool' is required but not installed" } }

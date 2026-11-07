@@ -1,10 +1,10 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import opensec.pibolt.protocol.rpc.ImageAttachment
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.rpc.imagesJson
+import opensec.rapidpi.protocol.rpc.ImageAttachment
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.rpc.imagesJson
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

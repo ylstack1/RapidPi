@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#050505">
-<title>Quickstart · Pi-Bolt documentation</title>
-<meta name="description" content="Start Pi-Bolt in a project, connect a model, run a prompt, and use Pi-Bolt alongside Pi.">
-<meta property="og:title" content="Quickstart · Pi-Bolt documentation">
-<meta property="og:description" content="Start Pi-Bolt in a project, connect a model, run a prompt, and use Pi-Bolt alongside Pi.">
-<meta property="og:url" content="https://pi-bolt.opensec.in/docs/quickstart.html">
-<link rel="canonical" href="https://pi-bolt.opensec.in/docs/quickstart.html">
+<title>Quickstart · Rapid Pi documentation</title>
+<meta name="description" content="Start Rapid Pi in a project, connect a model, run a prompt, and use Rapid Pi alongside Pi.">
+<meta property="og:title" content="Quickstart · Rapid Pi documentation">
+<meta property="og:description" content="Start Rapid Pi in a project, connect a model, run a prompt, and use Rapid Pi alongside Pi.">
+<meta property="og:url" content="https://rapid-pi.opensec.in/docs/quickstart.html">
+<link rel="canonical" href="https://rapid-pi.opensec.in/docs/quickstart.html">
 <link rel="icon" href="../logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
     </button>
     <nav class="top" aria-label="Main">
       <a href="../#benchmarks">Benchmarks</a>
-      <a href="https://github.com/opensec-git/Pi-Bolt/releases/latest">Releases</a>
-      <a class="gh" href="https://github.com/opensec-git/Pi-Bolt"><span>GitHub</span><i aria-hidden="true">↗</i></a>
+      <a href="https://github.com/opensec-git/Rapid Pi/releases/latest">Releases</a>
+      <a class="gh" href="https://github.com/opensec-git/Rapid Pi"><span>GitHub</span><i aria-hidden="true">↗</i></a>
     </nav>
   </div>
 </header>
@@ -68,20 +68,20 @@
     <article class="doc">
       <p class="eyebrow">Get started</p>
 <h1>Quickstart</h1>
-<p class="lede">If you use Pi already, Pi-Bolt works with what you have: run <code>pi-bolt</code> instead of <code>pi</code>. If you
+<p class="lede">If you use Pi already, Rapid Pi works with what you have: run <code>rapid-pi</code> instead of <code>pi</code>. If you
   are new to Pi, this page takes you from install to a first finished task.</p>
 
 <ol class="steps">
   <li>
-    <strong>Install Pi-Bolt</strong>
-<pre data-label="Terminal"><span class="p">$ </span>curl -fsSL https://pi-bolt.opensec.in/install.sh | sh</pre>
+    <strong>Install Rapid Pi</strong>
+<pre data-label="Terminal"><span class="p">$ </span>curl -fsSL https://rapid-pi.opensec.in/install.sh | sh</pre>
     <p>On Windows or with npm, see <a href="installation.html">Installation</a>.</p>
   </li>
   <li>
     <strong>Start it in a project</strong>
 <pre data-label="Terminal"><span class="p">$ </span>cd my-project
-<span class="p">$ </span>pi-bolt</pre>
-    <p>Pi-Bolt opens Pi's terminal interface in the current folder. That folder is what the agent reads and edits.</p>
+<span class="p">$ </span>rapid-pi</pre>
+    <p>Rapid Pi opens Pi's terminal interface in the current folder. That folder is what the agent reads and edits.</p>
   </li>
   <li>
     <strong>Connect a model</strong>
@@ -98,17 +98,17 @@
 </ol>
 
 <h2 id="common-commands">Common commands<a class="anchor" href="#common-commands" aria-label="Link to this section">#</a></h2>
-<pre data-label="Terminal"><span class="p">$ </span>pi-bolt "Explain the build setup"       <span class="c"># start with a prompt</span>
-<span class="p">$ </span>pi-bolt -p "List the TODOs in src/"     <span class="c"># run one prompt, print the answer, exit</span>
-<span class="p">$ </span>pi-bolt -c                              <span class="c"># continue the last session here</span>
-<span class="p">$ </span>pi-bolt -r                              <span class="c"># pick a session to resume</span>
-<span class="p">$ </span>pi-bolt --model sonnet:high             <span class="c"># a model, with a thinking level</span>
-<span class="p">$ </span>pi-bolt @README.md "Summarize this"     <span class="c"># include a file</span></pre>
-<p><code>pi-bolt --help</code> lists every option. They are Pi's options; Pi's <a href="https://pi.dev/docs/latest/cli">CLI
+<pre data-label="Terminal"><span class="p">$ </span>rapid-pi "Explain the build setup"       <span class="c"># start with a prompt</span>
+<span class="p">$ </span>rapid-pi -p "List the TODOs in src/"     <span class="c"># run one prompt, print the answer, exit</span>
+<span class="p">$ </span>rapid-pi -c                              <span class="c"># continue the last session here</span>
+<span class="p">$ </span>rapid-pi -r                              <span class="c"># pick a session to resume</span>
+<span class="p">$ </span>rapid-pi --model sonnet:high             <span class="c"># a model, with a thinking level</span>
+<span class="p">$ </span>rapid-pi @README.md "Summarize this"     <span class="c"># include a file</span></pre>
+<p><code>rapid-pi --help</code> lists every option. They are Pi's options; Pi's <a href="https://pi.dev/docs/latest/cli">CLI
   reference</a> describes them in full.</p>
 
-<h2 id="using-pi-bolt-next-to-pi">Using Pi-Bolt next to Pi<a class="anchor" href="#using-pi-bolt-next-to-pi" aria-label="Link to this section">#</a></h2>
-<p>Pi-Bolt and Pi share <code>~/.pi/agent</code>, so both see the same:</p>
+<h2 id="using-rapid-pi-next-to-pi">Using Rapid Pi next to Pi<a class="anchor" href="#using-rapid-pi-next-to-pi" aria-label="Link to this section">#</a></h2>
+<p>Rapid Pi and Pi share <code>~/.pi/agent</code>, so both see the same:</p>
 <ul>
   <li>providers, logins and API keys (<code>auth.json</code>, <code>models.json</code>);</li>
   <li>settings (<code>settings.json</code>);</li>
@@ -116,36 +116,36 @@
   <li>extensions, skills, prompt templates and themes.</li>
 </ul>
 <p>Install an extension with either command and both load it:</p>
-<pre data-label="Terminal"><span class="p">$ </span>pi-bolt install npm:opensec-pi-todo</pre>
-<p>A tool that starts Pi by running <code>pi</code> keeps using stock Pi. To make it use Pi-Bolt, point it at
-  <code>pi-bolt</code>: see <a href="integrations.html">Integrations</a>.</p>
+<pre data-label="Terminal"><span class="p">$ </span>rapid-pi install npm:opensec-pi-todo</pre>
+<p>A tool that starts Pi by running <code>pi</code> keeps using stock Pi. To make it use Rapid Pi, point it at
+  <code>rapid-pi</code>: see <a href="integrations.html">Integrations</a>.</p>
 
 <h2 id="next-steps">Next steps<a class="anchor" href="#next-steps" aria-label="Link to this section">#</a></h2>
 <div class="cards">
   <a class="card" href="builds.html"><strong>Choose a build</strong><span>When to use the JIT build instead of the default.</span></a>
-  <a class="card" href="extensions.html"><strong>Extensions</strong><span>How extensions run in Pi-Bolt, and which need the JIT build.</span></a>
+  <a class="card" href="extensions.html"><strong>Extensions</strong><span>How extensions run in Rapid Pi, and which need the JIT build.</span></a>
   <a class="card" href="https://pi.dev/docs/latest/usage"><strong>Use Pi in the terminal</strong><span>Pi's guide to the interface, commands and shortcuts.</span></a>
   <a class="card" href="https://pi.dev/docs/latest/sessions"><strong>Sessions</strong><span>Resume, branch and export your work, in Pi's docs.</span></a>
 </div>
 
     </article>
     <div class="doc-foot">
-      <a class="edit" href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs-site/pages/quickstart.html">Edit this page on GitHub</a>
+      <a class="edit" href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs-site/pages/quickstart.html">Edit this page on GitHub</a>
     </div>
     <nav class="pager" aria-label="Previous and next page"><a class="prev" href="installation.html"><span>Previous</span>Installation</a><a class="next" href="builds.html"><span>Next</span>Choose a build</a></nav>
   </main>
 
   <aside class="toc-col">
-    <nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li class="l2"><a href="#common-commands">Common commands</a></li><li class="l2"><a href="#using-pi-bolt-next-to-pi">Using Pi-Bolt next to Pi</a></li><li class="l2"><a href="#next-steps">Next steps</a></li></ul></nav>
+    <nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li class="l2"><a href="#common-commands">Common commands</a></li><li class="l2"><a href="#using-rapid-pi-next-to-pi">Using Rapid Pi next to Pi</a></li><li class="l2"><a href="#next-steps">Next steps</a></li></ul></nav>
   </aside>
 </div>
 
 <footer>
   <div class="foot">
-    <p>© 2026 OpenSec · <strong>Pi-Bolt</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
+    <p>© 2026 OpenSec · <strong>Rapid Pi</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
       affiliated with Pi's authors or with Oven. MIT licensed.</p>
-    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Pi-Bolt">GitHub</a> ·
-      <a href="https://www.npmjs.com/package/pi-bolt">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
+    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Rapid Pi">GitHub</a> ·
+      <a href="https://www.npmjs.com/package/rapid-pi">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
   </div>
 </footer>
 

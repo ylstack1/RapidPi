@@ -1,6 +1,6 @@
-package opensec.pibolt.app.ui.projects.transfer
+package opensec.rapidpi.app.ui.projects.transfer
 
-/** One thing shared into Pi-Bolt: its content URI (as a string), MIME type and display name when known. */
+/** One thing shared into Rapid Pi: its content URI (as a string), MIME type and display name when known. */
 data class SharedItem(val uri: String, val mime: String?, val name: String? = null)
 
 /** What arrived with ACTION_SEND / ACTION_SEND_MULTIPLE. */

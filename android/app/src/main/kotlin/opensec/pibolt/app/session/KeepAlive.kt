@@ -1,7 +1,7 @@
-package opensec.pibolt.app.session
+package opensec.rapidpi.app.session
 
-import opensec.pibolt.app.engine.BackgroundJobs
-import opensec.pibolt.protocol.session.SessionState
+import opensec.rapidpi.app.engine.BackgroundJobs
+import opensec.rapidpi.protocol.session.SessionState
 
 /**
  * When a session needs [SessionService], the foreground service that keeps the app's network with the app away. Pure,

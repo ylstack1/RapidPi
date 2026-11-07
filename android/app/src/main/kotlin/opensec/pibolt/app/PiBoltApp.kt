@@ -1,4 +1,4 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import android.app.Activity
 import android.app.Application
@@ -15,41 +15,41 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import opensec.pibolt.app.cost.SpendStore
-import opensec.pibolt.app.data.DeviceIdentity
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.app.data.HostStore
-import opensec.pibolt.app.data.RecentPrompts
-import opensec.pibolt.app.data.SettingsStore
-import opensec.pibolt.app.engine.EngineApi
-import opensec.pibolt.app.engine.LocalEngine
-import opensec.pibolt.app.engine.ModelsFile
-import opensec.pibolt.app.git.GitRunner
-import opensec.pibolt.app.git.ProcessGitRunner
-import opensec.pibolt.app.git.github.GitCredentialBroker
-import opensec.pibolt.app.git.github.GitHub
-import opensec.pibolt.app.git.github.KeystoreBox
-import opensec.pibolt.app.git.github.LocalSocketListener
-import opensec.pibolt.app.git.github.PrefsKeyValue
-import opensec.pibolt.app.git.github.TokenStore
-import opensec.pibolt.app.preview.PreviewBroker
-import opensec.pibolt.app.preview.PreviewController
-import opensec.pibolt.app.preview.PreviewReply
-import opensec.pibolt.app.session.Notifications
-import opensec.pibolt.app.terminal.Terminals
-import opensec.pibolt.app.session.LiveRegistry
-import opensec.pibolt.app.session.RunMarks
-import opensec.pibolt.app.ui.chats.Chats
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.session.SessionService
-import opensec.pibolt.app.ui.session.features2.SessionAlerts
-import opensec.pibolt.app.update.UpdateManager
-import opensec.pibolt.app.update.UpdateNotifications
-import opensec.pibolt.protocol.Base64Url
-import opensec.pibolt.protocol.PairingPayload
-import opensec.pibolt.protocol.backend.RemoteBackend
+import opensec.rapidpi.app.cost.SpendStore
+import opensec.rapidpi.app.data.DeviceIdentity
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.app.data.HostStore
+import opensec.rapidpi.app.data.RecentPrompts
+import opensec.rapidpi.app.data.SettingsStore
+import opensec.rapidpi.app.engine.EngineApi
+import opensec.rapidpi.app.engine.LocalEngine
+import opensec.rapidpi.app.engine.ModelsFile
+import opensec.rapidpi.app.git.GitRunner
+import opensec.rapidpi.app.git.ProcessGitRunner
+import opensec.rapidpi.app.git.github.GitCredentialBroker
+import opensec.rapidpi.app.git.github.GitHub
+import opensec.rapidpi.app.git.github.KeystoreBox
+import opensec.rapidpi.app.git.github.LocalSocketListener
+import opensec.rapidpi.app.git.github.PrefsKeyValue
+import opensec.rapidpi.app.git.github.TokenStore
+import opensec.rapidpi.app.preview.PreviewBroker
+import opensec.rapidpi.app.preview.PreviewController
+import opensec.rapidpi.app.preview.PreviewReply
+import opensec.rapidpi.app.session.Notifications
+import opensec.rapidpi.app.terminal.Terminals
+import opensec.rapidpi.app.session.LiveRegistry
+import opensec.rapidpi.app.session.RunMarks
+import opensec.rapidpi.app.ui.chats.Chats
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.session.SessionService
+import opensec.rapidpi.app.ui.session.features2.SessionAlerts
+import opensec.rapidpi.app.update.UpdateManager
+import opensec.rapidpi.app.update.UpdateNotifications
+import opensec.rapidpi.protocol.Base64Url
+import opensec.rapidpi.protocol.PairingPayload
+import opensec.rapidpi.protocol.backend.RemoteBackend
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -74,7 +74,7 @@ class PiBoltApp : Application() {
         private set
 
     /**
-     * The preview tools' socket (assets/extensions/pibolt-preview.js): project engines get its path; requests from the
+     * The preview tools' socket (assets/extensions/rapidpi-preview.js): project engines get its path; requests from the
      * chats' directory are refused (chat engines get no path and no tools either).
      */
     val previewBroker: PreviewBroker by lazy {
@@ -96,7 +96,7 @@ class PiBoltApp : Application() {
     /** GitHub sign-in (token sealed by the Keystore) and REST calls. A new token restarts the idle engine with it. */
     val github: GitHub by lazy {
         GitHub(
-            store = TokenStore(PrefsKeyValue(getSharedPreferences("github", MODE_PRIVATE)), KeystoreBox("pibolt-github-token")),
+            store = TokenStore(PrefsKeyValue(getSharedPreferences("github", MODE_PRIVATE)), KeystoreBox("rapidpi-github-token")),
             http = http.newBuilder().readTimeout(30, TimeUnit.SECONDS).callTimeout(60, TimeUnit.SECONDS).pingInterval(0, TimeUnit.SECONDS).build(),
             clientId = BuildConfig.GITHUB_CLIENT_ID,
             onCredentialsChanged = { localEngine.stopIdleEngines("GitHub credentials changed") },
@@ -117,7 +117,7 @@ class PiBoltApp : Application() {
     private val live = LiveRegistry<SessionController>(SystemClock::elapsedRealtime)
 
     /**
-     * Every live session: up to [opensec.pibolt.app.engine.LivePolicy.MAX_LIVE] on this phone's engine (several in one
+     * Every live session: up to [opensec.rapidpi.app.engine.LivePolicy.MAX_LIVE] on this phone's engine (several in one
      * project when one was busy as another opened), each with its own engine process, and at most one with a computer. They run side by side: opening or
      * switching to one stops none of the others.
      */

@@ -1,11 +1,11 @@
 # Third-party notices
 
-Pi-Bolt's own files (scripts, benchmarks, tests, documentation, examples) are under the [MIT license](LICENSE). Pi-Bolt builds on,
+Rapid Pi's own files (scripts, benchmarks, tests, documentation, examples) are under the [MIT license](LICENSE). Rapid Pi builds on,
 patches and redistributes the following projects, each under its own license.
 
 | Project | Used for | License |
 |---|---|---|
-| [Pi](https://github.com/earendil-works/pi) (coding agent), © Mario Zechner | The application compiled by Pi-Bolt; the release executables contain it; `bench/fixtures/` holds four of its source files as test input | MIT |
+| [Pi](https://github.com/earendil-works/pi) (coding agent), © Mario Zechner | The application compiled by Rapid Pi; the release executables contain it; `bench/fixtures/` holds four of its source files as test input | MIT |
 | [Bun](https://github.com/oven-sh/bun), © Oven | The runtime; `patches/bun.patch` modifies it | MIT (see Bun's `LICENSE.md` for the libraries it links) |
 | [WebKit / JavaScriptCore](https://github.com/oven-sh/WebKit) | The JavaScript engine; `patches/webkit.patch` modifies it | LGPL-2.0 and BSD-2-Clause (per file) |
 | [ICU](https://github.com/unicode-org/icu) | Unicode support, linked statically into the Linux release runtime (the macOS runtime uses the system's) | Unicode License v3 |

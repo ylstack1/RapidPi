@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Points https://pi-bolt.opensec.in/android, and the home page's Android tab, at an Android app release: writes android.json
+# Points https://rapid-pi.opensec.in/android, and the home page's Android tab, at an Android app release: writes android.json
 # on the gh-pages branch with the APK's URL, size, SHA-256 and signing certificate digest, and points android.html's fallback
 # at the same release. The facts come from the published release (the APK is downloaded and its checksum checked), so the
 # site offers exactly what GitHub serves. The Android release workflow runs this after publishing; run it by hand to point
@@ -20,9 +20,9 @@ VERSION="${1:-}"
 DRY_RUN="${2:-}"
 [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && ( -z "$DRY_RUN" || "$DRY_RUN" == "--dry-run" ) ]] ||
 	die "usage: publish-android-download.sh VERSION [--dry-run] (VERSION like 0.1.0)"
-REPO="${GITHUB_REPOSITORY:-opensec-git/Pi-Bolt}"
+REPO="${GITHUB_REPOSITORY:-opensec-git/Rapid Pi}"
 TAG="android-v$VERSION"
-APK="pi-bolt-android-$VERSION.apk"
+APK="rapid-pi-android-$VERSION.apk"
 PAGES_POLL_SECONDS="${PAGES_POLL_SECONDS:-5}"
 PAGES_POLL_TRIES="${PAGES_POLL_TRIES:-24}"
 WORK="$(mktemp -d)"
@@ -92,9 +92,9 @@ if page is not None:
     release = json.loads(release_bytes)
     version = release["version"]
     mb = round(release["size"] / 1048576)
-    new = re.sub(r"releases/download/android-v[0-9.]+/pi-bolt-android-[0-9.]+\.apk", f"releases/download/android-v{version}/pi-bolt-android-{version}.apk", html)
+    new = re.sub(r"releases/download/android-v[0-9.]+/rapid-pi-android-[0-9.]+\.apk", f"releases/download/android-v{version}/rapid-pi-android-{version}.apk", html)
     new = re.sub(r"releases/tag/android-v[0-9.]+\">android-v[0-9.]+", f"releases/tag/android-v{version}\">android-v{version}", new)
-    new = re.sub(r"Pi-Bolt for Android · [0-9.]+", f"Pi-Bolt for Android · {version}", new)
+    new = re.sub(r"Rapid Pi for Android · [0-9.]+", f"Rapid Pi for Android · {version}", new)
     new = re.sub(r"Version [0-9.]+ · about [0-9]+ MB", f"Version {version} · about {mb} MB", new)
     if new != html:
         open(os.path.join(work, "next", "android.html"), "wb").write(new.encode("utf-8"))

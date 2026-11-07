@@ -1,7 +1,7 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.terminal.DevServerPorts
-import opensec.pibolt.app.terminal.ProcNetTcp
+import opensec.rapidpi.app.terminal.DevServerPorts
+import opensec.rapidpi.app.terminal.ProcNetTcp
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

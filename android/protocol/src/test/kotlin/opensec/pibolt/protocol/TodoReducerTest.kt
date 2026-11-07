@@ -1,9 +1,9 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.TodoStatus
-import opensec.pibolt.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.TodoStatus
+import opensec.rapidpi.protocol.session.ToolItem
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame

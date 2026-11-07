@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Writes the compile kit: what `pi-bolt compile` needs, besides the runtime, to build the executable a release has with
+ * Writes the compile kit: what `rapid-pi compile` needs, besides the runtime, to build the executable a release has with
  * extensions compiled in, on a machine with no copy of this repository. scripts/build-pi.sh --kit runs it after a build.
  *
  * The kit is a folder:
@@ -130,7 +130,7 @@ const out = resolve(options.out);
 const apiModules = PROVIDED.flatMap((name) => providedModules(realpathSync(join(root, "node_modules", ...name.split("/")))));
 const work = mkdtempSync(join(tmpdir(), "pibolt-kit-"));
 const metafile = join(work, "meta.json");
-// (Without the build's --define of PIBOLT_BUILD: nothing is left out for it, so this reads what the build read, and more.)
+// (Without the build's --define of RAPIDPI_BUILD: nothing is left out for it, so this reads what the build read, and more.)
 const bundled = spawnSync(
 	options.bun,
 	[
@@ -252,11 +252,11 @@ mkdirSync(profileDir, { recursive: true });
 if (existsSync(profile)) cpSync(profile, profileDir, { recursive: true });
 cpSync(join(HERE, "..", "packages", "coding-agent", "src", "gen-plugin-manifest.mjs"), join(out, "gen-plugin-manifest.mjs"));
 
-// The compile command, with the profile's paths as @KIT@/profile/... (where `pi-bolt compile` unpacks the kit).
+// The compile command, with the profile's paths as @KIT@/profile/... (where `rapid-pi compile` unpacks the kit).
 const kitPath = (value) => value.split(profile).join("@KIT@/profile");
 const piVersion = JSON.parse(readFileSync(join(agent, "package.json"), "utf8")).version;
 const kit = {
-	piBolt: options.version,
+	rapidPi: options.version,
 	pi: piVersion,
 	platform: options.platform,
 	agent: `tree/${relative(root, agent).split(sep).join("/")}`,

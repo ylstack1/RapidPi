@@ -1,10 +1,10 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.secrets.ProjectSecrets
-import opensec.pibolt.app.secrets.Secret
-import opensec.pibolt.app.secrets.SecretBox
-import opensec.pibolt.app.secrets.SecretEnv
-import opensec.pibolt.app.terminal.shellEnvironment
+import opensec.rapidpi.app.secrets.ProjectSecrets
+import opensec.rapidpi.app.secrets.Secret
+import opensec.rapidpi.app.secrets.SecretBox
+import opensec.rapidpi.app.secrets.SecretEnv
+import opensec.rapidpi.app.terminal.shellEnvironment
 import java.io.File
 import java.nio.file.Files
 import javax.crypto.KeyGenerator
@@ -98,8 +98,8 @@ class ProjectSecretsTest {
 
     @Test
     fun theUserAndEnginePathsNameTheSameProject() {
-        assertEquals("/data/data/in.opensec.pibolt/files/home/projects/app", ProjectSecrets.keyOf(File("/data/user/0/in.opensec.pibolt/files/home/projects/app/")))
-        assertEquals("/data/data/in.opensec.pibolt/files/home/projects/app", ProjectSecrets.keyOf(File("/data/data/in.opensec.pibolt/files/home/projects/./app")))
+        assertEquals("/data/data/in.opensec.rapidpi/files/home/projects/app", ProjectSecrets.keyOf(File("/data/user/0/in.opensec.rapidpi/files/home/projects/app/")))
+        assertEquals("/data/data/in.opensec.rapidpi/files/home/projects/app", ProjectSecrets.keyOf(File("/data/data/in.opensec.rapidpi/files/home/projects/./app")))
     }
 
     @Test
@@ -119,7 +119,7 @@ class ProjectSecretsTest {
         assertNotNull(SecretEnv.nameProblem(""))
         assertNotNull(SecretEnv.nameProblem("1ABC"))
         assertNotNull(SecretEnv.nameProblem("WITH-DASH"))
-        for (reserved in listOf("PATH", "HOME", "SHELL", "LD_PRELOAD", "LD_LIBRARY_PATH", "XDG_CONFIG_HOME", "SSL_CERT_FILE", "GIT_CONFIG_COUNT", "PIBOLT_GITHUB_TOKEN")) {
+        for (reserved in listOf("PATH", "HOME", "SHELL", "LD_PRELOAD", "LD_LIBRARY_PATH", "XDG_CONFIG_HOME", "SSL_CERT_FILE", "GIT_CONFIG_COUNT", "RAPIDPI_GITHUB_TOKEN")) {
             assertNotNull(SecretEnv.nameProblem(reserved), reserved)
         }
     }

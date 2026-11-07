@@ -1,7 +1,7 @@
-<!-- {"title": "How it works", "description": "How Pi-Bolt compiles Pi ahead of time: bundling, bytecode, an ahead-of-time compiler, a prebuilt heap and a training profile."} -->
+<!-- {"title": "How it works", "description": "How Rapid Pi compiles Pi ahead of time: bundling, bytecode, an ahead-of-time compiler, a prebuilt heap and a training profile."} -->
 <p class="eyebrow">Reference</p>
 <h1>How it works</h1>
-<p class="lede">Pi-Bolt does at build time the work that Bun or Node does at every launch: parsing Pi's code, loading its modules
+<p class="lede">Rapid Pi does at build time the work that Bun or Node does at every launch: parsing Pi's code, loading its modules
   and compiling its hot functions. What is left at launch is mapping the result from the executable and running Pi.</p>
 
 <h2>Stock Pi at launch</h2>
@@ -10,7 +10,7 @@
   through them, and compiles those to machine code. Until then they are interpreted, and the JIT itself costs CPU, threads and
   memory.</p>
 
-<h2>Pi-Bolt at build time</h2>
+<h2>Rapid Pi at build time</h2>
 <ol class="steps">
   <li>
     <strong>Bundle and compile to bytecode</strong>
@@ -39,7 +39,7 @@
   </li>
 </ol>
 
-<h2>Pi-Bolt at launch</h2>
+<h2>Rapid Pi at launch</h2>
 <p>The executable checks that its compiled code fits the engine and the CPU, maps the prebuilt heap and the code from its own
   file, and runs Pi's <code>main()</code>. Nothing is parsed and nothing is compiled. Pi's modules run their top-level code, as
   compiled code.</p>
@@ -55,10 +55,10 @@
 </ul>
 
 <h2>Why it uses less CPU over a session</h2>
-<p>Compiled code accounts for the faster start. Over a session, most of the difference comes from Pi itself: Pi-Bolt carries
+<p>Compiled code accounts for the faster start. Over a session, most of the difference comes from Pi itself: Rapid Pi carries
   fixes to Pi's TypeScript where Pi redid work over the whole conversation or the whole streamed output at every step. Examples:
   a streamed tool call is parsed once, not again for every chunk; a long answer is redrawn incrementally; a command's output is
-  written as it arrives. These fixes are in Pi-Bolt's source, on top of Pi's.</p>
+  written as it arrives. These fixes are in Rapid Pi's source, on top of Pi's.</p>
 
 <h2>Limitations</h2>
 <ul>
@@ -71,7 +71,7 @@
 
 <h2>Credits and source</h2>
 <p>The ahead-of-time compiler builds on Jarred Sumner's work for Bun,
-  <a href="https://github.com/oven-sh/WebKit/pull/743">oven-sh/WebKit#743</a>. Pi-Bolt ports it to x86-64, macOS on ARM64 and
-  Windows, and adds its own code generation and runtime work. Pi's source with Pi-Bolt's changes is in
+  <a href="https://github.com/oven-sh/WebKit/pull/743">oven-sh/WebKit#743</a>. Rapid Pi ports it to x86-64, macOS on ARM64 and
+  Windows, and adds its own code generation and runtime work. Pi's source with Rapid Pi's changes is in
   <code>packages/</code> of the repository; the engine changes are in <code>patches/</code>. The full design is in
-  <a href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs/ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>
+  <a href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs/ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>

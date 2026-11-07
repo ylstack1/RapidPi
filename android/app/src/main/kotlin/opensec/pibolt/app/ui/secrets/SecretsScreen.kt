@@ -1,23 +1,23 @@
-package opensec.pibolt.app.ui.secrets
+package opensec.rapidpi.app.ui.secrets
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.text.input.ImeAction
-import opensec.pibolt.app.ui.components.ButtonSize
-import opensec.pibolt.app.ui.components.EmptyState
-import opensec.pibolt.app.ui.components.FieldHint
-import opensec.pibolt.app.ui.components.FieldLabel
-import opensec.pibolt.app.ui.components.PiCard
-import opensec.pibolt.app.ui.components.ScreenIntro
-import opensec.pibolt.app.ui.components.GlassBar
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.InsetSectionHead
-import opensec.pibolt.app.ui.components.PageTitle
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.ButtonSize
+import opensec.rapidpi.app.ui.components.EmptyState
+import opensec.rapidpi.app.ui.components.FieldHint
+import opensec.rapidpi.app.ui.components.FieldLabel
+import opensec.rapidpi.app.ui.components.PiCard
+import opensec.rapidpi.app.ui.components.ScreenIntro
+import opensec.rapidpi.app.ui.components.GlassBar
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.InsetSectionHead
+import opensec.rapidpi.app.ui.components.PageTitle
+import opensec.rapidpi.app.ui.theme.Space
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import opensec.pibolt.app.ui.components.SecretField
+import opensec.rapidpi.app.ui.components.SecretField
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
@@ -67,20 +67,20 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.engine.LocalEngine
-import opensec.pibolt.app.secrets.Secret
-import opensec.pibolt.app.secrets.SecretEnv
-import opensec.pibolt.app.secrets.SecretStore
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.PiSnackHost
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.components.show
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.engine.LocalEngine
+import opensec.rapidpi.app.secrets.Secret
+import opensec.rapidpi.app.secrets.SecretEnv
+import opensec.rapidpi.app.secrets.SecretStore
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.PiSnackHost
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.show
+import opensec.rapidpi.app.ui.theme.Pi
 import java.io.File
 
 /**
@@ -225,7 +225,7 @@ fun SecretsScreen(app: PiBoltApp, project: File, onBack: () -> Unit) {
         ConfirmSheet(
             title = "Write .env to the project?",
             message = "Values are saved in plain text in ${project.name}/.env, where anything in the project can read them. " +
-                "Pi-Bolt adds .env to .gitignore if the project uses git.",
+                "Rapid Pi adds .env to .gitignore if the project uses git.",
             confirmLabel = "Write .env",
             onConfirm = {
                 writeEnv = false
@@ -243,7 +243,7 @@ fun SecretsScreen(app: PiBoltApp, project: File, onBack: () -> Unit) {
 
 /**
  * One variable: the name (mono ink1) over the value masked as eight dots (monoMeta ink3, fixed length) or shown, then
- * Show / Hide, Edit and Delete; a hairline under it inset to the 20dp gutter, as an [opensec.pibolt.app.ui.components.InsetRow].
+ * Show / Hide, Edit and Delete; a hairline under it inset to the 20dp gutter, as an [opensec.rapidpi.app.ui.components.InsetRow].
  */
 @Composable
 private fun SecretRow(s: Secret, revealed: Boolean, onReveal: () -> Unit, onEdit: () -> Unit, onDelete: () -> Unit, divider: Boolean) {

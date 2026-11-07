@@ -1,4 +1,4 @@
-package opensec.pibolt.app.checkpoints
+package opensec.rapidpi.app.checkpoints
 
 import java.io.File
 import java.io.IOException

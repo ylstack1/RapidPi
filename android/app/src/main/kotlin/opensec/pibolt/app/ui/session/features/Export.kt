@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
 import android.content.ClipData
 import android.content.ComponentName
@@ -8,15 +8,15 @@ import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.MainActivity
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.SubagentNoticeItem
-import opensec.pibolt.protocol.session.ThinkingItem
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.MainActivity
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.SubagentNoticeItem
+import opensec.rapidpi.protocol.session.ThinkingItem
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -116,7 +116,7 @@ object ShareFiles {
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         subject?.let { send.putExtra(Intent.EXTRA_SUBJECT, it) }
         send.clipData = ClipData.newRawUri(file.name, uri)
-        // Pi-Bolt receives shares too: leave it out of its own chooser.
+        // Rapid Pi receives shares too: leave it out of its own chooser.
         val chooser = Intent.createChooser(send, null).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         context.startActivity(chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, arrayOf(ComponentName(context, MainActivity::class.java))))
     }

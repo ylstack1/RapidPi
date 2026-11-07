@@ -1,6 +1,6 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
-import opensec.pibolt.app.ui.session.features2.F2Empty
+import opensec.rapidpi.app.ui.session.features2.F2Empty
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,29 +39,29 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.session.ForkPoint
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.projects.ProjectRules
-import opensec.pibolt.app.ui.session.shortPath
-import opensec.pibolt.app.ui.providers.Brand
-import opensec.pibolt.app.ui.providers.LogoMark
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.session.SessionReducer
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.session.ForkPoint
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.projects.ProjectRules
+import opensec.rapidpi.app.ui.session.shortPath
+import opensec.rapidpi.app.ui.providers.Brand
+import opensec.rapidpi.app.ui.providers.LogoMark
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.session.SessionReducer
 
 /** What the session sheet shows besides the statistics (from the live state). */
 data class SessionFacts(
@@ -155,7 +155,7 @@ fun SessionStatsSheet(
             PickRow("Model", facts.model?.label ?: "—", enabled = facts.connected, onClick = { close(onModel) }, onNext = onCycleModel, nextLabel = "Next model", brand = facts.model?.let { ProviderCatalog.modelBrand(it.id, it.provider) })
             PickRow("Thinking", facts.thinkingLevel?.replaceFirstChar { it.uppercase() } ?: "—", enabled = facts.connected, onClick = { close(onThinking) }, onNext = onCycleThinking, nextLabel = "Next thinking level")
             facts.cwd?.takeIf { it.isNotBlank() }?.let { InfoLine("Folder", shortPath(it), mono = true) }
-            facts.version?.takeIf { it.isNotBlank() }?.let { InfoLine("Pi-Bolt", "v$it") }
+            facts.version?.takeIf { it.isNotBlank() }?.let { InfoLine("Rapid Pi", "v$it") }
             Spacer(Modifier.height(4.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 SecondaryButton(if (facts.compacting) "Compacting…" else "Compact", onClick = { close(onCompact) }, enabled = facts.connected && !facts.compacting, modifier = Modifier.weight(1f))

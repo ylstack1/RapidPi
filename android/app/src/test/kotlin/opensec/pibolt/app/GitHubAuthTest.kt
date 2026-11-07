@@ -1,23 +1,23 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import okhttp3.OkHttpClient
-import opensec.pibolt.app.git.GitErrors
-import opensec.pibolt.app.git.github.AesGcmBox
-import opensec.pibolt.app.git.github.DeviceFlow
-import opensec.pibolt.app.git.github.DeviceFlowState
-import opensec.pibolt.app.git.github.GitCredentialBroker
-import opensec.pibolt.app.git.github.GitCredentials
-import opensec.pibolt.app.git.github.GitHub
-import opensec.pibolt.app.git.github.GitHubException
-import opensec.pibolt.app.git.github.GitHubState
-import opensec.pibolt.app.git.github.KeyValue
-import opensec.pibolt.app.git.github.Redact
-import opensec.pibolt.app.git.github.TokenKind
-import opensec.pibolt.app.git.github.TokenStore
+import opensec.rapidpi.app.git.GitErrors
+import opensec.rapidpi.app.git.github.AesGcmBox
+import opensec.rapidpi.app.git.github.DeviceFlow
+import opensec.rapidpi.app.git.github.DeviceFlowState
+import opensec.rapidpi.app.git.github.GitCredentialBroker
+import opensec.rapidpi.app.git.github.GitCredentials
+import opensec.rapidpi.app.git.github.GitHub
+import opensec.rapidpi.app.git.github.GitHubException
+import opensec.rapidpi.app.git.github.GitHubState
+import opensec.rapidpi.app.git.github.KeyValue
+import opensec.rapidpi.app.git.github.Redact
+import opensec.rapidpi.app.git.github.TokenKind
+import opensec.rapidpi.app.git.github.TokenStore
 import org.junit.After
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -158,7 +158,7 @@ class GitHubAuthTest {
         server.start()
         val kv = Recording()
         val store = TokenStore(kv, box())
-        val sock = File(Files.createTempDirectory("pibolt-cred").toFile(), "cred/socket")
+        val sock = File(Files.createTempDirectory("rapidpi-cred").toFile(), "cred/socket")
         var answered: Pair<String, String>? = null
         val gh = GitHub(
             store, http, clientId = "", webBase = server.url("/").toString(), apiBase = server.url("/").toString(),
@@ -203,7 +203,7 @@ class GitHubAuthTest {
         for ((k, v) in env) assertFalse(token in v, k)
         assertEquals(account.login to token, answered)
         val out = ByteArrayOutputStream()
-        GitCredentialBroker.answer(ByteArrayInputStream("GET /github HTTP/1.1\r\nHost: pibolt\r\n\r\n".toByteArray()), out, answered)
+        GitCredentialBroker.answer(ByteArrayInputStream("GET /github HTTP/1.1\r\nHost: rapidpi\r\n\r\n".toByteArray()), out, answered)
         assertTrue(out.toString(Charsets.UTF_8.name()).endsWith("\r\n\r\nusername=${account.login}\npassword=$token\n"))
 
         // Another key cannot open it (a reset Keystore): signed out, no crash.
@@ -219,7 +219,7 @@ class GitHubAuthTest {
     /** No log call in the git and GitHub code (or its screens) mentions the token or the credential environment. */
     @Test
     fun noLogStatementTouchesTheToken() {
-        val roots = listOf("src/main/kotlin/opensec/pibolt/app/git", "src/main/kotlin/opensec/pibolt/app/ui/git").map(::File)
+        val roots = listOf("src/main/kotlin/opensec/rapidpi/app/git", "src/main/kotlin/opensec/rapidpi/app/ui/git").map(::File)
         val files = roots.filter { it.isDirectory }.flatMap { r -> r.walkTopDown().filter { it.extension == "kt" }.toList() }
         assertTrue(files.isNotEmpty(), "sources found from ${File(".").absolutePath}")
         val logCall = Regex("""\b(Log\.[vdiwe]|println|printStackTrace|System\.(out|err))\b""")

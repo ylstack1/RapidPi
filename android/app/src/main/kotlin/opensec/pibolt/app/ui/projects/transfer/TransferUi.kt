@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.transfer
+package opensec.rapidpi.app.ui.projects.transfer
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -37,13 +37,13 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.projects.ProjectFiles
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.projects.ProjectFiles
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
 import kotlin.math.roundToInt
 
 /** One running transfer: what it does ("Importing 3 files") and how far it is. */

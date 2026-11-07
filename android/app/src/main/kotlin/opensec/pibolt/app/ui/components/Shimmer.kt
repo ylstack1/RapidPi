@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.animation.core.withInfiniteAnimationFrameMillis
 import androidx.compose.material3.Text
@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Pi
 
 /** Alpha of the band's stops from its edge to its centre: eased, so the band has no visible shoulders. */
 private val BAND_RAMP = floatArrayOf(0f, 0.04f, 0.17f, 0.33f, 0.5f, 0.67f, 0.83f, 0.96f, 1f)

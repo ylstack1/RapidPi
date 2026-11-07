@@ -1,13 +1,13 @@
-// pibolt-preview: written by the Pi-Bolt Android app; do not edit (it is rewritten).
+// rapidpi-preview: written by the Rapid Pi Android app; do not edit (it is rewritten).
 //
 // Tools that let Pi check its own UI work in the app's in-app preview (a WebView showing the project's dev server).
 // The app drives the WebView; this extension forwards each call to the app over a unix socket the app owns
-// ($PIBOLT_PREVIEW_SOCKET, in a 0700 folder of the app, peers checked by uid): one JSON line per request, one JSON line
+// ($RAPIDPI_PREVIEW_SOCKET, in a 0700 folder of the app, peers checked by uid): one JSON line per request, one JSON line
 // back. The app sets the variable only for project engines on the phone, so chats and paired computers never get
 // these tools.
 import { connect } from "node:net";
 
-export const SOCKET_VAR = "PIBOLT_PREVIEW_SOCKET";
+export const SOCKET_VAR = "RAPIDPI_PREVIEW_SOCKET";
 
 /** Longest wait for one answer: a page load plus a screenshot stays well under it. */
 const TIMEOUT_MS = 45_000;
@@ -60,7 +60,7 @@ export function ask(socketPath, request, { signal, timeoutMs = TIMEOUT_MS } = {}
 			}
 		});
 		socket.on("error", (error) =>
-			finish(new Error(error?.code === "ENOENT" || error?.code === "ECONNREFUSED" ? "The Pi-Bolt app is not listening" : String(error?.message ?? error))),
+			finish(new Error(error?.code === "ENOENT" || error?.code === "ECONNREFUSED" ? "The Rapid Pi app is not listening" : String(error?.message ?? error))),
 		);
 		socket.on("end", () => finish(new Error("The app closed the connection without an answer")));
 	});

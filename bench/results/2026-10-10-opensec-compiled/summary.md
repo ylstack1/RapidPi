@@ -3,7 +3,7 @@
 Windows 11, the machine in `../2026-10-10-windows-0.8.0/environment.txt`. Both builds use runtime `Bun 1.4.3-canary.1+1ad2e13f5`, JIT
 off, and the model is bench's local fake model on 127.0.0.1.
 
-- **without**: `scripts\build-pi.ps1` (the build that `out\pi-bolt.old-20261010125512` keeps).
+- **without**: `scripts\build-pi.ps1` (the build that `out\rapid-pi.old-20261010125512` keeps).
 - **with OpenSec**: `scripts\build-pi.ps1 -Plugins plugins\opensec\plugins.ts`, which compiles in opensec-pi-subagents 0.20.0 and
   opensec-pi-todo 2.13.0. The profile is trained with them, and this is the release build. The A/B ran on `.work\opensec-test4`,
   the same sources built without `-VerifyDeterminism`.
@@ -14,10 +14,10 @@ Medians of 11 runs after 2 warm-ups (`bench\benchmark.py --scenarios startup,hea
 
 |  | without | with OpenSec |
 |---|---:|---:|
-| `pi-bolt --version` | 35 ms | 36 ms |
-| `pi-bolt -p`: one prompt, 4 tool calls | 114 ms | 180 ms |
-| `pi-bolt -p`: CPU, all threads | 94 ms | 141 ms |
-| `pi-bolt -p`: peak private bytes | 77 MB | 86 MB |
+| `rapid-pi --version` | 35 ms | 36 ms |
+| `rapid-pi -p`: one prompt, 4 tool calls | 114 ms | 180 ms |
+| `rapid-pi -p`: CPU, all threads | 94 ms | 141 ms |
+| `rapid-pi -p`: peak private bytes | 77 MB | 86 MB |
 | Launch to interactive (TUI) | 97 ms | 95 ms |
 | Interactive, 5 prompts: CPU, all threads | 281 ms | 328 ms |
 | Interactive: peak private bytes | 113 MB | 131 MB |

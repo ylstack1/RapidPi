@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#050505">
-<title>Pi-Bolt: the Pi coding agent, compiled to native code</title>
-<meta name="description" content="Pi-Bolt is the Pi coding agent compiled ahead of time to native code, for Linux, macOS, Windows and Android. Against Pi on Node it writes large files over 100 times faster and uses 8 times less CPU while an answer streams.">
-<meta property="og:title" content="Pi-Bolt: the Pi coding agent, compiled to native code">
+<title>Rapid Pi: the Pi coding agent, compiled to native code</title>
+<meta name="description" content="Rapid Pi is the Pi coding agent compiled ahead of time to native code, for Linux, macOS, Windows and Android. Against Pi on Node it writes large files over 100 times faster and uses 8 times less CPU while an answer streams.">
+<meta property="og:title" content="Rapid Pi: the Pi coding agent, compiled to native code">
 <meta property="og:description" content="Same Pi, same extensions, same config. Up to 120 times faster large file writes, 8 times less CPU while streaming, 7 times less CPU per session than Pi on Node.">
-<meta property="og:url" content="https://pi-bolt.opensec.in/">
-<meta property="og:image" content="https://pi-bolt.opensec.in/video-poster.jpg">
+<meta property="og:url" content="https://rapid-pi.opensec.in/">
+<meta property="og:image" content="https://rapid-pi.opensec.in/video-poster.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -190,7 +190,7 @@
   .bench-foot { margin-top: 26px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
   .bench-foot p { margin: 0; color: var(--muted); font-size: 13px; max-width: 46em; }
 
-  /* Why: problem, then what Pi-Bolt does */
+  /* Why: problem, then what Rapid Pi does */
   .why { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
   .why article { padding: 30px 30px 10px 0; }
   .why article + article { padding-left: 30px; border-left: 1px solid var(--line); }
@@ -307,7 +307,7 @@
       <a href="docs/">Docs</a>
     </nav>
     <div class="actions">
-      <a class="btn ghost small" href="https://github.com/opensec-git/Pi-Bolt"><span>GitHub</span><i aria-hidden="true">↗</i></a>
+      <a class="btn ghost small" href="https://github.com/opensec-git/Rapid Pi"><span>GitHub</span><i aria-hidden="true">↗</i></a>
       <a class="btn primary small" href="#install"><span>Install</span><i aria-hidden="true">↓</i></a>
     </div>
   </div>
@@ -316,7 +316,7 @@
 <main class="frame">
   <div class="hero">
     <div>
-      <span class="micro accent bracket">Pi-Bolt 1.0.0 · Pi 1.4.0</span>
+      <span class="micro accent bracket">Rapid Pi 1.0.0 · Pi 1.4.0</span>
       <h1>The Pi coding agent,<br>compiled to <span class="pix" id="scramble" data-text="native code.">native code.</span></h1>
       <p class="lede-1">Same Pi. Same extensions. Same config.</p>
       <div class="install" id="install">
@@ -326,13 +326,13 @@
           <button type="button" role="tab" aria-selected="false" data-os="apk">Android app</button>
         </div>
         <div class="cmd">
-          <code id="cmd">curl -fsSL https://pi-bolt.opensec.in/install.sh | sh</code>
+          <code id="cmd">curl -fsSL https://rapid-pi.opensec.in/install.sh | sh</code>
           <button class="copy" type="button" data-copy="cmd" aria-label="Copy the install command">Copy</button>
         </div>
-        <a class="apk" href="android" hidden><span><b>Download the Android app</b><small class="apk-meta">APK · Pi-Bolt on your phone</small></span><i aria-hidden="true">↓</i></a>
+        <a class="apk" href="android" hidden><span><b>Download the Android app</b><small class="apk-meta">APK · Rapid Pi on your phone</small></span><i aria-hidden="true">↓</i></a>
         <div class="apk-inapp" role="status" hidden>
           <p>This app's built-in browser can't download files. Open this page in Chrome (or your browser) to get the APK.</p>
-          <p class="inapp-actions"><a class="btn primary small open-browser" href="https://pi-bolt.opensec.in/android"><span>Open in browser</span></a>
+          <p class="inapp-actions"><a class="btn primary small open-browser" href="https://rapid-pi.opensec.in/android"><span>Open in browser</span></a>
             <button class="btn ghost small copy-link" type="button"><span>Copy link</span></button></p>
         </div>
       </div>
@@ -348,7 +348,7 @@
         <span class="micro" id="race-title">// Launch to prompt</span>
         <button class="replay" type="button" id="replay">Run again</button>
       </div>
-      <div class="lane bolt" data-ms="41"><div class="row1"><span>Pi-Bolt</span><span class="ms" data-v="41">0<small>ms</small></span></div><div class="track"><span class="fill"></span></div></div>
+      <div class="lane bolt" data-ms="41"><div class="row1"><span>Rapid Pi</span><span class="ms" data-v="41">0<small>ms</small></span></div><div class="track"><span class="fill"></span></div></div>
       <div class="lane" data-ms="366"><div class="row1"><span>Pi on Bun 1.4.4</span><span class="ms" data-v="366">0<small>ms</small></span></div><div class="track"><span class="fill"></span></div></div>
       <div class="lane" data-ms="423"><div class="row1"><span>Pi on Node 24</span><span class="ms" data-v="423">0<small>ms</small></span></div><div class="track"><span class="fill"></span></div></div>
       <div class="race-foot"><span class="micro">Linux x86-64</span></div>
@@ -366,12 +366,12 @@
     <div class="sec-head">
       <div>
         <span class="index">// 01</span> <span class="micro">Side by side</span>
-        <h2 id="video-title">Pi on Node vs Pi-Bolt.<br><span class="muted">Side by side.</span></h2>
+        <h2 id="video-title">Pi on Node vs Rapid Pi.<br><span class="muted">Side by side.</span></h2>
       </div>
     </div>
     <div class="panel video reveal">
       <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
-      <video controls preload="none" playsinline poster="video-poster.jpg" src="pi-bolt.mp4" aria-label="Pi-Bolt and Pi on Node 24 side by side, 2 minutes 11 seconds"></video>
+      <video controls preload="none" playsinline poster="video-poster.jpg" src="rapid-pi.mp4" aria-label="Rapid Pi and Pi on Node 24 side by side, 2 minutes 11 seconds"></video>
       <div class="video-foot">
         <div><span class="micro">Ready to type</span><b>6×</b><span class="what">sooner: 133 ms, not 840 ms</span></div>
         <div><span class="micro">Building a game</span><b>3×</b><span class="what">less CPU and memory</span></div>
@@ -398,7 +398,7 @@
     <div class="metrics" id="metrics"></div>
     <div class="bench-foot">
       <span></span>
-      <a class="link" href="https://github.com/opensec-git/Pi-Bolt/tree/pi-bolt/bench/results/2026-10-23-stock-bun-1.0.0">Method and raw data <span aria-hidden="true">↗</span></a>
+      <a class="link" href="https://github.com/opensec-git/Rapid Pi/tree/rapid-pi/bench/results/2026-10-23-stock-bun-1.0.0">Method and raw data <span aria-hidden="true">↗</span></a>
     </div>
   </section>
 
@@ -414,12 +414,12 @@
       <article class="reveal">
         <span class="index">// 01</span> <span class="micro">Streaming</span>
         <h3>Redraws only what changed</h3>
-        <p class="fix">Stock Pi re-renders the whole answer on every chunk. Pi-Bolt redoes only the last block.</p>
+        <p class="fix">Stock Pi re-renders the whole answer on every chunk. Rapid Pi redoes only the last block.</p>
       </article>
       <article class="reveal">
         <span class="index">// 02</span> <span class="micro">Large files and long sessions</span>
         <h3>Never starts over</h3>
-        <p class="fix">Stock Pi re-parses the whole file and conversation every time. Pi-Bolt adds only what's new.</p>
+        <p class="fix">Stock Pi re-parses the whole file and conversation every time. Rapid Pi adds only what's new.</p>
       </article>
       <article class="reveal">
         <span class="index">// 03</span> <span class="micro">Start-up</span>
@@ -442,19 +442,19 @@
         <span class="micro accent">Subagents</span>
         <h3><a href="https://www.npmjs.com/package/opensec-pi-subagents">opensec-pi-subagents</a></h3>
         <p>Specialized agents in separate sessions, parallel workflows and scheduled jobs.</p>
-        <pre><code>pi-bolt install npm:opensec-pi-subagents</code></pre>
+        <pre><code>rapid-pi install npm:opensec-pi-subagents</code></pre>
       </article>
       <article class="panel reveal">
         <span class="micro accent">Todo</span>
         <h3><a href="https://www.npmjs.com/package/opensec-pi-todo">opensec-pi-todo</a></h3>
         <p>A todo list for the model, shown as a live panel above the editor.</p>
-        <pre><code>pi-bolt install npm:opensec-pi-todo</code></pre>
+        <pre><code>rapid-pi install npm:opensec-pi-todo</code></pre>
       </article>
       <article class="panel reveal">
         <span class="micro accent">Search</span>
         <h3><a href="https://www.npmjs.com/package/opensec-pi-fff">opensec-pi-fff</a></h3>
         <p>pi-fff's fast fuzzy find, grep and <code>@</code>-mentions, at full speed on the default build.</p>
-        <pre><code>pi-bolt install npm:opensec-pi-fff</code></pre>
+        <pre><code>rapid-pi install npm:opensec-pi-fff</code></pre>
       </article>
     </div>
   </section>
@@ -471,11 +471,11 @@
         <details>
           <summary><span><span class="index">// 01 Extensions</span><span class="q">Do my extensions work?</span></span><span class="plus" aria-hidden="true"><i>+</i></span></summary>
           <div class="a"><p>Yes, unchanged. Pi's own code is compiled to machine code; an extension loaded at run time is interpreted, which light
-            extensions don't notice. For heavy ones, <code>pi-bolt compile</code> compiles them into your build, or install the JIT build.</p></div>
+            extensions don't notice. For heavy ones, <code>rapid-pi compile</code> compiles them into your build, or install the JIT build.</p></div>
         </details>
         <details>
           <summary><span><span class="index">// 02 Pi</span><span class="q">Does it replace Pi?</span></span><span class="plus" aria-hidden="true"><i>+</i></span></summary>
-          <div class="a"><p>No. It installs next to Pi as <code>pi-bolt</code> and uses your configuration in <code>~/.pi/agent</code> as it is,
+          <div class="a"><p>No. It installs next to Pi as <code>rapid-pi</code> and uses your configuration in <code>~/.pi/agent</code> as it is,
             so both can stay installed and you can switch back anytime.</p></div>
         </details>
         <details>
@@ -485,7 +485,7 @@
         </details>
         <details>
           <summary><span><span class="index">// 04 Updates</span><span class="q">How do I update, or go back?</span></span><span class="plus" aria-hidden="true"><i>+</i></span></summary>
-          <div class="a"><p><code>pi-bolt update</code> installs the latest release, and <code>pi-bolt update --rollback</code> puts back the build
+          <div class="a"><p><code>rapid-pi update</code> installs the latest release, and <code>rapid-pi update --rollback</code> puts back the build
             it replaced. Every release is signed, and the installer and the updater check the signature before installing anything.</p></div>
         </details>
       </div>
@@ -503,18 +503,18 @@
         <button type="button" role="tab" aria-selected="false" data-os="apk">Android app</button>
       </div>
       <div class="cmd">
-        <code id="cmd2">curl -fsSL https://pi-bolt.opensec.in/install.sh | sh</code>
+        <code id="cmd2">curl -fsSL https://rapid-pi.opensec.in/install.sh | sh</code>
         <button class="copy" type="button" data-copy="cmd2" aria-label="Copy the install command">Copy</button>
       </div>
-      <a class="apk" href="android" hidden><span><b>Download the Android app</b><small class="apk-meta">APK · Pi-Bolt on your phone</small></span><i aria-hidden="true">↓</i></a>
+      <a class="apk" href="android" hidden><span><b>Download the Android app</b><small class="apk-meta">APK · Rapid Pi on your phone</small></span><i aria-hidden="true">↓</i></a>
       <div class="apk-inapp" role="status" hidden>
         <p>This app's built-in browser can't download files. Open this page in Chrome (or your browser) to get the APK.</p>
-        <p class="inapp-actions"><a class="btn primary small open-browser" href="https://pi-bolt.opensec.in/android"><span>Open in browser</span></a>
+        <p class="inapp-actions"><a class="btn primary small open-browser" href="https://rapid-pi.opensec.in/android"><span>Open in browser</span></a>
           <button class="btn ghost small copy-link" type="button"><span>Copy link</span></button></p>
       </div>
     </div>
     <div class="row">
-      <a class="btn primary" href="https://github.com/opensec-git/Pi-Bolt"><span>Star it on GitHub</span><i aria-hidden="true">↗</i></a>
+      <a class="btn primary" href="https://github.com/opensec-git/Rapid Pi"><span>Star it on GitHub</span><i aria-hidden="true">↗</i></a>
       <a class="link" href="docs/">Read the documentation <span aria-hidden="true">→</span></a>
     </div>
   </div>
@@ -532,8 +532,8 @@
           <li><a href="docs/quickstart.html">Getting started</a></li>
           <li><a href="docs/installation.html">Installation</a></li>
           <li><a href="android">Android app</a></li>
-          <li><a href="https://github.com/opensec-git/Pi-Bolt/releases/latest">Latest release</a></li>
-          <li><a href="https://www.npmjs.com/package/pi-bolt">npm package</a></li>
+          <li><a href="https://github.com/opensec-git/Rapid Pi/releases/latest">Latest release</a></li>
+          <li><a href="https://www.npmjs.com/package/rapid-pi">npm package</a></li>
         </ul>
       </div>
       <div>
@@ -548,9 +548,9 @@
       <div>
         <h4><span class="index">// 03</span> <span class="micro">Project</span></h4>
         <ul>
-          <li><a href="https://github.com/opensec-git/Pi-Bolt">Source on GitHub</a></li>
-          <li><a href="https://github.com/opensec-git/Pi-Bolt/issues">Issues</a></li>
-          <li><a href="https://github.com/opensec-git/Pi-Bolt/security/advisories/new">Report a vulnerability</a></li>
+          <li><a href="https://github.com/opensec-git/Rapid Pi">Source on GitHub</a></li>
+          <li><a href="https://github.com/opensec-git/Rapid Pi/issues">Issues</a></li>
+          <li><a href="https://github.com/opensec-git/Rapid Pi/security/advisories/new">Report a vulnerability</a></li>
           <li><a href="https://opensec.in">OpenSec</a></li>
         </ul>
       </div>
@@ -560,7 +560,7 @@
       <span>© 2026 OpenSec · MIT licensed</span>
       <a href="#top" onclick="window.scrollTo(0, 0); return false;">Back to top ↑</a>
     </div>
-    <div class="wordmark" aria-hidden="true"><div>Pi-Bolt</div></div>
+    <div class="wordmark" aria-hidden="true"><div>Rapid Pi</div></div>
   </footer>
 </main>
 
@@ -569,8 +569,8 @@
 
   // Install commands, per system.
   var commands = {
-    sh: "curl -fsSL https://pi-bolt.opensec.in/install.sh | sh",
-    ps: "irm https://pi-bolt.opensec.in/install.ps1 | iex"
+    sh: "curl -fsSL https://rapid-pi.opensec.in/install.sh | sh",
+    ps: "irm https://rapid-pi.opensec.in/install.ps1 | iex"
   };
   var isAndroid = /Android/i.test(navigator.userAgent) || (navigator.userAgentData && navigator.userAgentData.platform === "Android");
   // In-app browsers (WhatsApp, Telegram, Gmail, Instagram, X and others) are Android WebViews, which drop file
@@ -598,11 +598,11 @@
   // Android: the app comes first, and its button downloads the APK itself (android.json, written by the Android release
   // workflow, names the newest one). Elsewhere the button opens the app's page, with a QR code for the phone.
   (function () {
-    var page = "https://pi-bolt.opensec.in/android";
+    var page = "https://rapid-pi.opensec.in/android";
     if (inApp) {
       // intent:// hands the Android page (which starts the download) to the default browser; a WebView that cannot
       // follow it keeps the plain link.
-      var intent = "intent://pi-bolt.opensec.in/android#Intent;scheme=https;action=android.intent.action.VIEW;S.browser_fallback_url=" + encodeURIComponent(page) + ";end";
+      var intent = "intent://rapid-pi.opensec.in/android#Intent;scheme=https;action=android.intent.action.VIEW;S.browser_fallback_url=" + encodeURIComponent(page) + ";end";
       document.querySelectorAll("a.apk, .apk-inapp .open-browser").forEach(function (a) { a.href = intent; });
       document.querySelectorAll(".apk-inapp .copy-link").forEach(function (button) {
         button.addEventListener("click", function () {
@@ -613,9 +613,9 @@
     fetch("android.json", { cache: "no-cache" })
       .then(function (response) { return response.ok ? response.json() : null; })
       .then(function (release) {
-        if (!release || !/^https:\/\/github\.com\/opensec-git\/Pi-Bolt\/releases\/download\//.test(release.apk)) return;
+        if (!release || !/^https:\/\/github\.com\/opensec-git\/Rapid Pi\/releases\/download\//.test(release.apk)) return;
         var mb = release.size ? " · " + (release.size / 1048576).toFixed(1) + " MB" : "";
-        document.querySelectorAll(".apk-meta").forEach(function (m) { m.textContent = "APK " + release.version + mb + " · Pi-Bolt on your phone"; });
+        document.querySelectorAll(".apk-meta").forEach(function (m) { m.textContent = "APK " + release.version + mb + " · Rapid Pi on your phone"; });
         if (isAndroid && !inApp) document.querySelectorAll("a.apk").forEach(function (a) { a.href = release.apk; a.setAttribute("download", ""); });
       })
       .catch(function () {});
@@ -691,9 +691,9 @@
   document.getElementById("replay").addEventListener("click", race);
   race();
 
-  // Benchmarks: Pi-Bolt 1.0.0 against Pi 1.4.0 as released (bench/results/2026-10-23-stock-bun-1.0.0).
-  // [Pi-Bolt, Pi on Bun 1.4.4, Pi on Node 22, Pi on Node 24]
-  var builds = ["Pi-Bolt", "Pi on Bun", "Pi on Node 22", "Pi on Node 24"];
+  // Benchmarks: Rapid Pi 1.0.0 against Pi 1.4.0 as released (bench/results/2026-10-23-stock-bun-1.0.0).
+  // [Rapid Pi, Pi on Bun 1.4.4, Pi on Node 22, Pi on Node 24]
+  var builds = ["Rapid Pi", "Pi on Bun", "Pi on Node 22", "Pi on Node 24"];
   var metrics = [
     ["Writing a 400 KB file through a tool call", "s", "faster", "write"],
     ["CPU while a 60,000-character answer streams", "s", "less", "answer"],

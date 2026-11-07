@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -10,9 +10,9 @@ import java.net.URI
 import java.util.Base64
 
 const val PROTOCOL_VERSION = 1
-const val PAIR_PREFIX = "pibolt://pair#"
-const val WS_SUBPROTOCOL = "pibolt-rc.1"
-val NOISE_PROLOGUE: ByteArray = "pibolt-rc/1".toByteArray(Charsets.US_ASCII)
+const val PAIR_PREFIX = "rapidpi://pair#"
+const val WS_SUBPROTOCOL = "rapidpi-rc.1"
+val NOISE_PROLOGUE: ByteArray = "rapidpi-rc/1".toByteArray(Charsets.US_ASCII)
 
 object Base64Url {
     private val encoder = Base64.getUrlEncoder().withoutPadding()
@@ -26,7 +26,7 @@ object Base64Url {
 
 class PairingParseException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
-/** The pairing QR payload: `pibolt://pair#` + base64url(JSON). */
+/** The pairing QR payload: `rapidpi://pair#` + base64url(JSON). */
 data class PairingPayload(
     val version: Int,
     val hostName: String,
@@ -90,7 +90,7 @@ data class PairingPayload(
         fun parse(text: String): PairingPayload {
             if (text.length > MAX_LINK_CHARS) throw PairingParseException("Pairing code is too long")
             val trimmed = text.trim()
-            if (!trimmed.startsWith(PAIR_PREFIX, ignoreCase = true)) throw PairingParseException("Not a Pi-Bolt pairing code")
+            if (!trimmed.startsWith(PAIR_PREFIX, ignoreCase = true)) throw PairingParseException("Not a Rapid Pi pairing code")
             val encoded = trimmed.substring(PAIR_PREFIX.length)
             val json = try {
                 ProtocolJson.parseToJsonElement(String(Base64Url.decode(encoded), Charsets.UTF_8)) as? JsonObject

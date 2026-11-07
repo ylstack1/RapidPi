@@ -2,15 +2,15 @@ name: android
 
 # The Android app (android/): the on-device engine pack (android/engine, built and run in Docker on an arm64 runner), then
 # protocol and app unit tests, lint, debug and release builds with the pack inside. A pull request uploads the debug
-# APK as an artifact. An `android-vX.Y.Z` tag on a pi-bolt commit builds the unsigned release APK, signs it with apksigner
+# APK as an artifact. An `android-vX.Y.Z` tag on a rapid-pi commit builds the unsigned release APK, signs it with apksigner
 # and the keystore from the ANDROID_KEYSTORE_B64 secret (environment `release`), checks the signature and publishes it
-# as a GitHub release of its own, then points pi-bolt.opensec.in/android at it (android.json on gh-pages). That release is
+# as a GitHub release of its own, then points rapid-pi.opensec.in/android at it (android.json on gh-pages). That release is
 # never marked latest, so
-# the Pi-Bolt installers (which read the latest release) and its release-files.txt check never see it. GitHub-hosted
+# the Rapid Pi installers (which read the latest release) and its release-files.txt check never see it. GitHub-hosted
 # runners only.
 on:
   push:
-    branches: [pi-bolt]
+    branches: [rapid-pi]
     tags: ["android-v*"]
     paths:
       - "android/**"
@@ -33,7 +33,7 @@ concurrency:
 # The GitHub OAuth App client id for device-flow sign-in (android/README.md, "GitHub"): a repository variable, not a
 # secret (client ids are public). Empty or unset builds an app that offers only personal access tokens.
 env:
-  PIBOLT_GITHUB_CLIENT_ID: ${{ vars.PIBOLT_GITHUB_CLIENT_ID }}
+  RAPIDPI_GITHUB_CLIENT_ID: ${{ vars.RAPIDPI_GITHUB_CLIENT_ID }}
 
 defaults:
   run:
@@ -73,7 +73,7 @@ jobs:
         if: ${{ startsWith(github.ref, 'refs/tags/android-v') }}
         with:
           name: engine-sources
-          path: android/engine/out/pi-bolt-android-engine-sources.tar
+          path: android/engine/out/rapid-pi-android-engine-sources.tar
           compression-level: 0
           if-no-files-found: error
           retention-days: 7
@@ -121,7 +121,7 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ github.event_name == 'pull_request' }}
         with:
-          name: pi-bolt-android-debug
+          name: rapid-pi-android-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
@@ -151,11 +151,11 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: The tag is on pi-bolt
+      - name: The tag is on rapid-pi
         run: |
-          git fetch --no-tags origin +refs/heads/pi-bolt:refs/remotes/origin/pi-bolt
-          git merge-base --is-ancestor "$GITHUB_SHA" refs/remotes/origin/pi-bolt || {
-            echo "::error::$GITHUB_REF_NAME points at $GITHUB_SHA, which is not on pi-bolt; only commits on pi-bolt are released"
+          git fetch --no-tags origin +refs/heads/rapid-pi:refs/remotes/origin/rapid-pi
+          git merge-base --is-ancestor "$GITHUB_SHA" refs/remotes/origin/rapid-pi || {
+            echo "::error::$GITHUB_REF_NAME points at $GITHUB_SHA, which is not on rapid-pi; only commits on rapid-pi are released"
             exit 1
           }
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -192,7 +192,7 @@ jobs:
       # the next step.
       - name: Build the unsigned release
         env:
-          PIBOLT_APP_VERSION: ${{ github.ref_name }}
+          RAPIDPI_APP_VERSION: ${{ github.ref_name }}
         run: ./gradlew :app:assembleRelease
       - name: Sign the release
         env:
@@ -218,8 +218,8 @@ jobs:
           apksigner="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)/apksigner"
           "$apksigner" verify --verbose --print-certs "$apk"
           version="${GITHUB_REF_NAME#android-v}"
-          cp "$apk" "$RUNNER_TEMP/pi-bolt-android-$version.apk"
-          (cd "$RUNNER_TEMP" && sha256sum "pi-bolt-android-$version.apk" > "pi-bolt-android-$version.apk.sha256")
+          cp "$apk" "$RUNNER_TEMP/rapid-pi-android-$version.apk"
+          (cd "$RUNNER_TEMP" && sha256sum "rapid-pi-android-$version.apk" > "rapid-pi-android-$version.apk.sha256")
           "$apksigner" verify --print-certs "$apk" | grep -i "SHA-256 digest" > "$RUNNER_TEMP/signing-cert.txt"
       - name: Publish the app release
         env:
@@ -227,9 +227,9 @@ jobs:
         run: |
           version="${GITHUB_REF_NAME#android-v}"
           {
-            echo "Pi-Bolt Android app $version: Pi-Bolt running on the phone, and remote control for Pi-Bolt (/remote-control)."
+            echo "Rapid Pi Android app $version: Rapid Pi running on the phone, and remote control for Rapid Pi (/remote-control)."
             echo
-            echo "pi-bolt-android-engine-sources.tar: the corresponding source of the GPL/LGPL parts of the on-device"
+            echo "rapid-pi-android-engine-sources.tar: the corresponding source of the GPL/LGPL parts of the on-device"
             echo "engine (glibc with Termux's Android patches, bash, busybox, git) and the scripts that build it."
             echo
             echo "Signing certificate:"
@@ -238,10 +238,10 @@ jobs:
             echo '```'
           } > "$RUNNER_TEMP/notes.md"
           gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag --latest=false \
-            --title "Pi-Bolt Android $version" --notes-file "$RUNNER_TEMP/notes.md" \
-            "$RUNNER_TEMP/pi-bolt-android-$version.apk" "$RUNNER_TEMP/pi-bolt-android-$version.apk.sha256" \
-            "$RUNNER_TEMP/engine-sources/pi-bolt-android-engine-sources.tar"
-      # pi-bolt.opensec.in/android and the home page's Android tab read android.json on gh-pages to offer the newest APK.
+            --title "Rapid Pi Android $version" --notes-file "$RUNNER_TEMP/notes.md" \
+            "$RUNNER_TEMP/rapid-pi-android-$version.apk" "$RUNNER_TEMP/rapid-pi-android-$version.apk.sha256" \
+            "$RUNNER_TEMP/engine-sources/rapid-pi-android-engine-sources.tar"
+      # rapid-pi.opensec.in/android and the home page's Android tab read android.json on gh-pages to offer the newest APK.
       - name: Point the site's Android download at this release
         working-directory: .
         env:

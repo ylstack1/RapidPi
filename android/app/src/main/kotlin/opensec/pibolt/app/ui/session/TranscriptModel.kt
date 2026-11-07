@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -7,26 +7,26 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.markdown.Markdown
-import opensec.pibolt.app.ui.markdown.MdBlock
-import opensec.pibolt.app.ui.markdown.MdDoc
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.NoticeKind
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.app.ui.session.subagent.SubagentFormat
-import opensec.pibolt.protocol.session.Subagent
-import opensec.pibolt.protocol.session.SubagentNoticeItem
-import opensec.pibolt.protocol.session.SubagentReducer
-import opensec.pibolt.protocol.session.SubagentStatus
-import opensec.pibolt.protocol.session.ThinkingItem
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
-import opensec.pibolt.app.ui.session.web.WebSources
-import opensec.pibolt.app.ui.session.web.WebTools
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.markdown.Markdown
+import opensec.rapidpi.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.markdown.MdDoc
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.NoticeKind
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.app.ui.session.subagent.SubagentFormat
+import opensec.rapidpi.protocol.session.Subagent
+import opensec.rapidpi.protocol.session.SubagentNoticeItem
+import opensec.rapidpi.protocol.session.SubagentReducer
+import opensec.rapidpi.protocol.session.SubagentStatus
+import opensec.rapidpi.protocol.session.ThinkingItem
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
+import opensec.rapidpi.app.ui.session.web.WebSources
+import opensec.rapidpi.app.ui.session.web.WebTools
 
 /**
  * One lazy-list row of the transcript. Keys are stable for the life of the row. Every row is an immutable data class, so
@@ -139,7 +139,7 @@ data class NoticeRow(val item: NoticeItem, override val live: Boolean) : TRow {
 /**
  * A subagent's card: an `Agent` call and its run ([Subagent], without its transcript so rows compare cheaply). [run]
  * is a stand-in built from the call while the model still writes it. [slot] picks its Quad colour
- * ([opensec.pibolt.app.ui.session.subagent.SubagentFormat.hueSlot]); stacks and notices carry one per run.
+ * ([opensec.rapidpi.app.ui.session.subagent.SubagentFormat.hueSlot]); stacks and notices carry one per run.
  */
 @Immutable
 data class SubagentRow(override val key: String, val run: Subagent, override val live: Boolean, val slot: Int = 0) : TRow

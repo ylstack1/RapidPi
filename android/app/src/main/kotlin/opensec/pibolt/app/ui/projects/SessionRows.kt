@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -11,15 +11,15 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.cost.Money
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.cost.SpendText
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.cost.Money
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.cost.SpendText
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
 
 /** What a saved session's row says under its title (unit-tested). */
 object SessionRowRules {

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.chats
+package opensec.rapidpi.app.ui.chats
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -25,18 +25,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.put
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.cost.Cost
-import opensec.pibolt.app.engine.ChatSpace
-import opensec.pibolt.app.engine.EngineApi
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.app.ui.cost.SpendText
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.projects.ProjectRules
-import opensec.pibolt.app.ui.session.features2.SessionBrowse
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.cost.Cost
+import opensec.rapidpi.app.engine.ChatSpace
+import opensec.rapidpi.app.engine.EngineApi
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.app.ui.cost.SpendText
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.projects.ProjectRules
+import opensec.rapidpi.app.ui.session.features2.SessionBrowse
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId

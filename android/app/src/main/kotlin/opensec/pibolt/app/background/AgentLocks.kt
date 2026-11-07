@@ -1,4 +1,4 @@
-package opensec.pibolt.app.background
+package opensec.rapidpi.app.background
 
 import android.content.Context
 import android.os.PowerManager

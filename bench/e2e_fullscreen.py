@@ -5,8 +5,8 @@ Markdown answer streams in, then the transcript is paged up and down and the win
 and colors) with scrolling is compared with the screen without (PI_TUI_SCROLL_ROWS=0), in tmux and, if installed, in zmx
 (libghostty's terminal). With --docker, Pi and the terminals run in a container.
 
-Example: bench/e2e_fullscreen.py --build pi-bolt=./out/pi-bolt/pi
-         bench/e2e_fullscreen.py --build pi-bolt=./out/pi-bolt/pi --docker debian-with-tmux --docker-command "sudo -n docker"
+Example: bench/e2e_fullscreen.py --build rapid-pi=./out/rapid-pi/pi
+         bench/e2e_fullscreen.py --build rapid-pi=./out/rapid-pi/pi --docker debian-with-tmux --docker-command "sudo -n docker"
 """
 
 import argparse

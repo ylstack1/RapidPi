@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
-import opensec.pibolt.app.ui.session.features2.SessionAlerts
-import opensec.pibolt.app.ui.session.features2.SessionAlerts.Target
+import opensec.rapidpi.app.ui.session.features2.SessionAlerts
+import opensec.rapidpi.app.ui.session.features2.SessionAlerts.Target
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -17,7 +17,7 @@ class SessionAlertsTest {
 
     @Test
     fun onlyThisAppsProjectsAndSessionFilesAreOpened() {
-        // MainActivity is exported: `am start --es opensec.pibolt.session.project ..` from any app opened a session with
+        // MainActivity is exported: `am start --es opensec.rapidpi.session.project ..` from any app opened a session with
         // every tool in HOME (projects/..), and the session extra could name any file.
         val root = kotlin.io.path.createTempDirectory("alerts").toFile()
         try {

@@ -1,8 +1,8 @@
-package opensec.pibolt.app.ui.providers
+package opensec.rapidpi.app.ui.providers
 
-import opensec.pibolt.app.ui.components.FieldHint
-import opensec.pibolt.app.ui.components.FieldLabel
-import opensec.pibolt.app.ui.components.SecretField
+import opensec.rapidpi.app.ui.components.FieldHint
+import opensec.rapidpi.app.ui.components.FieldLabel
+import opensec.rapidpi.app.ui.components.SecretField
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -56,31 +56,31 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.engine.CustomEndpoint
-import opensec.pibolt.app.engine.ModelsFile
-import opensec.pibolt.app.engine.ProviderAuth
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.engine.CustomEndpoint
+import opensec.rapidpi.app.engine.ModelsFile
+import opensec.rapidpi.app.engine.ProviderAuth
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.heading
-import opensec.pibolt.app.R
-import opensec.pibolt.app.ui.components.GhostButton
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.PillSearchField
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.R
+import opensec.rapidpi.app.ui.components.GhostButton
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.PillSearchField
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
 
 /** Where the provider sheet is: the list, one provider's key, or a custom endpoint. */
 private sealed interface Step {
@@ -155,12 +155,12 @@ private fun PickStep(configured: Set<String>, firstRun: Boolean, onPick: (Provid
                 Modifier.padding(start = Space.page, top = Space.sm, bottom = Space.xs).size(56.dp).glass(CircleShape, colors),
                 contentAlignment = Alignment.Center,
             ) {
-                Image(painterResource(R.drawable.ic_pibolt_logo), contentDescription = null, modifier = Modifier.size(width = 20.dp, height = 30.dp))
+                Image(painterResource(R.drawable.ic_rapidpi_logo), contentDescription = null, modifier = Modifier.size(width = 20.dp, height = 30.dp))
             }
         }
         SheetHeader(
             "Connect a model",
-            subtitle = if (firstRun) "Pi-Bolt runs on this phone with your API key. The key stays here." else "The key stays on this phone.",
+            subtitle = if (firstRun) "Rapid Pi runs on this phone with your API key. The key stays here." else "The key stays on this phone.",
         )
         PillSearchField(
             value = query,

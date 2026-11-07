@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.subagent
+package opensec.rapidpi.app.ui.session.subagent
 
 import android.os.SystemClock
 import androidx.compose.animation.AnimatedContent
@@ -60,27 +60,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.session.Chevron
-import opensec.pibolt.app.ui.session.StepHeader
-import opensec.pibolt.app.ui.session.SubagentNoticeRow
-import opensec.pibolt.app.ui.session.SubagentRow
-import opensec.pibolt.app.ui.session.SubagentStackRow
-import opensec.pibolt.app.ui.session.formatStepElapsed
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.session.Subagent
-import opensec.pibolt.protocol.session.SubagentStatus
-import opensec.pibolt.app.ui.session.subagent.SubagentFormat.AgentState
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.session.Chevron
+import opensec.rapidpi.app.ui.session.StepHeader
+import opensec.rapidpi.app.ui.session.SubagentNoticeRow
+import opensec.rapidpi.app.ui.session.SubagentRow
+import opensec.rapidpi.app.ui.session.SubagentStackRow
+import opensec.rapidpi.app.ui.session.formatStepElapsed
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.session.Subagent
+import opensec.rapidpi.protocol.session.SubagentStatus
+import opensec.rapidpi.app.ui.session.subagent.SubagentFormat.AgentState
 
 /** The Quad colour of the run in colour [slot] ([SubagentFormat.hueSlot]). */
-/** The run in colour [slot]: the theme's subagent tints (Pi-Bolt Desktop's --tint-0..4), wrapped. */
+/** The run in colour [slot]: the theme's subagent tints (Rapid Pi Desktop's --tint-0..4), wrapped. */
 fun agentHue(slot: Int, colors: PiColors): Color = colors.tints[Math.floorMod(slot, colors.tints.size)]
 
 /**

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
 import android.speech.SpeechRecognizer
 

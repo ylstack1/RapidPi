@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.providers
+package opensec.rapidpi.app.ui.providers
 
 import java.net.URI
 
@@ -6,7 +6,7 @@ import java.net.URI
  * A provider or model maker with a mark in `res/drawable/ic_provider_<slug>.xml` (monochrome Lobe Icons marks, MIT,
  * converted by android/tools/provider-logos.mjs). [Generic] has no mark of its own: it is drawn with a server glyph,
  * for custom endpoints and providers the app does not know. [title] is the maker's name as the model sheet groups by it
- * (Pi-Bolt Desktop's family labels: Gemini and Gemma are both "Google", Kimi is "Moonshot").
+ * (Rapid Pi Desktop's family labels: Gemini and Gemma are both "Google", Kimi is "Moonshot").
  */
 enum class Brand(val slug: String, val title: String) {
     Anthropic("anthropic", "Anthropic"),

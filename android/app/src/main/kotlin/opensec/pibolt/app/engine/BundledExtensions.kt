@@ -1,11 +1,11 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.ProtocolJson
+import opensec.rapidpi.protocol.ProtocolJson
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files

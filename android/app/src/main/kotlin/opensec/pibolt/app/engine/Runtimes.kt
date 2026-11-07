@@ -1,4 +1,4 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import java.io.File
 import java.io.IOException
@@ -9,7 +9,7 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.Locale
-import opensec.pibolt.app.data.SafeFiles
+import opensec.rapidpi.app.data.SafeFiles
 
 /** The Runtimes screen's data: the runtimes in this build's pack, and the space their package managers use. */
 data class RuntimesReport(val runtimes: List<EngineManifest.Runtime>, val storage: List<RuntimeStorage>)

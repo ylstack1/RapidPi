@@ -1,6 +1,6 @@
 name: bench-stock-bun
 
-# Pi-Bolt 0.9.7 (the release's archives) against Pi 1.3.0 as released on npm (@earendil-works/pi-coding-agent, dist/bundle/cli.js),
+# Rapid Pi 0.9.7 (the release's archives) against Pi 1.3.0 as released on npm (@earendil-works/pi-coding-agent, dist/bundle/cli.js),
 # run by stock Bun 1.4.2, by Node 22 and by Node 24, on GitHub's Linux x86-64 and ARM64 (one CPU each), macOS and Windows runners.
 on:
   push:
@@ -46,9 +46,9 @@ jobs:
           if [ "$RUNNER_OS" = Linux ]; then sudo apt-get update -qq && sudo apt-get install -y -qq tmux >/dev/null; sha() { sha256sum "$@"; }
           else brew install bash tmux >/dev/null; echo "$(brew --prefix)/bin" >>"$GITHUB_PATH"; export PATH="$(brew --prefix)/bin:$PATH"; sha() { shasum -a 256 "$@"; }; fi
           mkdir -p results .work/cand
-          gh release download "$BOLT_TAG" --repo "$GITHUB_REPOSITORY" --pattern "pi-bolt-$PLAT.tar.xz" --pattern SHA256SUMS --dir .work/cand
-          (cd .work/cand && grep " pi-bolt-$PLAT.tar.xz\$" SHA256SUMS | sha -c -)
-          mkdir -p out/cand && tar -C out/cand --strip-components=1 -xJf ".work/cand/pi-bolt-$PLAT.tar.xz"
+          gh release download "$BOLT_TAG" --repo "$GITHUB_REPOSITORY" --pattern "rapid-pi-$PLAT.tar.xz" --pattern SHA256SUMS --dir .work/cand
+          (cd .work/cand && grep " rapid-pi-$PLAT.tar.xz\$" SHA256SUMS | sha -c -)
+          mkdir -p out/cand && tar -C out/cand --strip-components=1 -xJf ".work/cand/rapid-pi-$PLAT.tar.xz"
           npm install --prefix .work/vanilla --ignore-scripts --no-audit --no-fund "@earendil-works/pi-coding-agent@$PI_VERSION" >/dev/null
           for v in 22 24; do
             base="https://nodejs.org/dist/latest-v$v.x"
@@ -61,7 +61,7 @@ jobs:
           {
             echo "runner: ${{ matrix.runner }} ($(uname -srm)), $(nproc 2>/dev/null || sysctl -n hw.ncpu) CPUs"
             if [ "$RUNNER_OS" = Linux ]; then grep -m1 'model name' /proc/cpuinfo || lscpu | grep -m1 'Model name'; else sysctl -n machdep.cpu.brand_string; fi
-            echo "pi-bolt: $BOLT_TAG, pi-bolt-$PLAT.tar.xz from the release (checked against its SHA256SUMS): $(out/cand/pi --version </dev/null)"
+            echo "rapid-pi: $BOLT_TAG, rapid-pi-$PLAT.tar.xz from the release (checked against its SHA256SUMS): $(out/cand/pi --version </dev/null)"
             echo "bun: Pi $(bun $VAN --version </dev/null) as released on npm, run by stock Bun $(bun --version)"
             for v in 22 24; do echo "node$v: Pi $(.work/node$v/bin/node $VAN --version </dev/null) as released on npm, on Node $(.work/node$v/bin/node --version)"; done
           } | tee results/environment.txt
@@ -70,7 +70,7 @@ jobs:
           CPUS: ${{ matrix.cpus }}
         run: |
           VAN=".work/vanilla/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js"
-          B=(--build pi-bolt=out/cand/pi --build "bun=$(command -v bun) $VAN" --build "node22=.work/node22/bin/node $VAN" --build "node24=.work/node24/bin/node $VAN")
+          B=(--build rapid-pi=out/cand/pi --build "bun=$(command -v bun) $VAN" --build "node22=.work/node22/bin/node $VAN" --build "node24=.work/node24/bin/node $VAN")
           C=(); [ -n "$CPUS" ] && C=(--cpus "$CPUS")
           run() { name=$1; shift; echo "## $name" | tee -a results/all.txt; "$@" 2>&1 | grep -vE 'round [0-9]+/' | tee -a results/all.txt || echo "$name failed" | tee -a results/all.txt; }
           run benchmark python3 bench/benchmark.py --runs 21 --warmup 3 --scenarios startup,headless,interactive "${C[@]}" "${B[@]}" --baseline node24
@@ -109,12 +109,12 @@ jobs:
         run: |
           $ErrorActionPreference = 'Continue'
           New-Item -ItemType Directory -Force results, .work | Out-Null
-          gh release download $env:BOLT_TAG --repo $env:GITHUB_REPOSITORY --pattern pi-bolt-win32-x64.zip --pattern SHA256SUMS --dir .work\cand-dl --clobber
+          gh release download $env:BOLT_TAG --repo $env:GITHUB_REPOSITORY --pattern rapid-pi-win32-x64.zip --pattern SHA256SUMS --dir .work\cand-dl --clobber
           if ($LASTEXITCODE -ne 0) { exit 1 }
-          $sum = (Get-FileHash .work\cand-dl\pi-bolt-win32-x64.zip -Algorithm SHA256).Hash.ToLowerInvariant()
-          if ((Get-Content -LiteralPath .work\cand-dl\SHA256SUMS) -notcontains "$sum  pi-bolt-win32-x64.zip") { throw "pi-bolt-win32-x64.zip is not the one SHA256SUMS lists" }
-          Expand-Archive .work\cand-dl\pi-bolt-win32-x64.zip -DestinationPath .work\cand-dl -Force
-          Move-Item .work\cand-dl\pi-bolt-win32-x64 .work\cand
+          $sum = (Get-FileHash .work\cand-dl\rapid-pi-win32-x64.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ((Get-Content -LiteralPath .work\cand-dl\SHA256SUMS) -notcontains "$sum  rapid-pi-win32-x64.zip") { throw "rapid-pi-win32-x64.zip is not the one SHA256SUMS lists" }
+          Expand-Archive .work\cand-dl\rapid-pi-win32-x64.zip -DestinationPath .work\cand-dl -Force
+          Move-Item .work\cand-dl\rapid-pi-win32-x64 .work\cand
           npm install --prefix .work\vanilla --ignore-scripts --no-audit --no-fund "@earendil-works/pi-coding-agent@$env:PI_VERSION" | Out-Null
           $env_lines = @()
           foreach ($v in 22, 24) {
@@ -130,7 +130,7 @@ jobs:
           $van = ".work\vanilla\node_modules\@earendil-works\pi-coding-agent\dist\bundle\cli.js"
           $cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
           $env_lines += "runner: windows-2025, $($cpu.Name.Trim()), $($cpu.NumberOfCores) cores, $($cpu.NumberOfLogicalProcessors) threads"
-          $env_lines += "pi-bolt: $env:BOLT_TAG, pi-bolt-win32-x64.zip from the release (checked against its SHA256SUMS): $(& .work\cand\pi-bolt.exe --version | Select-Object -First 1)"
+          $env_lines += "rapid-pi: $env:BOLT_TAG, rapid-pi-win32-x64.zip from the release (checked against its SHA256SUMS): $(& .work\cand\rapid-pi.exe --version | Select-Object -First 1)"
           $env_lines += "bun: Pi $(& bun $van --version | Select-Object -First 1) as released on npm, run by stock Bun $(bun --version)"
           foreach ($v in 22, 24) { $env_lines += "node${v}: Pi $(& .work\node$v\node.exe $van --version | Select-Object -First 1) as released on npm, on Node $(& .work\node$v\node.exe --version)" }
           $env_lines | Tee-Object -Variable shown
@@ -141,7 +141,7 @@ jobs:
           $ErrorActionPreference = 'Continue'
           $VAN = "$PWD\.work\vanilla\node_modules\@earendil-works\pi-coding-agent\dist\bundle\cli.js"
           $BUN = (Get-Command bun).Source
-          $B = @('--build', "pi-bolt=$PWD\.work\cand\pi-bolt.exe", '--build', "bun=$BUN $VAN",
+          $B = @('--build', "rapid-pi=$PWD\.work\cand\rapid-pi.exe", '--build', "bun=$BUN $VAN",
                  '--build', "node22=$PWD\.work\node22\node.exe $VAN", '--build', "node24=$PWD\.work\node24\node.exe $VAN")
           function Run($name, $file, [string[]]$cmd) {
             "## $name" | Add-Content -Encoding utf8 results\all.txt

@@ -92,8 +92,8 @@ fail("unexpected gh api " + method + " " + path);
 `;
 
 const oldPage = [
-	"<title>Pi-Bolt for Android · 0.5.5</title>",
-	'<a href="https://github.com/o/r/releases/download/android-v0.5.5/pi-bolt-android-0.5.5.apk">Download</a>',
+	"<title>Rapid Pi for Android · 0.5.5</title>",
+	'<a href="https://github.com/o/r/releases/download/android-v0.5.5/rapid-pi-android-0.5.5.apk">Download</a>',
 	'<a href="https://github.com/o/r/releases/tag/android-v0.5.5">android-v0.5.5</a>',
 	"<p>Version 0.5.5 · about 180 MB</p>",
 	"",
@@ -103,7 +103,7 @@ function releaseJson() {
 	return `${JSON.stringify(
 		{
 			version: VERSION,
-			apk: `https://github.com/o/r/releases/download/android-v${VERSION}/pi-bolt-android-${VERSION}.apk`,
+			apk: `https://github.com/o/r/releases/download/android-v${VERSION}/rapid-pi-android-${VERSION}.apk`,
 			page: `https://github.com/o/r/releases/tag/android-v${VERSION}`,
 			size: APK.length,
 			sha256: createHash("sha256").update(APK).digest("hex"),
@@ -133,7 +133,7 @@ function setup(t, overrides = {}) {
 		deployOnPush: true,
 		deployOnRequest: true,
 		release: {
-			apk: `pi-bolt-android-${VERSION}.apk`,
+			apk: `rapid-pi-android-${VERSION}.apk`,
 			bytes: APK.toString("base64"),
 			sha256: createHash("sha256").update(APK).digest("hex"),
 			body: `Signing certificate:\n\`\`\`\nSigner #1 certificate SHA-256 digest: ${CERT}\n\`\`\`\n`,
@@ -182,8 +182,8 @@ test("commits android.json and android.html together and waits for the push's ow
 	const files = state.trees[commit.tree];
 	assert.equal(files["android.json"], releaseJson());
 	assert.equal(files["index.html"], "home");
-	assert.match(files["android.html"], /Pi-Bolt for Android · 0\.6\.0/);
-	assert.match(files["android.html"], /releases\/download\/android-v0\.6\.0\/pi-bolt-android-0\.6\.0\.apk/);
+	assert.match(files["android.html"], /Rapid Pi for Android · 0\.6\.0/);
+	assert.match(files["android.html"], /releases\/download\/android-v0\.6\.0\/rapid-pi-android-0\.6\.0\.apk/);
 	assert.match(files["android.html"], /releases\/tag\/android-v0\.6\.0">android-v0\.6\.0/);
 	assert.match(files["android.html"], /Version 0\.6\.0 · about 0 MB/);
 	assert.equal(state.live["android.json"], releaseJson());
@@ -254,7 +254,7 @@ test("--dry-run prints the JSON and says what would change, writing nothing", (t
 });
 
 test("refuses an APK whose checksum does not match the release's", (t) => {
-	const { run } = setup(t, { state: { release: { apk: `pi-bolt-android-${VERSION}.apk`, bytes: APK.toString("base64"), sha256: "0".repeat(64), body: `SHA-256 digest: ${CERT}` } } });
+	const { run } = setup(t, { state: { release: { apk: `rapid-pi-android-${VERSION}.apk`, bytes: APK.toString("base64"), sha256: "0".repeat(64), body: `SHA-256 digest: ${CERT}` } } });
 	const result = run();
 	assert.notEqual(result.status, 0);
 	assert.match(result.stderr, /does not match the release's/);

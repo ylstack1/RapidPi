@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.editor
+package opensec.rapidpi.app.ui.projects.editor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -38,12 +38,12 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 
 /** The find bar's state, kept by the viewer across tabs: the query and its options, the replacement, the results. */
 @Stable

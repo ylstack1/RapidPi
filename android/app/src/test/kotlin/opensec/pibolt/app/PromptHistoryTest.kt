@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.ui.input.key.Key
-import opensec.pibolt.app.ui.session.ComposerKeys
-import opensec.pibolt.app.ui.session.ModelChipText
-import opensec.pibolt.app.ui.session.ProjectTraits
-import opensec.pibolt.app.ui.session.PromptHistory
-import opensec.pibolt.app.ui.session.StarterPrompts
-import opensec.pibolt.app.ui.session.thinkingChipLabel
+import opensec.rapidpi.app.ui.session.ComposerKeys
+import opensec.rapidpi.app.ui.session.ModelChipText
+import opensec.rapidpi.app.ui.session.ProjectTraits
+import opensec.rapidpi.app.ui.session.PromptHistory
+import opensec.rapidpi.app.ui.session.StarterPrompts
+import opensec.rapidpi.app.ui.session.thinkingChipLabel
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test

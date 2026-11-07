@@ -1,11 +1,11 @@
-package opensec.pibolt.app.session
+package opensec.rapidpi.app.session
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * The live sessions of the app (several at once: up to [opensec.pibolt.app.engine.LivePolicy.MAX_LIVE] on this phone's
+ * The live sessions of the app (several at once: up to [opensec.rapidpi.app.engine.LivePolicy.MAX_LIVE] on this phone's
  * engine plus one remote-control session), the one in focus (shown last), and when each was last used. Adding,
  * focusing and removing are cheap and thread-safe; nothing here starts or stops a session.
  */

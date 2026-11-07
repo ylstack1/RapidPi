@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Downloads the released Pi-Bolt runtime (instead of building it with build-runtime.sh) to $PIBOLT_WORK/runtime/bun.
+# Downloads the released Rapid Pi runtime (instead of building it with build-runtime.sh) to $RAPIDPI_WORK/runtime/bun.
 #
 # Usage: scripts/fetch-runtime.sh [--version bolt-vX.Y.Z]     (default: the latest release)
-# Environment: PIBOLT_DOWNLOAD_BASE (a mirror of the release files)
+# Environment: RAPIDPI_DOWNLOAD_BASE (a mirror of the release files)
 # The checksums must carry the release key's signature (keys/release.pub), checked with OpenSSL 3 or else with Bun.
 source "$(dirname "$0")/lib/common.sh"
 
@@ -16,10 +16,10 @@ while [ $# -gt 0 ]; do
 	shift
 done
 need curl
-REPO="https://github.com/opensec-git/Pi-Bolt"
+REPO="https://github.com/opensec-git/Rapid Pi"
 if [ "$TAG" = latest ]; then BASE="$REPO/releases/latest/download"; else BASE="$REPO/releases/download/$TAG"; fi
-BASE="${PIBOLT_DOWNLOAD_BASE:-$BASE}"
-NAME=pi-bolt-runtime-$PIBOLT_PLATFORM.tar.gz
+BASE="${RAPIDPI_DOWNLOAD_BASE:-$BASE}"
+NAME=rapid-pi-runtime-$RAPIDPI_PLATFORM.tar.gz
 
 # verify_signature FILE SIG KEY: dies unless SIG is KEY's signature of FILE.
 verify_signature() {
@@ -45,15 +45,15 @@ log "downloading $BASE/$NAME"
 curl -fL --progress-bar -o "$TMP/$NAME" "$BASE/$NAME"
 curl -fsSL -o "$TMP/SHA256SUMS" "$BASE/SHA256SUMS"
 curl -fsSL -o "$TMP/SHA256SUMS.sig" "$BASE/SHA256SUMS.sig" || die "no signature at $BASE/SHA256SUMS.sig: the runtime is not used"
-verify_signature "$TMP/SHA256SUMS" "$TMP/SHA256SUMS.sig" "$PIBOLT_ROOT/keys/release.pub"
+verify_signature "$TMP/SHA256SUMS" "$TMP/SHA256SUMS.sig" "$RAPIDPI_ROOT/keys/release.pub"
 check_sum "$TMP" "$NAME" || die "checksum mismatch for $NAME"
 tar -C "$TMP" -xzf "$TMP/$NAME"
-mkdir -p "$PIBOLT_WORK/runtime"
-install -m 755 "$TMP/pi-bolt-runtime-$PIBOLT_PLATFORM/bun" "$PIBOLT_WORK/runtime/bun"
-# Which engine it is, as the release's signed checksums give it (scripts/build-pi.sh records it, for `pi-bolt doctor`).
+mkdir -p "$RAPIDPI_WORK/runtime"
+install -m 755 "$TMP/rapid-pi-runtime-$RAPIDPI_PLATFORM/bun" "$RAPIDPI_WORK/runtime/bun"
+# Which engine it is, as the release's signed checksums give it (scripts/build-pi.sh records it, for `rapid-pi doctor`).
 if curl -fsSL -o "$TMP/RUNTIME_STAMP" "$BASE/RUNTIME_STAMP" 2>/dev/null && check_sum "$TMP" RUNTIME_STAMP; then
-	cp "$TMP/RUNTIME_STAMP" "$PIBOLT_WORK/runtime/RUNTIME_STAMP"
+	cp "$TMP/RUNTIME_STAMP" "$RAPIDPI_WORK/runtime/RUNTIME_STAMP"
 else
-	rm -f "$PIBOLT_WORK/runtime/RUNTIME_STAMP"
+	rm -f "$RAPIDPI_WORK/runtime/RUNTIME_STAMP"
 fi
-log "runtime: $PIBOLT_WORK/runtime/bun (Bun $("$PIBOLT_WORK/runtime/bun" --version))"
+log "runtime: $RAPIDPI_WORK/runtime/bun (Bun $("$RAPIDPI_WORK/runtime/bun" --version))"

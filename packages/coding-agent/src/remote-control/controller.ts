@@ -332,7 +332,7 @@ export class RemoteControlController {
 		}
 		this.lastPairingUri = server.pairingUri(endpoints);
 		const { lines, width } = renderQrLines(this.lastPairingUri);
-		const text: string[] = ["Remote control: scan with the Pi-Bolt app", ""];
+		const text: string[] = ["Remote control: scan with the Rapid Pi app", ""];
 		if (width + 2 > this.host.columns() || lines.length + 2 > this.host.rows()) {
 			text.push(
 				`The terminal is too small for the QR code (needs ${width + 2} columns and ${lines.length + 2} rows). Enlarge it and run /remote-control again, or use /remote-control copy.`,
@@ -360,7 +360,7 @@ export class RemoteControlController {
 		}
 		await this.host.copyToClipboard(this.lastPairingUri);
 		this.host.showStatus(
-			"Copied the pairing link. It pairs one phone within 10 minutes: paste it only into the Pi-Bolt app.",
+			"Copied the pairing link. It pairs one phone within 10 minutes: paste it only into the Rapid Pi app.",
 		);
 	}
 

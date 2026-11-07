@@ -1,21 +1,21 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.engine.ChatSpace
-import opensec.pibolt.app.engine.SessionIndex
-import opensec.pibolt.app.ui.chats.ChatList
-import opensec.pibolt.app.ui.chats.ChatModel
-import opensec.pibolt.app.ui.chats.ChatSummary
-import opensec.pibolt.app.ui.chats.ChatWelcome
-import opensec.pibolt.app.ui.session.SessionParts
-import opensec.pibolt.app.ui.session.features.Builtin
-import opensec.pibolt.app.ui.session.features.CommandPalette
-import opensec.pibolt.app.ui.session.features2.SessionBrowse
-import opensec.pibolt.protocol.backend.SessionTarget
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.app.ui.session.tree.SessionTree
+import opensec.rapidpi.app.engine.ChatSpace
+import opensec.rapidpi.app.engine.SessionIndex
+import opensec.rapidpi.app.ui.chats.ChatList
+import opensec.rapidpi.app.ui.chats.ChatModel
+import opensec.rapidpi.app.ui.chats.ChatSummary
+import opensec.rapidpi.app.ui.chats.ChatWelcome
+import opensec.rapidpi.app.ui.session.SessionParts
+import opensec.rapidpi.app.ui.session.features.Builtin
+import opensec.rapidpi.app.ui.session.features.CommandPalette
+import opensec.rapidpi.app.ui.session.features2.SessionBrowse
+import opensec.rapidpi.protocol.backend.SessionTarget
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.app.ui.session.tree.SessionTree
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.session.SlashCommand
+import opensec.rapidpi.protocol.session.SlashCommand
 import java.io.File
 import java.nio.file.Files
 import java.time.LocalDate
@@ -56,7 +56,7 @@ class ChatsTest {
     @Test
     fun aChatEngineGetsOnlyTheWebAndQuestionToolsInTheChatsFolderAndSessionFolder() {
         val chats = ChatSpace.dir(home)
-        assertEquals(File(home, ".pibolt/chats"), chats)
+        assertEquals(File(home, ".rapidpi/chats"), chats)
         assertFalse(chats.path.startsWith(projects.path), "the chats' folder is never a project")
         val args = ChatSpace.engineArgs(SessionTarget.Fresh, chats.path, home, agentDir)
         assertEquals(listOf("--mode", "rpc"), args.take(2))
@@ -93,37 +93,37 @@ class ChatsTest {
         )
         assertFalse(ChatSpace.isChat(File(projects, "chats").path, home))
         assertFalse(ChatSpace.isChat(home.path, home))
-        assertTrue(ChatSpace.isChat(File(home, ".pibolt/./chats").path, home))
+        assertTrue(ChatSpace.isChat(File(home, ".rapidpi/./chats").path, home))
     }
 
     @Test
     fun turningWebSearchOffRestartsEverySessionNotInATurn() {
         // Xiaomi round: an open chat kept its web tools. A lasting extension status (background subagents), an open
         // dialog or a reconnecting link made the session not "idle", so it was skipped; only a turn keeps the engine now.
-        val quiet = opensec.pibolt.protocol.session.SessionState(hello = true)
-        assertTrue(opensec.pibolt.app.engine.LivePolicy.restartsForSettings(quiet))
-        assertTrue(opensec.pibolt.app.engine.LivePolicy.restartsForSettings(quiet.copy(statuses = mapOf("subagents" to "1 agent running", "web" to "Exa"))))
-        assertTrue(opensec.pibolt.app.engine.LivePolicy.restartsForSettings(quiet.copy(dialogs = listOf(opensec.pibolt.protocol.session.DialogRequest("d", opensec.pibolt.protocol.session.DialogKind.Confirm, "Trust?")))))
-        assertFalse(opensec.pibolt.app.engine.LivePolicy.restartsForSettings(quiet.copy(isRunning = true)))
-        assertFalse(opensec.pibolt.app.engine.LivePolicy.restartsForSettings(quiet.copy(isCompacting = true)))
+        val quiet = opensec.rapidpi.protocol.session.SessionState(hello = true)
+        assertTrue(opensec.rapidpi.app.engine.LivePolicy.restartsForSettings(quiet))
+        assertTrue(opensec.rapidpi.app.engine.LivePolicy.restartsForSettings(quiet.copy(statuses = mapOf("subagents" to "1 agent running", "web" to "Exa"))))
+        assertTrue(opensec.rapidpi.app.engine.LivePolicy.restartsForSettings(quiet.copy(dialogs = listOf(opensec.rapidpi.protocol.session.DialogRequest("d", opensec.rapidpi.protocol.session.DialogKind.Confirm, "Trust?")))))
+        assertFalse(opensec.rapidpi.app.engine.LivePolicy.restartsForSettings(quiet.copy(isRunning = true)))
+        assertFalse(opensec.rapidpi.app.engine.LivePolicy.restartsForSettings(quiet.copy(isCompacting = true)))
     }
 
     @Test
     fun anEngineStartedWithOtherWebSearchIsStale() {
         // PR #266 review: an engine busy while Web search changed must not be reused, parked or handed a new session.
-        val policy = opensec.pibolt.app.engine.LivePolicy
+        val policy = opensec.rapidpi.app.engine.LivePolicy
         assertTrue(policy.staleEngine(launchedWith = true, current = false))
         assertTrue(policy.staleEngine(launchedWith = false, current = true))
         assertFalse(policy.staleEngine(launchedWith = true, current = true))
         assertFalse(policy.staleEngine(launchedWith = null, current = false))
         // Replaced once its turn ends, not during it.
-        val turn = opensec.pibolt.protocol.session.SessionState(hello = true, isRunning = true)
+        val turn = opensec.rapidpi.protocol.session.SessionState(hello = true, isRunning = true)
         assertFalse(policy.restartsForSettings(turn))
         assertTrue(policy.restartsForSettings(turn.copy(isRunning = false)))
     }
 
     /**
-     * What the engine registered with these flags: the tool lists the model saw in real runs of Pi-Bolt 1.1.2 with the
+     * What the engine registered with these flags: the tool lists the model saw in real runs of Rapid Pi 1.1.2 with the
      * bundled extensions (test/resources/fixtures/engine, recorded with android/e2e's fake model).
      */
     @Test

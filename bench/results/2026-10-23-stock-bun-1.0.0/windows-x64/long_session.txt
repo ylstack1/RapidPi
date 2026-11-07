@@ -1,4 +1,4 @@
-== pi-bolt (exit 0)
+== rapid-pi (exit 0)
      20:   156.9 ms/prompt   cpu    34.9 ms/prompt   memory 73.1 MB (own 94.9 MB)   request   4.5 MB (~1.1M tokens)   private working set 37.3 MB
      40:   215.9 ms/prompt   cpu    52.7 ms/prompt   memory 79.2 MB (own 100.5 MB)   request   9.0 MB (~2.2M tokens)   private working set 43.4 MB
          peaks: working set 81.9 MB, private working set 43.6 MB, private bytes 102.5 MB, system commit +127.3 MB

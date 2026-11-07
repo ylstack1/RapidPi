@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol.session
+package opensec.rapidpi.protocol.session
 
 /** Where a subagent run is. Queued waits for a slot; Done, Failed and Stopped are final. */
 enum class SubagentStatus {

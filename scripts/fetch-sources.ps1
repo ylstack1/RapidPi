@@ -1,5 +1,5 @@
-# Clones oven-sh/WebKit and oven-sh/bun at the commits in sources.json and applies Pi-Bolt's patches on top: Windows'
-# scripts/fetch-sources.sh. Sources go to $env:PIBOLT_WORK (default .work\) as webkit\ and bun\.
+# Clones oven-sh/WebKit and oven-sh/bun at the commits in sources.json and applies Rapid Pi's patches on top: Windows'
+# scripts/fetch-sources.sh. Sources go to $env:RAPIDPI_WORK (default .work\) as webkit\ and bun\.
 #
 # WebKit is fetched without file contents and checked out sparsely (Source, Tools, WebKitLibraries, JSTests, icu, scripts,
 # resources and the top-level files): its LayoutTests alone are hundreds of thousands of files, which Windows and its virus
@@ -7,7 +7,7 @@
 # Usage: scripts\fetch-sources.ps1
 $ErrorActionPreference = 'Stop'
 $Root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$Work = if ($env:PIBOLT_WORK) { $env:PIBOLT_WORK } else { Join-Path $Root '.work' }
+$Work = if ($env:RAPIDPI_WORK) { $env:RAPIDPI_WORK } else { Join-Path $Root '.work' }
 $sources = Get-Content (Join-Path $Root 'sources.json') -Raw | ConvertFrom-Json
 function Log($message) { Write-Host "==> $message" -ForegroundColor Cyan }
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) { throw "'git' is required" }
@@ -59,7 +59,7 @@ function Fetch($name, [string[]]$sparse) {
 	git -C $dir checkout -q --detach $s.commit
 	if ($LASTEXITCODE -ne 0) { throw "${name}: checkout failed" }
 	Log "${name}: applying $(Split-Path -Leaf $s.patches)"
-	git -C $dir -c user.name=pi-bolt -c user.email=pi-bolt@localhost am -q (Join-Path $Root $s.patches)
+	git -C $dir -c user.name=rapid-pi -c user.email=rapid-pi@localhost am -q (Join-Path $Root $s.patches)
 	if ($LASTEXITCODE -ne 0) { throw "${name}: the patch did not apply" }
 }
 

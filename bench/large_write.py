@@ -3,7 +3,7 @@
 about what a model sends per token, and Pi shows the call as it arrives. Reports the wall and CPU time of the prompt (pi -p), for
 files of each size.
 
-Example: bench/large_write.py --build pi-bolt=./out/pi-bolt/pi --build bun=./out/pi-stable/pi --sizes 50,200
+Example: bench/large_write.py --build rapid-pi=./out/rapid-pi/pi --build bun=./out/pi-stable/pi --sizes 50,200
 """
 
 import argparse

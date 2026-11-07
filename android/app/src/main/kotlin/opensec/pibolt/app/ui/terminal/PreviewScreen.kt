@@ -1,7 +1,7 @@
-package opensec.pibolt.app.ui.terminal
+package opensec.rapidpi.app.ui.terminal
 
-import opensec.pibolt.app.ui.projects.EmptyCard
-import opensec.pibolt.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.projects.EmptyCard
+import opensec.rapidpi.app.ui.components.PrimaryButton
 import androidx.compose.material.icons.rounded.CloudOff
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -35,10 +35,10 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import android.view.ViewGroup
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.preview.PreviewController
-import opensec.pibolt.app.preview.PreviewOrigins
-import opensec.pibolt.app.ui.components.GlassPill
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.preview.PreviewController
+import opensec.rapidpi.app.preview.PreviewOrigins
+import opensec.rapidpi.app.ui.components.GlassPill
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,12 +49,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.CircleShape
-import opensec.pibolt.app.ui.components.GlassBar
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.components.ProgressLine
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.components.GlassBar
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.ProgressLine
+import opensec.rapidpi.app.ui.theme.Pi
 
 /**
  * The dev app in an in-app browser: the shared preview WebView ([PreviewController]), restricted to http://localhost

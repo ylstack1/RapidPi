@@ -1,11 +1,11 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.AccentId
-import opensec.pibolt.app.data.AppSettings
-import opensec.pibolt.app.data.Density
-import opensec.pibolt.app.data.ReduceMotion
-import opensec.pibolt.app.data.SettingsCodec
-import opensec.pibolt.app.data.ThemeId
+import opensec.rapidpi.app.data.AccentId
+import opensec.rapidpi.app.data.AppSettings
+import opensec.rapidpi.app.data.Density
+import opensec.rapidpi.app.data.ReduceMotion
+import opensec.rapidpi.app.data.SettingsCodec
+import opensec.rapidpi.app.data.ThemeId
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -60,11 +60,11 @@ class SettingsCodecTest {
 
     @Test
     fun theRemovedVoidThemeMovesToTheDefault() {
-        // Void was removed in 0.5.2 (the default is black now); a saved Void choice becomes Pi-Bolt (id Graphite) and the
+        // Void was removed in 0.5.2 (the default is black now); a saved Void choice becomes Rapid Pi (id Graphite) and the
         // other settings in the file survive.
         val s = SettingsCodec.decode("""{"theme":"Void","accent":"Iris","textSize":1}""")
         assertEquals(ThemeId.Graphite, s.theme)
-        assertEquals("Pi-Bolt", s.theme.label)
+        assertEquals("Rapid Pi", s.theme.label)
         assertEquals(AccentId.Iris, s.accent)
         assertEquals(1, s.textSize)
         assertTrue(ThemeId.entries.none { it.name == "Void" })

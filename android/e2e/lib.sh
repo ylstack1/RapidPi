@@ -1,12 +1,12 @@
 # shellcheck shell=bash
-# Pi-Bolt Android on-device E2E helpers. Source from an area script; every helper acts on $SERIAL.
+# Rapid Pi Android on-device E2E helpers. Source from an area script; every helper acts on $SERIAL.
 # Bash 3.2 compatible (macOS /bin/bash): no associative arrays, no ${x,,}, no mapfile.
 #
 # Environment:
-#   SERIAL        adb serial (required), e.g. emulator-5556. emulator-5554 (the shared pibolt-api36) is refused.
+#   SERIAL        adb serial (required), e.g. emulator-5556. emulator-5554 (the shared rapidpi-api36) is refused.
 #   APK           debug APK to install (default: $SUITE/build/app-debug.apk)
 #   E2E_OUT       results root (default: $SUITE/out); an area writes to $E2E_OUT/$SERIAL/<area>/
-#   E2E_ENGINE    real | stand-in (default: detected: real when the APK ships lib/arm64-v8a/libpibolt.so)
+#   E2E_ENGINE    real | stand-in (default: detected: real when the APK ships lib/arm64-v8a/librapidpi.so)
 #   E2E_INSTALL   1 to (re)install the APK at area start (default: install only when missing)
 #   FAKE_MODEL    fake model server script (default: $SUITE/fake-model-scripted.mjs; extensions.sh uses fake-model-ext.mjs)
 #   FAKE_PORT     host port of this device's fake model (default: 13000 + emulator console port, so 18556 for 5556)
@@ -14,8 +14,8 @@
 #   E2E_SKIP_ENGINE=1  skip the cases that need the on-device engine (stand-in APK runs only the UI parts)
 
 SUITE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PKG=in.opensec.pibolt
-ACTIVITY=opensec.pibolt.app.MainActivity
+PKG=in.opensec.rapidpi
+ACTIVITY=opensec.rapidpi.app.MainActivity
 ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
 ADB="${ADB:-$ANDROID_HOME/platform-tools/adb}"
 APK="${APK:-$SUITE/build/app-debug.apk}"
@@ -30,7 +30,7 @@ if [ -z "${SERIAL:-}" ]; then
 	exit 2
 fi
 if [ "$SERIAL" = "emulator-5554" ] && [ "${E2E_ALLOW_5554:-}" != "yes-i-own-it" ]; then
-	echo "refusing emulator-5554: it is the shared pibolt-api36 used by the runtime agent" >&2
+	echo "refusing emulator-5554: it is the shared rapidpi-api36 used by the runtime agent" >&2
 	exit 2
 fi
 case "$SERIAL" in
@@ -41,7 +41,7 @@ esac
 FAKE_HOST="${FAKE_HOST:-10.0.2.2}"
 
 if [ -z "${E2E_ENGINE:-}" ]; then
-	if unzip -l "$APK" 2>/dev/null | grep -q 'lib/arm64-v8a/libpibolt.so'; then E2E_ENGINE=real; else E2E_ENGINE=stand-in; fi
+	if unzip -l "$APK" 2>/dev/null | grep -q 'lib/arm64-v8a/librapidpi.so'; then E2E_ENGINE=real; else E2E_ENGINE=stand-in; fi
 fi
 # Where project folders live: HOME/projects for the real engine (CONTRACT.md), dev-projects for the UI's FakeEngine.
 if [ "$E2E_ENGINE" = real ]; then PROJECTS_REL=files/home/projects; else PROJECTS_REL=files/dev-projects; fi
@@ -139,7 +139,7 @@ clear_data() {
 
 stop_app() { adb_ shell am force-stop "$PKG"; }
 
-APP_SCREENS=("text=Pi-Bolt" "text=Connect a model" "any=Message Pi…" "desc=Project" "desc=Projects" "text=Settings")
+APP_SCREENS=("text=Rapid Pi" "text=Connect a model" "any=Message Pi…" "desc=Project" "desc=Projects" "text=Settings")
 launch_app() {
 	adb_ shell am start -W -n "$PKG/$ACTIVITY" >/dev/null
 	WAIT=$((E2E_TIMEOUT + 10)) wait_for "${APP_SCREENS[@]}" >/dev/null && return 0
@@ -159,8 +159,8 @@ restart_app() {
 
 app_pid() { adb_ shell pidof "$PKG" | tr -d '\r'; }
 
-# Engine processes: libpibolt.so exec'd from nativeLibraryDir (CONTRACT.md), owned by the app's uid.
-engine_pids() { run_as "pgrep -f libpibolt.so" | tr -d '\r' | tr '\n' ' '; }
+# Engine processes: librapidpi.so exec'd from nativeLibraryDir (CONTRACT.md), owned by the app's uid.
+engine_pids() { run_as "pgrep -f librapidpi.so" | tr -d '\r' | tr '\n' ' '; }
 
 kill_engine() {
 	local pids
@@ -271,12 +271,12 @@ dump_ui() {
 }
 
 # Dismisses dialogs that are not ours (a slow emulator's "System UI isn't responding", a permission prompt).
-# An ANR dialog for Pi-Bolt itself is recorded (assert_no_crash fails on it) and then waited out.
+# An ANR dialog for Rapid Pi itself is recorded (assert_no_crash fails on it) and then waited out.
 handle_system_dialogs() {
 	local ui="node $SUITE/ui.mjs"
 	if $ui find "$UI_XML" "text~=isn't responding" >/dev/null; then
-		if $ui find "$UI_XML" "text~=Pi-Bolt isn" >/dev/null; then
-			log "ANR dialog for Pi-Bolt"
+		if $ui find "$UI_XML" "text~=Rapid Pi isn" >/dev/null; then
+			log "ANR dialog for Rapid Pi"
 			echo "ANR dialog seen at $(date +%T) in ${CASE:-?}" >>"$OUT_DIR/anr-dialogs.txt"
 			screenshot "anr-dialog" >/dev/null
 		else
@@ -423,12 +423,12 @@ scroll_up_to() {
 	ui_find "$@" >/dev/null
 }
 
-# Back until Home (title "Pi-Bolt" with the Settings action), relaunching if back left the app.
+# Back until Home (title "Rapid Pi" with the Settings action), relaunching if back left the app.
 go_home() {
 	local i
 	for i in 1 2 3 4 5 6; do
 		dump_ui
-		if ui find "text=Pi-Bolt" >/dev/null && ui find "desc=Settings" >/dev/null && ! ui find "desc=Close sheet" >/dev/null; then return 0; fi
+		if ui find "text=Rapid Pi" >/dev/null && ui find "desc=Settings" >/dev/null && ! ui find "desc=Close sheet" >/dev/null; then return 0; fi
 		if ! adb_ shell dumpsys activity activities | grep -q "topResumedActivity.*$PKG"; then
 			launch_app
 			continue
@@ -436,7 +436,7 @@ go_home() {
 		back
 		sleep 0.5
 	done
-	ui_find "text=Pi-Bolt" >/dev/null || fail "could not get back to Home"
+	ui_find "text=Rapid Pi" >/dev/null || fail "could not get back to Home"
 }
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -508,7 +508,7 @@ assert_no_crash() {
 	local uid
 	uid=$(app_uid)
 	adb_ logcat -d -v threadtime --uid="$uid" 2>/dev/null | grep -E "FATAL EXCEPTION|Fatal signal|AndroidRuntime: Process" >"$OUT_DIR/.crash-lines.txt"
-	adb_ logcat -d -b crash -v threadtime 2>/dev/null | grep -E "Process: $PKG|>>> .*($PKG|libpibolt)" >>"$OUT_DIR/.crash-lines.txt"
+	adb_ logcat -d -b crash -v threadtime 2>/dev/null | grep -E "Process: $PKG|>>> .*($PKG|librapidpi)" >>"$OUT_DIR/.crash-lines.txt"
 	adb_ logcat -d -b system,main -v brief 2>/dev/null | grep -E "ANR in $PKG" >>"$OUT_DIR/.crash-lines.txt"
 	[ -s "$OUT_DIR/.crash-lines.txt" ] && fail "crash or ANR in logcat: $(head -3 "$OUT_DIR/.crash-lines.txt" | tr '\n' ' ')"
 	[ -s "$OUT_DIR/anr-dialogs.txt" ] && fail "ANR dialog shown: $(head -1 "$OUT_DIR/anr-dialogs.txt")"
@@ -584,7 +584,7 @@ fresh_app() {
 	if [ "${1:-fake}" = fake ]; then
 		# The first-run key sheet must not show: auth.json already has the "fake" key.
 		sleep 1
-		ui_find "text=Welcome to Pi-Bolt" >/dev/null && fail "first-run key sheet shown although auth.json has a key"
+		ui_find "text=Welcome to Rapid Pi" >/dev/null && fail "first-run key sheet shown although auth.json has a key"
 	fi
 	return 0
 }

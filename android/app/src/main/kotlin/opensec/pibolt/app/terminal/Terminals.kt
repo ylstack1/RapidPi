@@ -1,4 +1,4 @@
-package opensec.pibolt.app.terminal
+package opensec.rapidpi.app.terminal
 
 import android.content.ClipData
 import android.content.ClipDescription
@@ -26,15 +26,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.engine.EngineManifest
-import opensec.pibolt.app.engine.EnginePaths
-import opensec.pibolt.app.engine.EnginePrefix
-import opensec.pibolt.app.engine.EngineStatus
-import opensec.pibolt.app.engine.ProcessReaper
-import opensec.pibolt.app.engine.engineEnvironment
-import opensec.pibolt.app.secrets.ProjectSecrets
-import opensec.pibolt.app.secrets.SecretStore
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.engine.EngineManifest
+import opensec.rapidpi.app.engine.EnginePaths
+import opensec.rapidpi.app.engine.EnginePrefix
+import opensec.rapidpi.app.engine.EngineStatus
+import opensec.rapidpi.app.engine.ProcessReaper
+import opensec.rapidpi.app.engine.engineEnvironment
+import opensec.rapidpi.app.secrets.ProjectSecrets
+import opensec.rapidpi.app.secrets.SecretStore
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.TimeZone
@@ -89,7 +89,7 @@ object Terminals {
             Thread({
                 runCatching { reaper.killTree(pid.toLong()) }
                 session.finishIfRunning()
-            }, "pibolt-terminal-kill").start()
+            }, "rapidpi-terminal-kill").start()
         }
         tab.running = false
         views.remove(tab.session)
@@ -155,7 +155,7 @@ object Terminals {
     private val previewScanner by lazy { DevServerPorts(mentionedPorts = { hintPorts + probeAlso }) }
 
     /** Dev-server ports, scanned while a chip shows them. */
-    val ports: StateFlow<List<Int>> by lazy { DevServerPorts(mentionedPorts = { hintPorts + opensec.pibolt.app.engine.BackgroundJobs.hintPorts }).watch(portScope) }
+    val ports: StateFlow<List<Int>> by lazy { DevServerPorts(mentionedPorts = { hintPorts + opensec.rapidpi.app.engine.BackgroundJobs.hintPorts }).watch(portScope) }
 
     /** The theme's colours as the terminal palette: background, text, cursor and the 16 base colours. */
     fun applyColors(background: Int, foreground: Int, cursor: Int, base16: IntArray) {

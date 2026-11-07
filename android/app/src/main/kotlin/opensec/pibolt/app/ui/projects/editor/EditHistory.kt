@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.editor
+package opensec.rapidpi.app.ui.projects.editor
 
 /**
  * One change to the text: at [start], [removed] was replaced by [inserted]. [selectionBefore] / [selectionAfter] are

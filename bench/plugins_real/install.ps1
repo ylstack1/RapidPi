@@ -1,11 +1,11 @@
 # Installs each of the real extensions measured by bench\plugins_real\measure.py into a Pi agent directory of its own, under
 # .work\plugins-real\<name>\agent, from registry.npmjs.org, with the packages' install scripts off. Pi's own `install` does it
-# (as a user would), with Pi-Bolt's executable.
-#   bench\plugins_real\install.ps1 [-Pi out\pi-bolt\pi.exe]
+# (as a user would), with Rapid Pi's executable.
+#   bench\plugins_real\install.ps1 [-Pi out\rapid-pi\pi.exe]
 param([string]$Pi = '')
 $ErrorActionPreference = 'Continue'
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-if (-not $Pi) { $Pi = Join-Path $root 'out\pi-bolt\pi.exe' }
+if (-not $Pi) { $Pi = Join-Path $root 'out\rapid-pi\pi.exe' }
 $work = Join-Path $root '.work\plugins-real'
 $extensions = [ordered]@{
 	'opensec-pi-subagents' = 'opensec-pi-subagents@0.20.0'

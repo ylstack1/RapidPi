@@ -1,12 +1,12 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.double
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.double
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.session.SessionReducer
 import java.util.Locale
 
 /**

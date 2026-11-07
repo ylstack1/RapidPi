@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,18 +24,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.projects.ProjectRules
-import opensec.pibolt.app.ui.session.features2.F2Empty
-import opensec.pibolt.app.ui.session.features2.F2Loading
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.protocol.rpc.RemoteProject
-import opensec.pibolt.protocol.rpc.RemoteSessionInfo
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.projects.ProjectRules
+import opensec.rapidpi.app.ui.session.features2.F2Empty
+import opensec.rapidpi.app.ui.session.features2.F2Loading
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.protocol.rpc.RemoteProject
+import opensec.rapidpi.protocol.rpc.RemoteSessionInfo
 
 /**
  * The computer's projects and their sessions, from its background service (`host.service`): pick a project, then one
@@ -72,7 +72,7 @@ fun RemoteSessionsSheet(controller: SessionController, onDismiss: () -> Unit) {
             when {
                 list == null -> F2Loading("Reading projects")
                 list.isFailure -> F2Empty(list.exceptionOrNull()?.message ?: "Could not list projects", Icons.Rounded.Folder)
-                list.getOrThrow().isEmpty() -> F2Empty("No projects yet. Start Pi-Bolt in a folder on the computer first.", Icons.Rounded.Folder)
+                list.getOrThrow().isEmpty() -> F2Empty("No projects yet. Start Rapid Pi in a folder on the computer first.", Icons.Rounded.Folder)
                 else -> LazyColumn(Modifier.fillMaxWidth().heightIn(max = 520.dp)) {
                     items(list.getOrThrow(), key = { it.cwd }) { p ->
                         InsetRow(

@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#050505">
-<title>Integrations · Pi-Bolt documentation</title>
-<meta name="description" content="Use Pi-Bolt from tools that run Pi, such as Paseo, from scripts, in tmux and in containers.">
-<meta property="og:title" content="Integrations · Pi-Bolt documentation">
-<meta property="og:description" content="Use Pi-Bolt from tools that run Pi, such as Paseo, from scripts, in tmux and in containers.">
-<meta property="og:url" content="https://pi-bolt.opensec.in/docs/integrations.html">
-<link rel="canonical" href="https://pi-bolt.opensec.in/docs/integrations.html">
+<title>Integrations · Rapid Pi documentation</title>
+<meta name="description" content="Use Rapid Pi from tools that run Pi, such as Paseo, from scripts, in tmux and in containers.">
+<meta property="og:title" content="Integrations · Rapid Pi documentation">
+<meta property="og:description" content="Use Rapid Pi from tools that run Pi, such as Paseo, from scripts, in tmux and in containers.">
+<meta property="og:url" content="https://rapid-pi.opensec.in/docs/integrations.html">
+<link rel="canonical" href="https://rapid-pi.opensec.in/docs/integrations.html">
 <link rel="icon" href="../logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
     </button>
     <nav class="top" aria-label="Main">
       <a href="../#benchmarks">Benchmarks</a>
-      <a href="https://github.com/opensec-git/Pi-Bolt/releases/latest">Releases</a>
-      <a class="gh" href="https://github.com/opensec-git/Pi-Bolt"><span>GitHub</span><i aria-hidden="true">↗</i></a>
+      <a href="https://github.com/opensec-git/Rapid Pi/releases/latest">Releases</a>
+      <a class="gh" href="https://github.com/opensec-git/Rapid Pi"><span>GitHub</span><i aria-hidden="true">↗</i></a>
     </nav>
   </div>
 </header>
@@ -68,60 +68,60 @@
     <article class="doc">
       <p class="eyebrow">Guides</p>
 <h1>Integrations</h1>
-<p class="lede">Anything that runs Pi can run Pi-Bolt: it takes the same arguments, speaks the same JSON and RPC protocols, and
-  reads the same configuration. Point the tool at <code>pi-bolt</code> instead of <code>pi</code>.</p>
+<p class="lede">Anything that runs Pi can run Rapid Pi: it takes the same arguments, speaks the same JSON and RPC protocols, and
+  reads the same configuration. Point the tool at <code>rapid-pi</code> instead of <code>pi</code>.</p>
 
 <h2 id="tools-that-start-pi">Tools that start Pi<a class="anchor" href="#tools-that-start-pi" aria-label="Link to this section">#</a></h2>
 <p>Agent managers, editors and web interfaces start Pi by running a command, usually <code>pi</code>. Most let you set that
-  command. Set it to <code>pi-bolt</code>, or to the full path that <code>command -v pi-bolt</code> prints.</p>
-<p>A tool that bundles its own copy of Pi, locked to a version, runs that copy and not Pi-Bolt, unless it lets you choose the Pi
+  command. Set it to <code>rapid-pi</code>, or to the full path that <code>command -v rapid-pi</code> prints.</p>
+<p>A tool that bundles its own copy of Pi, locked to a version, runs that copy and not Rapid Pi, unless it lets you choose the Pi
   executable.</p>
 
 <h3 id="paseo">Paseo<a class="anchor" href="#paseo" aria-label="Link to this section">#</a></h3>
-<p><a href="https://paseo.sh">Paseo</a> runs Pi through its <code>pi</code> provider. To run every Pi agent on Pi-Bolt, change
+<p><a href="https://paseo.sh">Paseo</a> runs Pi through its <code>pi</code> provider. To run every Pi agent on Rapid Pi, change
   that provider's command in <code>~/.paseo/config.json</code>:</p>
-<pre data-label="~/.paseo/config.json">{ "agents": { "providers": { "pi": { "command": ["pi-bolt"] } } } }</pre>
-<p>Or add Pi-Bolt as a provider of its own, next to Pi. <code>"extends": "pi"</code> tells Paseo to drive it the way it drives
+<pre data-label="~/.paseo/config.json">{ "agents": { "providers": { "pi": { "command": ["rapid-pi"] } } } }</pre>
+<p>Or add Rapid Pi as a provider of its own, next to Pi. <code>"extends": "pi"</code> tells Paseo to drive it the way it drives
   Pi; <code>command</code> only changes the executable:</p>
 <pre data-label="~/.paseo/config.json">{
   "agents": {
     "providers": {
-      "pi-bolt": { "extends": "pi", "label": "Pi-Bolt", "command": ["pi-bolt"] }
+      "rapid-pi": { "extends": "pi", "label": "Rapid Pi", "command": ["rapid-pi"] }
     }
   }
 }</pre>
-<p>Restart Paseo, then pick Pi-Bolt in the app or run <code>paseo run --provider pi-bolt "your task"</code>.</p>
+<p>Restart Paseo, then pick Rapid Pi in the app or run <code>paseo run --provider rapid-pi "your task"</code>.</p>
 
 <h2 id="scripts-and-automation">Scripts and automation<a class="anchor" href="#scripts-and-automation" aria-label="Link to this section">#</a></h2>
 <p>Pi's non-interactive modes work as documented by Pi:</p>
-<pre data-label="Terminal"><span class="p">$ </span>pi-bolt -p "Summarize the open TODOs"           <span class="c"># print mode: answer, then exit</span>
-<span class="p">$ </span>pi-bolt -p --mode json "Run the tests"         <span class="c"># a stream of JSON events</span>
-<span class="p">$ </span>pi-bolt --mode rpc                              <span class="c"># controlled by another program over stdio</span></pre>
+<pre data-label="Terminal"><span class="p">$ </span>rapid-pi -p "Summarize the open TODOs"           <span class="c"># print mode: answer, then exit</span>
+<span class="p">$ </span>rapid-pi -p --mode json "Run the tests"         <span class="c"># a stream of JSON events</span>
+<span class="p">$ </span>rapid-pi --mode rpc                              <span class="c"># controlled by another program over stdio</span></pre>
 <p>See Pi's <a href="https://pi.dev/docs/latest/cli">CLI</a>, <a href="https://pi.dev/docs/latest/json">JSON</a> and
-  <a href="https://pi.dev/docs/latest/rpc">RPC</a> references. A one-shot <code>pi-bolt -p</code> starts and finishes several
+  <a href="https://pi.dev/docs/latest/rpc">RPC</a> references. A one-shot <code>rapid-pi -p</code> starts and finishes several
   times faster than Pi on Bun or Node, which adds up in scripts and CI.</p>
 <p>Pi's <a href="https://pi.dev/docs/latest/sdk">TypeScript SDK</a> embeds Pi in your own program; that program runs on its own
-  runtime, not on Pi-Bolt.</p>
+  runtime, not on Rapid Pi.</p>
 
 <h2 id="tmux-and-terminal-multiplexers">tmux and terminal multiplexers<a class="anchor" href="#tmux-and-terminal-multiplexers" aria-label="Link to this section">#</a></h2>
-<p>Pi-Bolt runs in tmux, zmx and other multiplexers as Pi does. It also writes less to the terminal: on Linux a session in tmux
-  takes about 28 MB of Pi-Bolt's own memory, against 87 MB for Pi on Bun. See Pi's <a href="https://pi.dev/docs/latest/tmux">Run
+<p>Rapid Pi runs in tmux, zmx and other multiplexers as Pi does. It also writes less to the terminal: on Linux a session in tmux
+  takes about 28 MB of Rapid Pi's own memory, against 87 MB for Pi on Bun. See Pi's <a href="https://pi.dev/docs/latest/tmux">Run
   Pi in tmux</a> for tmux settings.</p>
-<p>If a terminal draws the screen wrongly while the interface scrolls, start Pi-Bolt with <code>PI_TUI_SCROLL_ROWS=0</code>, which
+<p>If a terminal draws the screen wrongly while the interface scrolls, start Rapid Pi with <code>PI_TUI_SCROLL_ROWS=0</code>, which
   redraws changed rows instead of scrolling them. tmux, zmx, xterm, kitty, Ghostty and VTE terminals do not need it.</p>
 
 <h2 id="containers">Containers<a class="anchor" href="#containers" aria-label="Link to this section">#</a></h2>
-<p>Pi-Bolt needs nothing from a Linux image but glibc 2.17 or later. The installer also needs <code>curl</code> or
-  <code>wget</code>, and <code>tar</code>. Install it in the image with <code>PIBOLT_YES=1</code>, which takes the defaults
+<p>Rapid Pi needs nothing from a Linux image but glibc 2.17 or later. The installer also needs <code>curl</code> or
+  <code>wget</code>, and <code>tar</code>. Install it in the image with <code>RAPIDPI_YES=1</code>, which takes the defaults
   without asking:</p>
-<pre data-label="Dockerfile">RUN curl -fsSL https://pi-bolt.opensec.in/install.sh | PIBOLT_YES=1 sh
+<pre data-label="Dockerfile">RUN curl -fsSL https://rapid-pi.opensec.in/install.sh | RAPIDPI_YES=1 sh
 ENV PATH="/root/.local/bin:$PATH"</pre>
 <ul>
   <li><strong>Memory limits.</strong> Count the executable too: its code is file-backed memory that the kernel charges to the
-    container. Pi-Bolt runs with a limit of about 100 MB, at twice the CPU and with pauses; 256 MB or more leaves it alone.</li>
-  <li><strong>CPU limits.</strong> With <code>--cpus</code>, Pi-Bolt starts fewer threads.</li>
+    container. Rapid Pi runs with a limit of about 100 MB, at twice the CPU and with pauses; 256 MB or more leaves it alone.</li>
+  <li><strong>CPU limits.</strong> With <code>--cpus</code>, Rapid Pi starts fewer threads.</li>
   <li><strong>Address-space limits.</strong> The compiled code needs about 10 GB of virtual address space. It is reserved, not
-    used. Under a tighter <code>ulimit -v</code>, Pi-Bolt runs from bytecode, more slowly; see
+    used. Under a tighter <code>ulimit -v</code>, Rapid Pi runs from bytecode, more slowly; see
     <a href="troubleshooting.html#notices-at-startup">Notices at startup</a>.</li>
 </ul>
 <p>Pi's <a href="https://pi.dev/docs/latest/containerization">Isolate Pi</a> covers running the agent in a container
@@ -129,7 +129,7 @@ ENV PATH="/root/.local/bin:$PATH"</pre>
 
     </article>
     <div class="doc-foot">
-      <a class="edit" href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs-site/pages/integrations.html">Edit this page on GitHub</a>
+      <a class="edit" href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs-site/pages/integrations.html">Edit this page on GitHub</a>
     </div>
     <nav class="pager" aria-label="Previous and next page"><a class="prev" href="extensions.html"><span>Previous</span>Extensions</a><a class="next" href="configuration.html"><span>Next</span>Configuration</a></nav>
   </main>
@@ -141,10 +141,10 @@ ENV PATH="/root/.local/bin:$PATH"</pre>
 
 <footer>
   <div class="foot">
-    <p>© 2026 OpenSec · <strong>Pi-Bolt</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
+    <p>© 2026 OpenSec · <strong>Rapid Pi</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
       affiliated with Pi's authors or with Oven. MIT licensed.</p>
-    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Pi-Bolt">GitHub</a> ·
-      <a href="https://www.npmjs.com/package/pi-bolt">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
+    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Rapid Pi">GitHub</a> ·
+      <a href="https://www.npmjs.com/package/rapid-pi">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
   </div>
 </footer>
 

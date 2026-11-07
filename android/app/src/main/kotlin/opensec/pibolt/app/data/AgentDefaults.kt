@@ -1,4 +1,4 @@
-package opensec.pibolt.app.data
+package opensec.rapidpi.app.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -8,10 +8,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 import java.io.File
 
 /**

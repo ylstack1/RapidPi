@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
 import android.graphics.Paint
 import android.graphics.Path
@@ -38,16 +38,16 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.horizontalEdgeFades
-import opensec.pibolt.app.ui.markdown.math.GlyphMetrics
-import opensec.pibolt.app.ui.markdown.math.MathBox
-import opensec.pibolt.app.ui.markdown.math.MathFont
-import opensec.pibolt.app.ui.markdown.math.MathLayout
-import opensec.pibolt.app.ui.markdown.math.MathMetrics
-import opensec.pibolt.app.ui.markdown.math.MathOp
-import opensec.pibolt.app.ui.markdown.math.Tex
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.components.horizontalEdgeFades
+import opensec.rapidpi.app.ui.markdown.math.GlyphMetrics
+import opensec.rapidpi.app.ui.markdown.math.MathBox
+import opensec.rapidpi.app.ui.markdown.math.MathFont
+import opensec.rapidpi.app.ui.markdown.math.MathLayout
+import opensec.rapidpi.app.ui.markdown.math.MathMetrics
+import opensec.rapidpi.app.ui.markdown.math.MathOp
+import opensec.rapidpi.app.ui.markdown.math.Tex
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 import java.util.EnumMap
 
 /** Measures and draws math with platform paints: serif italic for variables, serif upright for the rest. */

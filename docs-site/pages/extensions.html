@@ -1,21 +1,21 @@
-<!-- {"title": "Extensions", "description": "Pi extensions work in Pi-Bolt unchanged. How they run on each build, which need the JIT build, and how to compile them in."} -->
+<!-- {"title": "Extensions", "description": "Pi extensions work in Rapid Pi unchanged. How they run on each build, which need the JIT build, and how to compile them in."} -->
 <p class="eyebrow">Guides</p>
 <h1>Extensions</h1>
-<p class="lede">Pi extensions and Pi packages work in Pi-Bolt without changes. They are found, installed and configured exactly as
+<p class="lede">Pi extensions and Pi packages work in Rapid Pi without changes. They are found, installed and configured exactly as
   in Pi. What differs is how their code runs, which depends on the build.</p>
 
 <h2>Install and manage extensions</h2>
-<p>Pi-Bolt loads extensions from the same places as Pi: <code>~/.pi/agent/extensions</code>, a project's
+<p>Rapid Pi loads extensions from the same places as Pi: <code>~/.pi/agent/extensions</code>, a project's
   <code>.pi/extensions</code>, Pi packages, and <code>-e &lt;path&gt;</code> on the command line.</p>
-<pre data-label="Terminal"><span class="p">$ </span>pi-bolt install --pi-bolt npm:opensec-pi-todo <span class="c"># install for Pi-Bolt only</span>
-<span class="p">$ </span>pi-bolt list                           <span class="c"># list installed packages</span>
-<span class="p">$ </span>pi-bolt update --extensions            <span class="c"># update them</span>
-<span class="p">$ </span>pi-bolt remove --pi-bolt npm:opensec-pi-todo <span class="c"># remove one</span>
-<span class="p">$ </span>pi-bolt config                         <span class="c"># turn resources on and off</span></pre>
-<p><code>pi-bolt install</code> and <code>pi-bolt remove</code> change the shared <code>packages</code> list used by both Pi and
-  Pi-Bolt. Add <code>--pi-bolt</code> to change only Pi-Bolt's package overrides, which inherit the shared list and can add,
-  exclude or replace packages (see <a href="configuration.html#shared-packages-and-pi-bolt-overrides">Configuration</a>).</p>
-<p>Pi-Bolt installs packages with its own package manager when npm is not installed. A run-time extension's own dependencies
+<pre data-label="Terminal"><span class="p">$ </span>rapid-pi install --rapid-pi npm:opensec-pi-todo <span class="c"># install for Rapid Pi only</span>
+<span class="p">$ </span>rapid-pi list                           <span class="c"># list installed packages</span>
+<span class="p">$ </span>rapid-pi update --extensions            <span class="c"># update them</span>
+<span class="p">$ </span>rapid-pi remove --rapid-pi npm:opensec-pi-todo <span class="c"># remove one</span>
+<span class="p">$ </span>rapid-pi config                         <span class="c"># turn resources on and off</span></pre>
+<p><code>rapid-pi install</code> and <code>rapid-pi remove</code> change the shared <code>packages</code> list used by both Pi and
+  Rapid Pi. Add <code>--rapid-pi</code> to change only Rapid Pi's package overrides, which inherit the shared list and can add,
+  exclude or replace packages (see <a href="configuration.html#shared-packages-and-rapid-pi-overrides">Configuration</a>).</p>
+<p>Rapid Pi installs packages with its own package manager when npm is not installed. A run-time extension's own dependencies
   resolve as they do on Node, through its <code>package.json</code>. Writing extensions is covered by Pi's
   <a href="https://pi.dev/docs/latest/extensions">Extensions</a> guide.</p>
 
@@ -43,17 +43,17 @@
     <code>vm</code>: that code is only ever interpreted on the default build.</li>
   <li><strong>Extensions that do heavy work in JavaScript</strong>: they work on the default build, more slowly.</li>
 </ul>
-<p>Install the JIT build with <code>PIBOLT_VARIANT</code>, as described in <a href="builds.html#switch-builds">Switch builds</a>.</p>
+<p>Install the JIT build with <code>RAPIDPI_VARIANT</code>, as described in <a href="builds.html#switch-builds">Switch builds</a>.</p>
 
 <h2>Extensions that start Pi</h2>
 <p>Some extensions start more Pi processes, for example to run subagents. If such an extension runs the <code>pi</code> command,
   its subagents run on stock Pi (or fail when Pi is not installed). Check the extension's settings for the command it runs. For
   <a href="https://github.com/nicobailon/pi-subagents">pi-subagents</a>, set:</p>
-<pre data-label="Shell profile">export PI_SUBAGENT_PI_BINARY=pi-bolt</pre>
+<pre data-label="Shell profile">export PI_SUBAGENT_PI_BINARY=rapid-pi</pre>
 
 <h2 id="opensec-extensions">OpenSec extensions</h2>
-<p>The installer offers three extensions that OpenSec maintains for Pi-Bolt. They are prebuilt for Pi-Bolt's runtime, so they
-  load without being transpiled. The installer uses <code>--pi-bolt</code> to keep them out of Pi's shared list, as Pi on Node
+<p>The installer offers three extensions that OpenSec maintains for Rapid Pi. They are prebuilt for Rapid Pi's runtime, so they
+  load without being transpiled. The installer uses <code>--rapid-pi</code> to keep them out of Pi's shared list, as Pi on Node
   cannot run them. It installs the versions each release pins.</p>
 <div class="table"><table>
   <thead><tr><th>Package</th><th>What it does</th></tr></thead>
@@ -63,22 +63,22 @@
     <tr><td><a href="https://www.npmjs.com/package/opensec-pi-fff"><code>opensec-pi-fff</code></a></td><td>Fast file and content search: find, grep and @-mentions, as fast on the default build as with the JIT. Not offered when <code>@ff-labs/pi-fff</code> is installed.</td></tr>
   </tbody>
 </table></div>
-<pre data-label="Terminal"><span class="p">$ </span>pi-bolt install --pi-bolt npm:opensec-pi-subagents
-<span class="p">$ </span>pi-bolt install --pi-bolt npm:opensec-pi-todo
-<span class="p">$ </span>pi-bolt install --pi-bolt npm:opensec-pi-fff</pre>
+<pre data-label="Terminal"><span class="p">$ </span>rapid-pi install --rapid-pi npm:opensec-pi-subagents
+<span class="p">$ </span>rapid-pi install --rapid-pi npm:opensec-pi-todo
+<span class="p">$ </span>rapid-pi install --rapid-pi npm:opensec-pi-fff</pre>
 
 <h2>Compile extensions in</h2>
 <p>An extension compiled into the executable runs as machine code like Pi itself, with no startup cost. On Linux and macOS,
-  <code>pi-bolt compile</code> compiles the extensions you have installed into your Pi-Bolt:</p>
-<pre data-label="Terminal"><span class="p">$ </span>pi-bolt compile                          <span class="c"># the extensions installed here</span>
-<span class="p">$ </span>pi-bolt compile --exclude big-bundle     <span class="c"># all but these (--only: just these)</span>
-<span class="p">$ </span>pi-bolt compile --off                    <span class="c"># the release's executable again</span></pre>
+  <code>rapid-pi compile</code> compiles the extensions you have installed into your Rapid Pi:</p>
+<pre data-label="Terminal"><span class="p">$ </span>rapid-pi compile                          <span class="c"># the extensions installed here</span>
+<span class="p">$ </span>rapid-pi compile --exclude big-bundle     <span class="c"># all but these (--only: just these)</span>
+<span class="p">$ </span>rapid-pi compile --off                    <span class="c"># the release's executable again</span></pre>
 <p>It downloads its release's runtime and compile kit, checks them against the release's signature, and builds in about 20
-  seconds. The build it replaces is kept (<code>pi-bolt update --rollback</code> puts it back), and <code>pi-bolt update</code>
+  seconds. The build it replaces is kept (<code>rapid-pi update --rollback</code> puts it back), and <code>rapid-pi update</code>
   compiles the same extensions into each new release. An extension compiled in is used while its installed copy is unchanged;
   one changed since is loaded from its files, with a warning to compile it in again.</p>
-<p>To build with a manifest of your own (on Windows too), use a Pi-Bolt build environment (see
-  <a href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs/BUILDING.md">Building</a>):</p>
+<p>To build with a manifest of your own (on Windows too), use a Rapid Pi build environment (see
+  <a href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs/BUILDING.md">Building</a>):</p>
 <ol class="steps">
   <li>
     <strong>Write a manifest</strong>
@@ -98,12 +98,12 @@ export default plugins;</pre>
   </li>
   <li>
     <strong>Build</strong>
-<pre data-label="Terminal"><span class="p">$ </span>scripts/build-pi.sh --plugins my-plugins/plugins.ts --out out/pi-bolt-plugins</pre>
-    <p>On Windows: <code>scripts\build-pi.ps1 -Plugins my-plugins\plugins.ts -Out out\pi-bolt-plugins</code>.</p>
+<pre data-label="Terminal"><span class="p">$ </span>scripts/build-pi.sh --plugins my-plugins/plugins.ts --out out/rapid-pi-plugins</pre>
+    <p>On Windows: <code>scripts\build-pi.ps1 -Plugins my-plugins\plugins.ts -Out out\rapid-pi-plugins</code>.</p>
   </li>
   <li>
     <strong>Check</strong>
-<pre data-label="Terminal"><span class="p">$ </span>BUN_STATIC_HEAP_VERBOSE=1 out/pi-bolt-plugins/pi --version 2>&amp;1 | grep "image registered"
+<pre data-label="Terminal"><span class="p">$ </span>BUN_STATIC_HEAP_VERBOSE=1 out/rapid-pi-plugins/pi --version 2>&amp;1 | grep "image registered"
 [aot] image registered: true</pre>
     <p>A named extension is a built-in, <code>builtin:&lt;name&gt;</code>: <code>-builtin:&lt;name&gt;</code> in the
       <code>extensions</code> setting turns it off. If the same extension is also installed at run time, the run-time copy takes
@@ -111,7 +111,7 @@ export default plugins;</pre>
   </li>
 </ol>
 <p>The full guide, with workers, embedded files and training a profile, is
-  <a href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs/PLUGINS.md">Porting Pi plugins to Pi-Bolt</a>.</p>
+  <a href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs/PLUGINS.md">Porting Pi plugins to Rapid Pi</a>.</p>
 
 <h3 id="compatibility">Compatibility checklist</h3>
 <p>These are the rules for any code bundled into one executable. Most extensions already follow them.</p>
@@ -125,7 +125,7 @@ export default plugins;</pre>
     <code>import prompt from "./prompt.md" with { type: "text" }</code>.</li>
   <li><strong>Keep the factory light.</strong> Start processes, sockets and timers from <code>session_start</code> or the command
     that needs them.</li>
-  <li><strong>Do not replace the standard objects' methods.</strong> Pi-Bolt freezes them, so
+  <li><strong>Do not replace the standard objects' methods.</strong> Rapid Pi freezes them, so
     <code>Array.prototype.map = ...</code> throws. Polyfills that only add what is missing are fine.</li>
 </ul>
 

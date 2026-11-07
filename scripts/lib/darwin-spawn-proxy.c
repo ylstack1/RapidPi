@@ -78,7 +78,7 @@ static void execute(int helper, int status, const char* path, char** argv)
     fcntl(status, F_SETFD, FD_CLOEXEC);
     execve(path, argv, environ);
     int error = errno;
-    tell(status, PIBOLT_SPAWN_FAILED, error);
+    tell(status, RAPIDPI_SPAWN_FAILED, error);
     _exit(127);
 }
 
@@ -129,9 +129,9 @@ static void waitForAnswer(int helper, int stream)
 // nothing was started.
 static int request(int helper, int status, const char* path, char** argv, uint32_t ignored, uint32_t blocked, int* stream)
 {
-    struct pibolt_spawn_request message = { .magic = PIBOLT_SPAWN_MAGIC, .version = PIBOLT_SPAWN_VERSION };
-    int fds[PIBOLT_SPAWN_MAX_FDS + 2];
-    struct proc_fdinfo open_[PIBOLT_SPAWN_MAX_FDS + 8];
+    struct pibolt_spawn_request message = { .magic = RAPIDPI_SPAWN_MAGIC, .version = RAPIDPI_SPAWN_VERSION };
+    int fds[RAPIDPI_SPAWN_MAX_FDS + 2];
+    struct proc_fdinfo open_[RAPIDPI_SPAWN_MAX_FDS + 8];
     int listed = proc_pidinfo(getpid(), PROC_PIDLISTFDS, 0, open_, sizeof(open_));
     if (listed <= 0 || listed >= (int)sizeof(open_))
         return -1;
@@ -139,7 +139,7 @@ static int request(int helper, int status, const char* path, char** argv, uint32
         int fd = open_[i].proc_fd;
         if (fd == helper || fd == status || open_[i].proc_fdtype == PROX_FDTYPE_KQUEUE)
             continue;
-        if (message.nfds == PIBOLT_SPAWN_MAX_FDS)
+        if (message.nfds == RAPIDPI_SPAWN_MAX_FDS)
             return -1;
         message.targets[message.nfds] = fd;
         fds[2 + message.nfds++] = fd;
@@ -164,7 +164,7 @@ static int request(int helper, int status, const char* path, char** argv, uint32
 
     union {
         struct cmsghdr header;
-        char space[CMSG_SPACE((PIBOLT_SPAWN_MAX_FDS + 2) * sizeof(int))];
+        char space[CMSG_SPACE((RAPIDPI_SPAWN_MAX_FDS + 2) * sizeof(int))];
     } control;
     memset(&control, 0, sizeof(control));
     size_t descriptors = (size_t)(message.nfds + 2) * sizeof(int);
@@ -195,12 +195,12 @@ static int request(int helper, int status, const char* path, char** argv, uint32
 
     struct pibolt_spawn_params params = { .ignored_signals = ignored, .blocked_signals = blocked };
     pid_t self = getpid();
-    params.mode = getsid(0) == self ? PIBOLT_SPAWN_NEW_SESSION : getpgrp() == self ? PIBOLT_SPAWN_NEW_GROUP : PIBOLT_SPAWN_SHARE_GROUP;
+    params.mode = getsid(0) == self ? RAPIDPI_SPAWN_NEW_SESSION : getpgrp() == self ? RAPIDPI_SPAWN_NEW_GROUP : RAPIDPI_SPAWN_SHARE_GROUP;
     params.pgid = getpgrp();
     mode_t mask = umask(0);
     umask(mask);
     params.umask = mask;
-    for (int resource = 0; resource < PIBOLT_SPAWN_RLIMITS; resource++) {
+    for (int resource = 0; resource < RAPIDPI_SPAWN_RLIMITS; resource++) {
         struct rlimit limit;
         if (getrlimit(resource, &limit)) {
             // (Closed: the program would otherwise inherit it, and the helper's worker would wait on it.)
@@ -223,19 +223,19 @@ static int request(int helper, int status, const char* path, char** argv, uint32
     // The worker has its own copy by now, or never will (the helper is gone, or nothing for 30 seconds): from here the
     // stream ends when the worker does, and a request that never reached one ends it at once.
     close(pair[1]);
-    if (failed || readFully(*stream, &reply, sizeof(reply)) || reply.kind == PIBOLT_SPAWN_UNAVAILABLE) {
+    if (failed || readFully(*stream, &reply, sizeof(reply)) || reply.kind == RAPIDPI_SPAWN_UNAVAILABLE) {
         close(*stream);
         return -1;
     }
-    if (reply.kind == PIBOLT_SPAWN_FAILED) {
-        tell(status, PIBOLT_SPAWN_FAILED, reply.value);
+    if (reply.kind == RAPIDPI_SPAWN_FAILED) {
+        tell(status, RAPIDPI_SPAWN_FAILED, reply.value);
         _exit(127);
     }
-    if (reply.kind != PIBOLT_SPAWN_STARTED) {
+    if (reply.kind != RAPIDPI_SPAWN_STARTED) {
         close(*stream);
         return -1;
     }
-    tell(status, PIBOLT_SPAWN_STARTED, reply.value);
+    tell(status, RAPIDPI_SPAWN_STARTED, reply.value);
     // The program has them now: they must close when it closes them (a pipe's reader sees its end). (The status pipe stays
     // open: what the program used goes there when it has exited.)
     for (int i = 2; i < message.nfds + 2; i++)
@@ -272,22 +272,22 @@ int main(int argc, char** argv)
         execute(helper, status, path, programArgv);
 
     struct pibolt_spawn_reply exited;
-    if (readFully(stream, &exited, sizeof(exited)) || exited.kind != PIBOLT_SPAWN_EXITED)
+    if (readFully(stream, &exited, sizeof(exited)) || exited.kind != RAPIDPI_SPAWN_EXITED)
         _exit(127);
     struct pibolt_spawn_reply used;
     struct pibolt_spawn_usage usage;
     // `usage` comes right after `exited` from a helper of 0.8.2 or later. A helper of an earlier release (that of a session
-    // started before Pi-Bolt was updated in place, which runs this pi-spawn from the new files) sends nothing more and waits
+    // started before Rapid Pi was updated in place, which runs this pi-spawn from the new files) sends nothing more and waits
     // for pi-spawn to exit: so only a short wait for it.
     struct pollfd more = { .fd = stream, .events = POLLIN };
     int ready;
     while ((ready = poll(&more, 1, 250)) < 0 && errno == EINTR) { }
-    if (ready == 1 && (more.revents & POLLIN) && !readFully(stream, &used, sizeof(used)) && used.kind == PIBOLT_SPAWN_USAGE
+    if (ready == 1 && (more.revents & POLLIN) && !readFully(stream, &used, sizeof(used)) && used.kind == RAPIDPI_SPAWN_USAGE
         && !readFully(stream, &usage, sizeof(usage))) {
         // (pi-bin may have stopped listening: that must not be how pi-spawn ends.)
         struct sigaction ignore = { .sa_handler = SIG_IGN };
         sigaction(SIGPIPE, &ignore, NULL);
-        tell(status, PIBOLT_SPAWN_USAGE, 0);
+        tell(status, RAPIDPI_SPAWN_USAGE, 0);
         writeFully(status, &usage, sizeof(usage));
     }
     close(status);

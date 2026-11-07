@@ -19,7 +19,7 @@ import type { PathMetadata, ResolvedPaths, ResolvedResource } from "../../../cor
 import { getPackageIdentity } from "../../../core/package-source.ts";
 import type { PackageSource, SettingsManager } from "../../../core/settings-manager.ts";
 import { BUILTIN_PATH_PREFIX, getResourcePathKey } from "../../../core/source-info.ts";
-import { PIBOLT } from "../../../pi-bolt.ts";
+import { RAPIDPI } from "../../../rapid-pi.ts";
 import { isLocalPath, resolvePath, shortenHomePath } from "../../../utils/paths.ts";
 import { theme } from "../theme/theme.ts";
 import { DynamicBorder } from "./dynamic-border.ts";
@@ -574,12 +574,12 @@ class ResourceList implements Component, Focusable {
 
 	private togglePackageResource(item: ResourceItem, enabled: boolean): void {
 		const scope = item.metadata.scope as "user" | "project";
-		const { packages, piBolt } = this.getPackageDeclarationList(item, scope);
+		const { packages, rapidPi } = this.getPackageDeclarationList(item, scope);
 		const matches = (pkg: PackageSource) => {
 			const source = typeof pkg === "string" ? pkg : pkg.source;
 			return source === item.metadata.source;
 		};
-		const pkgIndex = piBolt ? packages.findLastIndex(matches) : packages.findIndex(matches);
+		const pkgIndex = rapidPi ? packages.findLastIndex(matches) : packages.findIndex(matches);
 
 		if (pkgIndex === -1) return;
 
@@ -623,9 +623,9 @@ class ResourceList implements Component, Focusable {
 		}
 
 		if (scope === "project") {
-			this.settingsManager.setProjectPackages(packages, { piBolt });
+			this.settingsManager.setProjectPackages(packages, { rapidPi });
 		} else {
-			this.settingsManager.setPackages(packages, { piBolt });
+			this.settingsManager.setPackages(packages, { rapidPi });
 		}
 	}
 
@@ -689,18 +689,18 @@ class ResourceList implements Component, Focusable {
 	}
 
 	private setProjectPackageOverride(item: ResourceItem, state: ProjectOverrideState): boolean {
-		const { packages, piBolt } = this.getPackageDeclarationList(item, "project");
+		const { packages, rapidPi } = this.getPackageDeclarationList(item, "project");
 		const matches = (pkg: PackageSource) =>
 			this.packageSourceStringMatches(
 				item.metadata.source,
 				this.getItemScope(item),
-				typeof pkg === "string" ? (piBolt && pkg.startsWith("-") ? pkg.slice(1) : pkg) : pkg.source,
+				typeof pkg === "string" ? (rapidPi && pkg.startsWith("-") ? pkg.slice(1) : pkg) : pkg.source,
 				"project",
 			);
-		let pkgIndex = PIBOLT !== undefined ? packages.findLastIndex(matches) : packages.findIndex(matches);
+		let pkgIndex = RAPIDPI !== undefined ? packages.findLastIndex(matches) : packages.findIndex(matches);
 		const existing = packages[pkgIndex];
 		// Keep the exclusion beneath a new delta, so returning to inherit restores the global fallback.
-		if (piBolt && typeof existing === "string" && existing.startsWith("-")) pkgIndex = -1;
+		if (rapidPi && typeof existing === "string" && existing.startsWith("-")) pkgIndex = -1;
 		if (pkgIndex === -1) {
 			if (state === "inherit") return false;
 			packages.push(this.createPackageOverrideSource(item));
@@ -722,7 +722,7 @@ class ResourceList implements Component, Focusable {
 			if (pkg.autoload === false) packages.splice(pkgIndex, 1);
 			else packages[pkgIndex] = pkg.source;
 		}
-		this.settingsManager.setProjectPackages(packages, { piBolt });
+		this.settingsManager.setProjectPackages(packages, { rapidPi });
 		return true;
 	}
 
@@ -811,7 +811,7 @@ class ResourceList implements Component, Focusable {
 		rightSource: string,
 		rightScope: SettingsScope,
 	): boolean {
-		if (PIBOLT === undefined) {
+		if (RAPIDPI === undefined) {
 			if (leftSource === rightSource) return true;
 			if (!isLocalPath(leftSource) || !isLocalPath(rightSource)) return false;
 			return (
@@ -829,10 +829,10 @@ class ResourceList implements Component, Focusable {
 	private getPackageDeclarationList(
 		item: ResourceItem,
 		scope: SettingsScope,
-	): { packages: PackageSource[]; piBolt: boolean } {
+	): { packages: PackageSource[]; rapidPi: boolean } {
 		const settings =
 			scope === "project" ? this.settingsManager.getProjectSettings() : this.settingsManager.getGlobalSettings();
-		const own = Array.isArray(settings.piBolt?.packages) ? settings.piBolt.packages : [];
+		const own = Array.isArray(settings.rapidPi?.packages) ? settings.rapidPi.packages : [];
 		const matches = (pkg: PackageSource, pkgScope: SettingsScope, ownEntry = false) =>
 			this.packageSourceStringMatches(
 				item.metadata.source,
@@ -842,14 +842,14 @@ class ResourceList implements Component, Focusable {
 			);
 		const hasDeclaration =
 			(settings.packages ?? []).some((pkg) => matches(pkg, scope)) || own.some((pkg) => matches(pkg, scope, true));
-		const globalOwn = this.settingsManager.getGlobalSettings().piBolt?.packages;
+		const globalOwn = this.settingsManager.getGlobalSettings().rapidPi?.packages;
 		const inheritedOwn =
 			scope === "project" &&
 			!hasDeclaration &&
 			Array.isArray(globalOwn) &&
 			globalOwn.some((pkg) => matches(pkg, "user", true));
-		const piBolt = PIBOLT !== undefined && (own.some((pkg) => matches(pkg, scope, true)) || inheritedOwn);
-		return { packages: [...((piBolt ? own : settings.packages) ?? [])], piBolt };
+		const rapidPi = RAPIDPI !== undefined && (own.some((pkg) => matches(pkg, scope, true)) || inheritedOwn);
+		return { packages: [...((rapidPi ? own : settings.packages) ?? [])], rapidPi };
 	}
 
 	private findMatchingPackageSource(item: ResourceItem, targetScope: SettingsScope): PackageSource | undefined {
@@ -864,7 +864,7 @@ class ResourceList implements Component, Focusable {
 				typeof pkg === "string" ? pkg : pkg.source,
 				targetScope,
 			);
-		return PIBOLT !== undefined && targetScope === "project" ? packages.findLast(matches) : packages.find(matches);
+		return RAPIDPI !== undefined && targetScope === "project" ? packages.findLast(matches) : packages.find(matches);
 	}
 
 	private getPatternEntryTarget(entry: string): string {

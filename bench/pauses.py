@@ -12,8 +12,8 @@ of a plain one: run once without it for the frames, once with it for the collect
 Steps are scenarios of fake_model_stress.py: write:KB (a file written through a tool call), md:CHARS (a Markdown answer).
 On Windows Pi runs in a ConPTY: the gaps are between the updates the console sends, which come at most once a console frame.
 
-Example: bench/pauses.py --build pi-bolt=./out/pi-bolt/pi --steps write:50,write:200,write:400
-         bench/pauses.py --gc --steps md:20000,write:50 --out pauses.jsonl --build pi-bolt=./out/pi-bolt/pi
+Example: bench/pauses.py --build rapid-pi=./out/rapid-pi/pi --steps write:50,write:200,write:400
+         bench/pauses.py --gc --steps md:20000,write:50 --out pauses.jsonl --build rapid-pi=./out/rapid-pi/pi
 """
 
 import argparse
@@ -38,7 +38,7 @@ def is_node(build):
 
 
 def gc_env(build):
-    """What turns the GC log on: JavaScriptCore's option for Bun and Pi-Bolt, a preloaded observer for Node."""
+    """What turns the GC log on: JavaScriptCore's option for Bun and Rapid Pi, a preloaded observer for Node."""
     if is_node(build):
         # (Forward slashes: Node takes a backslash in NODE_OPTIONS for an escape.)
         return {"NODE_OPTIONS": f'--require "{(HERE / "gc_log.cjs").as_posix()}"'}

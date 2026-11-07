@@ -1,7 +1,7 @@
-package opensec.pibolt.app.background
+package opensec.rapidpi.app.background
 
 /**
- * When the CPU must stay awake for the agent with the screen off. Pure, for [opensec.pibolt.app.session.SessionService]
+ * When the CPU must stay awake for the agent with the screen off. Pure, for [opensec.rapidpi.app.session.SessionService]
  * and tests.
  *
  * A partial wake lock is held while at least one session on this phone works: a turn streams or runs tools (and is not

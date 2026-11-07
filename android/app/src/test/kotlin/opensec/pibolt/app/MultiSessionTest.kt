@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.session.LiveRegistry
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.projects.LocalSessions.Placed
+import opensec.rapidpi.app.session.LiveRegistry
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.projects.LocalSessions.Placed
 import java.io.File
-import opensec.pibolt.app.session.RunningSummary
-import opensec.pibolt.app.session.RunningSummary.Entry
+import opensec.rapidpi.app.session.RunningSummary
+import opensec.rapidpi.app.session.RunningSummary.Entry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -73,12 +73,12 @@ class MultiSessionTest {
 
     @Test
     fun theForegroundNotificationSumsUpEveryBusySession() {
-        assertNull(RunningSummary.of(listOf(entry("idle")), "Pi-Bolt"), "nothing busy: the service stops")
-        val one = RunningSummary.of(listOf(entry("api", running = true), entry("idle")), "Pi-Bolt")!!
+        assertNull(RunningSummary.of(listOf(entry("idle")), "Rapid Pi"), "nothing busy: the service stops")
+        val one = RunningSummary.of(listOf(entry("api", running = true), entry("idle")), "Rapid Pi")!!
         assertEquals("api", one.title)
         assertEquals("Working", one.text)
-        val two = RunningSummary.of(listOf(entry("api", running = true), entry("web", running = true, waiting = true), entry("idle")), "Pi-Bolt")!!
-        assertEquals("Pi-Bolt", two.title)
+        val two = RunningSummary.of(listOf(entry("api", running = true), entry("web", running = true, waiting = true), entry("idle")), "Rapid Pi")!!
+        assertEquals("Rapid Pi", two.title)
         assertEquals("2 sessions · 1 waiting for your answer", two.text)
         assertEquals(listOf("api: Working", "web: Waiting for your answer"), two.lines)
         assertEquals("Restarting the engine…", entry("x", running = true, connected = false).status)
@@ -98,7 +98,7 @@ class MultiSessionTest {
 
     @Test
     fun sessionsOfOneProjectHaveTheirOwnIds() {
-        val p = File("/data/data/in.opensec.pibolt/files/projects/app")
+        val p = File("/data/data/in.opensec.rapidpi/files/projects/app")
         assertEquals("local:${p.absolutePath}", SessionController.localId(p))
         assertEquals("local:${p.absolutePath}", SessionController.localId(p, 0))
         assertEquals("local:${p.absolutePath}#1", SessionController.localId(p, 1))

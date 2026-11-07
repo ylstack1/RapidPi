@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests of the Pi-Bolt runtime itself (the patched Bun), for what Pi and its extensions rely on:
+# Tests of the Rapid Pi runtime itself (the patched Bun), for what Pi and its extensions rely on:
 #   stack       Error.captureStackTrace() and the default Error.prepareStackTrace on objects that are not Errors
 #   keepalive   a connection waits in fetch's keep-alive pool for 4 seconds, or for as long as the server's Keep-Alive header
 #               says less 2 seconds, and one that has waited longer is not used again: a connection that went dead while it
@@ -9,8 +9,8 @@
 #   builtins    in an executable built as Pi is (static heap, code compiled ahead of time), each built-in module is one object
 #               however it is reached, its functions' source text is the module's own, what they throw is unchanged, and a
 #               server's Date header is the time it answered; the same as from source
-# Usage: tests/runtime/run.sh        Environment: PIBOLT_BUN (the runtime; default $PIBOLT_WORK/runtime/bun);
-#   PIBOLT_RUNTIME_OLDER=1 skips workdir (CI, while the released runtime is an older engine)
+# Usage: tests/runtime/run.sh        Environment: RAPIDPI_BUN (the runtime; default $RAPIDPI_WORK/runtime/bun);
+#   RAPIDPI_RUNTIME_OLDER=1 skips workdir (CI, while the released runtime is an older engine)
 source "$(dirname "$0")/../../scripts/lib/common.sh"
 set +e
 BUN="$(runtime_bun)"
@@ -22,7 +22,7 @@ check() { # check NAME EXPECTED ACTUAL
 
 if [ "$("$BUN" stack.mjs 2>&1)" = "$(cat stack.expected)" ]; then echo "PASS stack"; else echo "FAIL stack"; "$BUN" stack.mjs 2>&1 | diff stack.expected - | head -5; status=1; fi
 
-if [ -n "${PIBOLT_RUNTIME_OLDER:-}" ]; then
+if [ -n "${RAPIDPI_RUNTIME_OLDER:-}" ]; then
 	echo "SKIP workdir: the runtime is an older engine than this commit's"
 else
 workdir=$(mktemp -d)
@@ -40,10 +40,10 @@ rm -rf "$workdir"
 fi
 
 builtins=$(mktemp -d)
-"$BUN" build --compile --bytecode --format=esm --target="bun-$PIBOLT_PLATFORM" builtins.mjs --outfile "$builtins/bc" >/dev/null
+"$BUN" build --compile --bytecode --format=esm --target="bun-$RAPIDPI_PLATFORM" builtins.mjs --outfile "$builtins/bc" >/dev/null
 BUN_BYTECODE_ORDER_OUT="$builtins/order" "$builtins/bc" >/dev/null 2>&1
 env BUN_JSC_useJIT=0 BUN_STATIC_HEAP=1 BUN_AOT=1 BUN_AOT_JIT=0 BUN_JSC_omitBytecodeFromStaticHeap=1 BUN_JSC_useImmutableIntrinsics=1 \
-	"$BUN" build --compile --bytecode --format=esm --target="bun-$PIBOLT_PLATFORM" --bytecode-order="$builtins/order" builtins.mjs \
+	"$BUN" build --compile --bytecode --format=esm --target="bun-$RAPIDPI_PLATFORM" --bytecode-order="$builtins/order" builtins.mjs \
 	--outfile "$builtins/aot" >/dev/null 2>&1
 check "builtins: compiled ahead of time, from the static heap" "$(cat builtins.expected)" "$("$builtins/aot" 2>&1)"
 check "builtins: from source" "$(cat builtins.expected)" "$("$BUN" builtins.mjs 2>&1)"

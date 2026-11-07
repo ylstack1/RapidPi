@@ -1,13 +1,13 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.git.BranchStatus
-import opensec.pibolt.app.git.Change
-import opensec.pibolt.app.git.GitStatus
-import opensec.pibolt.app.git.StatusEntry
-import opensec.pibolt.app.ui.git.ChangesRules
-import opensec.pibolt.app.ui.projects.ProjectBadges
-import opensec.pibolt.app.ui.projects.ProjectNavRules
-import opensec.pibolt.app.ui.projects.ProjectTab
+import opensec.rapidpi.app.git.BranchStatus
+import opensec.rapidpi.app.git.Change
+import opensec.rapidpi.app.git.GitStatus
+import opensec.rapidpi.app.git.StatusEntry
+import opensec.rapidpi.app.ui.git.ChangesRules
+import opensec.rapidpi.app.ui.projects.ProjectBadges
+import opensec.rapidpi.app.ui.projects.ProjectNavRules
+import opensec.rapidpi.app.ui.projects.ProjectTab
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

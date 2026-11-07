@@ -1,6 +1,6 @@
 # Architecture
 
-This document explains what a Pi-Bolt executable contains, how it is built, and what happens when it starts.
+This document explains what a Rapid Pi executable contains, how it is built, and what happens when it starts.
 
 - [The executable](#the-executable)
 - [Build pipeline](#build-pipeline)
@@ -14,7 +14,7 @@ This document explains what a Pi-Bolt executable contains, how it is built, and 
 
 ## The executable
 
-A Pi-Bolt executable is a Bun single-file executable with two extra sections appended:
+A Rapid Pi executable is a Bun single-file executable with two extra sections appended:
 
 ```
 ┌──────────────────────────────┐
@@ -34,7 +34,7 @@ Both appended sections are page-aligned, so that they can be mapped directly fro
 
 ## Build pipeline
 
-`scripts/build-pi.sh` runs `bun build --compile --bytecode` with the Pi-Bolt runtime and these settings:
+`scripts/build-pi.sh` runs `bun build --compile --bytecode` with the Rapid Pi runtime and these settings:
 
 | Setting | Effect |
 |---|---|
@@ -108,7 +108,7 @@ When the executable starts:
    code.
 4. Pi's modules run, then its `main()`. Their functions and code are in the heap, so nothing is parsed or compiled; what the
    heap does not hold is the modules' state: their top-level code (and Bun's `node:*` modules they import) runs at every start,
-   as it would without Pi-Bolt, only compiled.
+   as it would without Rapid Pi, only compiled.
 
 If any check fails, the executable prints one notice and runs from bytecode instead: correct, just slower to start. The checks
 are the engine stamp, the CPU features, the address space (for example a tight `ulimit -v`), and `BUN_AOT=0`. See
@@ -132,7 +132,7 @@ are the engine stamp, the CPU features, the address space (for example a tight `
 
 ## The x86-64 port
 
-The upstream compiler targets ARM64: on x86-64 nothing was compiled ahead of time. Pi-Bolt's
+The upstream compiler targets ARM64: on x86-64 nothing was compiled ahead of time. Rapid Pi's
 [WebKit patch](../patches/webkit.patch) adds the x86-64 back end and runtime work, and its [Bun patch](../patches/bun.patch) adds the
 executable format.
 
@@ -164,7 +164,7 @@ executable format.
 ## The macOS ARM64 port
 
 The compiler's ARM64 back end is upstream's; the macOS port is about the executable around it, and about what the x86-64 work
-had left x86-64 only. The macOS parts of Pi-Bolt's [WebKit patch](../patches/webkit.patch) and [Bun patch](../patches/bun.patch) are this port's.
+had left x86-64 only. The macOS parts of Rapid Pi's [WebKit patch](../patches/webkit.patch) and [Bun patch](../patches/bun.patch) are this port's.
 
 **Where the image is.** Bun keeps a compiled program in the `__BUN` section of the Mach-O executable, which starts on a 16 KB
 page of the file, as the static heap and code image need. The executable asks the kernel which file and offset back the static
@@ -245,7 +245,7 @@ the proxy agents and the OAuth callback servers use (the first two alone cost a 
 ## The Linux ARM64 port
 
 The ARM64 code generation is the macOS port's; the Linux ARM64 port is about the many kinds of ARM64 Linux machine, and Android.
-Its parts of Pi-Bolt's [WebKit patch](../patches/webkit.patch) and [Bun patch](../patches/bun.patch) apply to Linux on ARM64 only.
+Its parts of Rapid Pi's [WebKit patch](../patches/webkit.patch) and [Bun patch](../patches/bun.patch) apply to Linux on ARM64 only.
 
 **Address space.** Many ARM64 kernels give a process 512 GB of addresses (39-bit: Android's, the Raspberry Pi 3's and 4's) or
 4 TB (42-bit, with 64 KB pages), where 0x200000000000 is out of reach. On Linux ARM64 the static region is at 64 GB
@@ -261,13 +261,13 @@ DotProd: `BUN_AOT_CPU=baseline`, which `build-pi.sh` sets on Linux ARM64), so th
 Graviton 4. The JIT build's JIT still uses what the CPU has.
 
 **Android.** Android's libc is not glibc, and an Android executable must be position-independent, which the static heap's
-pointers into the executable rule out. In Termux, Pi-Bolt runs as the Linux build with Termux's glibc: the executable's loader
+pointers into the executable rule out. In Termux, Rapid Pi runs as the Linux build with Termux's glibc: the executable's loader
 path (PT_INTERP) is the usual one with room after it, which the installer overwrites with Termux's
 (`$PREFIX/glibc/lib/ld-linux-aarch64.so.1`), so nothing in the file moves. Android's system call filter kills an app's process
 for calls it does not allow, where other Linux kernels return ENOSYS; Termux's glibc avoids them, but the runtime makes some
 itself (`epoll_pwait2`, `close_range`, `openat2`, `pidfd_open`, ...). On Android (`/system/bin/linker64` is there) the runtime
 returns ENOSYS for a call the filter refused, from its SIGSYS handler, and falls back as on an older kernel. The installer's
-launcher starts Pi-Bolt without Termux's `LD_PRELOAD`, which glibc's loader cannot load, and Pi gives it back to the programs it
+launcher starts Rapid Pi without Termux's `LD_PRELOAD`, which glibc's loader cannot load, and Pi gives it back to the programs it
 starts.
 
 ## Limitations

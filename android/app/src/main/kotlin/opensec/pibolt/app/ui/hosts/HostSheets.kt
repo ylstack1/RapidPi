@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.hosts
+package opensec.rapidpi.app.ui.hosts
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,18 +31,18 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.data.Connections
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.ButtonSize
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.data.Connections
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.ButtonSize
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
 
 /** Add a computer: scan its pairing code or paste its link. */
 @OptIn(ExperimentalMaterial3Api::class)

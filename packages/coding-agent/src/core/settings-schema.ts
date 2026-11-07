@@ -317,15 +317,15 @@ export const SettingsSchema = Type.Object(
 								tunnel: Type.Optional(
 									remoteControlTunnel({
 										description:
-											'Tunnel of the background service (pi-bolt service install). Default: the remoteControl.tunnel setting; "off" serves the local network and Tailscale only.',
+											'Tunnel of the background service (rapid-pi service install). Default: the remoteControl.tunnel setting; "off" serves the local network and Tailscale only.',
 									}),
 								),
 							},
-							{ additionalProperties: false, description: "The background service (pi-bolt service)." },
+							{ additionalProperties: false, description: "The background service (rapid-pi service)." },
 						),
 					),
 				},
-				{ additionalProperties: false, description: "Settings of /remote-control (Pi-Bolt Android app)." },
+				{ additionalProperties: false, description: "Settings of /remote-control (Rapid Pi Android app)." },
 			),
 		),
 		steeringMode: Type.Optional(
@@ -417,23 +417,23 @@ export const SettingsSchema = Type.Object(
 				description: "npm or git package sources, as strings or objects with resource filtering.",
 			}),
 		),
-		piBolt: Type.Optional(
+		rapidPi: Type.Optional(
 			Type.Object(
 				{
 					packages: Type.Optional(
 						Type.Array(PackageSourceSchema, {
 							description:
-								"Pi-Bolt package additions and same-identity replacements over this file's shared packages. Use -<source> strings to exclude inherited packages. An empty list inherits shared packages.",
+								"Rapid Pi package additions and same-identity replacements over this file's shared packages. Use -<source> strings to exclude inherited packages. An empty list inherits shared packages.",
 						}),
 					),
 					packagesOverlay: Type.Optional(
 						Type.Boolean({
 							description:
-								"Set by Pi-Bolt when it writes packages. A list without it and without -<source> entries is taken for an independent copy written before Pi-Bolt 0.9.1 and converted to an overlay once.",
+								"Set by Rapid Pi when it writes packages. A list without it and without -<source> entries is taken for an independent copy written before Rapid Pi 0.9.1 and converted to an overlay once.",
 						}),
 					),
 				},
-				{ description: "Pi-Bolt only settings." },
+				{ description: "Rapid Pi only settings." },
 			),
 		),
 		extensions: Type.Optional(

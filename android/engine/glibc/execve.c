@@ -1,4 +1,4 @@
-/* execve for Pi-Bolt on Android: run what the kernel refuses to exec in the app's data directory.
+/* execve for Rapid Pi on Android: run what the kernel refuses to exec in the app's data directory.
 
    Problem: Android 10+ denies execve() of any file in an app's data directory to apps that target API 29+
    (SELinux: no `execute_no_trans` on app_data_file), but it still lets them map such files as code (`execute` is
@@ -26,12 +26,12 @@
 #include <unistd.h>
 #include <sysdep.h>
 
-#define PIBOLT_PREFIX "@PREFIX@"
-#define PIBOLT_APP_DATA "@APP_DATA@/"
-#define PIBOLT_LOADER PIBOLT_PREFIX "/lib/ld-linux-aarch64.so.1"
+#define RAPIDPI_PREFIX "@PREFIX@"
+#define RAPIDPI_APP_DATA "@APP_DATA@/"
+#define RAPIDPI_LOADER RAPIDPI_PREFIX "/lib/ld-linux-aarch64.so.1"
 #define MAX_DEPTH 4
 #define HDR 256
-#define REMAP (sizeof PIBOLT_PREFIX + sizeof "/bin/" + NAME_MAX)
+#define REMAP (sizeof RAPIDPI_PREFIX + sizeof "/bin/" + NAME_MAX)
 
 static int
 raw_execve (const char *path, char *const argv[], char *const envp[])
@@ -57,8 +57,8 @@ remap (const char *path, char *buf)
 	size_t n = strlen (name);
 	if (n == 0 || n > NAME_MAX || strchr (name, '/') != NULL)
 	  return path;
-	memcpy (buf, PIBOLT_PREFIX "/bin/", sizeof PIBOLT_PREFIX + 4);
-	memcpy (buf + sizeof PIBOLT_PREFIX + 4, name, n + 1);
+	memcpy (buf, RAPIDPI_PREFIX "/bin/", sizeof RAPIDPI_PREFIX + 4);
+	memcpy (buf + sizeof RAPIDPI_PREFIX + 4, name, n + 1);
 	if (INTERNAL_SYSCALL_CALL (faccessat, AT_FDCWD, buf, F_OK) == 0)
 	  return buf;
 	return path;
@@ -97,7 +97,7 @@ probe (const char *path, char *hdr)
   if (len > 0)
     {
       real[len] = '\0';
-      if (starts_with (real, PIBOLT_APP_DATA))
+      if (starts_with (real, RAPIDPI_APP_DATA))
 	{
 	  long int r = INTERNAL_SYSCALL_CALL (read, fd, hdr, HDR - 1);
 	  got = r < 0 ? -1 : r;
@@ -151,8 +151,8 @@ __execve (const char *path, char *const argv[], char *const envp[])
 	  nargv[3] = (char *) p;
 	  nargv[2] = curc > 0 ? cur[0] : (char *) p;
 	  nargv[1] = (char *) "--argv0";
-	  nargv[0] = (char *) PIBOLT_LOADER;
-	  return raw_execve (PIBOLT_LOADER, nargv, envp);
+	  nargv[0] = (char *) RAPIDPI_LOADER;
+	  return raw_execve (RAPIDPI_LOADER, nargv, envp);
 	}
 
       if (n < 2 || hdr[0] != '#' || hdr[1] != '!')

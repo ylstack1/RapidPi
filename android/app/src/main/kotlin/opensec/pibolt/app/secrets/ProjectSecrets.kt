@@ -1,4 +1,4 @@
-package opensec.pibolt.app.secrets
+package opensec.rapidpi.app.secrets
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject

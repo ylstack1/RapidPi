@@ -5,7 +5,7 @@ streams a Markdown answer at the pace of a fast model. Reports the CPU and frame
 retired per frame: what a frame costs must not grow with the length of the transcript. With --keys, a key is typed every
 --key-interval seconds while the answer streams, and the time until the editor shows it is reported (echo latency).
 
-Example: bench/long_transcript.py --build pi-bolt=./out/pi-bolt/pi --entries 0,500,1000,2292,4000 --mode fullscreen,regular
+Example: bench/long_transcript.py --build rapid-pi=./out/rapid-pi/pi --entries 0,500,1000,2292,4000 --mode fullscreen,regular
 """
 
 import argparse

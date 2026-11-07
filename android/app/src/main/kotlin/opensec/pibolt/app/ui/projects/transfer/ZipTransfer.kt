@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.transfer
+package opensec.rapidpi.app.ui.projects.transfer
 
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -193,7 +193,7 @@ object ZipTransfer {
         if (!Files.isDirectory(only.toPath(), LinkOption.NOFOLLOW_LINKS)) return null
         val name = only.name
         // Move through a temporary name, in case the folder holds an entry named like itself.
-        val tmp = File(dir, ".pibolt-hoist-${System.nanoTime()}")
+        val tmp = File(dir, ".rapidpi-hoist-${System.nanoTime()}")
         if (!only.renameTo(tmp)) return null
         tmp.listFiles()?.forEach { child -> if (!child.renameTo(File(dir, child.name))) throw IOException("Could not move ${child.name}") }
         tmp.delete()

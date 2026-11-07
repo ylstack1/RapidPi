@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -36,15 +36,15 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.CopyButton
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.session.NoticeItem
+import opensec.rapidpi.app.ui.components.CopyButton
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.session.NoticeItem
 
 /** What an error notice needs from the session: names for the title, and whether it is on this phone and busy. */
 data class ErrorContext(val model: String?, val provider: String?, val local: Boolean, val running: Boolean)

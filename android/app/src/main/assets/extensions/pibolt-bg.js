@@ -1,8 +1,8 @@
-// pibolt-bg v1: written by the Pi-Bolt Android app; do not edit (it is rewritten).
+// rapidpi-bg v1: written by the Rapid Pi Android app; do not edit (it is rewritten).
 // Background shell jobs for the agent: bash_background, bash_output, bash_kill, bash_jobs. Each job runs in the shell
 // Pi's bash tool uses, with the engine's environment, in its own process group (stop kills its children too). Output
 // goes to a log file and a 1 MB ring buffer; the job list is mirrored to jobs.json beside the logs for the app, under
-// $TMPDIR/pibolt-bg/<engine pid>/. Jobs end with the session (session_shutdown) and with the engine (exit).
+// $TMPDIR/rapidpi-bg/<engine pid>/. Jobs end with the session (session_shutdown) and with the engine (exit).
 import { spawn } from "node:child_process";
 import { closeSync, existsSync, mkdirSync, openSync, readdirSync, readSync, realpathSync, renameSync, rmSync, statSync, writeFileSync, writeSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -18,7 +18,7 @@ const STATUS_KEY = "bg-jobs";
 // ESC sequences (CSI, OSC, two-byte) and control characters other than tab and newline.
 const ANSI = /\x1b\[[0-?]*[ -/]*[@-~]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[@-Z\\-_]|[\x00-\x08\x0b-\x1f\x7f]/g;
 
-const root = join(process.env.TMPDIR || tmpdir(), "pibolt-bg");
+const root = join(process.env.TMPDIR || tmpdir(), "rapidpi-bg");
 const dir = join(root, String(process.pid));
 let jobs = [];
 let nextId = 1;

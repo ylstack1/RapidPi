@@ -6,7 +6,7 @@ index 00000000..ed3c8ada
 @@ -0,0 +1,79 @@
 +package main
 +
-+// Pi-Bolt (Android): one esbuild binary serves the JS API of every esbuild
++// Rapid Pi (Android): one esbuild binary serves the JS API of every esbuild
 +// release from 0.19.0 through 0.28.x, so projects that pin different versions
 +// (Vite 5, 6 and 7) can share it via ESBUILD_BINARY_PATH. Upstream refuses any
 +// host whose version differs from the binary's. The stdio protocol is the same
@@ -21,7 +21,7 @@ index 00000000..ed3c8ada
 +// directory and fails unless it prints the package's version, which
 +// "versionForWorkingDirectory" answers.
 +//
-+// See android/engine/CONTRACT.md in the Pi-Bolt repository.
++// See android/engine/CONTRACT.md in the Rapid Pi repository.
 +
 +import (
 +	"encoding/json"
@@ -163,7 +163,7 @@ index 3ff4481e..533fbda1 100644
  		// Special-case the version flag here
  		case arg == "--version":
 -			fmt.Printf("%s\n", esbuildVersion)
-+			fmt.Printf("%s\n", versionForWorkingDirectory()) // Pi-Bolt: host_version.go
++			fmt.Printf("%s\n", versionForWorkingDirectory()) // Rapid Pi: host_version.go
  			os.Exit(0)
  
  		case strings.HasPrefix(arg, "--heap="):
@@ -173,13 +173,13 @@ index 3ff4481e..533fbda1 100644
  			// errors that appear to indicate an incorrect installation.
 -			if hostVersion != esbuildVersion {
 +			//
-+			// Pi-Bolt: any host whose protocol this binary speaks (host_version.go).
++			// Rapid Pi: any host whose protocol this binary speaks (host_version.go).
 +			if !isCompatibleHostVersion(hostVersion) {
  				logger.PrintErrorToStderr(osArgs,
 -					fmt.Sprintf("Cannot start service: Host version %q does not match binary version %q",
 -						hostVersion, esbuildVersion))
 +					fmt.Sprintf("Cannot start service: Host version %q is not supported by binary version %q "+
-+						"(Pi-Bolt's esbuild serves the JS API of esbuild 0.%d.0 to 0.%d.x)",
++						"(Rapid Pi's esbuild serves the JS API of esbuild 0.%d.0 to 0.%d.x)",
 +						hostVersion, esbuildVersion, oldestHostMinor, newestHostMinor))
  				os.Exit(1)
  			}
@@ -204,7 +204,7 @@ index c4c2178b..de6249e5 100644
  	keepAliveWaitGroup *helpers.ThreadSafeWaitGroup
  	mutex              sync.Mutex
  	nextRequestID      uint32
-+	hostVersion        string // Pi-Bolt: the JS API's version (host_version.go)
++	hostVersion        string // Rapid Pi: the JS API's version (host_version.go)
  }
  
  func (service *serviceType) getActiveBuild(key int) *activeBuild {
@@ -231,7 +231,7 @@ index c4c2178b..de6249e5 100644
  
 -	// The protocol always starts with the version
 -	os.Stdout.Write(append(writeUint32(nil, uint32(len(esbuildVersion))), esbuildVersion...))
-+	// The protocol always starts with the version. Pi-Bolt: the host's own (main.go checked it is compatible), as
++	// The protocol always starts with the version. Rapid Pi: the host's own (main.go checked it is compatible), as
 +	// the host refuses any other.
 +	os.Stdout.Write(append(writeUint32(nil, uint32(len(hostVersion))), hostVersion...))
  
@@ -246,7 +246,7 @@ index c4c2178b..de6249e5 100644
 +							"hosts": hosts,
 +						}
 +						if service.hostBefore("0.25.0") && len(result.Hosts) > 0 {
-+							response["host"] = result.Hosts[0] // Pi-Bolt: hosts before 0.25.0 read "host"
++							response["host"] = result.Hosts[0] // Rapid Pi: hosts before 0.25.0 read "host"
 +						}
  						service.sendPacket(encodePacket(packet{
 -							id: p.id,
@@ -265,7 +265,7 @@ index c4c2178b..de6249e5 100644
  		if options.Metafile {
 -			response["metafile"] = []byte(result.Metafile)
 +			if service.hostBefore("0.27.4") {
-+				response["metafile"] = result.Metafile // Pi-Bolt: hosts before 0.27.4 JSON.parse a string
++				response["metafile"] = result.Metafile // Rapid Pi: hosts before 0.27.4 JSON.parse a string
 +			} else {
 +				response["metafile"] = []byte(result.Metafile)
 +			}

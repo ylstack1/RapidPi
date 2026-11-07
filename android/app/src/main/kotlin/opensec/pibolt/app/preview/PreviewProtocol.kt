@@ -1,16 +1,16 @@
-package opensec.pibolt.app.preview
+package opensec.rapidpi.app.preview
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.double
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.double
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 import java.net.URI
 
-/** What the engine's preview tools ask the app for (assets/extensions/pibolt-preview.js, one JSON line each). */
+/** What the engine's preview tools ask the app for (assets/extensions/rapidpi-preview.js, one JSON line each). */
 sealed interface PreviewCommand {
     data class Open(val url: String?, val reload: Boolean) : PreviewCommand
 

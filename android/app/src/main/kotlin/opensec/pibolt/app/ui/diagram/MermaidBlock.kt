@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.diagram
+package opensec.rapidpi.app.ui.diagram
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.snap
@@ -47,18 +47,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.delay
-import opensec.pibolt.app.ui.components.CodeBlock
-import opensec.pibolt.app.ui.components.CopyButton
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.session.Viewer
-import opensec.pibolt.app.ui.session.ViewerContent
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.components.CodeBlock
+import opensec.rapidpi.app.ui.components.CopyButton
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.session.Viewer
+import opensec.rapidpi.app.ui.session.ViewerContent
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
 
 /** Inline diagrams are at most this tall; the full-screen view shows the rest. */
 private val MAX_INLINE_HEIGHT = 480.dp

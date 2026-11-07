@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
 /**
  * Fuzzy matching for the command palette and the `@` file picker: every query character must appear in order. A

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -36,14 +36,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.git.GitStatus
-import opensec.pibolt.app.ui.components.SOFT_PRESS
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.git.GitStatus
+import opensec.rapidpi.app.ui.components.SOFT_PRESS
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Space
 
 /** The four places of a project. [index] is what the screen saves across rotation and process death. */
 enum class ProjectTab(val index: Int, val label: String) {

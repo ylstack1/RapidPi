@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -36,23 +36,23 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import opensec.pibolt.app.data.ProjectMeta
-import opensec.pibolt.app.session.LinkState
-import opensec.pibolt.app.session.RunningSummary
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.PiMenu
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.projects.ProjectRules
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.UserItem
-import opensec.pibolt.app.ui.projects.SessionMark
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.data.ProjectMeta
+import opensec.rapidpi.app.session.LinkState
+import opensec.rapidpi.app.session.RunningSummary
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.PiMenu
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.projects.ProjectRules
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.UserItem
+import opensec.rapidpi.app.ui.projects.SessionMark
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
 
 /** The live on-device sessions that are working or waiting for an answer, in the order they were opened. */
 @OptIn(ExperimentalCoroutinesApi::class)

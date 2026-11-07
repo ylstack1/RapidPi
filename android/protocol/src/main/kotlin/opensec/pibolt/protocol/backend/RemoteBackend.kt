@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol.backend
+package opensec.rapidpi.protocol.backend
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.Channel
@@ -20,17 +20,17 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
-import opensec.pibolt.protocol.Base64Url
-import opensec.pibolt.protocol.NOISE_PROLOGUE
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.WS_SUBPROTOCOL
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.noise.CipherState
-import opensec.pibolt.protocol.noise.IkHandshake
-import opensec.pibolt.protocol.noise.KeyPair
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.transport.Framing
-import opensec.pibolt.protocol.transport.Reassembler
+import opensec.rapidpi.protocol.Base64Url
+import opensec.rapidpi.protocol.NOISE_PROLOGUE
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.WS_SUBPROTOCOL
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.noise.CipherState
+import opensec.rapidpi.protocol.noise.IkHandshake
+import opensec.rapidpi.protocol.noise.KeyPair
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.transport.Framing
+import opensec.rapidpi.protocol.transport.Reassembler
 import java.util.concurrent.TimeUnit
 
 data class RemoteConfig(

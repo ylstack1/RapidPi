@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.editor
+package opensec.rapidpi.app.ui.projects.editor
 
 /**
  * "Ask Pi about this file / this selection" (pure, unit-tested): the text the editor puts into the project's composer.

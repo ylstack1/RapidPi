@@ -4,11 +4,11 @@ import { SettingsManager } from "../src/core/settings-manager.ts";
 import { main } from "../src/main.ts";
 import { getPiBoltPackageFlagError, handleConfigCommand, handlePackageCommand } from "../src/package-manager-cli.ts";
 
-const build = vi.hoisted(() => ({ piBolt: true }));
-vi.mock("../src/pi-bolt.ts", async (importOriginal) => ({
+const build = vi.hoisted(() => ({ rapidPi: true }));
+vi.mock("../src/rapid-pi.ts", async (importOriginal) => ({
 	...(await importOriginal<object>()),
-	get PIBOLT() {
-		return build.piBolt ? { version: "0.8.4", variant: "arm64", jit: false } : undefined;
+	get RAPIDPI() {
+		return build.rapidPi ? { version: "0.8.4", variant: "arm64", jit: false } : undefined;
 	},
 }));
 
@@ -30,9 +30,9 @@ afterEach(() => {
 });
 
 // #28: package selector preflight must reuse startup argument consumption, not scan option values.
-describe.each([true, false])("getPiBoltPackageFlagError (Pi-Bolt=%s)", (piBolt) => {
+describe.each([true, false])("getPiBoltPackageFlagError (Rapid Pi=%s)", (rapidPi) => {
 	beforeEach(() => {
-		build.piBolt = piBolt;
+		build.rapidPi = rapidPi;
 	});
 
 	test.each([
@@ -60,9 +60,9 @@ describe.each([true, false])("getPiBoltPackageFlagError (Pi-Bolt=%s)", (piBolt) 
 		"--prompt-template",
 		"--theme",
 	])("preserves selector-like values of %s", (option) => {
-		for (const value of ["--pi-bolt", "--pi-bolt=true", "--pi-bolt="]) {
+		for (const value of ["--rapid-pi", "--rapid-pi=true", "--rapid-pi="]) {
 			const args = [option, value, "--version"];
-			expect(parseArgs(args).unknownFlags.has("pi-bolt")).toBe(false);
+			expect(parseArgs(args).unknownFlags.has("rapid-pi")).toBe(false);
 			expect(getPiBoltPackageFlagError(args)).toBeUndefined();
 		}
 	});
@@ -70,19 +70,19 @@ describe.each([true, false])("getPiBoltPackageFlagError (Pi-Bolt=%s)", (piBolt) 
 	test("preserves the reported session-name example and repeated literal prompts", () => {
 		const args = [
 			"--name",
-			"--pi-bolt",
+			"--rapid-pi",
 			"--system-prompt",
-			"--pi-bolt=false",
+			"--rapid-pi=false",
 			"--append-system-prompt",
-			"--pi-bolt",
+			"--rapid-pi",
 			"--append-system-prompt",
-			"--pi-bolt=true",
+			"--rapid-pi=true",
 			"--version",
 		];
 		expect(parseArgs(args)).toMatchObject({
-			name: "--pi-bolt",
-			systemPrompt: "--pi-bolt=false",
-			appendSystemPrompt: ["--pi-bolt", "--pi-bolt=true"],
+			name: "--rapid-pi",
+			systemPrompt: "--rapid-pi=false",
+			appendSystemPrompt: ["--rapid-pi", "--rapid-pi=true"],
 			version: true,
 			diagnostics: [],
 		});
@@ -90,36 +90,36 @@ describe.each([true, false])("getPiBoltPackageFlagError (Pi-Bolt=%s)", (piBolt) 
 	});
 
 	test.each([
-		["--", "--pi-bolt", "--pi-bolt=true"],
-		["--name", "--pi-bolt", "--", "--pi-bolt=true"],
-		["--print", "--", "--pi-bolt"],
-		["--print", "---literal --pi-bolt"],
-		["@--pi-bolt"],
-		["--pi-bolt-other"],
+		["--", "--rapid-pi", "--rapid-pi=true"],
+		["--name", "--rapid-pi", "--", "--rapid-pi=true"],
+		["--print", "--", "--rapid-pi"],
+		["--print", "---literal --rapid-pi"],
+		["@--rapid-pi"],
+		["--rapid-pi-other"],
 	])("does not treat positional or unrelated tokens as selectors: %j", (...args) => {
 		expect(getPiBoltPackageFlagError(args)).toBeUndefined();
 	});
 
 	// #28: real selectors still fail at main's preflight, before settings reads or migrations.
 	test.each([
-		["--pi-bolt"],
-		["--pi-bolt=true"],
-		["--pi-bolt=", "--pi-bolt"],
-		["--pi-bolt", "--pi-bolt=false"],
-		["--name", "--pi-bolt=true", "--pi-bolt"],
-		["--name", "--", "--pi-bolt"],
-		["--mode", "--pi-bolt"],
-		["--use-theme", "--pi-bolt"],
-		["--tui-mode", "--pi-bolt"],
-		["--list-models", "--pi-bolt"],
-		["--print", "--pi-bolt"],
-		["--custom-extension-flag", "--pi-bolt"],
-		["auth", "--pi-bolt"],
-		["mcp", "--pi-bolt"],
+		["--rapid-pi"],
+		["--rapid-pi=true"],
+		["--rapid-pi=", "--rapid-pi"],
+		["--rapid-pi", "--rapid-pi=false"],
+		["--name", "--rapid-pi=true", "--rapid-pi"],
+		["--name", "--", "--rapid-pi"],
+		["--mode", "--rapid-pi"],
+		["--use-theme", "--rapid-pi"],
+		["--tui-mode", "--rapid-pi"],
+		["--list-models", "--rapid-pi"],
+		["--print", "--rapid-pi"],
+		["--custom-extension-flag", "--rapid-pi"],
+		["auth", "--rapid-pi"],
+		["mcp", "--rapid-pi"],
 	])("rejects actual unsupported selector tokens: %j", async (...args) => {
-		const expected = piBolt
-			? "--pi-bolt is only supported by install, remove, and uninstall"
-			: "--pi-bolt requires a Pi-Bolt build";
+		const expected = rapidPi
+			? "--rapid-pi is only supported by install, remove, and uninstall"
+			: "--rapid-pi requires a Rapid Pi build";
 		expect(getPiBoltPackageFlagError(args)).toBe(expected);
 		await main(args);
 		expect(process.exitCode).toBe(1);
@@ -129,21 +129,21 @@ describe.each([true, false])("getPiBoltPackageFlagError (Pi-Bolt=%s)", (piBolt) 
 
 	// #28: startup value handling must not relax package-command selector validation or help precedence.
 	test.each(["install", "remove", "uninstall"])("preserves %s selector grammar", async (command) => {
-		const args = [command, "npm:fixture", "--pi-bolt", "--help"];
-		expect(getPiBoltPackageFlagError(args)).toBe(piBolt ? undefined : "--pi-bolt requires a Pi-Bolt build");
+		const args = [command, "npm:fixture", "--rapid-pi", "--help"];
+		expect(getPiBoltPackageFlagError(args)).toBe(rapidPi ? undefined : "--rapid-pi requires a Rapid Pi build");
 		expect(await handlePackageCommand(args)).toBe(true);
-		expect(process.exitCode).toBe(piBolt ? undefined : 1);
+		expect(process.exitCode).toBe(rapidPi ? undefined : 1);
 		expect(SettingsManager.create).not.toHaveBeenCalled();
 	});
 
 	test.each([
-		["install", "npm:fixture", "--pi-bolt=true"],
-		["install", "npm:fixture", "--pi-bolt", "--pi-bolt=false"],
-		["remove", "npm:fixture", "--pi-bolt=", "--pi-bolt"],
-		["update", "--extension", "--pi-bolt=true"],
+		["install", "npm:fixture", "--rapid-pi=true"],
+		["install", "npm:fixture", "--rapid-pi", "--rapid-pi=false"],
+		["remove", "npm:fixture", "--rapid-pi=", "--rapid-pi"],
+		["update", "--extension", "--rapid-pi=true"],
 	])("rejects every valued package selector: %j", async (...args) => {
 		expect(getPiBoltPackageFlagError(args)).toBe(
-			piBolt ? "--pi-bolt does not take a value" : "--pi-bolt requires a Pi-Bolt build",
+			rapidPi ? "--rapid-pi does not take a value" : "--rapid-pi requires a Rapid Pi build",
 		);
 		await handlePackageCommand(args);
 		expect(process.exitCode).toBe(1);
@@ -151,11 +151,11 @@ describe.each([true, false])("getPiBoltPackageFlagError (Pi-Bolt=%s)", (piBolt) 
 	});
 
 	test.each(["list", "update", "config"])("rejects unsupported %s selectors before settings", async (command) => {
-		const args = command === "update" ? [command, "--extension", "--pi-bolt"] : [command, "--pi-bolt"];
+		const args = command === "update" ? [command, "--extension", "--rapid-pi"] : [command, "--rapid-pi"];
 		expect(getPiBoltPackageFlagError(args)).toBe(
-			piBolt
-				? "--pi-bolt is only supported by install, remove, and uninstall"
-				: "--pi-bolt requires a Pi-Bolt build",
+			rapidPi
+				? "--rapid-pi is only supported by install, remove, and uninstall"
+				: "--rapid-pi requires a Rapid Pi build",
 		);
 		if (command === "config") await handleConfigCommand(args);
 		else await handlePackageCommand(args);
@@ -164,7 +164,7 @@ describe.each([true, false])("getPiBoltPackageFlagError (Pi-Bolt=%s)", (piBolt) 
 	});
 
 	test("preserves the package preflight cutoff without adding package end-of-options support", async () => {
-		const args = ["install", "npm:fixture", "--", "--pi-bolt=true"];
+		const args = ["install", "npm:fixture", "--", "--rapid-pi=true"];
 		expect(getPiBoltPackageFlagError(args)).toBeUndefined();
 		await handlePackageCommand(args);
 		expect(process.exitCode).toBe(1);

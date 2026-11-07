@@ -1,13 +1,13 @@
-package opensec.pibolt.app.background
+package opensec.rapidpi.app.background
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.session.Notifications
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.protocol.rpc.StreamingBehavior
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.session.Notifications
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.protocol.rpc.StreamingBehavior
 
 /**
  * Runs a session notification's button or inline reply ([SessionActions]) on the live sessions: Stop, a dialog's
@@ -63,6 +63,6 @@ class SessionActionReceiver : BroadcastReceiver() {
 
     companion object {
         /** The notification the action belongs to (to update or clear it). */
-        const val EXTRA_NOTIFICATION = "opensec.pibolt.session.notification"
+        const val EXTRA_NOTIFICATION = "opensec.rapidpi.session.notification"
     }
 }

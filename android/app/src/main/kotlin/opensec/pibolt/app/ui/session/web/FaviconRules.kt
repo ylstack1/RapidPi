@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.web
+package opensec.rapidpi.app.ui.session.web
 
 import java.net.IDN
 import java.net.URI

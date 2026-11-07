@@ -1,11 +1,11 @@
-package opensec.pibolt.app.ui.diagram
+package opensec.rapidpi.app.ui.diagram
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
-import opensec.pibolt.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiColors
 
 /**
  * Mermaid's "base" theme variables from the app palette, as the JSON object the renderer page takes. Nodes are

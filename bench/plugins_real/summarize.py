@@ -6,8 +6,8 @@ import sys
 from pathlib import Path
 
 results = Path(sys.argv[1])
-BUILDS = ["pi-bolt", "pi-bolt-jit", "bun"]
-NAMES = {"pi-bolt": "Pi-Bolt, JIT off", "pi-bolt-jit": "Pi-Bolt, JIT on", "bun": "Pi on stock Bun"}
+BUILDS = ["rapid-pi", "rapid-pi-jit", "bun"]
+NAMES = {"rapid-pi": "Rapid Pi, JIT off", "rapid-pi-jit": "Rapid Pi, JIT on", "bun": "Pi on stock Bun"}
 
 
 def med(values):

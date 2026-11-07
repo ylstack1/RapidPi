@@ -1,4 +1,4 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -6,10 +6,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.app.session.SubagentTail
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.Subagent
-import opensec.pibolt.protocol.session.SubagentStatus
+import opensec.rapidpi.app.session.SubagentTail
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.Subagent
+import opensec.rapidpi.protocol.session.SubagentStatus
 import java.io.File
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger

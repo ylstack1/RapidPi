@@ -1,4 +1,4 @@
-package opensec.pibolt.app.data
+package opensec.rapidpi.app.data
 
 import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -7,23 +7,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.app.cost.SpendLimits
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.double
-import opensec.pibolt.protocol.int
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.app.cost.SpendLimits
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.double
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.protocol.str
 import java.io.File
 import java.util.concurrent.Executors
 
 /**
- * Themes, stored by name. Pi-Bolt (id Graphite), Paper (light), Contrast, Lime and Moss are the app's own; Claude, Codex,
+ * Themes, stored by name. Rapid Pi (id Graphite), Paper (light), Contrast, Lime and Moss are the app's own; Claude, Codex,
  * Vercel and GitHub are palettes in the spirit of those products' dark modes. A removed theme's name (Tide, Void) is
  * unknown to [SettingsCodec], so it falls back to the default.
  */
 enum class ThemeId(val label: String) {
-    /** The default: Pi-Bolt Desktop's palette. The id stays Graphite so saved settings keep it. */
-    Graphite("Pi-Bolt"),
+    /** The default: Rapid Pi Desktop's palette. The id stays Graphite so saved settings keep it. */
+    Graphite("Rapid Pi"),
     Paper("Paper"),
     Contrast("Contrast"),
     Lime("Lime"),
@@ -35,7 +35,7 @@ enum class ThemeId(val label: String) {
     GitHub("GitHub"),
 }
 
-/** [Theme] uses the theme's own accent (white for Pi-Bolt, Claude's coral, GitHub's blue, ink for the others). */
+/** [Theme] uses the theme's own accent (white for Rapid Pi, Claude's coral, GitHub's blue, ink for the others). */
 enum class AccentId(val label: String) { Theme("Theme"), Ink("Ink"), Iris("Iris"), Glacier("Glacier") }
 
 enum class Density(val label: String) { Comfortable("Comfortable"), Compact("Compact") }

@@ -1,11 +1,11 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
-import opensec.pibolt.protocol.backend.SessionTarget
+import opensec.rapidpi.protocol.backend.SessionTarget
 import java.io.File
 
 /**
  * Plain chats: conversations with the model that belong to no project. Every chat is a Pi session that runs in one
- * app-private working directory, [dir] (`HOME/.pibolt/chats`, created empty, never listed as a project: projects live
+ * app-private working directory, [dir] (`HOME/.rapidpi/chats`, created empty, never listed as a project: projects live
  * in `HOME/projects`), and is saved in its own session folder, [sessionDir] (`agentDir/chats`), apart from every
  * project's sessions (`agentDir/sessions/--<cwd>--`). So chats never show in a project's lists, and projects never in
  * the chats.
@@ -47,7 +47,7 @@ object ChatSpace {
 
     /** A chat's system prompt: what it can do with [chatTools], and that it has no shell or files. */
     fun systemPrompt(webSearch: Boolean): String =
-        "You are Pi, a helpful assistant in the Pi-Bolt app on the user's phone. This is a plain chat: you have no shell, " +
+        "You are Pi, a helpful assistant in the Rapid Pi app on the user's phone. This is a plain chat: you have no shell, " +
             "no files and no code execution. " +
             (
                 if (webSearch) {
@@ -62,7 +62,7 @@ object ChatSpace {
             "options each) instead of guessing. Be direct and concise. Use Markdown when it helps: lists, tables, code blocks."
 
     /** The working directory of every chat. */
-    fun dir(home: File): File = File(home, ".pibolt/chats")
+    fun dir(home: File): File = File(home, ".rapidpi/chats")
 
     /** Where chats are saved (`--session-dir`). */
     fun sessionDir(agentDir: File): File = File(agentDir, "chats")

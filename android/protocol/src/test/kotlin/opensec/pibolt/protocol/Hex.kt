@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 fun String.hex(): ByteArray = chunked(2).map { it.toInt(16).toByte() }.toByteArray()
 

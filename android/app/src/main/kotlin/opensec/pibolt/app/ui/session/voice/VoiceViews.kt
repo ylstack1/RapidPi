@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
@@ -37,16 +37,16 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.ButtonSize
-import opensec.pibolt.app.ui.components.DotWave
-import opensec.pibolt.app.ui.components.GhostButton
-import opensec.pibolt.app.ui.components.SOFT_PRESS
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.session.ComposerLayout
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.ButtonSize
+import opensec.rapidpi.app.ui.components.DotWave
+import opensec.rapidpi.app.ui.components.GhostButton
+import opensec.rapidpi.app.ui.components.SOFT_PRESS
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.session.ComposerLayout
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Space
 
 /**
  * The pill's mic: a 36dp circle in a 48dp target, the kit's `ComposerCircle` look (the selected overlay, an ink1 MicNone) at

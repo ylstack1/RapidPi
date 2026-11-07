@@ -47,7 +47,7 @@ case_setup() {
 	send_prompt "second e2e"
 	WAIT=$E2E_ENGINE_TIMEOUT assert_fake_log '"lastUser":"second e2e"'
 	WAIT=$E2E_ENGINE_TIMEOUT assert_visible "text=Message Pi…"
-	assert_device_file "$AGENT_REL/extensions/pibolt-app.js"
+	assert_device_file "$AGENT_REL/extensions/rapidpi-app.js"
 }
 
 case_tree_branch_and_label() {
@@ -263,7 +263,7 @@ case_bug_and_share() {
 	ensure_session
 	send_prompt "/bug the tree sheet test"
 	WAIT=10 assert_visible "text=Report a bug"
-	assert_visible "text~=App: Pi-Bolt Android"
+	assert_visible "text~=App: Rapid Pi Android"
 	shot bug-sheet
 	close_sheet
 	send_prompt "/share"
@@ -279,7 +279,7 @@ case_notification_deep_link() {
 	[ -n "$file" ] || fail "no older session file"
 	go_home
 	# What a session notification's tap sends (SessionAlerts.openIntent): project and session file.
-	adb_ shell am start -n "$PKG/$ACTIVITY" -f 0x24000000 --es opensec.pibolt.session.project "$P" --es opensec.pibolt.session.file "/data/data/$PKG/$file" >/dev/null
+	adb_ shell am start -n "$PKG/$ACTIVITY" -f 0x24000000 --es opensec.rapidpi.session.project "$P" --es opensec.rapidpi.session.file "/data/data/$PKG/$file" >/dev/null
 	WAIT=$E2E_ENGINE_TIMEOUT assert_visible "text=Message Pi…" "the deep link did not open the session"
 	shot deep-link-opened
 }

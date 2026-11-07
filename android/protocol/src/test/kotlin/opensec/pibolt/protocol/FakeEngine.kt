@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement

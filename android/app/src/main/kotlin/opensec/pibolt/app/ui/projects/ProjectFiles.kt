@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.layout.size
@@ -24,11 +24,11 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.data.SafeFiles
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.data.SafeFiles
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Tnum
 import java.io.File
 import java.io.RandomAccessFile
 import java.nio.file.Files
@@ -198,7 +198,7 @@ object ProjectFiles {
     suspend fun write(file: File, text: String): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
             val target = if (Files.isSymbolicLink(file.toPath())) file.toPath().toRealPath().toFile() else file
-            val tmp = File(target.parentFile, ".${target.name}.pibolt-tmp")
+            val tmp = File(target.parentFile, ".${target.name}.rapidpi-tmp")
             tmp.writeText(text)
             if (target.exists()) copyPermissions(target, tmp)
             if (!tmp.renameTo(target)) {

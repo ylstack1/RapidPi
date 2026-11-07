@@ -5,13 +5,13 @@
 #   android/engine/build-pack.sh                 full pack
 #   android/engine/build-pack.sh --engine-only   glibc + engine only (no userland)
 #
-# Env: PIBOLT_PACK_WORK (download cache + stage, default android/engine/.work),
-#      PIBOLT_PACK_OUT (default android/engine/out). Stages are cached by a hash of their inputs.
+# Env: RAPIDPI_PACK_WORK (download cache + stage, default android/engine/.work),
+#      RAPIDPI_PACK_OUT (default android/engine/out). Stages are cached by a hash of their inputs.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
-WORK=${PIBOLT_PACK_WORK:-$HERE/.work}
-OUT=${PIBOLT_PACK_OUT:-$HERE/out}
-IMAGE=pibolt-pack-builder
+WORK=${RAPIDPI_PACK_WORK:-$HERE/.work}
+OUT=${RAPIDPI_PACK_OUT:-$HERE/out}
+IMAGE=rapidpi-pack-builder
 ENGINE_ONLY=false
 [ "${1-}" = "--engine-only" ] && ENGINE_ONLY=true
 mkdir -p "$WORK/dl" "$WORK/stage" "$OUT"

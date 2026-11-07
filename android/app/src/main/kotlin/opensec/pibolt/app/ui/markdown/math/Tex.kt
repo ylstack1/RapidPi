@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown.math
+package opensec.rapidpi.app.ui.markdown.math
 
 /**
  * A small TeX math parser for what models write: symbols, Greek, `^` `_`, `\frac`, `\sqrt`, big operators with limits,

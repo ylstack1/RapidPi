@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.terminal
+package opensec.rapidpi.app.ui.terminal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.ui.theme.Pi
 import java.io.File
 
 /** The project's terminals full screen, above the keyboard. */

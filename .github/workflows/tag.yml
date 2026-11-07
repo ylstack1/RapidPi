@@ -1,15 +1,15 @@
 name: tag
 
-# With the repository variable AUTO_RELEASE set to true: when ci passes on a push to pi-bolt whose VERSION has no
+# With the repository variable AUTO_RELEASE set to true: when ci passes on a push to rapid-pi whose VERSION has no
 # bolt-vX.Y.Z tag yet (a version bump, as scripts/bump-version.sh makes for a new Pi), tags that commit and runs the release
-# workflow, which hands its draft to publish (docs/RELEASING.md). Only pi-bolt's latest commit is tagged: a later push gets a
+# workflow, which hands its draft to publish (docs/RELEASING.md). Only rapid-pi's latest commit is tagged: a later push gets a
 # run of its own. (A push that changes only what ci ignores starts no ci run, so the commit before it is tagged then.) Nothing
 # is checked out here; the commit is read through the API.
 on:
   workflow_run:
     workflows: [ci]
     types: [completed]
-    branches: [pi-bolt]
+    branches: [rapid-pi]
 
 permissions:
   contents: read
@@ -35,16 +35,16 @@ jobs:
       - name: Tag and release
         run: |
           printf '%s' "$SHA" | grep -Eq '^[0-9a-f]{40}$' || { echo "unexpected commit: $SHA"; exit 1; }
-          head=$(gh api "repos/$GITHUB_REPOSITORY/commits/pi-bolt" --jq .sha)
+          head=$(gh api "repos/$GITHUB_REPOSITORY/commits/rapid-pi" --jq .sha)
           if [ "$head" != "$SHA" ]; then
             # Tagged still when every later commit changes only what ci's paths-ignore lists (VERSION then is this commit's).
             later=$(gh api "repos/$GITHUB_REPOSITORY/compare/$SHA...$head" \
               --jq 'if .status == "ahead" and (.files | length) < 300 then .files[] | .filename, (.previous_filename // empty) else "-" end')
             if [ -z "$later" ] || printf '%s\n' "$later" | grep -Ev '\.md$|^(docs|bench/results|site)/' | grep -q .; then
-              echo "pi-bolt has moved on to $head: that push is tagged by its own run"
+              echo "rapid-pi has moved on to $head: that push is tagged by its own run"
               exit 0
             fi
-            echo "pi-bolt has moved on to $head, which changes only files ci ignores: $SHA is tagged"
+            echo "rapid-pi has moved on to $head, which changes only files ci ignores: $SHA is tagged"
           fi
           version=$(gh api "repos/$GITHUB_REPOSITORY/contents/VERSION?ref=$SHA" --jq .content | base64 -d | tr -d '[:space:]')
           printf '%s' "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' || { echo "unexpected VERSION: $version"; exit 1; }
@@ -52,12 +52,12 @@ jobs:
           if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag" >/dev/null 2>&1; then echo "$tag exists"; exit 0; fi
           gh api "repos/$GITHUB_REPOSITORY/contents/docs/releases/$version.md?ref=$SHA" >/dev/null 2>&1 ||
             { echo "::warning::VERSION is $version but docs/releases/$version.md is missing: not tagged"; exit 0; }
-          object=$(gh api "repos/$GITHUB_REPOSITORY/git/tags" -f tag="$tag" -f message="Pi-Bolt $version" -f object="$SHA" -f type=commit \
+          object=$(gh api "repos/$GITHUB_REPOSITORY/git/tags" -f tag="$tag" -f message="Rapid Pi $version" -f object="$SHA" -f type=commit \
             -f "tagger[name]=OpenSec" -f "tagger[email]=323596076+opensec-intelligence@users.noreply.github.com" --jq .sha)
           gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$tag" -f sha="$object" >/dev/null
           echo "tagged $SHA as $tag"
           # (A tag created with this workflow's token starts no workflow by itself.)
-          gh workflow run release.yml --repo "$GITHUB_REPOSITORY" --ref pi-bolt -f tag="$tag"
+          gh workflow run release.yml --repo "$GITHUB_REPOSITORY" --ref rapid-pi -f tag="$tag"
           echo "### $tag: tagged and released (the release workflow builds it, then publish signs and publishes it)" >> "$GITHUB_STEP_SUMMARY"
         env:
           GH_TOKEN: ${{ github.token }}

@@ -6,7 +6,7 @@ client, so the bytes Pi writes are CPU for tmux and traffic for whatever carries
 For each build and step it reports the CPU of Pi, the CPU of the tmux server, the bytes Pi wrote to the pane, the bytes tmux
 sent to the client, and Pi's own memory at the end.
 
-Example: bench/tmux_load.py --build pi-bolt=./out/pi-bolt/pi --build bun=./out/pi-stable/pi
+Example: bench/tmux_load.py --build rapid-pi=./out/rapid-pi/pi --build bun=./out/pi-stable/pi
 """
 
 import argparse

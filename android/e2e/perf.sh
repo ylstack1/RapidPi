@@ -162,7 +162,7 @@ pss=$(adb_ shell dumpsys meminfo "$PKG" | tr -d '\r' | grep -E "TOTAL PSS|TOTAL 
 note "app_meminfo $pss"
 rss_of() { adb_ shell "cat /proc/$1/status 2>/dev/null" | tr -d '\r' | sed -n 's/^VmRSS: *//p'; }
 note "app_rss $(rss_of "$(app_pid)")"
-for pid in $(adb_ shell "ps -A -o PID,ARGS" | tr -d '\r' | grep libpibolt | grep -v grep | awk '{print $1}'); do
+for pid in $(adb_ shell "ps -A -o PID,ARGS" | tr -d '\r' | grep librapidpi | grep -v grep | awk '{print $1}'); do
 	note "engine_rss pid $pid $(rss_of "$pid")"
 done
 
@@ -174,7 +174,7 @@ switches() {
 idle_check() {
 	local label="$1" pid a b engines ea eb
 	pid=$(app_pid)
-	engines=$(adb_ shell "ps -A -o PID,ARGS" | tr -d '\r' | grep libpibolt | grep -v grep | awk '{print $1}')
+	engines=$(adb_ shell "ps -A -o PID,ARGS" | tr -d '\r' | grep librapidpi | grep -v grep | awk '{print $1}')
 	a=$(switches "$pid")
 	ea=0
 	for e in $engines; do ea=$((ea + $(switches "$e"))); done

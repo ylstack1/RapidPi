@@ -1,4 +1,4 @@
-package opensec.pibolt.baselineprofile
+package opensec.rapidpi.baselineprofile
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4

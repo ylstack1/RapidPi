@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import android.os.SystemClock
 import androidx.compose.runtime.mutableIntStateOf
@@ -10,12 +10,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import opensec.pibolt.protocol.rpc.ImageAttachment
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.ThinkingItem
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.protocol.rpc.ImageAttachment
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.ThinkingItem
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
 
 /**
  * UI memory of one session that outlives the screen: turn and thinking durations measured on this phone, which

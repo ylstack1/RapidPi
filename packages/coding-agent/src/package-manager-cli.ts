@@ -43,21 +43,21 @@ import { SettingsManager } from "./core/settings-manager.ts";
 import { hasTrustRequiringProjectResources, ProjectTrustStore } from "./core/trust-manager.ts";
 import {
 	isPiBoltChannel,
-	PIBOLT,
-	PIBOLT_INSTALL_COMMAND,
+	RAPIDPI,
+	RAPIDPI_INSTALL_COMMAND,
 	type PiBoltChannel,
-	piBoltChannel,
-	piBoltExecutableIn,
-	piBoltInstallDir,
-	piBoltInstallMethod,
-	piBoltPackageManager,
-	piBoltUpdateEnvironment,
+	rapidPiChannel,
+	rapidPiExecutableIn,
+	rapidPiInstallDir,
+	rapidPiInstallMethod,
+	rapidPiPackageManager,
+	rapidPiUpdateEnvironment,
 	setPiBoltChannel,
-} from "./pi-bolt.ts";
-import { piBoltCompileWanted, runPiBoltCompile } from "./pi-bolt-compile.ts";
-import { fetchReleaseInstaller, type ReleaseInstaller, runReleaseInstaller } from "./pi-bolt-installer.ts";
-import { rollbackPiBolt } from "./pi-bolt-rollback.ts";
-import { isInProfile, updatePiBoltWindows } from "./pi-bolt-update-windows.ts";
+} from "./rapid-pi.ts";
+import { rapidPiCompileWanted, runPiBoltCompile } from "./rapid-pi-compile.ts";
+import { fetchReleaseInstaller, type ReleaseInstaller, runReleaseInstaller } from "./rapid-pi-installer.ts";
+import { rollbackPiBolt } from "./rapid-pi-rollback.ts";
+import { isInProfile, updatePiBoltWindows } from "./rapid-pi-update-windows.ts";
 import { spawnProcess, spawnProcessSync, waitForChildProcess } from "./utils/child-process.ts";
 import { canonicalizePath, getCwdRelativePath } from "./utils/paths.ts";
 import { getPiUserAgent } from "./utils/pi-user-agent.ts";
@@ -294,20 +294,20 @@ const SELF_UPDATE_NOTE_MARKDOWN_THEME: MarkdownTheme = {
 export function getPiBoltPackageFlagError(args: string[]): string | undefined {
 	if (!["install", "remove", "uninstall", "update", "list", "config"].includes(args[0])) {
 		// Startup options can consume dash-prefixed values, including a literal "--".
-		if (!parseArgs(args).unknownFlags.has("pi-bolt")) return undefined;
-		if (PIBOLT === undefined) return "--pi-bolt requires a Pi-Bolt build";
-		return "--pi-bolt is only supported by install, remove, and uninstall";
+		if (!parseArgs(args).unknownFlags.has("rapid-pi")) return undefined;
+		if (RAPIDPI === undefined) return "--rapid-pi requires a Rapid Pi build";
+		return "--rapid-pi is only supported by install, remove, and uninstall";
 	}
 
 	const endOfOptions = args.indexOf("--");
 	const flags = args
 		.slice(0, endOfOptions === -1 ? args.length : endOfOptions)
-		.filter((arg) => arg === "--pi-bolt" || arg.startsWith("--pi-bolt="));
+		.filter((arg) => arg === "--rapid-pi" || arg.startsWith("--rapid-pi="));
 	if (flags.length === 0) return undefined;
-	if (PIBOLT === undefined) return "--pi-bolt requires a Pi-Bolt build";
-	if (flags.some((flag) => flag !== "--pi-bolt")) return "--pi-bolt does not take a value";
+	if (RAPIDPI === undefined) return "--rapid-pi requires a Rapid Pi build";
+	if (flags.some((flag) => flag !== "--rapid-pi")) return "--rapid-pi does not take a value";
 	if (!["install", "remove", "uninstall"].includes(args[0]))
-		return "--pi-bolt is only supported by install, remove, and uninstall";
+		return "--rapid-pi is only supported by install, remove, and uninstall";
 	return undefined;
 }
 
@@ -317,7 +317,7 @@ interface PackageCommandOptions {
 	updateTarget?: UpdateTarget;
 	showExtensionsSkippedNote: boolean;
 	local: boolean;
-	piBolt: boolean;
+	rapidPi: boolean;
 	force: boolean;
 	projectTrustOverride?: boolean;
 	help: boolean;
@@ -325,7 +325,7 @@ interface PackageCommandOptions {
 	invalidArgument?: string;
 	missingOptionValue?: string;
 	conflictingOptions?: string;
-	/** Pi-Bolt: the release channel to switch to (`--channel`). */
+	/** Rapid Pi: the release channel to switch to (`--channel`). */
 	channel?: PiBoltChannel;
 }
 
@@ -342,11 +342,11 @@ function reportSettingsErrors(settingsManager: SettingsManager, context: string)
 function getPackageCommandUsage(command: PackageCommand): string {
 	switch (command) {
 		case "install":
-			return `${COMMAND_NAME} install <source> [-l]${PIBOLT ? " [--pi-bolt]" : ""} [--approve|--no-approve]`;
+			return `${COMMAND_NAME} install <source> [-l]${RAPIDPI ? " [--rapid-pi]" : ""} [--approve|--no-approve]`;
 		case "remove":
-			return `${COMMAND_NAME} remove <source> [-l]${PIBOLT ? " [--pi-bolt]" : ""} [--approve|--no-approve]`;
+			return `${COMMAND_NAME} remove <source> [-l]${RAPIDPI ? " [--rapid-pi]" : ""} [--approve|--no-approve]`;
 		case "update":
-			return `${COMMAND_NAME} update [source|self|pi] [--self|--extensions|--models|--all] [--extension <source>] [--approve|--no-approve] [--force]${PIBOLT ? " [--channel stable|beta] [--rollback]" : ""}`;
+			return `${COMMAND_NAME} update [source|self|pi] [--self|--extensions|--models|--all] [--extension <source>] [--approve|--no-approve] [--force]${RAPIDPI ? " [--channel stable|beta] [--rollback]" : ""}`;
 		case "list":
 			return `${COMMAND_NAME} list [--approve|--no-approve]`;
 	}
@@ -379,7 +379,7 @@ Install a package and add it to settings.
 
 Options:
   -l, --local       Install project-locally (${CONFIG_DIR_NAME}/settings.json)
-${PIBOLT ? "  --pi-bolt        Write Pi-Bolt-only package declarations (installed files remain shared)\n" : ""}  -a, --approve     Trust project-local files for this command
+${RAPIDPI ? "  --rapid-pi        Write Rapid Pi-only package declarations (installed files remain shared)\n" : ""}  -a, --approve     Trust project-local files for this command
   -na, --no-approve Ignore project-local files for this command
 
 Examples:
@@ -401,7 +401,7 @@ Alias: ${COMMAND_NAME} uninstall <source> [-l]
 
 Options:
   -l, --local       Remove from project settings (${CONFIG_DIR_NAME}/settings.json)
-${PIBOLT ? "  --pi-bolt        Remove or exclude only for Pi-Bolt (keep shared declarations/files)\n" : ""}  -a, --approve     Trust project-local files for this command
+${RAPIDPI ? "  --rapid-pi        Remove or exclude only for Rapid Pi (keep shared declarations/files)\n" : ""}  -a, --approve     Trust project-local files for this command
   -na, --no-approve Ignore project-local files for this command
 
 Examples:
@@ -425,7 +425,7 @@ Options:
   -a, --approve           Trust project-local files for this command
   -na, --no-approve       Ignore project-local files for this command
   --force                 Reinstall ${PRODUCT_NAME} even if the current version is latest${
-		PIBOLT
+		RAPIDPI
 			? `
   --channel stable|beta   Take the latest release (stable, the default) or the newest, pre-releases included (beta),
                           from now on
@@ -469,7 +469,7 @@ function parsePackageCommand(args: string[]): PackageCommandOptions | undefined 
 	}
 
 	let local = false;
-	let piBolt = false;
+	let rapidPi = false;
 	let force = false;
 	let projectTrustOverride: boolean | undefined;
 	let help = false;
@@ -493,8 +493,8 @@ function parsePackageCommand(args: string[]): PackageCommandOptions | undefined 
 			continue;
 		}
 
-		if (arg === "--pi-bolt") {
-			if (PIBOLT !== undefined && (command === "install" || command === "remove")) piBolt = true;
+		if (arg === "--rapid-pi") {
+			if (RAPIDPI !== undefined && (command === "install" || command === "remove")) rapidPi = true;
 			else invalidOption = invalidOption ?? arg;
 			continue;
 		}
@@ -563,9 +563,9 @@ function parsePackageCommand(args: string[]): PackageCommandOptions | undefined 
 			continue;
 		}
 
-		// Pi-Bolt's: the build before the last update back, and which releases updates take (pi-bolt-rollback.ts, pi-bolt.ts).
+		// Rapid Pi's: the build before the last update back, and which releases updates take (rapid-pi-rollback.ts, rapid-pi.ts).
 		if (arg === "--rollback") {
-			if (command === "update" && PIBOLT) {
+			if (command === "update" && RAPIDPI) {
 				rollbackFlag = true;
 			} else {
 				invalidOption = invalidOption ?? arg;
@@ -574,7 +574,7 @@ function parsePackageCommand(args: string[]): PackageCommandOptions | undefined 
 		}
 
 		if (arg === "--channel") {
-			if (command !== "update" || !PIBOLT) {
+			if (command !== "update" || !RAPIDPI) {
 				invalidOption = invalidOption ?? arg;
 				continue;
 			}
@@ -689,7 +689,7 @@ function parsePackageCommand(args: string[]): PackageCommandOptions | undefined 
 		channel,
 		showExtensionsSkippedNote,
 		local,
-		piBolt,
+		rapidPi,
 		force,
 		projectTrustOverride,
 		help,
@@ -791,14 +791,14 @@ interface SelfUpdatePlan {
 }
 
 async function getSelfUpdatePlan(force: boolean): Promise<SelfUpdatePlan> {
-	// (A Pi-Bolt build is versioned, and updated, as Pi-Bolt.)
-	const currentVersion = PIBOLT ? PIBOLT.version : VERSION;
-	// (Pi-Bolt: how to update without it, as the installation was installed.)
-	const method = PIBOLT ? piBoltInstallMethod() : undefined;
+	// (A Rapid Pi build is versioned, and updated, as Rapid Pi.)
+	const currentVersion = RAPIDPI ? RAPIDPI.version : VERSION;
+	// (Rapid Pi: how to update without it, as the installation was installed.)
+	const method = RAPIDPI ? rapidPiInstallMethod() : undefined;
 	const fallback =
 		method === undefined
 			? ""
-			: ` You can update without it: ${method === "npm" ? "npm install -g pi-bolt@latest" : (piBoltPackageManager(method)?.update ?? PIBOLT_INSTALL_COMMAND)}`;
+			: ` You can update without it: ${method === "npm" ? "npm install -g rapid-pi@latest" : (rapidPiPackageManager(method)?.update ?? RAPIDPI_INSTALL_COMMAND)}`;
 	let latestRelease: Awaited<ReturnType<typeof getLatestPiRelease>>;
 	try {
 		latestRelease = await getLatestPiRelease(currentVersion, { retry: true });
@@ -825,15 +825,15 @@ async function getSelfUpdatePlan(force: boolean): Promise<SelfUpdatePlan> {
 		};
 	}
 
-	const channelNote = PIBOLT && piBoltChannel() === "beta" ? ", beta channel" : "";
+	const channelNote = RAPIDPI && rapidPiChannel() === "beta" ? ", beta channel" : "";
 	console.log(
-		chalk.green(`${PIBOLT ? "Pi-Bolt" : APP_NAME} is already up to date (v${currentVersion}${channelNote})`),
+		chalk.green(`${RAPIDPI ? "Rapid Pi" : APP_NAME} is already up to date (v${currentVersion}${channelNote})`),
 	);
 	return { packageName, installSpec, version: latestRelease.version, shouldRun: false };
 }
 
 /**
- * Updates a Pi-Bolt installation to the latest release: the installer, run again, replaces the executable in place (same
+ * Updates a Rapid Pi installation to the latest release: the installer, run again, replaces the executable in place (same
  * variant, same folder). One installed with the npm package, Homebrew, Scoop or mise is updated with the package manager
  * instead.
  */
@@ -841,29 +841,29 @@ async function runPiBoltSelfUpdate(
 	version: string,
 	options: { reinstall?: boolean; recompile?: boolean } = {},
 ): Promise<boolean> {
-	const method = piBoltInstallMethod();
+	const method = rapidPiInstallMethod();
 	if (method === "npm") {
 		console.log(
-			`This Pi-Bolt was installed with the npm package. Update it with the package manager that installed it:`,
+			`This Rapid Pi was installed with the npm package. Update it with the package manager that installed it:`,
 		);
-		console.log(`  npm install -g pi-bolt@latest      (or: bun add -g pi-bolt@latest)`);
+		console.log(`  npm install -g rapid-pi@latest      (or: bun add -g rapid-pi@latest)`);
 		return false;
 	}
 	// (Homebrew, Scoop and mise own the folder: the installer would replace files they keep track of.)
-	const manager = piBoltPackageManager(method);
+	const manager = rapidPiPackageManager(method);
 	if (manager) {
-		console.log(`This Pi-Bolt was installed with ${manager.name}. Update it with ${manager.name}:`);
+		console.log(`This Rapid Pi was installed with ${manager.name}. Update it with ${manager.name}:`);
 		console.log(`  ${manager.update}`);
 		return false;
 	}
 	// On Windows, without PowerShell (#82): a program that starts PowerShell to download a script and run it is what malware does,
 	// and antivirus stops it as such. Only the installation this executable runs from, under the profile: outside it, install.ps1
 	// manages the folder's permissions.
-	const runningFrom = piBoltInstallDir();
+	const runningFrom = rapidPiInstallDir();
 	if (process.platform === "win32" && runningFrom && isInProfile(runningFrom)) {
 		return runPiBoltWindowsUpdate(version, runningFrom, options);
 	}
-	// The release's own installer, checked against its signed checksums before it runs (pi-bolt-installer.ts).
+	// The release's own installer, checked against its signed checksums before it runs (rapid-pi-installer.ts).
 	let installer: ReleaseInstaller;
 	try {
 		installer = await fetchReleaseInstaller(version);
@@ -872,43 +872,43 @@ async function runPiBoltSelfUpdate(
 		return false;
 	}
 	if (installer.script) {
-		console.log(chalk.dim(`Updating Pi-Bolt to ${version} with its ${installer.name} (signature verified)...`));
+		console.log(chalk.dim(`Updating Rapid Pi to ${version} with its ${installer.name} (signature verified)...`));
 	} else {
 		console.log(
 			chalk.yellow(
-				`Pi-Bolt ${version} does not list ${installer.name} in its signed SHA256SUMS (releases up to 1.0.1): the installer is not checked before it runs. The installer still checks the release's signature.`,
+				`Rapid Pi ${version} does not list ${installer.name} in its signed SHA256SUMS (releases up to 1.0.1): the installer is not checked before it runs. The installer still checks the release's signature.`,
 			),
 		);
-		console.log(chalk.dim(`Updating Pi-Bolt to ${version} with ${PIBOLT_INSTALL_COMMAND}...`));
+		console.log(chalk.dim(`Updating Rapid Pi to ${version} with ${RAPIDPI_INSTALL_COMMAND}...`));
 	}
-	const status = await runReleaseInstaller(installer, piBoltUpdateEnvironment(version)).catch((error: unknown) => {
+	const status = await runReleaseInstaller(installer, rapidPiUpdateEnvironment(version)).catch((error: unknown) => {
 		console.error(chalk.red(`Error: ${error instanceof Error ? error.message : String(error)}`));
 		return 1;
 	});
 	if (status !== 0) {
-		console.error(chalk.red(`The installer did not finish. You can run it yourself: ${PIBOLT_INSTALL_COMMAND}`));
+		console.error(chalk.red(`The installer did not finish. You can run it yourself: ${RAPIDPI_INSTALL_COMMAND}`));
 		return false;
 	}
 	// What is there now says which version it is: an update that left the old one in place is not reported as done.
-	const installed = piBoltExecutableIn(piBoltUpdateEnvironment(version).PIBOLT_INSTALL ?? "");
+	const installed = rapidPiExecutableIn(rapidPiUpdateEnvironment(version).RAPIDPI_INSTALL ?? "");
 	const check = spawnProcessSync(installed, ["--version"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-	// ("1.0.3 (Pi-Bolt 0.8.1, win32-x64, JIT off)": with the comma, 0.8.10 is not taken for 0.8.1.)
-	if (check.status !== 0 || !check.stdout.includes(`Pi-Bolt ${version},`)) {
-		console.error(chalk.red(`The installer finished, but ${installed} is not Pi-Bolt ${version}.`));
-		console.error(chalk.red(`You can run the installer yourself: ${PIBOLT_INSTALL_COMMAND}`));
+	// ("1.0.3 (Rapid Pi 0.8.1, win32-x64, JIT off)": with the comma, 0.8.10 is not taken for 0.8.1.)
+	if (check.status !== 0 || !check.stdout.includes(`Rapid Pi ${version},`)) {
+		console.error(chalk.red(`The installer finished, but ${installed} is not Rapid Pi ${version}.`));
+		console.error(chalk.red(`You can run the installer yourself: ${RAPIDPI_INSTALL_COMMAND}`));
 		return false;
 	}
 	console.log(
 		chalk.green(
 			options.reinstall
-				? `Installed Pi-Bolt ${version} again`
-				: `Updated Pi-Bolt from ${PIBOLT?.version} to ${version}`,
+				? `Installed Rapid Pi ${version} again`
+				: `Updated Rapid Pi from ${RAPIDPI?.version} to ${version}`,
 		),
 	);
-	// Extensions `pi-bolt compile` compiled in before are compiled into this release too, by the release itself.
-	const installDir = piBoltUpdateEnvironment(version).PIBOLT_INSTALL;
-	if (options.recompile !== false && installDir && piBoltCompileWanted(installDir)) {
-		console.log(chalk.dim(`Compiling the extensions compiled in before into Pi-Bolt ${version}...`));
+	// Extensions `rapid-pi compile` compiled in before are compiled into this release too, by the release itself.
+	const installDir = rapidPiUpdateEnvironment(version).RAPIDPI_INSTALL;
+	if (options.recompile !== false && installDir && rapidPiCompileWanted(installDir)) {
+		console.log(chalk.dim(`Compiling the extensions compiled in before into Rapid Pi ${version}...`));
 		const compiled = spawnProcessSync(installed, ["compile", "--after-update"], {
 			cwd: homedir(),
 			encoding: "utf8",
@@ -917,7 +917,7 @@ async function runPiBoltSelfUpdate(
 		if (compiled.status !== 0) {
 			console.error(
 				chalk.yellow(
-					`The extensions were not compiled into ${version}: they load from their files until \`pi-bolt compile\` compiles them in.`,
+					`The extensions were not compiled into ${version}: they load from their files until \`rapid-pi compile\` compiles them in.`,
 				),
 			);
 		}
@@ -925,38 +925,38 @@ async function runPiBoltSelfUpdate(
 	return true;
 }
 
-/** `pi-bolt update` on Windows for the installation in `installDir` (this executable's), without the installer. */
+/** `rapid-pi update` on Windows for the installation in `installDir` (this executable's), without the installer. */
 async function runPiBoltWindowsUpdate(
 	version: string,
 	installDir: string,
 	options: { reinstall?: boolean; recompile?: boolean },
 ): Promise<boolean> {
-	console.log(chalk.dim(`Updating Pi-Bolt to ${version}...`));
+	console.log(chalk.dim(`Updating Rapid Pi to ${version}...`));
 	try {
-		await updatePiBoltWindows(version, installDir, PIBOLT?.variant ?? "x64");
+		await updatePiBoltWindows(version, installDir, RAPIDPI?.variant ?? "x64");
 	} catch (error) {
 		console.error(chalk.red(`Error: ${error instanceof Error ? error.message : String(error)}`));
 		console.error(
-			chalk.red(`The update did not finish. You can run the installer yourself: ${PIBOLT_INSTALL_COMMAND}`),
+			chalk.red(`The update did not finish. You can run the installer yourself: ${RAPIDPI_INSTALL_COMMAND}`),
 		);
 		return false;
 	}
-	const installed = piBoltExecutableIn(installDir);
+	const installed = rapidPiExecutableIn(installDir);
 	const check = spawnProcessSync(installed, ["--version"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-	if (check.status !== 0 || !check.stdout.includes(`Pi-Bolt ${version},`)) {
-		console.error(chalk.red(`The update finished, but ${installed} is not Pi-Bolt ${version}.`));
-		console.error(chalk.red(`You can run the installer yourself: ${PIBOLT_INSTALL_COMMAND}`));
+	if (check.status !== 0 || !check.stdout.includes(`Rapid Pi ${version},`)) {
+		console.error(chalk.red(`The update finished, but ${installed} is not Rapid Pi ${version}.`));
+		console.error(chalk.red(`You can run the installer yourself: ${RAPIDPI_INSTALL_COMMAND}`));
 		return false;
 	}
 	console.log(
 		chalk.green(
 			options.reinstall
-				? `Installed Pi-Bolt ${version} again`
-				: `Updated Pi-Bolt from ${PIBOLT?.version} to ${version}`,
+				? `Installed Rapid Pi ${version} again`
+				: `Updated Rapid Pi from ${RAPIDPI?.version} to ${version}`,
 		),
 	);
-	if (options.recompile !== false && piBoltCompileWanted(installDir)) {
-		console.log(chalk.dim(`Compiling the extensions compiled in before into Pi-Bolt ${version}...`));
+	if (options.recompile !== false && rapidPiCompileWanted(installDir)) {
+		console.log(chalk.dim(`Compiling the extensions compiled in before into Rapid Pi ${version}...`));
 		const compiled = spawnProcessSync(installed, ["compile", "--after-update"], {
 			cwd: homedir(),
 			encoding: "utf8",
@@ -965,7 +965,7 @@ async function runPiBoltWindowsUpdate(
 		if (compiled.status !== 0) {
 			console.error(
 				chalk.yellow(
-					`The extensions were not compiled into ${version}: they load from their files until \`pi-bolt compile\` compiles them in.`,
+					`The extensions were not compiled into ${version}: they load from their files until \`rapid-pi compile\` compiles them in.`,
 				),
 			);
 		}
@@ -1211,9 +1211,9 @@ export async function handlePackageCommand(
 	args: string[],
 	runtimeOptions: PackageCommandRuntimeOptions = {},
 ): Promise<boolean> {
-	// Pi-Bolt: `pi-bolt compile` (pi-bolt-compile.ts). In Pi, `compile` stays a message to the model.
-	if (PIBOLT && args[0] === "compile") {
-		const build = PIBOLT;
+	// Rapid Pi: `rapid-pi compile` (rapid-pi-compile.ts). In Pi, `compile` stays a message to the model.
+	if (RAPIDPI && args[0] === "compile") {
+		const build = RAPIDPI;
 		process.exitCode = await runPiBoltCompile(args.slice(1), () =>
 			runPiBoltSelfUpdate(build.version, { reinstall: true, recompile: false }),
 		);
@@ -1320,7 +1320,7 @@ export async function handlePackageCommand(
 	try {
 		switch (options.command) {
 			case "install":
-				await packageManager.installAndPersist(source!, { local: options.local, piBolt: options.piBolt });
+				await packageManager.installAndPersist(source!, { local: options.local, rapidPi: options.rapidPi });
 				// main() exits right after a package command; queued settings writes (one per list) must land first.
 				await settingsManager.flush();
 				reportSettingsErrors(settingsManager, "package command");
@@ -1330,7 +1330,7 @@ export async function handlePackageCommand(
 			case "remove": {
 				const removed = await packageManager.removeAndPersist(source!, {
 					local: options.local,
-					piBolt: options.piBolt,
+					rapidPi: options.rapidPi,
 				});
 				await settingsManager.flush();
 				reportSettingsErrors(settingsManager, "package command");
@@ -1398,7 +1398,7 @@ export async function handlePackageCommand(
 				if (options.channel) {
 					if (!setPiBoltChannel(options.channel)) {
 						console.error(
-							chalk.red("error: this Pi-Bolt is not in an installation, so it has no channel to set"),
+							chalk.red("error: this Rapid Pi is not in an installation, so it has no channel to set"),
 						);
 						process.exitCode = 1;
 						return true;
@@ -1445,7 +1445,7 @@ export async function handlePackageCommand(
 						return true;
 					}
 
-					if (PIBOLT) {
+					if (RAPIDPI) {
 						if (selfUpdatePlan.note) {
 							printSelfUpdateNote(selfUpdatePlan.note);
 						}

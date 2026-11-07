@@ -1,5 +1,5 @@
 /**
- * What `pi-bolt service install` writes for each service manager, as plain functions of their inputs: a launchd
+ * What `rapid-pi service install` writes for each service manager, as plain functions of their inputs: a launchd
  * LaunchAgent (macOS), a systemd user unit (Linux), and a Task Scheduler task (Windows). All three run the service as the
  * user, at login, from files in the user's own directories, and start it again after a crash.
  */
@@ -7,9 +7,9 @@
 import { posix, win32 } from "node:path";
 
 /** The LaunchAgent's label (and the plist's file name). */
-export const LAUNCH_AGENT_LABEL = "in.opensec.pi-bolt.remote-control";
-export const SYSTEMD_UNIT = "pi-bolt-remote-control.service";
-export const WINDOWS_TASK_NAME = "Pi-Bolt Remote Control";
+export const LAUNCH_AGENT_LABEL = "in.opensec.rapid-pi.remote-control";
+export const SYSTEMD_UNIT = "rapid-pi-remote-control.service";
+export const WINDOWS_TASK_NAME = "Rapid Pi Remote Control";
 
 export type ServicePlatform = "darwin" | "linux" | "win32";
 
@@ -120,7 +120,7 @@ export function systemdUserUnit(spec: ServiceSpec): string {
 		.map(([key, value]) => `Environment=${systemdQuote(`${key}=${value}`, false)}`)
 		.join("\n");
 	return `[Unit]
-Description=Pi-Bolt remote control (serves paired phones)
+Description=Rapid Pi remote control (serves paired phones)
 After=network-online.target
 
 [Service]
@@ -163,7 +163,7 @@ export function windowsTaskXml(spec: WindowsTaskSpec): string {
 	return `<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
-    <Description>Pi-Bolt remote control: serves paired phones after you log on.</Description>
+    <Description>Rapid Pi remote control: serves paired phones after you log on.</Description>
     <URI>\\${xml(WINDOWS_TASK_NAME)}</URI>
   </RegistrationInfo>
   <Triggers>
@@ -216,7 +216,7 @@ function batchQuote(value: string): string {
 export function windowsTaskScript(spec: ServiceSpec): string {
 	return [
 		"@echo off",
-		"rem Pi-Bolt remote control: written by pi-bolt service install, removed by pi-bolt service uninstall.",
+		"rem Rapid Pi remote control: written by rapid-pi service install, removed by rapid-pi service uninstall.",
 		"chcp 65001 >nul",
 		...Object.entries(spec.env).map(([key, value]) => `set ${batchQuote(`${key}=${value}`)}`),
 		`cd /d ${batchQuote(spec.home)}`,

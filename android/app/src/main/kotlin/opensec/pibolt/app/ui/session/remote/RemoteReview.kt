@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.remote
+package opensec.rapidpi.app.ui.session.remote
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -48,63 +48,63 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.git.BranchStatus
-import opensec.pibolt.app.git.Change
-import opensec.pibolt.app.git.Commit
-import opensec.pibolt.app.git.DiffStats
-import opensec.pibolt.app.git.FileDiff
-import opensec.pibolt.app.git.GitException
-import opensec.pibolt.app.git.GitSource
-import opensec.pibolt.app.git.GitStatus
-import opensec.pibolt.app.git.LineCount
-import opensec.pibolt.app.git.StatusEntry
-import opensec.pibolt.app.git.UnifiedDiffParser
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.ErrorState
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.GlassPill
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.LoadingRow
-import opensec.pibolt.app.ui.components.PiSnackHost
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.components.show
-import opensec.pibolt.app.ui.git.ChangesModel
-import opensec.pibolt.app.ui.git.ChangesOverlays
-import opensec.pibolt.app.ui.git.ChangesRules
-import opensec.pibolt.app.ui.git.ChangesUi
-import opensec.pibolt.app.ui.git.OverlayBar
-import opensec.pibolt.app.ui.git.changesItems
-import opensec.pibolt.app.ui.projects.DOT_FILE_ALPHA
-import opensec.pibolt.app.ui.projects.EmptyCard
-import opensec.pibolt.app.ui.projects.FileDoc
-import opensec.pibolt.app.ui.projects.FileEntry
-import opensec.pibolt.app.ui.projects.FileKind
-import opensec.pibolt.app.ui.projects.FileTypes
-import opensec.pibolt.app.ui.projects.FileViewer
-import opensec.pibolt.app.ui.projects.ProjectFiles
-import opensec.pibolt.app.ui.projects.editor.EditorTabs
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.rpc.RemoteCommit
-import opensec.pibolt.protocol.rpc.RemoteDiff
-import opensec.pibolt.protocol.rpc.RemoteDirEntry
-import opensec.pibolt.protocol.rpc.RemoteFile
-import opensec.pibolt.protocol.rpc.RemoteGitStatus
-import opensec.pibolt.protocol.rpc.RemoteLineCount
-import opensec.pibolt.protocol.rpc.RemoteListing
-import opensec.pibolt.protocol.rpc.RemoteLog
-import opensec.pibolt.protocol.rpc.RemoteShow
-import opensec.pibolt.protocol.rpc.RemoteStatusEntry
-import opensec.pibolt.protocol.rpc.ReviewException
-import opensec.pibolt.protocol.rpc.ReviewRequest
-import opensec.pibolt.protocol.rpc.RpcResponse
-import opensec.pibolt.protocol.rpc.remoteChild
-import opensec.pibolt.protocol.session.SessionState
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.git.BranchStatus
+import opensec.rapidpi.app.git.Change
+import opensec.rapidpi.app.git.Commit
+import opensec.rapidpi.app.git.DiffStats
+import opensec.rapidpi.app.git.FileDiff
+import opensec.rapidpi.app.git.GitException
+import opensec.rapidpi.app.git.GitSource
+import opensec.rapidpi.app.git.GitStatus
+import opensec.rapidpi.app.git.LineCount
+import opensec.rapidpi.app.git.StatusEntry
+import opensec.rapidpi.app.git.UnifiedDiffParser
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.ErrorState
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.GlassPill
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.LoadingRow
+import opensec.rapidpi.app.ui.components.PiSnackHost
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.show
+import opensec.rapidpi.app.ui.git.ChangesModel
+import opensec.rapidpi.app.ui.git.ChangesOverlays
+import opensec.rapidpi.app.ui.git.ChangesRules
+import opensec.rapidpi.app.ui.git.ChangesUi
+import opensec.rapidpi.app.ui.git.OverlayBar
+import opensec.rapidpi.app.ui.git.changesItems
+import opensec.rapidpi.app.ui.projects.DOT_FILE_ALPHA
+import opensec.rapidpi.app.ui.projects.EmptyCard
+import opensec.rapidpi.app.ui.projects.FileDoc
+import opensec.rapidpi.app.ui.projects.FileEntry
+import opensec.rapidpi.app.ui.projects.FileKind
+import opensec.rapidpi.app.ui.projects.FileTypes
+import opensec.rapidpi.app.ui.projects.FileViewer
+import opensec.rapidpi.app.ui.projects.ProjectFiles
+import opensec.rapidpi.app.ui.projects.editor.EditorTabs
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.rpc.RemoteCommit
+import opensec.rapidpi.protocol.rpc.RemoteDiff
+import opensec.rapidpi.protocol.rpc.RemoteDirEntry
+import opensec.rapidpi.protocol.rpc.RemoteFile
+import opensec.rapidpi.protocol.rpc.RemoteGitStatus
+import opensec.rapidpi.protocol.rpc.RemoteLineCount
+import opensec.rapidpi.protocol.rpc.RemoteListing
+import opensec.rapidpi.protocol.rpc.RemoteLog
+import opensec.rapidpi.protocol.rpc.RemoteShow
+import opensec.rapidpi.protocol.rpc.RemoteStatusEntry
+import opensec.rapidpi.protocol.rpc.ReviewException
+import opensec.rapidpi.protocol.rpc.ReviewRequest
+import opensec.rapidpi.protocol.rpc.RpcResponse
+import opensec.rapidpi.protocol.rpc.remoteChild
+import opensec.rapidpi.protocol.session.SessionState
 import java.io.File
 
 /*
@@ -251,7 +251,7 @@ class RemoteReview(val controller: SessionController, private val scope: Corouti
 }
 
 /**
- * The remote session's review, or null when there is none: an on-device session, or a computer whose Pi-Bolt does
+ * The remote session's review, or null when there is none: an on-device session, or a computer whose Rapid Pi does
  * not offer it (`host.review`). The counts refresh when the session connects or switches, and after every turn.
  */
 @Composable

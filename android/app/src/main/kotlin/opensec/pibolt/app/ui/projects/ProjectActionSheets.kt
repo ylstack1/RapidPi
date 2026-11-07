@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -6,10 +6,10 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.terminal.Terminals
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.session.TextPromptSheet
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.terminal.Terminals
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.session.TextPromptSheet
 import java.io.File
 
 /**

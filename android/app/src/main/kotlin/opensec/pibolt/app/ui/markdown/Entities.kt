@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
 /** HTML character references in markdown text: `&amp;`, `&#169;`, `&#x1F680;` and the named ones models use. */
 object Entities {

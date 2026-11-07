@@ -30,7 +30,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("opensec.pibolt.protocol.cli.MainKt")
+    mainClass.set("opensec.rapidpi.protocol.cli.MainKt")
 }
 
 tasks.named<JavaExec>("run") {

@@ -1,25 +1,25 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.ui.session.toolLabel
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.app.preview.ConsoleBuffer
-import opensec.pibolt.app.preview.PreviewBroker
-import opensec.pibolt.app.preview.PreviewCommand
-import opensec.pibolt.app.preview.PreviewExtension
-import opensec.pibolt.app.preview.PreviewOrigins
-import opensec.pibolt.app.preview.PreviewOrigins.Target
-import opensec.pibolt.app.preview.PreviewReply
-import opensec.pibolt.app.preview.PreviewRequest
-import opensec.pibolt.app.preview.PreviewRequests
-import opensec.pibolt.app.preview.PreviewScripts
-import opensec.pibolt.app.preview.ScreenshotScale
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.app.ui.session.toolLabel
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.app.preview.ConsoleBuffer
+import opensec.rapidpi.app.preview.PreviewBroker
+import opensec.rapidpi.app.preview.PreviewCommand
+import opensec.rapidpi.app.preview.PreviewExtension
+import opensec.rapidpi.app.preview.PreviewOrigins
+import opensec.rapidpi.app.preview.PreviewOrigins.Target
+import opensec.rapidpi.app.preview.PreviewReply
+import opensec.rapidpi.app.preview.PreviewRequest
+import opensec.rapidpi.app.preview.PreviewRequests
+import opensec.rapidpi.app.preview.PreviewScripts
+import opensec.rapidpi.app.preview.ScreenshotScale
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 import org.junit.Assume.assumeTrue
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -217,7 +217,7 @@ class PreviewToolsTest {
 
     @Test
     fun brokerSocketIsPrivateAndNamedForProjectEngines() {
-        val dir = Files.createTempDirectory("pibolt-preview").toFile()
+        val dir = Files.createTempDirectory("rapidpi-preview").toFile()
         try {
             val socket = File(dir, "preview/socket")
             var bound: File? = null
@@ -248,7 +248,7 @@ class PreviewToolsTest {
     @Test
     fun extensionIsInstalledAndKeptCurrent() {
         assertTrue(asset.isFile, "run from the app module (${asset.absolutePath})")
-        val agentDir = Files.createTempDirectory("pibolt-agent").toFile()
+        val agentDir = Files.createTempDirectory("rapidpi-agent").toFile()
         try {
             assertTrue(PreviewExtension.install(agentDir) { asset.inputStream() })
             val installed = File(agentDir, "extensions/${PreviewExtension.FILE}")
@@ -272,7 +272,7 @@ class PreviewToolsTest {
         val node = listOf("/opt/homebrew/bin/node", "/usr/local/bin/node", "/usr/bin/node").firstOrNull { File(it).canExecute() }
             ?: System.getenv("PATH").orEmpty().split(File.pathSeparator).map { File(it, "node") }.firstOrNull { it.canExecute() }?.path
         assumeTrue("node is not installed", node != null)
-        val process = ProcessBuilder(node, "--test", "src/test/js/pibolt-preview.test.mjs").redirectErrorStream(true).start()
+        val process = ProcessBuilder(node, "--test", "src/test/js/rapidpi-preview.test.mjs").redirectErrorStream(true).start()
         val output = process.inputStream.bufferedReader().readText()
         assertTrue(process.waitFor(60, TimeUnit.SECONDS), "node --test timed out")
         assertEquals(0, process.exitValue(), output)

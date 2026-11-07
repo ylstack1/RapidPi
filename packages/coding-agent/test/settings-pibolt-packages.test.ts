@@ -25,11 +25,11 @@ import { ConfigSelectorComponent } from "../src/modes/interactive/components/con
 import { handlePackageCommand } from "../src/package-manager-cli.ts";
 import { allowNetwork } from "./test-network-env.ts";
 
-const build = vi.hoisted(() => ({ piBolt: true }));
-vi.mock("../src/pi-bolt.ts", async (importOriginal) => ({
+const build = vi.hoisted(() => ({ rapidPi: true }));
+vi.mock("../src/rapid-pi.ts", async (importOriginal) => ({
 	...(await importOriginal<object>()),
-	get PIBOLT() {
-		return build.piBolt ? { version: "0.8.4", variant: "arm64", jit: false } : undefined;
+	get RAPIDPI() {
+		return build.rapidPi ? { version: "0.8.4", variant: "arm64", jit: false } : undefined;
 	},
 }));
 
@@ -41,10 +41,10 @@ let projectFile: string;
 let originalCwd: string;
 let originalExitCode: typeof process.exitCode;
 
-/** Fixture Pi-Bolt lists are overlays, as Pi-Bolt writes them; writeLegacySettings writes pre-0.9.1 copies. */
+/** Fixture Rapid Pi lists are overlays, as Rapid Pi writes them; writeLegacySettings writes pre-0.9.1 copies. */
 function overlay(settings: Settings): Settings {
-	return Array.isArray(settings.piBolt?.packages)
-		? { ...settings, piBolt: { ...settings.piBolt, packagesOverlay: true } }
+	return Array.isArray(settings.rapidPi?.packages)
+		? { ...settings, rapidPi: { ...settings.rapidPi, packagesOverlay: true } }
 		: settings;
 }
 
@@ -90,7 +90,7 @@ function installedNpm(name: string, local = false): string {
 }
 
 beforeEach(() => {
-	build.piBolt = true;
+	build.rapidPi = true;
 	root = realpathSync(mkdtempSync(join(tmpdir(), "pibolt-packages-")));
 	agentDir = join(root, "agent");
 	cwd = join(root, "project");
@@ -117,17 +117,17 @@ afterEach(() => {
 });
 
 // #28: exercise raw settings, the real resolver, configuration writes and CLI dispatch without network installs.
-describe("Pi-Bolt additive package inheritance", () => {
+describe("Rapid Pi additive package inheritance", () => {
 	test("ordinary install/remove edits shared packages, and later shared changes remain visible", async () => {
 		const shared = localPackage("shared");
 		const own = localPackage("own");
 		const later = localPackage("later");
-		writeSettings({ packages: [shared], piBolt: { packages: [own] } });
+		writeSettings({ packages: [shared], rapidPi: { packages: [own] } });
 		const { settings, packages } = manager();
 		await packages.installAndPersist(later);
 		await settings.flush();
 		expect(readSettings().packages).toEqual([shared, relative(agentDir, later)]);
-		expect(readSettings().piBolt?.packages).toEqual([own]);
+		expect(readSettings().rapidPi?.packages).toEqual([own]);
 		expect(packages.listConfiguredPackages().map((entry) => entry.source)).toEqual([
 			shared,
 			relative(agentDir, later),
@@ -137,7 +137,7 @@ describe("Pi-Bolt additive package inheritance", () => {
 		expect(await packages.removeAndPersist(later)).toBe(true);
 		await settings.flush();
 		expect(readSettings().packages).toEqual([shared]);
-		expect(readSettings().piBolt?.packages).toEqual([own]);
+		expect(readSettings().rapidPi?.packages).toEqual([own]);
 	});
 
 	test("first explicit install writes only its addition, not a snapshot of shared packages", async () => {
@@ -145,10 +145,10 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const own = localPackage("own");
 		writeSettings({ packages: [shared] });
 		const { settings, packages } = manager();
-		await packages.installAndPersist(own, { piBolt: true });
+		await packages.installAndPersist(own, { rapidPi: true });
 		await settings.flush();
 		expect(readSettings().packages).toEqual([shared]);
-		expect(readSettings().piBolt?.packages).toEqual([relative(agentDir, own)]);
+		expect(readSettings().rapidPi?.packages).toEqual([relative(agentDir, own)]);
 		writeSettings({ ...readSettings(), packages: [shared, localPackage("new-shared")] });
 		await settings.reload();
 		expect((await packages.resolve()).extensions).toHaveLength(6);
@@ -160,23 +160,23 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const shared = localPackage("shared");
 		const own = localPackage("own");
 		const copied: PackageSource[] = ["npm:tools", { source: shared, extensions: ["-extensions/a.ts"] }, own];
-		writeSettings({ packages: ["npm:tools", shared], piBolt: { packages: copied } });
+		writeSettings({ packages: ["npm:tools", shared], rapidPi: { packages: copied } });
 		const { settings, packages } = manager();
 		const resolved = await packages.resolve();
 		expect(packages.listConfiguredPackages()).toHaveLength(3);
 		expect(resolved.extensions).toHaveLength(5);
 		expect(new Set(resolved.extensions.map((entry) => entry.path)).size).toBe(5);
 		expect(resolved.extensions.filter((entry) => entry.enabled)).toHaveLength(4);
-		expect(readSettings()).toEqual(overlay({ packages: ["npm:tools", shared], piBolt: { packages: copied } }));
+		expect(readSettings()).toEqual(overlay({ packages: ["npm:tools", shared], rapidPi: { packages: copied } }));
 		const later = localPackage("later");
 		writeSettings({ ...readSettings(), packages: ["npm:tools", shared, later] });
 		await settings.reload();
 		expect(packages.listConfiguredPackages()).toHaveLength(4);
 		expect((await packages.resolve()).extensions).toHaveLength(7);
-		expect(readSettings().piBolt?.packages).toEqual(copied);
+		expect(readSettings().rapidPi?.packages).toEqual(copied);
 	});
 
-	// #28: a list copied from packages by Pi-Bolt before 0.9.1 keeps its removals when it becomes an overlay.
+	// #28: a list copied from packages by Rapid Pi before 0.9.1 keeps its removals when it becomes an overlay.
 	test("legacy copied list is converted once: removals excluded, identical entries dropped, others kept", async () => {
 		const local = localPackage("local");
 		const plain = localPackage("plain");
@@ -191,18 +191,18 @@ describe("Pi-Bolt additive package inheritance", () => {
 			"npm:versioned@2.0.0",
 			"npm:own-only",
 		];
-		writeLegacySettings({ packages: shared, piBolt: { packages: copy }, theme: "dark" });
+		writeLegacySettings({ packages: shared, rapidPi: { packages: copy }, theme: "dark" });
 		const { settings } = manager();
 		const converted = {
 			packages: shared,
-			piBolt: {
+			rapidPi: {
 				packages: ["-npm:removed", localFiltered, "npm:versioned@2.0.0", "npm:own-only"],
 				packagesOverlay: true,
 			},
 			theme: "dark",
 		};
 		expect(readSettings()).toEqual(converted);
-		// Pi-Bolt loads what the copy declared, as before.
+		// Rapid Pi loads what the copy declared, as before.
 		expect(settings.getResolvedPackages("global")).toEqual([
 			"npm:tools",
 			localFiltered,
@@ -217,23 +217,23 @@ describe("Pi-Bolt additive package inheritance", () => {
 		expect(readFileSync(globalFile, "utf8")).toBe(before);
 		writeLegacySettings({ ...converted, packages: [...shared, "npm:later"] });
 		await settings.reload();
-		expect(readSettings().piBolt).toEqual(converted.piBolt);
+		expect(readSettings().rapidPi).toEqual(converted.rapidPi);
 		expect(settings.getResolvedPackages("global")).toContain("npm:later");
 	});
 
-	// #28: the conversion runs per settings file, only in trusted projects and only in Pi-Bolt.
+	// #28: the conversion runs per settings file, only in trusted projects and only in Rapid Pi.
 	test("legacy project copy is converted when trusted; stock Pi and unreadable files are left alone", async () => {
-		const legacyProject = { packages: ["npm:a", "npm:b"], piBolt: { packages: ["npm:a"] } };
-		writeLegacySettings({ packages: ["npm:a"], piBolt: { packages: ["npm:a"] } }, legacyProject);
-		build.piBolt = false;
+		const legacyProject = { packages: ["npm:a", "npm:b"], rapidPi: { packages: ["npm:a"] } };
+		writeLegacySettings({ packages: ["npm:a"], rapidPi: { packages: ["npm:a"] } }, legacyProject);
+		build.rapidPi = false;
 		manager();
-		expect(readSettings()).toEqual({ packages: ["npm:a"], piBolt: { packages: ["npm:a"] } });
-		build.piBolt = true;
+		expect(readSettings()).toEqual({ packages: ["npm:a"], rapidPi: { packages: ["npm:a"] } });
+		build.rapidPi = true;
 		const { settings } = manager(false);
 		expect(readSettings(projectFile)).toEqual(legacyProject);
-		expect(readSettings()).toEqual(overlay({ packages: ["npm:a"], piBolt: { packages: [] } }));
+		expect(readSettings()).toEqual(overlay({ packages: ["npm:a"], rapidPi: { packages: [] } }));
 		settings.setProjectTrusted(true);
-		expect(readSettings(projectFile)).toEqual(overlay({ ...legacyProject, piBolt: { packages: ["-npm:b"] } }));
+		expect(readSettings(projectFile)).toEqual(overlay({ ...legacyProject, rapidPi: { packages: ["-npm:b"] } }));
 		expect(settings.getResolvedPackages("project")).toEqual(["npm:a"]);
 
 		writeFileSync(globalFile, "{");
@@ -243,17 +243,17 @@ describe("Pi-Bolt additive package inheritance", () => {
 
 	// #28: exclusions exist only in overlays, so such a list is marked, never converted.
 	test("unmarked list with exclusions is only marked", () => {
-		writeLegacySettings({ packages: ["npm:a", "npm:b"], piBolt: { packages: ["-npm:a", "npm:c"] } });
+		writeLegacySettings({ packages: ["npm:a", "npm:b"], rapidPi: { packages: ["-npm:a", "npm:c"] } });
 		const { settings } = manager();
 		expect(readSettings()).toEqual(
-			overlay({ packages: ["npm:a", "npm:b"], piBolt: { packages: ["-npm:a", "npm:c"] } }),
+			overlay({ packages: ["npm:a", "npm:b"], rapidPi: { packages: ["-npm:a", "npm:c"] } }),
 		);
 		expect(settings.getResolvedPackages("global")).toEqual(["npm:b", "npm:c"]);
 	});
 
 	test("empty overlays inherit and empty project packages do not disable global resolution", async () => {
 		const shared = localPackage("shared");
-		writeSettings({ packages: [shared], piBolt: { packages: [] } }, { packages: [], piBolt: { packages: [] } });
+		writeSettings({ packages: [shared], rapidPi: { packages: [] } }, { packages: [], rapidPi: { packages: [] } });
 		const { settings, packages } = manager();
 		expect(settings.getResolvedPackages("global")).toEqual([shared]);
 		expect((await packages.resolve()).extensions).toHaveLength(2);
@@ -269,23 +269,23 @@ describe("Pi-Bolt additive package inheritance", () => {
 		];
 		writeSettings({
 			packages: ["npm:@scope/tools@1.0.0", "https://github.com/example/tools@main", `${local}/../local/`],
-			piBolt: { packages: overrides },
+			rapidPi: { packages: overrides },
 		});
 		const { settings } = manager();
 		expect(settings.getPackages()).toEqual(overrides);
 		expect(settings.getGlobalSettings().packages).toHaveLength(3);
 		expect(settings.getSettings().packages).toEqual(readSettings().packages);
 		settings.setPackages(["npm:new-shared"]);
-		settings.setPackages(overrides, { piBolt: true });
+		settings.setPackages(overrides, { rapidPi: true });
 		await settings.flush();
-		expect(readSettings()).toEqual(overlay({ packages: ["npm:new-shared"], piBolt: { packages: overrides } }));
+		expect(readSettings()).toEqual(overlay({ packages: ["npm:new-shared"], rapidPi: { packages: overrides } }));
 	});
 
 	test("exclusion plus different-name addition replaces a package; exclusions never resolve as sources", async () => {
 		const original = localPackage("original");
 		const replacement = localPackage("replacement");
 		const retained = localPackage("retained");
-		writeSettings({ packages: [original, retained], piBolt: { packages: [`-${original}`, replacement] } });
+		writeSettings({ packages: [original, retained], rapidPi: { packages: [`-${original}`, replacement] } });
 		const { packages } = manager();
 		const missing = vi.fn(async () => {
 			throw new Error("unexpected install");
@@ -306,21 +306,21 @@ describe("Pi-Bolt additive package inheritance", () => {
 		installedNpm("tools", true);
 		writeSettings(
 			{ packages: ["npm:tools"] },
-			{ packages: ["npm:tools"], piBolt: { packages: [{ source: "npm:tools@1.0.0", extensions: [] }] } },
+			{ packages: ["npm:tools"], rapidPi: { packages: [{ source: "npm:tools@1.0.0", extensions: [] }] } },
 		);
 		const { settings, packages } = manager(false);
 		expect((await packages.resolve()).extensions.map((entry) => [entry.enabled, entry.metadata.scope])).toEqual([
 			[true, "user"],
 		]);
-		expect(() => settings.setProjectPackages([], { piBolt: true })).toThrow("not trusted");
-		await expect(packages.installAndPersist("npm:tools", { local: true, piBolt: true })).rejects.toThrow(
+		expect(() => settings.setProjectPackages([], { rapidPi: true })).toThrow("not trusted");
+		await expect(packages.installAndPersist("npm:tools", { local: true, rapidPi: true })).rejects.toThrow(
 			"not trusted",
 		);
 		settings.setProjectTrusted(true);
 		expect((await packages.resolve()).extensions.map((entry) => [entry.enabled, entry.metadata.scope])).toEqual([
 			[false, "project"],
 		]);
-		settings.setProjectPackages(["-npm:tools"], { piBolt: true });
+		settings.setProjectPackages(["-npm:tools"], { rapidPi: true });
 		await settings.flush();
 		expect((await packages.resolve()).extensions.map((entry) => [entry.enabled, entry.metadata.scope])).toEqual([
 			[true, "user"],
@@ -332,7 +332,7 @@ describe("Pi-Bolt additive package inheritance", () => {
 		installedNpm("tools");
 		writeSettings(
 			{ packages: ["npm:tools"] },
-			{ piBolt: { packages: [{ source: "npm:tools", autoload: false, extensions: ["-extensions/a.ts"] }] } },
+			{ rapidPi: { packages: [{ source: "npm:tools", autoload: false, extensions: ["-extensions/a.ts"] }] } },
 		);
 		const { packages } = manager();
 		expect((await packages.resolve()).extensions.map((entry) => [entry.enabled, entry.metadata.scope])).toEqual([
@@ -340,50 +340,50 @@ describe("Pi-Bolt additive package inheritance", () => {
 		]);
 	});
 
-	test("removing an inherited or overridden package excludes it only for Pi-Bolt, and install re-enables it", async () => {
+	test("removing an inherited or overridden package excludes it only for Rapid Pi, and install re-enables it", async () => {
 		const shared = localPackage("shared");
 		writeSettings({ packages: [shared] });
 		const { settings, packages } = manager();
-		expect(await packages.removeAndPersist(shared, { piBolt: true })).toBe(true);
+		expect(await packages.removeAndPersist(shared, { rapidPi: true })).toBe(true);
 		await settings.flush();
-		expect(readSettings()).toEqual(overlay({ packages: [shared], piBolt: { packages: [`-${shared}`] } }));
+		expect(readSettings()).toEqual(overlay({ packages: [shared], rapidPi: { packages: [`-${shared}`] } }));
 		expect((await packages.resolve()).extensions).toHaveLength(0);
-		expect(packages.removeSourceFromSettings(shared, { piBolt: true })).toBe(false);
-		await packages.installAndPersist(shared, { piBolt: true });
+		expect(packages.removeSourceFromSettings(shared, { rapidPi: true })).toBe(false);
+		await packages.installAndPersist(shared, { rapidPi: true });
 		await settings.flush();
 		expect(settings.getPackages()).toEqual([relative(agentDir, shared)]);
-		expect(readSettings().piBolt?.packages).toEqual([relative(agentDir, shared)]);
-		expect(await packages.removeAndPersist(shared, { piBolt: true })).toBe(true);
+		expect(readSettings().rapidPi?.packages).toEqual([relative(agentDir, shared)]);
+		expect(await packages.removeAndPersist(shared, { rapidPi: true })).toBe(true);
 		await settings.flush();
-		expect(readSettings().piBolt?.packages).toEqual([`-${shared}`]);
+		expect(readSettings().rapidPi?.packages).toEqual([`-${shared}`]);
 	});
 
 	test.each([false, true])(
 		"npm removal keeps files only while the shared list declares them (local=%s)",
 		async (local) => {
 			const installed = installedNpm("tools", local);
-			const declared = { packages: ["npm:tools"], piBolt: { packages: ["npm:tools@1.0.0"] } };
+			const declared = { packages: ["npm:tools"], rapidPi: { packages: ["npm:tools@1.0.0"] } };
 			writeSettings(local ? {} : declared, local ? declared : undefined);
 			const { settings, packages } = manager();
 			const npm = vi
 				.spyOn(packages as unknown as { runNpmCommand(args: string[]): Promise<void> }, "runNpmCommand")
 				.mockResolvedValue();
 			const file = local ? projectFile : globalFile;
-			expect(await packages.removeAndPersist("npm:tools", { local, piBolt: true })).toBe(true);
+			expect(await packages.removeAndPersist("npm:tools", { local, rapidPi: true })).toBe(true);
 			await settings.flush();
 			expect(npm).not.toHaveBeenCalled();
 			expect(existsSync(installed)).toBe(true);
-			expect(readSettings(file).piBolt?.packages).toEqual(["-npm:tools"]);
+			expect(readSettings(file).rapidPi?.packages).toEqual(["-npm:tools"]);
 			expect(settings.getResolvedPackages(local ? "project" : "global")).toEqual([]);
 			expect(await packages.removeAndPersist("npm:tools", { local })).toBe(true);
 			await settings.flush();
 			expect(npm).toHaveBeenCalledWith(expect.arrayContaining(["uninstall", "tools"]));
 			expect(readSettings(file).packages).toEqual([]);
-			expect(readSettings(file).piBolt?.packages).toEqual([]);
+			expect(readSettings(file).rapidPi?.packages).toEqual([]);
 		},
 	);
 
-	// #28: a plain remove must not report success while Pi-Bolt keeps loading the package.
+	// #28: a plain remove must not report success while Rapid Pi keeps loading the package.
 	test.each([false, true])("plain remove drops a package from both lists (local=%s)", async (local) => {
 		const shared = localPackage("shared");
 		const other = localPackage("other");
@@ -397,21 +397,21 @@ describe("Pi-Bolt additive package inheritance", () => {
 			expect(readSettings(file)).toEqual(overlay(expected));
 			expect((await manager().packages.resolve()).extensions).toHaveLength(0);
 		};
-		// Replacement with Pi-Bolt-only filters.
+		// Replacement with Rapid Pi-only filters.
 		await check(
-			{ packages: [shared], piBolt: { packages: [{ source: shared, skills: [] }] } },
-			{ packages: [], piBolt: { packages: [] } },
+			{ packages: [shared], rapidPi: { packages: [{ source: shared, skills: [] }] } },
+			{ packages: [], rapidPi: { packages: [] } },
 		);
-		// Pi-Bolt-only addition.
-		await check({ packages: [], piBolt: { packages: [shared] } }, { packages: [], piBolt: { packages: [] } });
+		// Rapid Pi-only addition.
+		await check({ packages: [], rapidPi: { packages: [shared] } }, { packages: [], rapidPi: { packages: [] } });
 		// After the legacy conversion dropped the identical copy of shared and excluded other.
 		writeLegacySettings(
-			local ? {} : { packages: [shared, other], piBolt: { packages: [shared] } },
-			local ? { packages: [shared, other], piBolt: { packages: [shared] } } : undefined,
+			local ? {} : { packages: [shared, other], rapidPi: { packages: [shared] } },
+			local ? { packages: [shared, other], rapidPi: { packages: [shared] } } : undefined,
 		);
 		await handlePackageCommand(["remove", shared, ...scopeFlags]);
 		expect(process.exitCode).toBeUndefined();
-		expect(readSettings(file)).toEqual(overlay({ packages: [other], piBolt: { packages: [`-${other}`] } }));
+		expect(readSettings(file)).toEqual(overlay({ packages: [other], rapidPi: { packages: [`-${other}`] } }));
 		expect((await manager().packages.resolve()).extensions).toHaveLength(0);
 	});
 
@@ -421,13 +421,13 @@ describe("Pi-Bolt additive package inheritance", () => {
 		mkdirSync(path, { recursive: true });
 		writeSettings({ packages: [source] });
 		const { settings, packages } = manager();
-		await packages.removeAndPersist(source, { piBolt: true });
+		await packages.removeAndPersist(source, { rapidPi: true });
 		await settings.flush();
 		expect(existsSync(path)).toBe(true);
 		settings.setPackages([]);
-		settings.setPackages([source], { piBolt: true });
+		settings.setPackages([source], { rapidPi: true });
 		await settings.flush();
-		await packages.removeAndPersist(source, { piBolt: true });
+		await packages.removeAndPersist(source, { rapidPi: true });
 		await settings.flush();
 		expect(existsSync(path)).toBe(false);
 	});
@@ -435,7 +435,7 @@ describe("Pi-Bolt additive package inheritance", () => {
 	test("reload observes overlay deletion, settings deletion and later shared changes without copying", async () => {
 		const shared = localPackage("shared");
 		const own = localPackage("own");
-		writeSettings({ packages: [shared], piBolt: { packages: [own] } });
+		writeSettings({ packages: [shared], rapidPi: { packages: [own] } });
 		const { settings, packages } = manager();
 		expect((await packages.resolve()).extensions).toHaveLength(4);
 		writeSettings({ packages: [shared] });
@@ -444,9 +444,9 @@ describe("Pi-Bolt additive package inheritance", () => {
 		rmSync(globalFile);
 		await settings.reload();
 		expect(packages.listConfiguredPackages()).toEqual([]);
-		settings.setPackages([own], { piBolt: true });
+		settings.setPackages([own], { rapidPi: true });
 		await settings.flush();
-		expect(readSettings()).toEqual(overlay({ piBolt: { packages: [own] } }));
+		expect(readSettings()).toEqual(overlay({ rapidPi: { packages: [own] } }));
 	});
 
 	test("safety migration moves only historical Bun-only extensions, once, preserving object filters", async () => {
@@ -455,24 +455,24 @@ describe("Pi-Bolt additive package inheritance", () => {
 		writeSettings({ packages: [shared, bunOnly], theme: "dark" });
 		const { settings } = manager();
 		expect(settings.getPackages()).toEqual([shared, bunOnly]);
-		expect(readSettings()).toEqual(overlay({ packages: [shared], piBolt: { packages: [bunOnly] }, theme: "dark" }));
+		expect(readSettings()).toEqual(overlay({ packages: [shared], rapidPi: { packages: [bunOnly] }, theme: "dark" }));
 		await settings.reload();
-		expect(readSettings().piBolt?.packages).toEqual([bunOnly]);
+		expect(readSettings().rapidPi?.packages).toEqual([bunOnly]);
 	});
 
 	test("stock Pi ignores additive lists and writes shared declarations unchanged", async () => {
-		build.piBolt = false;
+		build.rapidPi = false;
 		const shared = localPackage("shared");
 		const own = localPackage("own");
-		writeSettings({ packages: [shared], piBolt: { packages: [`-${shared}`, own] } });
+		writeSettings({ packages: [shared], rapidPi: { packages: [`-${shared}`, own] } });
 		const { settings, packages } = manager();
 		expect(settings.getPackages()).toEqual([shared]);
 		expect((await packages.resolve()).extensions).toHaveLength(2);
 		await packages.installAndPersist(own);
 		await settings.flush();
 		expect(readSettings().packages).toEqual([shared, relative(agentDir, own)]);
-		expect(readSettings().piBolt?.packages).toEqual([`-${shared}`, own]);
-		expect(() => settings.setPackages([], { piBolt: true })).toThrow("Pi-Bolt build");
+		expect(readSettings().rapidPi?.packages).toEqual([`-${shared}`, own]);
+		expect(() => settings.setPackages([], { rapidPi: true })).toThrow("Rapid Pi build");
 	});
 
 	test("config selector updates shared and explicit declaration filters without copying other packages", async () => {
@@ -480,11 +480,11 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const own = localPackage("own");
 		writeSettings({
 			packages: [{ source: shared, skills: [] }],
-			piBolt: { packages: [{ source: own, themes: [] }] },
+			rapidPi: { packages: [{ source: own, themes: [] }] },
 		});
 		const { settings, packages } = manager();
 		const resolved = await packages.resolve();
-		for (const [source, piBolt] of [
+		for (const [source, rapidPi] of [
 			[shared, false],
 			[own, true],
 		] as const) {
@@ -505,42 +505,42 @@ describe("Pi-Bolt additive package inheritance", () => {
 			await settings.flush();
 			const written = readSettings();
 			expect(written.packages).toHaveLength(1);
-			expect(written.piBolt?.packages).toHaveLength(1);
-			const entry = (piBolt ? written.piBolt?.packages : written.packages)?.[0];
+			expect(written.rapidPi?.packages).toHaveLength(1);
+			const entry = (rapidPi ? written.rapidPi?.packages : written.packages)?.[0];
 			expect(entry).toMatchObject({ source, extensions: ["-extensions/a.ts"] });
 		}
 		expect(readSettings().packages?.[0]).toMatchObject({ skills: [] });
-		expect(readSettings().piBolt?.packages?.[0]).toMatchObject({ themes: [] });
+		expect(readSettings().rapidPi?.packages?.[0]).toMatchObject({ themes: [] });
 	});
 
 	// #28: SDK raw lists and runtime-only overrides must remain distinct.
 	test.each([false, true])(
-		"SDK getPackages keeps project precedence and applyOverrides without persisting it (Pi-Bolt=%s)",
-		async (piBolt) => {
-			build.piBolt = piBolt;
+		"SDK getPackages keeps project precedence and applyOverrides without persisting it (Rapid Pi=%s)",
+		async (rapidPi) => {
+			build.rapidPi = rapidPi;
 			writeSettings(
-				{ packages: ["npm:global"], piBolt: { packages: ["npm:global-own"] } },
-				{ packages: ["npm:project"], piBolt: { packages: ["npm:project-own"] } },
+				{ packages: ["npm:global"], rapidPi: { packages: ["npm:global-own"] } },
+				{ packages: ["npm:project"], rapidPi: { packages: ["npm:project-own"] } },
 			);
 			const { settings } = manager();
-			expect(settings.getPackages()).toEqual(piBolt ? ["npm:project", "npm:project-own"] : ["npm:project"]);
+			expect(settings.getPackages()).toEqual(rapidPi ? ["npm:project", "npm:project-own"] : ["npm:project"]);
 			settings.applyOverrides({ packages: ["npm:runtime"] });
-			expect(settings.getPackages()).toEqual(piBolt ? ["npm:runtime", "npm:project-own"] : ["npm:runtime"]);
+			expect(settings.getPackages()).toEqual(rapidPi ? ["npm:runtime", "npm:project-own"] : ["npm:runtime"]);
 			expect(settings.getResolvedPackages("project")).toEqual(
-				piBolt ? ["npm:project", "npm:project-own"] : ["npm:project"],
+				rapidPi ? ["npm:project", "npm:project-own"] : ["npm:project"],
 			);
 			settings.setTheme("dark");
 			await settings.flush();
-			expect(settings.getPackages()).toEqual(piBolt ? ["npm:project", "npm:project-own"] : ["npm:project"]);
+			expect(settings.getPackages()).toEqual(rapidPi ? ["npm:project", "npm:project-own"] : ["npm:project"]);
 			expect(readSettings(projectFile).packages).toEqual(["npm:project"]);
 		},
 	);
 
-	// #28: a project with only Pi-Bolt entries adds to the global packages; only project `packages` replaces them.
-	test("SDK getPackages adds project Pi-Bolt entries to global packages", () => {
+	// #28: a project with only Rapid Pi entries adds to the global packages; only project `packages` replaces them.
+	test("SDK getPackages adds project Rapid Pi entries to global packages", () => {
 		writeSettings(
 			{ packages: ["npm:global", "npm:replaced@1.0.0"] },
-			{ piBolt: { packages: ["npm:project-own", "npm:replaced@2.0.0", "-npm:global"] } },
+			{ rapidPi: { packages: ["npm:project-own", "npm:replaced@2.0.0", "-npm:global"] } },
 		);
 		expect(manager().settings.getPackages()).toEqual(["npm:global", "npm:project-own", "npm:replaced@2.0.0"]);
 	});
@@ -552,13 +552,13 @@ describe("Pi-Bolt additive package inheritance", () => {
 		mkdirSync(customAgentDir, { recursive: true });
 		const raw = {
 			packages: [local],
-			piBolt: { packages: [{ source: relative(customAgentDir, local), extensions: [] }] },
+			rapidPi: { packages: [{ source: relative(customAgentDir, local), extensions: [] }] },
 		};
 		const storage = new InMemorySettingsStorage();
 		storage.withLock("global", () => JSON.stringify(raw));
 		for (const settings of [SettingsManager.inMemory(raw), SettingsManager.fromStorage(storage)]) {
 			const packages = new DefaultPackageManager({ cwd, agentDir: customAgentDir, settingsManager: settings });
-			expect(settings.getResolvedPackages("global", customAgentDir)).toEqual(raw.piBolt.packages);
+			expect(settings.getResolvedPackages("global", customAgentDir)).toEqual(raw.rapidPi.packages);
 			expect(packages.listConfiguredPackages()).toHaveLength(1);
 			expect((await packages.resolve()).extensions.map((entry) => entry.enabled)).toEqual([false, false]);
 		}
@@ -570,7 +570,7 @@ describe("Pi-Bolt additive package inheritance", () => {
 		for (const name of ["shared", "excluded", "replaced", "own"]) installedNpm(name);
 		writeSettings({
 			packages: ["npm:shared", "npm:excluded", "npm:replaced@1"],
-			piBolt: { packages: ["-npm:excluded", "npm:replaced@^2", "npm:own"] },
+			rapidPi: { packages: ["-npm:excluded", "npm:replaced@^2", "npm:own"] },
 		});
 		const { packages } = manager();
 		const transport = packages as unknown as {
@@ -602,13 +602,13 @@ describe("Pi-Bolt additive package inheritance", () => {
 			undefined,
 		);
 		await expect(packages.update("npm:excluded")).rejects.toThrow("No matching package");
-		expect(readSettings().piBolt?.packages).toEqual(["-npm:excluded", "npm:replaced@^2", "npm:own"]);
+		expect(readSettings().rapidPi?.packages).toEqual(["-npm:excluded", "npm:replaced@^2", "npm:own"]);
 	});
 
 	// #28: project selector writes follow the raw owner and keep project/global delta precedence.
-	test("project config selector edits Pi-Bolt declarations and cycles inherited Pi-Bolt deltas", async () => {
+	test("project config selector edits Rapid Pi declarations and cycles inherited Rapid Pi deltas", async () => {
 		const own = localPackage("own");
-		writeSettings({ piBolt: { packages: [own] } }, { piBolt: { packages: [] } });
+		writeSettings({ rapidPi: { packages: [own] } }, { rapidPi: { packages: [] } });
 		const { settings, packages } = manager();
 		const resolved = await packages.resolve();
 		const selector = new ConfigSelectorComponent(
@@ -625,15 +625,15 @@ describe("Pi-Bolt additive package inheritance", () => {
 		selector.getResourceList().handleInput(" ");
 		await settings.flush();
 		expect(readSettings(projectFile).packages).toBeUndefined();
-		expect(readSettings(projectFile).piBolt?.packages).toEqual([
+		expect(readSettings(projectFile).rapidPi?.packages).toEqual([
 			{ source: relative(join(cwd, CONFIG_DIR_NAME), own), autoload: false, extensions: ["-extensions/a.ts"] },
 		]);
 		expect((await packages.resolve()).extensions.map((entry) => entry.enabled)).toEqual([false, true]);
 		selector.getResourceList().handleInput(" ");
 		selector.getResourceList().handleInput(" ");
 		await settings.flush();
-		expect(readSettings(projectFile).piBolt?.packages).toEqual([]);
-		expect(readSettings().piBolt?.packages).toEqual([own]);
+		expect(readSettings(projectFile).rapidPi?.packages).toEqual([]);
+		expect(readSettings().rapidPi?.packages).toEqual([own]);
 	});
 
 	// #28: modifiers are ordered and normal entries replace an identity exactly once.
@@ -643,7 +643,7 @@ describe("Pi-Bolt additive package inheritance", () => {
 		{ entries: ["npm:tools@^1", "npm:tools@~1.0.0"], expected: ["npm:tools@~1.0.0"] },
 	])("applies overlay entries in order: $entries", async ({ entries, expected }) => {
 		installedNpm("tools");
-		writeSettings({ packages: ["npm:tools"], piBolt: { packages: entries } });
+		writeSettings({ packages: ["npm:tools"], rapidPi: { packages: entries } });
 		const { settings, packages } = manager();
 		expect(settings.getPackages()).toEqual(expected);
 		expect(packages.listConfiguredPackages().map((entry) => entry.source)).toEqual(expected);
@@ -654,35 +654,35 @@ describe("Pi-Bolt additive package inheritance", () => {
 	test.each(["npm:opensec-pi-todo@3.0.0", "-npm:opensec-pi-todo"])(
 		"safety migration respects existing identity override %s",
 		(entry) => {
-			writeSettings({ packages: ["npm:ordinary", "npm:opensec-pi-todo@2.13.1"], piBolt: { packages: [entry] } });
+			writeSettings({ packages: ["npm:ordinary", "npm:opensec-pi-todo@2.13.1"], rapidPi: { packages: [entry] } });
 			const { settings } = manager();
-			expect(readSettings()).toEqual(overlay({ packages: ["npm:ordinary"], piBolt: { packages: [entry] } }));
+			expect(readSettings()).toEqual(overlay({ packages: ["npm:ordinary"], rapidPi: { packages: [entry] } }));
 			expect(settings.getPackages()).toEqual(entry.startsWith("-") ? ["npm:ordinary"] : ["npm:ordinary", entry]);
 		},
 	);
 
-	// #28: stock Pi never uses the Pi-Bolt declarations to retain files during removal.
-	test("stock Pi removal ignores Pi-Bolt declarations", async () => {
-		build.piBolt = false;
+	// #28: stock Pi never uses the Rapid Pi declarations to retain files during removal.
+	test("stock Pi removal ignores Rapid Pi declarations", async () => {
+		build.rapidPi = false;
 		const source = "git:github.com/example/tools";
 		const installed = join(agentDir, "git", "github.com", "example", "tools");
 		mkdirSync(installed, { recursive: true });
-		writeSettings({ packages: [source], piBolt: { packages: [source] } });
+		writeSettings({ packages: [source], rapidPi: { packages: [source] } });
 		const { settings, packages } = manager();
 		expect(await packages.removeAndPersist(source)).toBe(true);
 		await settings.flush();
 		expect(existsSync(installed)).toBe(false);
-		expect(readSettings()).toEqual(overlay({ packages: [], piBolt: { packages: [source] } }));
+		expect(readSettings()).toEqual(overlay({ packages: [], rapidPi: { packages: [source] } }));
 	});
 
 	// #28: retain tolerance for non-array overlays in every new consumer, without validating shared entries.
 	test.each(["bad", null, 1, {}])(
-		"ignores malformed Pi-Bolt package list %j and explicit install normalizes it",
+		"ignores malformed Rapid Pi package list %j and explicit install normalizes it",
 		async (malformed) => {
 			const shared = localPackage("shared");
 			const own = localPackage("own");
-			writeFileSync(globalFile, JSON.stringify({ packages: [shared], piBolt: { packages: malformed } }));
-			writeFileSync(projectFile, JSON.stringify({ piBolt: { packages: malformed } }));
+			writeFileSync(globalFile, JSON.stringify({ packages: [shared], rapidPi: { packages: malformed } }));
+			writeFileSync(projectFile, JSON.stringify({ rapidPi: { packages: malformed } }));
 			const { settings, packages } = manager();
 			expect(settings.getPackages()).toEqual([shared]);
 			expect(packages.listConfiguredPackages()).toHaveLength(1);
@@ -699,14 +699,14 @@ describe("Pi-Bolt additive package inheritance", () => {
 			);
 			selector.getResourceList().handleInput(" ");
 			await settings.flush();
-			expect(readSettings().piBolt?.packages).toEqual(malformed);
+			expect(readSettings().rapidPi?.packages).toEqual(malformed);
 			await packages.installAndPersist(own);
 			await packages.removeAndPersist(own);
 			await settings.flush();
-			expect(readSettings().piBolt?.packages).toEqual(malformed);
-			await packages.installAndPersist(own, { piBolt: true });
+			expect(readSettings().rapidPi?.packages).toEqual(malformed);
+			await packages.installAndPersist(own, { rapidPi: true });
 			await settings.flush();
-			expect(readSettings().piBolt?.packages).toEqual([relative(agentDir, own)]);
+			expect(readSettings().rapidPi?.packages).toEqual([relative(agentDir, own)]);
 		},
 	);
 
@@ -717,7 +717,7 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const unrelated = localPackage("unrelated");
 		const projectShared = [{ source: "npm:tools", extensions: [] }];
 		const projectOwn = ["-npm:tools", unrelated];
-		writeSettings({ packages: ["npm:tools"] }, { packages: projectShared, piBolt: { packages: projectOwn } });
+		writeSettings({ packages: ["npm:tools"] }, { packages: projectShared, rapidPi: { packages: projectOwn } });
 		const { settings, packages } = manager();
 		const globalPaths = await manager(false).packages.resolve();
 		const resolved = await packages.resolve();
@@ -744,9 +744,9 @@ describe("Pi-Bolt additive package inheritance", () => {
 			);
 			expect(toolResources.map((entry) => entry.enabled)).toEqual([expectedEnabled]);
 			expect(readSettings(projectFile).packages).toEqual(projectShared);
-			expect(readSettings(projectFile).piBolt?.packages?.slice(0, 2)).toEqual(projectOwn);
+			expect(readSettings(projectFile).rapidPi?.packages?.slice(0, 2)).toEqual(projectOwn);
 		}
-		expect(readSettings(projectFile).piBolt?.packages).toEqual(projectOwn);
+		expect(readSettings(projectFile).rapidPi?.packages).toEqual(projectOwn);
 		expect(readSettings().packages).toEqual(["npm:tools"]);
 	});
 	// #28: the first explicit override must retain the inherited resource policy.
@@ -760,12 +760,12 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const filtered = { source: shared, extensions: [], skills: [], themes: [], prompts: [], autoload };
 		writeSettings(local ? {} : { packages: [filtered] }, local ? { packages: [filtered] } : undefined);
 		const { settings, packages } = manager();
-		await packages.installAndPersist(shared, { local, piBolt: true });
+		await packages.installAndPersist(shared, { local, rapidPi: true });
 		await settings.flush();
 		const file = local ? projectFile : globalFile;
 		const baseDir = local ? join(cwd, CONFIG_DIR_NAME) : agentDir;
 		expect(readSettings(file)).toEqual(
-			overlay({ packages: [filtered], piBolt: { packages: [{ ...filtered, source: relative(baseDir, shared) }] } }),
+			overlay({ packages: [filtered], rapidPi: { packages: [{ ...filtered, source: relative(baseDir, shared) }] } }),
 		);
 		expect((await packages.resolve()).extensions.map((entry) => entry.enabled)).toEqual(
 			autoload ? [false, false] : [],
@@ -774,30 +774,30 @@ describe("Pi-Bolt additive package inheritance", () => {
 
 	// #28: an already-completed external write must protect shared files without requiring reload.
 	test.each([
-		{ local: false, piBolt: false },
-		{ local: false, piBolt: true },
-		{ local: true, piBolt: false },
-		{ local: true, piBolt: true },
-	])("removal sees current declaration ownership ($local, $piBolt)", async ({ local, piBolt }) => {
+		{ local: false, rapidPi: false },
+		{ local: false, rapidPi: true },
+		{ local: true, rapidPi: false },
+		{ local: true, rapidPi: true },
+	])("removal sees current declaration ownership ($local, $rapidPi)", async ({ local, rapidPi }) => {
 		const source = "git:github.com/example/tools";
 		const baseDir = local ? join(cwd, CONFIG_DIR_NAME) : agentDir;
 		const installed = join(baseDir, "git", "github.com", "example", "tools");
 		mkdirSync(installed, { recursive: true });
-		const initial = { packages: piBolt ? [] : [source], piBolt: { packages: piBolt ? [source] : [] } };
+		const initial = { packages: rapidPi ? [] : [source], rapidPi: { packages: rapidPi ? [source] : [] } };
 		writeSettings(local ? {} : initial, local ? initial : undefined);
 		const { settings, packages } = manager();
 		const file = local ? projectFile : globalFile;
 		writeFileSync(
 			file,
-			JSON.stringify(overlay({ packages: [source], piBolt: { packages: [source] }, theme: "light" })),
+			JSON.stringify(overlay({ packages: [source], rapidPi: { packages: [source] }, theme: "light" })),
 		);
 		settings.setTheme("dark");
-		expect(await packages.removeAndPersist(source, { local, piBolt })).toBe(true);
+		expect(await packages.removeAndPersist(source, { local, rapidPi })).toBe(true);
 		await settings.flush();
 		// A plain remove drops the package from both lists, so no declaration keeps its files.
-		expect(existsSync(installed)).toBe(piBolt);
-		expect(readSettings(file).packages).toEqual(piBolt ? [source] : []);
-		expect(readSettings(file).piBolt?.packages).toEqual(piBolt ? [`-${source}`] : []);
+		expect(existsSync(installed)).toBe(rapidPi);
+		expect(readSettings(file).packages).toEqual(rapidPi ? [source] : []);
+		expect(readSettings(file).rapidPi?.packages).toEqual(rapidPi ? [`-${source}`] : []);
 		await settings.reload();
 		expect(settings.getResolvedPackages(local ? "project" : "global")).toEqual([]);
 		expect(settings.getTheme()).toBe(local ? "light" : "dark");
@@ -809,11 +809,11 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const installed = join(agentDir, "git", "github.com", "example", "tools");
 		mkdirSync(installed, { recursive: true });
 		const storage = new InMemorySettingsStorage();
-		storage.withLock("global", () => JSON.stringify({ piBolt: { packages: [source] } }));
+		storage.withLock("global", () => JSON.stringify({ rapidPi: { packages: [source] } }));
 		const settings = SettingsManager.fromStorage(storage);
 		const packages = new DefaultPackageManager({ cwd, agentDir, settingsManager: settings });
 		settings.setPackages([source]);
-		expect(await packages.removeAndPersist(source, { piBolt: true })).toBe(true);
+		expect(await packages.removeAndPersist(source, { rapidPi: true })).toBe(true);
 		await settings.flush();
 		expect(existsSync(installed)).toBe(true);
 		expect(SettingsManager.fromStorage(storage).getPackages()).toEqual([]);
@@ -823,15 +823,15 @@ describe("Pi-Bolt additive package inheritance", () => {
 	// #28: synchronous declaration edits must retain local changes whose writes are still queued.
 	test("synchronous exclusion preserves later queued shared declarations", async () => {
 		const source = "npm:tools";
-		writeSettings({ piBolt: { packages: [source] } });
+		writeSettings({ rapidPi: { packages: [source] } });
 		const { settings, packages } = manager();
 		settings.setPackages(["npm:unrelated"]);
 		settings.setPackages([source]);
 		await Promise.resolve();
-		expect(packages.removeSourceFromSettings(source, { piBolt: true })).toBe(true);
+		expect(packages.removeSourceFromSettings(source, { rapidPi: true })).toBe(true);
 		await settings.flush();
 		expect(readSettings().packages).toEqual([source]);
-		expect(readSettings().piBolt?.packages).toEqual([`-${source}`]);
+		expect(readSettings().rapidPi?.packages).toEqual([`-${source}`]);
 	});
 
 	// #28: a generated relative path must not collide with the new exclusion syntax.
@@ -843,13 +843,13 @@ describe("Pi-Bolt additive package inheritance", () => {
 		expect(own).toBe(join(baseDir, "-tools"));
 		writeSettings(local ? {} : { packages: [shared] }, local ? { packages: [shared] } : undefined);
 		const { settings, packages } = manager();
-		await packages.installAndPersist(own, { local, piBolt: true });
+		await packages.installAndPersist(own, { local, rapidPi: true });
 		await settings.flush();
-		expect(readSettings(local ? projectFile : globalFile).piBolt?.packages).toEqual(["./-tools"]);
+		expect(readSettings(local ? projectFile : globalFile).rapidPi?.packages).toEqual(["./-tools"]);
 		expect((await packages.resolve()).extensions.filter((entry) => entry.enabled)).toHaveLength(4);
-		await packages.removeAndPersist(own, { local, piBolt: true });
+		await packages.removeAndPersist(own, { local, rapidPi: true });
 		await settings.flush();
-		expect(readSettings(local ? projectFile : globalFile).piBolt?.packages).toEqual([]);
+		expect(readSettings(local ? projectFile : globalFile).rapidPi?.packages).toEqual([]);
 		expect((await packages.resolve()).extensions.filter((entry) => entry.enabled)).toHaveLength(2);
 	});
 
@@ -889,7 +889,7 @@ describe("Pi-Bolt additive package inheritance", () => {
 	});
 
 	// #28: conflict advice must lead to a working exclusion without changing Pi's shared declarations.
-	test("tool conflict recovery excludes only the selected Pi-Bolt package", async () => {
+	test("tool conflict recovery excludes only the selected Rapid Pi package", async () => {
 		const sources = [localPackage("tools-a"), localPackage("tools-b")];
 		for (const source of sources) {
 			writeFileSync(
@@ -907,12 +907,12 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const conflict = loader
 			.getExtensions()
 			.errors.find((entry) => entry.error.includes('Tool "example_tool" conflicts'));
-		expect(conflict?.error).toContain("pi-bolt remove --pi-bolt <source>");
+		expect(conflict?.error).toContain("rapid-pi remove --rapid-pi <source>");
 		expect(conflict?.error).not.toContain("a package list of its own");
-		await handlePackageCommand(["remove", "--pi-bolt", sources[1]]);
+		await handlePackageCommand(["remove", "--rapid-pi", sources[1]]);
 		expect(process.exitCode).toBeUndefined();
 		expect(readSettings().packages).toEqual(sources);
-		expect(readSettings().piBolt?.packages).toEqual([`-${sources[1]}`]);
+		expect(readSettings().rapidPi?.packages).toEqual([`-${sources[1]}`]);
 		await loader.reload();
 		expect(loader.getExtensions().errors).toEqual([]);
 		expect(loader.getExtensions().extensions.filter((extension) => extension.tools.has("example_tool"))).toHaveLength(
@@ -925,10 +925,10 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const source = "git:github.com/example/tools";
 		const installed = join(agentDir, "git", "github.com", "example", "tools");
 		mkdirSync(installed, { recursive: true });
-		writeSettings({ piBolt: { packages: [source] } });
+		writeSettings({ rapidPi: { packages: [source] } });
 		const { packages } = manager();
 		writeFileSync(globalFile, "{");
-		await expect(packages.removeAndPersist(source, { piBolt: true })).rejects.toThrow();
+		await expect(packages.removeAndPersist(source, { rapidPi: true })).rejects.toThrow();
 		expect(existsSync(installed)).toBe(true);
 		expect(readFileSync(globalFile, "utf8")).toBe("{");
 	});
@@ -940,11 +940,11 @@ describe("Pi-Bolt additive package inheritance", () => {
 			const source = "git:github.com/example/tools";
 			const installed = join(agentDir, "git", "github.com", "example", "tools");
 			mkdirSync(installed, { recursive: true });
-			writeSettings({ packages: [source], piBolt: { packages: [source] } });
+			writeSettings({ packages: [source], rapidPi: { packages: [source] } });
 			const { packages } = manager();
 			rmSync(globalFile);
 			symlinkSync("settings.json", globalFile);
-			await expect(packages.removeAndPersist(source, { piBolt: true })).rejects.toMatchObject({ code: "ELOOP" });
+			await expect(packages.removeAndPersist(source, { rapidPi: true })).rejects.toMatchObject({ code: "ELOOP" });
 			expect(existsSync(installed)).toBe(true);
 		},
 	);
@@ -966,64 +966,64 @@ describe("Pi-Bolt additive package inheritance", () => {
 		const source = "git:github.com/example/tools";
 		const installed = join(cwd, CONFIG_DIR_NAME, "git", "github.com", "example", "tools");
 		mkdirSync(installed, { recursive: true });
-		writeSettings({}, { piBolt: { packages: [source] } });
+		writeSettings({}, { rapidPi: { packages: [source] } });
 		const { settings, packages } = manager();
-		const removal = packages.removeAndPersist(source, { local: true, piBolt: true });
+		const removal = packages.removeAndPersist(source, { local: true, rapidPi: true });
 		settings.setProjectTrusted(false);
 		await expect(removal).rejects.toThrow("not trusted");
 		expect(existsSync(installed)).toBe(true);
-		expect(readSettings(projectFile).piBolt?.packages).toEqual([source]);
+		expect(readSettings(projectFile).rapidPi?.packages).toEqual([source]);
 	});
 });
 
 // #28: CLI tests use real handlers and local package fixtures, including rejection before settings migrations.
-describe("package CLI --pi-bolt", () => {
-	test.each([false, true])("install/remove select Pi-Bolt list explicitly (local=%s)", async (local) => {
+describe("package CLI --rapid-pi", () => {
+	test.each([false, true])("install/remove select Rapid Pi list explicitly (local=%s)", async (local) => {
 		const shared = localPackage("shared");
 		const own = localPackage("own");
 		writeSettings({ packages: [shared] }, { packages: [shared] });
 		const scopeFlags = local ? ["--local", "--approve"] : [];
-		await handlePackageCommand(["install", own, "--pi-bolt", ...scopeFlags]);
+		await handlePackageCommand(["install", own, "--rapid-pi", ...scopeFlags]);
 		expect(process.exitCode).toBeUndefined();
 		const file = local ? projectFile : globalFile;
 		const baseDir = local ? join(cwd, CONFIG_DIR_NAME) : agentDir;
 		expect(readSettings(file)).toEqual(
-			overlay({ packages: [shared], piBolt: { packages: [relative(baseDir, own)] } }),
+			overlay({ packages: [shared], rapidPi: { packages: [relative(baseDir, own)] } }),
 		);
-		await handlePackageCommand(["uninstall", own, "--pi-bolt", ...scopeFlags]);
-		expect(readSettings(file)).toEqual(overlay({ packages: [shared], piBolt: { packages: [] } }));
-		await handlePackageCommand(["remove", shared, "--pi-bolt", ...scopeFlags]);
-		expect(readSettings(file).piBolt?.packages).toEqual([`-${shared}`]);
+		await handlePackageCommand(["uninstall", own, "--rapid-pi", ...scopeFlags]);
+		expect(readSettings(file)).toEqual(overlay({ packages: [shared], rapidPi: { packages: [] } }));
+		await handlePackageCommand(["remove", shared, "--rapid-pi", ...scopeFlags]);
+		expect(readSettings(file).rapidPi?.packages).toEqual([`-${shared}`]);
 	});
 
 	test("ordinary CLI install writes shared packages even after an override exists", async () => {
 		const own = localPackage("own");
 		const shared = localPackage("shared");
-		writeSettings({ piBolt: { packages: [own] } });
+		writeSettings({ rapidPi: { packages: [own] } });
 		await handlePackageCommand(["install", shared]);
-		expect(readSettings()).toEqual(overlay({ packages: [relative(agentDir, shared)], piBolt: { packages: [own] } }));
+		expect(readSettings()).toEqual(overlay({ packages: [relative(agentDir, shared)], rapidPi: { packages: [own] } }));
 	});
 
-	// #28: a plain install must take effect for Pi-Bolt, not leave a stale replacement or an exclusion in its way.
+	// #28: a plain install must take effect for Rapid Pi, not leave a stale replacement or an exclusion in its way.
 	test.each([
 		{ shared: ["npm:tools@1.0.0"], own: ["npm:tools@1.0.0", "npm:other"] },
 		{ shared: ["npm:tools@1.0.0"], own: ["-npm:tools", "npm:other"] },
 		{ shared: [], own: [{ source: "npm:tools@1.0.0", skills: [] }, "npm:other"] },
-	])("plain install replaces Pi-Bolt's entry for the package: $own", async ({ shared, own }) => {
+	])("plain install replaces Rapid Pi's entry for the package: $own", async ({ shared, own }) => {
 		const install = vi.spyOn(DefaultPackageManager.prototype, "install").mockResolvedValue();
-		writeSettings({ packages: shared, piBolt: { packages: own } });
+		writeSettings({ packages: shared, rapidPi: { packages: own } });
 		await handlePackageCommand(["install", "npm:tools@2.0.0"]);
 		expect(process.exitCode).toBeUndefined();
 		expect(install).toHaveBeenCalledWith("npm:tools@2.0.0", expect.anything());
-		expect(readSettings()).toEqual(overlay({ packages: ["npm:tools@2.0.0"], piBolt: { packages: ["npm:other"] } }));
+		expect(readSettings()).toEqual(overlay({ packages: ["npm:tools@2.0.0"], rapidPi: { packages: ["npm:other"] } }));
 		expect(manager().settings.getResolvedPackages("global")).toEqual(["npm:tools@2.0.0", "npm:other"]);
 	});
 
-	test("untrusted --local --pi-bolt is rejected without project writes", async () => {
-		writeSettings({}, { piBolt: { packages: [] } });
-		await handlePackageCommand(["install", localPackage("own"), "--pi-bolt", "--local", "--no-approve"]);
+	test("untrusted --local --rapid-pi is rejected without project writes", async () => {
+		writeSettings({}, { rapidPi: { packages: [] } });
+		await handlePackageCommand(["install", localPackage("own"), "--rapid-pi", "--local", "--no-approve"]);
 		expect(process.exitCode).toBe(1);
-		expect(readSettings(projectFile)).toEqual(overlay({ piBolt: { packages: [] } }));
+		expect(readSettings(projectFile)).toEqual(overlay({ rapidPi: { packages: [] } }));
 	});
 
 	test.each(["list", "update", "config", "mcp", "auth", "--print"])(
@@ -1031,19 +1031,19 @@ describe("package CLI --pi-bolt", () => {
 		async (command) => {
 			writeSettings({ packages: ["npm:opensec-pi-todo"] });
 			const before = readFileSync(globalFile, "utf8");
-			await main([command, "--pi-bolt"]);
+			await main([command, "--rapid-pi"]);
 			expect(process.exitCode).toBe(1);
 			expect(readFileSync(globalFile, "utf8")).toBe(before);
 			expect(existsSync(join(agentDir, "sessions"))).toBe(false);
 		},
 	);
 
-	test("stock Pi rejects --pi-bolt before installs, settings writes or help dispatch", async () => {
-		build.piBolt = false;
+	test("stock Pi rejects --rapid-pi before installs, settings writes or help dispatch", async () => {
+		build.rapidPi = false;
 		for (const args of [
-			["install", "npm:tools", "--pi-bolt"],
-			["remove", "npm:tools", "--pi-bolt"],
-			["install", "--help", "--pi-bolt"],
+			["install", "npm:tools", "--rapid-pi"],
+			["remove", "npm:tools", "--rapid-pi"],
+			["install", "--help", "--rapid-pi"],
 		]) {
 			process.exitCode = undefined;
 			await main(args);
@@ -1054,24 +1054,24 @@ describe("package CLI --pi-bolt", () => {
 	});
 
 	// #28: an explicit install re-enables an identity despite duplicate manual modifiers and retains its filters.
-	test("install --pi-bolt removes all same-identity modifiers before enabling the source", async () => {
+	test("install --rapid-pi removes all same-identity modifiers before enabling the source", async () => {
 		const shared = localPackage("shared");
 		writeSettings({
 			packages: [shared],
-			piBolt: { packages: [shared, `-${shared}`, { source: shared, skills: [] }, `-${shared}`] },
+			rapidPi: { packages: [shared, `-${shared}`, { source: shared, skills: [] }, `-${shared}`] },
 		});
-		await handlePackageCommand(["install", shared, "--pi-bolt"]);
+		await handlePackageCommand(["install", shared, "--rapid-pi"]);
 		expect(process.exitCode).toBeUndefined();
 		expect(readSettings()).toEqual(
-			overlay({ packages: [shared], piBolt: { packages: [{ source: relative(agentDir, shared), skills: [] }] } }),
+			overlay({ packages: [shared], rapidPi: { packages: [{ source: relative(agentDir, shared), skills: [] }] } }),
 		);
 		expect((await manager().packages.resolve()).extensions).toHaveLength(2);
-		await handlePackageCommand(["remove", shared, "--pi-bolt"]);
-		expect(readSettings().piBolt?.packages).toEqual([`-${shared}`]);
+		await handlePackageCommand(["remove", shared, "--rapid-pi"]);
+		expect(readSettings().rapidPi?.packages).toEqual([`-${shared}`]);
 	});
 
 	// #28: validate every flag occurrence before any migration or installation.
-	test.each([{ flags: ["--pi-bolt", "--pi-bolt=true"] }, { flags: ["--pi-bolt=false", "--pi-bolt"] }])(
+	test.each([{ flags: ["--rapid-pi", "--rapid-pi=true"] }, { flags: ["--rapid-pi=false", "--rapid-pi"] }])(
 		"rejects malformed repeated selectors: $flags",
 		async ({ flags }) => {
 			writeSettings({ packages: ["npm:opensec-pi-todo"] });

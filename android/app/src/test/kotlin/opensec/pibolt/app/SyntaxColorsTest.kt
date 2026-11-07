@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import opensec.pibolt.app.data.AccentId
-import opensec.pibolt.app.data.ThemeId
-import opensec.pibolt.app.ui.markdown.Highlighter
-import opensec.pibolt.app.ui.markdown.tokenStyle
-import opensec.pibolt.app.ui.theme.PiColors
+import opensec.rapidpi.app.data.AccentId
+import opensec.rapidpi.app.data.ThemeId
+import opensec.rapidpi.app.ui.markdown.Highlighter
+import opensec.rapidpi.app.ui.markdown.tokenStyle
+import opensec.rapidpi.app.ui.theme.PiColors
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

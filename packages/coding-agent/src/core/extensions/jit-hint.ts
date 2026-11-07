@@ -1,12 +1,12 @@
 /**
- * Pi-Bolt's default build has no JIT. bun:ffi makes the code that calls into a native library while the program runs, so
+ * Rapid Pi's default build has no JIT. bun:ffi makes the code that calls into a native library while the program runs, so
  * there dlopen(), cc(), linkSymbols(), CFunction() and new JSCallback() throw "bun:ffi requires the JIT", and an extension
  * that needs them works only with the -jit build. Where Pi shows that error (an extension that failed to load, an error in one
- * of its handlers, a notice the extension shows itself), Pi-Bolt adds which extension needs the JIT build and the command that
+ * of its handlers, a notice the extension shows itself), Rapid Pi adds which extension needs the JIT build and the command that
  * installs it:
  *
- *   Failed to load extension: bun:ffi requires the JIT. pi-foo needs Pi-Bolt's JIT build (bun:ffi); switch with:
- *   curl -fsSL https://pi-bolt.opensec.in/install.sh | PIBOLT_VARIANT=arm64-jit sh
+ *   Failed to load extension: bun:ffi requires the JIT. pi-foo needs Rapid Pi's JIT build (bun:ffi); switch with:
+ *   curl -fsSL https://rapid-pi.opensec.in/install.sh | RAPIDPI_VARIANT=arm64-jit sh
  *
  * Nothing is looked at before such an error is shown (bun:ffi is not even loaded), so this costs nothing otherwise. In every
  * other build (stock Pi, the -jit build) messages are left as they are.
@@ -15,20 +15,20 @@
 import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, sep } from "node:path";
-import { PIBOLT, piBoltJitSwitchCommand } from "../../pi-bolt.ts";
+import { RAPIDPI, rapidPiJitSwitchCommand } from "../../rapid-pi.ts";
 
 /** The engine's message (patches/bun.patch): a TypeError from the bun:ffi functions that make native code. */
 export const JIT_REQUIRED_MESSAGE = "bun:ffi requires the JIT";
-const HINT_MARK = "needs Pi-Bolt's JIT build";
+const HINT_MARK = "needs Rapid Pi's JIT build";
 
 /** Whether `message` is (or includes) the engine's "bun:ffi requires the JIT", on a build where it applies. */
 export function isJitRequiredMessage(message: unknown): message is string {
-	return PIBOLT !== undefined && !PIBOLT.jit && typeof message === "string" && message.includes(JIT_REQUIRED_MESSAGE);
+	return RAPIDPI !== undefined && !RAPIDPI.jit && typeof message === "string" && message.includes(JIT_REQUIRED_MESSAGE);
 }
 
 /** The line that says `extension` needs the JIT build, and how to switch to it. */
 export function jitHint(extension: string): string {
-	return `${extension} ${HINT_MARK} (bun:ffi); switch with: ${piBoltJitSwitchCommand()}`;
+	return `${extension} ${HINT_MARK} (bun:ffi); switch with: ${rapidPiJitSwitchCommand()}`;
 }
 
 /**

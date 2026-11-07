@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#050505">
-<title>Configuration · Pi-Bolt documentation</title>
-<meta name="description" content="Pi-Bolt reads Pi&#x27;s configuration. Where it lives, and the environment variables that are specific to Pi-Bolt.">
-<meta property="og:title" content="Configuration · Pi-Bolt documentation">
-<meta property="og:description" content="Pi-Bolt reads Pi&#x27;s configuration. Where it lives, and the environment variables that are specific to Pi-Bolt.">
-<meta property="og:url" content="https://pi-bolt.opensec.in/docs/configuration.html">
-<link rel="canonical" href="https://pi-bolt.opensec.in/docs/configuration.html">
+<title>Configuration · Rapid Pi documentation</title>
+<meta name="description" content="Rapid Pi reads Pi&#x27;s configuration. Where it lives, and the environment variables that are specific to Rapid Pi.">
+<meta property="og:title" content="Configuration · Rapid Pi documentation">
+<meta property="og:description" content="Rapid Pi reads Pi&#x27;s configuration. Where it lives, and the environment variables that are specific to Rapid Pi.">
+<meta property="og:url" content="https://rapid-pi.opensec.in/docs/configuration.html">
+<link rel="canonical" href="https://rapid-pi.opensec.in/docs/configuration.html">
 <link rel="icon" href="../logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
     </button>
     <nav class="top" aria-label="Main">
       <a href="../#benchmarks">Benchmarks</a>
-      <a href="https://github.com/opensec-git/Pi-Bolt/releases/latest">Releases</a>
-      <a class="gh" href="https://github.com/opensec-git/Pi-Bolt"><span>GitHub</span><i aria-hidden="true">↗</i></a>
+      <a href="https://github.com/opensec-git/Rapid Pi/releases/latest">Releases</a>
+      <a class="gh" href="https://github.com/opensec-git/Rapid Pi"><span>GitHub</span><i aria-hidden="true">↗</i></a>
     </nav>
   </div>
 </header>
@@ -68,11 +68,11 @@
     <article class="doc">
       <p class="eyebrow">Guides</p>
 <h1>Configuration</h1>
-<p class="lede">Pi-Bolt has no configuration of its own: it reads Pi's. A few environment variables control the Pi-Bolt
+<p class="lede">Rapid Pi has no configuration of its own: it reads Pi's. A few environment variables control the Rapid Pi
   executable itself, for diagnostics and tuning.</p>
 
 <h2 id="pi-s-configuration">Pi's configuration<a class="anchor" href="#pi-s-configuration" aria-label="Link to this section">#</a></h2>
-<p>Pi-Bolt and Pi share the agent directory, <code>~/.pi/agent</code>, and a project's <code>.pi</code> folder:</p>
+<p>Rapid Pi and Pi share the agent directory, <code>~/.pi/agent</code>, and a project's <code>.pi</code> folder:</p>
 <div class="table"><table>
   <thead><tr><th>File or folder</th><th>Holds</th></tr></thead>
   <tbody>
@@ -84,53 +84,53 @@
   </tbody>
 </table></div>
 <p>Pi's <a href="https://pi.dev/docs/latest/configuration">Configuration</a>, <a href="https://pi.dev/docs/latest/settings">Settings</a>
-  and <a href="https://pi.dev/docs/latest/environment-variables">Environment variables</a> pages apply to Pi-Bolt as written.
+  and <a href="https://pi.dev/docs/latest/environment-variables">Environment variables</a> pages apply to Rapid Pi as written.
   <code>PI_CODING_AGENT_DIR</code> moves the agent directory, and <code>PI_OFFLINE=1</code> (or <code>--offline</code>) turns off
   network operations at startup.</p>
-<h2 id="shared-packages-and-pi-bolt-overrides">Shared packages and Pi-Bolt overrides<a class="anchor" href="#shared-packages-and-pi-bolt-overrides" aria-label="Link to this section">#</a></h2>
-<p><code>pi-bolt install</code> and <code>pi-bolt remove</code> update the shared <code>packages</code> list, just as Pi does.
-  They do not create a separate copy. They also drop Pi-Bolt's own entry for that package in the same settings file (a
-  replacement, an addition or an exclusion), so Pi-Bolt then loads what the shared list declares: <code>remove</code> stops both
-  from loading the package, and <code>install npm:tools@2</code> is not hidden by a Pi-Bolt entry for <code>npm:tools@1</code>.
-  Use <code>--pi-bolt</code> to change only <code>piBolt.packages</code>, which Pi ignores. These examples use fictional
+<h2 id="shared-packages-and-rapid-pi-overrides">Shared packages and Rapid Pi overrides<a class="anchor" href="#shared-packages-and-rapid-pi-overrides" aria-label="Link to this section">#</a></h2>
+<p><code>rapid-pi install</code> and <code>rapid-pi remove</code> update the shared <code>packages</code> list, just as Pi does.
+  They do not create a separate copy. They also drop Rapid Pi's own entry for that package in the same settings file (a
+  replacement, an addition or an exclusion), so Rapid Pi then loads what the shared list declares: <code>remove</code> stops both
+  from loading the package, and <code>install npm:tools@2</code> is not hidden by a Rapid Pi entry for <code>npm:tools@1</code>.
+  Use <code>--rapid-pi</code> to change only <code>rapidPi.packages</code>, which Pi ignores. These examples use fictional
   package names:</p>
-<pre data-label="Terminal"><span class="p">$ </span>pi-bolt install --pi-bolt npm:@example/bolt-tools
-<span class="p">$ </span>pi-bolt remove --pi-bolt npm:@example/shared-tools</pre>
-<p><code>piBolt.packages</code> extends <code>packages</code> in the same settings file. Entries are applied in order: a package
+<pre data-label="Terminal"><span class="p">$ </span>rapid-pi install --rapid-pi npm:@example/bolt-tools
+<span class="p">$ </span>rapid-pi remove --rapid-pi npm:@example/shared-tools</pre>
+<p><code>rapidPi.packages</code> extends <code>packages</code> in the same settings file. Entries are applied in order: a package
   adds to the inherited list or replaces an entry with the same identity; a <code>-source</code> string excludes it. For example:</p>
 <pre data-label="settings.json">{
   "packages": ["npm:@example/shared-tools", "npm:@example/theme"],
-  "piBolt": {
+  "rapidPi": {
     "packages": ["-npm:@example/shared-tools", "npm:@example/bolt-tools"]
   }
 }</pre>
-<p>Pi-Bolt loads <code>@example/theme</code> and <code>@example/bolt-tools</code>; Pi still loads <code>@example/shared-tools</code> and
+<p>Rapid Pi loads <code>@example/theme</code> and <code>@example/bolt-tools</code>; Pi still loads <code>@example/shared-tools</code> and
   <code>@example/theme</code>. Later changes to the shared list remain inherited. Package objects with resource filters work in
   either list. Identity matching uses the npm package name, the Git repository, or the resolved local path, ignoring versions
   and Git refs.</p>
-<p><code>remove --pi-bolt</code> removes an explicit override and, if the package is inherited, records an exclusion.
-  <code>install --pi-bolt</code> replaces a matching exclusion with the package. Add <code>--local</code> to either command to
+<p><code>remove --rapid-pi</code> removes an explicit override and, if the package is inherited, records an exclusion.
+  <code>install --rapid-pi</code> replaces a matching exclusion with the package. Add <code>--local</code> to either command to
   edit <code>.pi/settings.json</code> instead of global settings. Each file's overrides affect only its own shared list;
   project/global precedence is unchanged. A project exclusion does not exclude a global package.</p>
-<p>These are configuration overrides, not separate installations. Pi and Pi-Bolt share installed package files, so selecting
+<p>These are configuration overrides, not separate installations. Pi and Rapid Pi share installed package files, so selecting
   different versions or Git refs of the same package can replace the files used by both.</p>
-<p><strong>Existing configurations:</strong> before 0.9.1, <code>piBolt.packages</code> was an independent list, copied from
-  <code>packages</code> on the first <code>pi-bolt</code> install or removal. Pi-Bolt converts such a copy once, at its next
+<p><strong>Existing configurations:</strong> before 0.9.1, <code>rapidPi.packages</code> was an independent list, copied from
+  <code>packages</code> on the first <code>rapid-pi</code> install or removal. Rapid Pi converts such a copy once, at its next
   start: each shared package missing from the copy gets a <code>-source</code> exclusion, entries identical to their shared
-  entry are dropped (so future shared changes apply to them), and entries that differ or exist only for Pi-Bolt are kept. Pi-Bolt
-  then loads what it loaded before, and packages added to <code>packages</code> later are inherited. Pi-Bolt marks the list with
+  entry are dropped (so future shared changes apply to them), and entries that differ or exist only for Rapid Pi are kept. Rapid Pi
+  then loads what it loaded before, and packages added to <code>packages</code> later are inherited. Rapid Pi marks the list with
   <code>"packagesOverlay": true</code> whenever it writes it; an unmarked list without <code>-source</code> entries is taken for
   an old copy, so add the mark to a list you write by hand.</p>
-<p>The installer uses <code>--pi-bolt</code> for OpenSec's optional Bun-only extensions. The existing startup repair for older
+<p>The installer uses <code>--rapid-pi</code> for OpenSec's optional Bun-only extensions. The existing startup repair for older
   installations still moves those extensions out of the shared list, but does not copy other shared packages.</p>
 
-<h2 id="pi-bolt-s-environment-variables">Pi-Bolt's environment variables<a class="anchor" href="#pi-bolt-s-environment-variables" aria-label="Link to this section">#</a></h2>
-<p>These are read by the Pi-Bolt executable at run time.</p>
+<h2 id="rapid-pi-s-environment-variables">Rapid Pi's environment variables<a class="anchor" href="#rapid-pi-s-environment-variables" aria-label="Link to this section">#</a></h2>
+<p>These are read by the Rapid Pi executable at run time.</p>
 <div class="table"><table>
   <thead><tr><th>Variable</th><th>Effect</th></tr></thead>
   <tbody>
-    <tr><td><code>PIBOLT_VARIANT</code></td><td>The build the installer or the npm package installs. See <a href="builds.html">Choose a build</a>.</td></tr>
-    <tr><td><code>PIBOLT_HOME</code></td><td>npm package: where downloaded builds are kept. Default: <code>~/.pi-bolt</code>.</td></tr>
+    <tr><td><code>RAPIDPI_VARIANT</code></td><td>The build the installer or the npm package installs. See <a href="builds.html">Choose a build</a>.</td></tr>
+    <tr><td><code>RAPIDPI_HOME</code></td><td>npm package: where downloaded builds are kept. Default: <code>~/.rapid-pi</code>.</td></tr>
     <tr><td><code>BUN_AOT=0</code></td><td>Ignore the compiled code and run Pi from bytecode. Use it to tell whether a problem comes from the compiled code.</td></tr>
     <tr><td><code>BUN_STATIC_HEAP_VERBOSE=1</code></td><td>Report how the compiled code and prebuilt heap were loaded.</td></tr>
     <tr><td><code>PI_TIMING=1</code></td><td>Pi's startup timings, including each extension's factory.</td></tr>
@@ -144,28 +144,28 @@
 <p>The installer has its own variables; see <a href="installation.html#installer-options">Installer options</a>.</p>
 
 <h2 id="env-files">.env files<a class="anchor" href="#env-files" aria-label="Link to this section">#</a></h2>
-<p>Pi-Bolt does not read a <code>.env</code> file from the working directory. Pi on Bun does, because Bun loads one into every
+<p>Rapid Pi does not read a <code>.env</code> file from the working directory. Pi on Bun does, because Bun loads one into every
   program's environment; Pi on Node does not. A project's <code>.env</code> (its API keys, its proxy settings) belongs to the
   project. Set what Pi should see in the shell that starts it.</p>
 
     </article>
     <div class="doc-foot">
-      <a class="edit" href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs-site/pages/configuration.html">Edit this page on GitHub</a>
+      <a class="edit" href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs-site/pages/configuration.html">Edit this page on GitHub</a>
     </div>
     <nav class="pager" aria-label="Previous and next page"><a class="prev" href="integrations.html"><span>Previous</span>Integrations</a><a class="next" href="benchmarks.html"><span>Next</span>Benchmarks</a></nav>
   </main>
 
   <aside class="toc-col">
-    <nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li class="l2"><a href="#pi-s-configuration">Pi&#x27;s configuration</a></li><li class="l2"><a href="#shared-packages-and-pi-bolt-overrides">Shared packages and Pi-Bolt overrides</a></li><li class="l2"><a href="#pi-bolt-s-environment-variables">Pi-Bolt&#x27;s environment variables</a></li><li class="l2"><a href="#env-files">.env files</a></li></ul></nav>
+    <nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li class="l2"><a href="#pi-s-configuration">Pi&#x27;s configuration</a></li><li class="l2"><a href="#shared-packages-and-rapid-pi-overrides">Shared packages and Rapid Pi overrides</a></li><li class="l2"><a href="#rapid-pi-s-environment-variables">Rapid Pi&#x27;s environment variables</a></li><li class="l2"><a href="#env-files">.env files</a></li></ul></nav>
   </aside>
 </div>
 
 <footer>
   <div class="foot">
-    <p>© 2026 OpenSec · <strong>Pi-Bolt</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
+    <p>© 2026 OpenSec · <strong>Rapid Pi</strong> is an independent fork of <a href="https://github.com/earendil-works/pi">Pi</a>, not
       affiliated with Pi's authors or with Oven. MIT licensed.</p>
-    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Pi-Bolt">GitHub</a> ·
-      <a href="https://www.npmjs.com/package/pi-bolt">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
+    <p class="micro"><a href="../">Home</a> · <a href="https://github.com/opensec-git/Rapid Pi">GitHub</a> ·
+      <a href="https://www.npmjs.com/package/rapid-pi">npm</a> · <a href="https://pi.dev/docs/latest">Pi documentation</a></p>
   </div>
 </footer>
 

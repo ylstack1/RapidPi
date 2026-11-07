@@ -14,7 +14,7 @@ type Request = { id: string; method: string; params: Record<string, unknown> };
 const cleanups: Array<() => void | Promise<void>> = [];
 afterEach(async () => {
 	for (const cleanup of cleanups.splice(0).reverse()) await cleanup();
-	delete (globalThis as { PIBOLT_BUILD?: string }).PIBOLT_BUILD;
+	delete (globalThis as { RAPIDPI_BUILD?: string }).RAPIDPI_BUILD;
 	vi.resetModules();
 });
 
@@ -128,8 +128,8 @@ describe("Herdr extension", () => {
 		await until(() => run.states().length === 1);
 		expect(run.herdr.requests[0].params).toMatchObject({
 			pane_id: "w1:p2",
-			source: "pi-bolt",
-			agent: "pi-bolt",
+			source: "rapid-pi",
+			agent: "rapid-pi",
 			state: "idle",
 			agent_session_path: "/work/s.jsonl",
 			resume_argv: [COMMAND_NAME, "--session", "/work/s.jsonl"],
@@ -242,7 +242,7 @@ describe("Herdr extension", () => {
 		await until(() => quitting.herdr.requests.length === 2);
 		expect(quitting.herdr.requests[1]).toMatchObject({
 			method: "pane.release_agent",
-			params: { pane_id: "w1:p2", source: "pi-bolt", agent: "pi-bolt" },
+			params: { pane_id: "w1:p2", source: "rapid-pi", agent: "rapid-pi" },
 		});
 	});
 
@@ -349,7 +349,7 @@ describe("Herdr socket", () => {
 
 	const report: HerdrRequest = {
 		method: "pane.report_agent",
-		params: { pane_id: "w1:p1", source: "pi-bolt", agent: "pi-bolt", state: "idle", seq: 1 },
+		params: { pane_id: "w1:p1", source: "rapid-pi", agent: "rapid-pi", state: "idle", seq: 1 },
 	};
 
 	// #200: an error answer counted as success.
@@ -395,13 +395,13 @@ describe("Herdr executable (Windows)", () => {
 				method: "pane.report_agent",
 				params: {
 					pane_id: "w1:p2",
-					source: "pi-bolt",
-					agent: "pi-bolt",
+					source: "rapid-pi",
+					agent: "rapid-pi",
 					state: "blocked",
 					message: "-y to continue?",
 					seq: 7,
 					agent_session_path: "C:\\Users\\me\\s.jsonl",
-					resume_argv: ["pi-bolt", "--session", "C:\\Users\\me\\s.jsonl"],
+					resume_argv: ["rapid-pi", "--session", "C:\\Users\\me\\s.jsonl"],
 				},
 			}),
 		).toEqual([
@@ -409,9 +409,9 @@ describe("Herdr executable (Windows)", () => {
 			"report-agent",
 			"w1:p2",
 			"--source",
-			"pi-bolt",
+			"rapid-pi",
 			"--agent",
-			"pi-bolt",
+			"rapid-pi",
 			"--seq",
 			"7",
 			"--state",
@@ -421,16 +421,16 @@ describe("Herdr executable (Windows)", () => {
 			"--agent-session-path",
 			"C:\\Users\\me\\s.jsonl",
 			"--",
-			"pi-bolt",
+			"rapid-pi",
 			"--session",
 			"C:\\Users\\me\\s.jsonl",
 		]);
 		expect(
 			herdrArguments({
 				method: "pane.release_agent",
-				params: { pane_id: "w1:p2", source: "pi-bolt", agent: "pi-bolt", seq: 8 },
+				params: { pane_id: "w1:p2", source: "rapid-pi", agent: "rapid-pi", seq: 8 },
 			}),
-		).toEqual(["pane", "release-agent", "w1:p2", "--source", "pi-bolt", "--agent", "pi-bolt", "--seq", "8"]);
+		).toEqual(["pane", "release-agent", "w1:p2", "--source", "rapid-pi", "--agent", "rapid-pi", "--seq", "8"]);
 	});
 
 	test.skipIf(process.platform === "win32")("on Windows, reports run HERDR_BIN_PATH", async () => {
@@ -454,10 +454,10 @@ describe("Herdr executable (Windows)", () => {
 		await until(() => calls().length === 2);
 		expect(calls()[0]).toMatch(
 			new RegExp(
-				`^pane\\|report-agent\\|w1:p2\\|--source\\|pi-bolt\\|--agent\\|pi-bolt\\|--seq\\|\\d+\\|--state\\|idle\\|--agent-session-path\\|/w/s.jsonl\\|--\\|${COMMAND_NAME}\\|--session\\|/w/s.jsonl$`,
+				`^pane\\|report-agent\\|w1:p2\\|--source\\|rapid-pi\\|--agent\\|rapid-pi\\|--seq\\|\\d+\\|--state\\|idle\\|--agent-session-path\\|/w/s.jsonl\\|--\\|${COMMAND_NAME}\\|--session\\|/w/s.jsonl$`,
 			),
 		);
-		expect(calls()[1]).toMatch(/^pane\|release-agent\|w1:p2\|--source\|pi-bolt\|--agent\|pi-bolt\|--seq\|\d+$/);
+		expect(calls()[1]).toMatch(/^pane\|release-agent\|w1:p2\|--source\|rapid-pi\|--agent\|rapid-pi\|--seq\|\d+$/);
 	});
 });
 
@@ -499,7 +499,7 @@ describe("Herdr's own Pi integration file", () => {
 
 	async function loadedCommands(build: string | undefined, paths: string[], cwd: string) {
 		vi.resetModules();
-		(globalThis as { PIBOLT_BUILD?: string }).PIBOLT_BUILD = build;
+		(globalThis as { RAPIDPI_BUILD?: string }).RAPIDPI_BUILD = build;
 		const { loadExtensions } = await import("../src/core/extensions/loader.ts");
 		const result = await loadExtensions(paths, cwd);
 		expect(result.errors).toEqual([]);
@@ -511,12 +511,12 @@ describe("Herdr's own Pi integration file", () => {
 		expect(await loadedCommands(undefined, [herdrFile, other], dir)).toEqual(["herdr-file-loaded", "other"]);
 	});
 
-	test("Pi-Bolt leaves it out, and loads the rest", async () => {
+	test("Rapid Pi leaves it out, and loads the rest", async () => {
 		const { dir, herdrFile, other } = extensionsDir();
 		expect(await loadedCommands("0.7.5 arm64 jit-off", [herdrFile, other], dir)).toEqual(["other"]);
 	});
 
-	test("only Pi-Bolt has the built-in Herdr extension, and only in a Herdr pane", async () => {
+	test("only Rapid Pi has the built-in Herdr extension, and only in a Herdr pane", async () => {
 		const names = (list: { builtInExtensions: unknown[] }) =>
 			list.builtInExtensions.map((e) => (typeof e === "function" ? "" : (e as { name: string }).name));
 		vi.stubEnv("HERDR_ENV", "1");
@@ -525,7 +525,7 @@ describe("Herdr's own Pi integration file", () => {
 		vi.resetModules();
 		expect(names(await import("../src/extensions/index.ts"))).not.toContain("herdr");
 		vi.resetModules();
-		(globalThis as { PIBOLT_BUILD?: string }).PIBOLT_BUILD = "0.7.5 arm64 jit-off";
+		(globalThis as { RAPIDPI_BUILD?: string }).RAPIDPI_BUILD = "0.7.5 arm64 jit-off";
 		expect(names(await import("../src/extensions/index.ts"))).toContain("herdr");
 		vi.unstubAllEnvs();
 		vi.stubEnv("HERDR_ENV", undefined);

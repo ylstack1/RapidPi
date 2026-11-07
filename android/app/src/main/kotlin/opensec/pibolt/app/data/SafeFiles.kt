@@ -1,4 +1,4 @@
-package opensec.pibolt.app.data
+package opensec.rapidpi.app.data
 
 import java.io.File
 import java.io.IOException

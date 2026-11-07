@@ -1,8 +1,8 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.UserItem
 
 /** Text helpers for the message actions: plain text from Markdown, and the prompt a reply answered. */
 object MessageText {

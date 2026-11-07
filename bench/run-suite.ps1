@@ -4,7 +4,7 @@
 #   powershell -ExecutionPolicy Bypass -File bench\run-suite.ps1 -Out bench\results\<date>-windows [-PiBolt ...] [-Bun ...]
 #
 # The four builds compared, by default:
-#   pi-bolt  out\pi-bolt-aot-lto\pi.exe     Pi-Bolt, compiled ahead of time, LTO + Control Flow Guard (scripts\build-pi.ps1)
+#   rapid-pi  out\rapid-pi-aot-lto\pi.exe     Rapid Pi, compiled ahead of time, LTO + Control Flow Guard (scripts\build-pi.ps1)
 #   bun      out\pi-stable-upstream\pi.exe  Pi as released on stock Bun 1.4.2 (scripts\build-pi.ps1 -Stable -Pi <Pi checkout>)
 #   node     C:\pb\tools\node22\node.exe    Node 22, running Pi's npm bundle (-NodeCli)
 #   node24   node (on PATH)                 Node 24, the same bundle
@@ -18,24 +18,24 @@
 #   long_answer.py, large_write.py   -LongAnswerRuns runs each (0 skips them)
 #   plugin_bench.py   the example plugin loaded at run time, and compiled in, as run-suite.sh has them: each of these builds that
 #                     is there (or that its parameter names) is measured:
-#                       -PiBoltPlugins     out\pi-bolt-plugins\pi.exe       --compiled pi-bolt
-#                       -PiBoltPluginsJit  out\pi-bolt-plugins-jit\pi.exe   --compiled pi-bolt-jit
-#                       -PiBoltJit         out\pi-bolt-aot-lto-jit\pi.exe   --runtime pi-bolt-jit
+#                       -PiBoltPlugins     out\rapid-pi-plugins\pi.exe       --compiled rapid-pi
+#                       -PiBoltPluginsJit  out\rapid-pi-plugins-jit\pi.exe   --compiled rapid-pi-jit
+#                       -PiBoltJit         out\rapid-pi-aot-lto-jit\pi.exe   --runtime rapid-pi-jit
 #                     (scripts\build-pi.ps1 -Plugins examples\plugins\plugins.ts [-Jit on] -Out ...; -Jit on for the last)
 #   report.py         summary.md, and the charts in -Images (default: <Out>\images; docs\images is left alone)
 # Keep the machine otherwise idle, on AC power, for the whole run: Windows cannot pin a process to cores the way taskset does.
 [CmdletBinding()]
 param(
 	[Parameter(Mandatory = $true)][string]$Out,
-	[string]$PiBolt = 'out\pi-bolt-aot-lto\pi.exe',
+	[string]$PiBolt = 'out\rapid-pi-aot-lto\pi.exe',
 	[string]$Bun = 'out\pi-stable-upstream\pi.exe',
 	[string]$Node22 = 'C:\pb\tools\node22\node.exe',
 	[string]$Node24 = 'node',
-	[string]$NodeCli = 'C:\pb\Pi-Bolt\.work\node-pi\node_modules\@earendil-works\pi-coding-agent\dist\bundle\cli.js',
+	[string]$NodeCli = 'C:\pb\Rapid Pi\.work\node-pi\node_modules\@earendil-works\pi-coding-agent\dist\bundle\cli.js',
 	[string]$PiBoltPlugins = '',
 	[string]$PiBoltPluginsJit = '',
 	[string]$PiBoltJit = '',
-	[string]$PiBoltLabel = 'Pi-Bolt (LTO+CFG AOT)',
+	[string]$PiBoltLabel = 'Rapid Pi (LTO+CFG AOT)',
 	[int]$Runs = 11,
 	[int]$Warmup = 2,
 	[int]$LongSessions = 4,
@@ -75,7 +75,7 @@ function Resolve-File($path, $what) {
 	if ($full -match ' ') { Die "$what is in a folder with a space in its path, which a --build command line cannot hold: $full" }
 	return $full
 }
-$PiBolt = Resolve-File $PiBolt 'Pi-Bolt (-PiBolt)'
+$PiBolt = Resolve-File $PiBolt 'Rapid Pi (-PiBolt)'
 $Bun = Resolve-File $Bun 'the stock-Bun build (-Bun)'
 $Node22 = Resolve-File $Node22 'Node 22 (-Node22)'
 $Node24 = Resolve-File $Node24 'Node 24 (-Node24)'
@@ -86,9 +86,9 @@ function Resolve-Optional($path, $default, $what) {
 	if (Test-Path -LiteralPath (Join-Path $Root $default) -PathType Leaf) { return Resolve-File (Join-Path $Root $default) $what }
 	return ''
 }
-$PiBoltPlugins = Resolve-Optional $PiBoltPlugins 'out\pi-bolt-plugins\pi.exe' 'the plugin build (-PiBoltPlugins)'
-$PiBoltPluginsJit = Resolve-Optional $PiBoltPluginsJit 'out\pi-bolt-plugins-jit\pi.exe' 'the JIT-on plugin build (-PiBoltPluginsJit)'
-$PiBoltJit = Resolve-Optional $PiBoltJit 'out\pi-bolt-aot-lto-jit\pi.exe' 'the JIT-on build (-PiBoltJit)'
+$PiBoltPlugins = Resolve-Optional $PiBoltPlugins 'out\rapid-pi-plugins\pi.exe' 'the plugin build (-PiBoltPlugins)'
+$PiBoltPluginsJit = Resolve-Optional $PiBoltPluginsJit 'out\rapid-pi-plugins-jit\pi.exe' 'the JIT-on plugin build (-PiBoltPluginsJit)'
+$PiBoltJit = Resolve-Optional $PiBoltJit 'out\rapid-pi-aot-lto-jit\pi.exe' 'the JIT-on build (-PiBoltJit)'
 # The process floor: a minimal native program, linked as the real executable is (static CRT, a relocatable image, DEP, Control
 # Flow Guard), built here from bench\floor\floor.c into a scratch folder (no binary in the repository).
 $floorBuilt = ''
@@ -145,9 +145,9 @@ $mode = try {
 	if ($overlays.ContainsKey("$guid")) { $overlays["$guid"] } else { "$guid" }
 } catch { 'unknown' }
 if ($source -ne 'AC') { Write-Host "warning: running on $source power: the figures will not compare with a run on AC" -ForegroundColor Yellow }
-$piBoltVersion = (& $PiBolt --version | Select-Object -First 1)
+$rapidPiVersion = (& $PiBolt --version | Select-Object -First 1)
 $env:BUN_BE_BUN = '1' # (a Bun executable says which Bun it is built on)
-$piBoltBun = (& $PiBolt --version | Select-Object -First 1)
+$rapidPiBun = (& $PiBolt --version | Select-Object -First 1)
 $stockBun = (& $Bun --version | Select-Object -First 1)
 Remove-Item Env:BUN_BE_BUN
 $stockPi = (& $Bun --version | Select-Object -First 1)
@@ -162,7 +162,7 @@ Save-Lines (Join-Path $Out 'environment.txt') @(
 	"system: $($os.Caption) $($nt.DisplayVersion), build $($nt.CurrentBuild).$($nt.UBR)",
 	"defender: $defender",
 	"power: $source, scheme $scheme, power mode $mode",
-	"pi-bolt: $piBoltVersion, Pi-Bolt $((Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()) from $commit, runtime Bun $piBoltBun (Pi-Bolt's), $PiBolt",
+	"rapid-pi: $rapidPiVersion, Rapid Pi $((Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()) from $commit, runtime Bun $rapidPiBun (Rapid Pi's), $PiBolt",
 	"bun: Pi $stockPi on stock Bun $stockBun, $Bun",
 	"node: $node22Version, Pi $cliVersion's npm bundle, $Node22",
 	"node24: $node24Version, Pi $cliVersion's npm bundle, $Node24",
@@ -170,20 +170,20 @@ Save-Lines (Join-Path $Out 'environment.txt') @(
 	"model: bench/fake_model*.py on 127.0.0.1 (no provider is called)"
 )
 if ($Floor) { [System.IO.File]::AppendAllLines((Join-Path $Out 'environment.txt'), [string[]]@("floor: bench/floor/floor.c$floorBuilt, $Floor")) }
-foreach ($extra in @(@('pi-bolt-plugins', $PiBoltPlugins), @('pi-bolt-plugins-jit', $PiBoltPluginsJit), @('pi-bolt-jit', $PiBoltJit))) {
+foreach ($extra in @(@('rapid-pi-plugins', $PiBoltPlugins), @('rapid-pi-plugins-jit', $PiBoltPluginsJit), @('rapid-pi-jit', $PiBoltJit))) {
 	if ($extra[1]) { [System.IO.File]::AppendAllLines((Join-Path $Out 'environment.txt'), [string[]]@("$($extra[0]): $(& $extra[1] --version | Select-Object -First 1), $($extra[1])")) }
 }
-# The runtime each Pi-Bolt build was made with (its pi-bolt.txt, from scripts\build-pi.ps1): builds on different runtimes show here.
-foreach ($extra in @(@('pi-bolt', $PiBolt), @('pi-bolt-plugins', $PiBoltPlugins), @('pi-bolt-plugins-jit', $PiBoltPluginsJit), @('pi-bolt-jit', $PiBoltJit))) {
+# The runtime each Rapid Pi build was made with (its rapid-pi.txt, from scripts\build-pi.ps1): builds on different runtimes show here.
+foreach ($extra in @(@('rapid-pi', $PiBolt), @('rapid-pi-plugins', $PiBoltPlugins), @('rapid-pi-plugins-jit', $PiBoltPluginsJit), @('rapid-pi-jit', $PiBoltJit))) {
 	if (-not $extra[1]) { continue }
-	$stamp = Join-Path (Split-Path $extra[1]) 'pi-bolt.txt'
+	$stamp = Join-Path (Split-Path $extra[1]) 'rapid-pi.txt'
 	$runtime = if (Test-Path -LiteralPath $stamp) { Get-Content -LiteralPath $stamp | Where-Object { $_ -like 'runtime: *' } | Select-Object -First 1 } else { $null }
 	if (-not $runtime) { $runtime = 'runtime: not recorded (built before scripts\build-pi.ps1 recorded it)' }
 	[System.IO.File]::AppendAllLines((Join-Path $Out 'environment.txt'), [string[]]@("$($extra[0]) $runtime"))
 }
 Get-Content (Join-Path $Out 'environment.txt')
 
-$builds = @('--build', "pi-bolt=$PiBolt", '--build', "bun=$Bun", '--build', "node=$Node22 $NodeCli", '--build', "node24=$Node24 $NodeCli")
+$builds = @('--build', "rapid-pi=$PiBolt", '--build', "bun=$Bun", '--build', "node=$Node22 $NodeCli", '--build', "node24=$Node24 $NodeCli")
 
 $floorArgs = if ($Floor) { @('--floor', $Floor) } else { @() }
 Log "benchmark.py: startup, headless, interactive$(if ($Floor) { ', and the process floor' })"
@@ -219,21 +219,21 @@ for ($i = 1; $i -le $LongAnswerRuns; $i++) {
 Log 'plugin_bench.py'
 # (The order of run-suite.sh's, which is the order of the table and chart.)
 $plugins = @()
-if ($PiBoltPlugins) { $plugins += @('--compiled', "pi-bolt=$PiBoltPlugins") }
-else { Write-Host 'note: no plugin build (out\pi-bolt-plugins\pi.exe, or -PiBoltPlugins): not measured compiled in' -ForegroundColor Yellow }
-if ($PiBoltPluginsJit) { $plugins += @('--compiled', "pi-bolt-jit=$PiBoltPluginsJit") }
-else { Write-Host 'note: no JIT-on plugin build (out\pi-bolt-plugins-jit\pi.exe, or -PiBoltPluginsJit): not measured compiled in with the JIT on' -ForegroundColor Yellow }
-$plugins += @('--runtime', "pi-bolt=$PiBolt")
-if ($PiBoltJit) { $plugins += @('--runtime', "pi-bolt-jit=$PiBoltJit") }
-else { Write-Host 'note: no JIT-on build (out\pi-bolt-aot-lto-jit\pi.exe, or -PiBoltJit): not measured loaded at run time with the JIT on' -ForegroundColor Yellow }
-$plugins += @('--runtime', "bun=$Bun", '--none', "pi-bolt=$PiBolt", '--none', "bun=$Bun")
+if ($PiBoltPlugins) { $plugins += @('--compiled', "rapid-pi=$PiBoltPlugins") }
+else { Write-Host 'note: no plugin build (out\rapid-pi-plugins\pi.exe, or -PiBoltPlugins): not measured compiled in' -ForegroundColor Yellow }
+if ($PiBoltPluginsJit) { $plugins += @('--compiled', "rapid-pi-jit=$PiBoltPluginsJit") }
+else { Write-Host 'note: no JIT-on plugin build (out\rapid-pi-plugins-jit\pi.exe, or -PiBoltPluginsJit): not measured compiled in with the JIT on' -ForegroundColor Yellow }
+$plugins += @('--runtime', "rapid-pi=$PiBolt")
+if ($PiBoltJit) { $plugins += @('--runtime', "rapid-pi-jit=$PiBoltJit") }
+else { Write-Host 'note: no JIT-on build (out\rapid-pi-aot-lto-jit\pi.exe, or -PiBoltJit): not measured loaded at run time with the JIT on' -ForegroundColor Yellow }
+$plugins += @('--runtime', "bun=$Bun", '--none', "rapid-pi=$PiBolt", '--none', "bun=$Bun")
 Run-Python bench\plugin_bench.py --runs $PluginRuns --commands $PluginCommands --out "$Out\plugins.jsonl" @plugins | Out-Host
 
 Log "report.py -> $Out\summary.md"
 $bunLabel = "Pi $stockPi on stock Bun $stockBun"
 $node22Label = "Node $(($node22Version -replace '^v', '').Split('.')[0])"
 $node24Label = "Node $(($node24Version -replace '^v', '').Split('.')[0])"
-Run-Python bench\report.py $Out --images $Images --builds 'pi-bolt,bun,node,node24' --label "pi-bolt=$PiBoltLabel" `
+Run-Python bench\report.py $Out --images $Images --builds 'rapid-pi,bun,node,node24' --label "rapid-pi=$PiBoltLabel" `
 	--label "bun=$bunLabel" --label "node=$node22Label" --label "node24=$node24Label" | Tee-Object -Variable lines | Out-Host
 Save-Lines "$Out\summary.md" $lines
 Log "done: $Out\summary.md"

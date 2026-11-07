@@ -1,4 +1,4 @@
-package opensec.pibolt.app.secrets
+package opensec.rapidpi.app.secrets
 
 import java.io.File
 
@@ -20,22 +20,22 @@ object SecretEnv {
         "npm_config_cache", "PIP_CACHE_DIR", "PYTHONUSERBASE", "ESBUILD_BINARY_PATH",
     )
 
-    /** Prefixes the app owns: the loader's, XDG dirs, git's config (the GitHub credential helper) and Pi-Bolt's own. */
-    private val RESERVED_PREFIXES = listOf("LD_", "XDG_", "GIT_CONFIG_", "PIBOLT_")
+    /** Prefixes the app owns: the loader's, XDG dirs, git's config (the GitHub credential helper) and Rapid Pi's own. */
+    private val RESERVED_PREFIXES = listOf("LD_", "XDG_", "GIT_CONFIG_", "RAPIDPI_")
 
     /** Null when [name] is usable, else why not (shown in the form). */
     fun nameProblem(name: String): String? = when {
         name.isEmpty() -> "Enter a name"
         name.length > 128 -> "Use at most 128 characters"
         !NAME.matches(name) -> "Use letters, digits and _, not starting with a digit"
-        name in RESERVED || RESERVED_PREFIXES.any(name::startsWith) -> "$name is set by Pi-Bolt"
+        name in RESERVED || RESERVED_PREFIXES.any(name::startsWith) -> "$name is set by Rapid Pi"
         else -> null
     }
 
     fun mask(value: String): String = if (value.isEmpty()) "" else MASK
 
     /**
-     * [env] with [secrets] added. Variables in [env] that the app owns ([RESERVED], `LD_*`, `XDG_*`, `GIT_CONFIG_*`, `PIBOLT_*`) are never
+     * [env] with [secrets] added. Variables in [env] that the app owns ([RESERVED], `LD_*`, `XDG_*`, `GIT_CONFIG_*`, `RAPIDPI_*`) are never
      * replaced, whatever a secrets file holds; other names take the secret's value.
      */
     fun inject(env: Map<String, String>, secrets: Map<String, String>): Map<String, String> {
@@ -47,7 +47,7 @@ object SecretEnv {
 
     /** A `.env` file: `NAME="value"`, with `\`, `"`, `$`, and newlines escaped (dotenv and docker-compose read it). */
     fun dotEnv(secrets: List<Secret>): String = buildString {
-        append("# Written by Pi-Bolt from the project's secrets. Do not commit this file.\n")
+        append("# Written by Rapid Pi from the project's secrets. Do not commit this file.\n")
         for (s in secrets) {
             append(s.name).append("=\"")
             for (c in s.value) when (c) {

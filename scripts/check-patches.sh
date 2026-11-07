@@ -12,7 +12,7 @@ targets=("$@")
 for name in "${targets[@]}"; do
 	repository=$(source_field "$name" repository)
 	commit=$(source_field "$name" commit)
-	patch="$PIBOLT_ROOT/$(source_field "$name" patches)"
+	patch="$RAPIDPI_ROOT/$(source_field "$name" patches)"
 	dir="$WORK/$name"
 	git init -q "$dir"
 	git -C "$dir" remote add origin "$repository"

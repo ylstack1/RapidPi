@@ -1,8 +1,8 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
-import opensec.pibolt.protocol.noise.IkHandshake
-import opensec.pibolt.protocol.noise.KeyPair
-import opensec.pibolt.protocol.noise.NoiseException
+import opensec.rapidpi.protocol.noise.IkHandshake
+import opensec.rapidpi.protocol.noise.KeyPair
+import opensec.rapidpi.protocol.noise.NoiseException
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals

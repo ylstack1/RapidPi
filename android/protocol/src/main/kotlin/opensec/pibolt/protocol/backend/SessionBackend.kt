@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol.backend
+package opensec.rapidpi.protocol.backend
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +13,7 @@ interface SessionBackend {
 
     /**
      * Every JSON object from the session (events, responses, extension UI requests), in order. Backed by an unbounded
-     * channel: collect it from exactly one place (the [opensec.pibolt.protocol.rpc.RpcClient]).
+     * channel: collect it from exactly one place (the [opensec.rapidpi.protocol.rpc.RpcClient]).
      */
     val incoming: Flow<JsonObject>
 
@@ -39,7 +39,7 @@ enum class DisconnectReason {
     /** The connection dropped after the handshake (network change, sleep, host crash). */
     Lost,
 
-    /** 1001: Pi-Bolt stopped remote control. */
+    /** 1001: Rapid Pi stopped remote control. */
     HostStopped,
 
     /** 1012: the background service handed the port to the computer's terminal (`/remote-control`). Reconnect at once. */

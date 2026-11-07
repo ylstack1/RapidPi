@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.chats
+package opensec.rapidpi.app.ui.chats
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,22 +44,22 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.EmptyState
-import opensec.pibolt.app.ui.components.GlassBarInset
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.GlassSearchField
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.PiSnackHost
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.components.show
-import opensec.pibolt.app.ui.session.ActionsSheet
-import opensec.pibolt.app.ui.session.SheetAction
-import opensec.pibolt.app.ui.session.TextPromptSheet
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.EmptyState
+import opensec.rapidpi.app.ui.components.GlassBarInset
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.GlassSearchField
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.PiSnackHost
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.show
+import opensec.rapidpi.app.ui.session.ActionsSheet
+import opensec.rapidpi.app.ui.session.SheetAction
+import opensec.rapidpi.app.ui.session.TextPromptSheet
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
 import java.time.ZoneId
 
 /**

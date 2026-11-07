@@ -127,7 +127,7 @@ case_tool_turn_in_background() {
 
 case_no_anr_or_crash() {
 	assert_no_crash
-	grep -h 'ANR\|not responding' "$OUT_DIR"/*.texts.txt 2>/dev/null | grep -q 'Pi-Bolt' && fail "a Pi-Bolt ANR dialog was on screen"
+	grep -h 'ANR\|not responding' "$OUT_DIR"/*.texts.txt 2>/dev/null | grep -q 'Rapid Pi' && fail "a Rapid Pi ANR dialog was on screen"
 	return 0
 }
 

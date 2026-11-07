@@ -1,4 +1,4 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -8,19 +8,19 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.app.engine.AssetSource
-import opensec.pibolt.app.engine.AuthFile
-import opensec.pibolt.app.engine.BundledExtensions
-import opensec.pibolt.app.engine.EngineManifest
-import opensec.pibolt.app.engine.EnginePaths
-import opensec.pibolt.app.engine.EnginePrefix
-import opensec.pibolt.app.engine.SessionIndex
-import opensec.pibolt.app.engine.engineEnvironment
-import opensec.pibolt.app.engine.engineUnavailableReason
-import opensec.pibolt.app.engine.resolvConf
-import opensec.pibolt.app.secrets.SecretEnv
-import opensec.pibolt.app.terminal.shellEnvironment
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.app.engine.AssetSource
+import opensec.rapidpi.app.engine.AuthFile
+import opensec.rapidpi.app.engine.BundledExtensions
+import opensec.rapidpi.app.engine.EngineManifest
+import opensec.rapidpi.app.engine.EnginePaths
+import opensec.rapidpi.app.engine.EnginePrefix
+import opensec.rapidpi.app.engine.SessionIndex
+import opensec.rapidpi.app.engine.engineEnvironment
+import opensec.rapidpi.app.engine.engineUnavailableReason
+import opensec.rapidpi.app.engine.resolvConf
+import opensec.rapidpi.app.secrets.SecretEnv
+import opensec.rapidpi.app.terminal.shellEnvironment
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileNotFoundException
@@ -30,9 +30,9 @@ import java.nio.file.attribute.PosixFilePermissions
 import java.io.ByteArrayOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-import opensec.pibolt.app.engine.RuntimeStorage
-import opensec.pibolt.app.engine.RuntimeStore
-import opensec.pibolt.app.engine.formatBytes
+import opensec.rapidpi.app.engine.RuntimeStorage
+import opensec.rapidpi.app.engine.RuntimeStore
+import opensec.rapidpi.app.engine.formatBytes
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -53,7 +53,7 @@ class EngineFilesTest {
     }
 
     private val manifestJson = """
-        { "version": 1, "engine": "1.1.1", "glibc": "2.44", "prefix": "/data/data/in.opensec.pibolt/files/usr",
+        { "version": 1, "engine": "1.1.1", "glibc": "2.44", "prefix": "/data/data/in.opensec.rapidpi/files/usr",
           "links": [ { "path": "lib/libc.so.6", "target": "libc_so_6.so" }, { "path": "lib/ld-linux-aarch64.so.1", "target": "libld.so" } ],
           "files": [ { "path": "etc/ssl/certs/ca-certificates.crt", "asset": "engine/files/ca-certificates.crt" } ],
           "package": [ "package.json", "theme/dark.json", "examples/.gitignore" ], "env": { "SHELL": "/system/bin/sh", "LD_PRELOAD": "no.so" },
@@ -87,7 +87,7 @@ class EngineFilesTest {
         val assets = MapAssets(
             mapOf(
                 "engine/files/ca-certificates.crt" to "CERTS",
-                "engine/package/package.json" to "{\"name\":\"pi-bolt\"}",
+                "engine/package/package.json" to "{\"name\":\"rapid-pi\"}",
                 "engine/package/theme/dark.json" to "{}",
             ),
         )
@@ -179,15 +179,15 @@ class EngineFilesTest {
     @Test
     fun theTerminalShellGetsTheRuntimesPathTheGitHubHelperAndSecretsThatCannotOverrideThem() {
         val p = paths()
-        val git = mapOf("GIT_CONFIG_COUNT" to "2", "PIBOLT_GITHUB_TOKEN" to "gho_x")
+        val git = mapOf("GIT_CONFIG_COUNT" to "2", "RAPIDPI_GITHUB_TOKEN" to "gho_x")
         val engine = engineEnvironment(p, emptyMap(), "UTC", mapOf("PATH" to "${p.prefix.path}/bin:/system/bin"), git)
-        val secrets = mapOf("API_KEY" to "k", "PATH" to "/evil", "PYTHONUSERBASE" to "/evil", "GIT_CONFIG_COUNT" to "0", "PIBOLT_GITHUB_TOKEN" to "stolen")
+        val secrets = mapOf("API_KEY" to "k", "PATH" to "/evil", "PYTHONUSERBASE" to "/evil", "GIT_CONFIG_COUNT" to "0", "RAPIDPI_GITHUB_TOKEN" to "stolen")
         val shell = shellEnvironment(engine, secrets)
         // node, npm, python3 and pip in PREFIX/bin; npm -g and pip install commands in HOME/.local/bin, first.
         assertEquals("${p.userBase.path}/bin:${p.prefix.path}/bin:/system/bin", shell["PATH"])
         assertEquals(p.userBase.path, shell["PYTHONUSERBASE"])
         assertEquals("2", shell["GIT_CONFIG_COUNT"])
-        assertEquals("gho_x", shell["PIBOLT_GITHUB_TOKEN"])
+        assertEquals("gho_x", shell["RAPIDPI_GITHUB_TOKEN"])
         assertEquals("k", shell["API_KEY"])
         assertEquals("xterm-256color", shell["TERM"])
     }
@@ -195,7 +195,7 @@ class EngineFilesTest {
     @Test
     fun resolvConfListsAtMostThreeServers() {
         assertEquals(
-            "# Written by Pi-Bolt from the active network's DNS servers\nnameserver 10.0.2.3\nnameserver fe80::1%wlan0\n" +
+            "# Written by Rapid Pi from the active network's DNS servers\nnameserver 10.0.2.3\nnameserver fe80::1%wlan0\n" +
                 "nameserver 8.8.8.8\nsearch lan example.com\noptions timeout:2 attempts:2\n",
             resolvConf(listOf("10.0.2.3", "fe80::1%wlan0", "8.8.8.8", "1.1.1.1"), "lan, example.com"),
         )
@@ -204,14 +204,14 @@ class EngineFilesTest {
     @Test
     fun availabilityNamesTheReason() {
         val m = EngineManifest.parse(manifestJson)
-        val ok = engineUnavailableReason("in.opensec.pibolt", listOf("arm64-v8a"), 36, m, true, "/data/user/0/in.opensec.pibolt", "/data/user/0/in.opensec.pibolt")
+        val ok = engineUnavailableReason("in.opensec.rapidpi", listOf("arm64-v8a"), 36, m, true, "/data/user/0/in.opensec.rapidpi", "/data/user/0/in.opensec.rapidpi")
         assertNull(ok)
-        assertNotNull(engineUnavailableReason("in.opensec.pibolt", listOf("x86_64"), 36, m, true, "/d", "/d")).let { assertTrue("ARM" in it) }
-        assertNotNull(engineUnavailableReason("in.opensec.pibolt", listOf("arm64-v8a"), 28, m, true, "/d", "/d"))
-        assertNotNull(engineUnavailableReason("in.opensec.pibolt", listOf("arm64-v8a"), 36, null, true, "/d", "/d")).let { assertTrue("does not include" in it) }
-        assertNotNull(engineUnavailableReason("in.opensec.pibolt.debug", listOf("arm64-v8a"), 36, m, true, "/d", "/d")).let { assertTrue("another app id" in it) }
+        assertNotNull(engineUnavailableReason("in.opensec.rapidpi", listOf("x86_64"), 36, m, true, "/d", "/d")).let { assertTrue("ARM" in it) }
+        assertNotNull(engineUnavailableReason("in.opensec.rapidpi", listOf("arm64-v8a"), 28, m, true, "/d", "/d"))
+        assertNotNull(engineUnavailableReason("in.opensec.rapidpi", listOf("arm64-v8a"), 36, null, true, "/d", "/d")).let { assertTrue("does not include" in it) }
+        assertNotNull(engineUnavailableReason("in.opensec.rapidpi.debug", listOf("arm64-v8a"), 36, m, true, "/d", "/d")).let { assertTrue("another app id" in it) }
         assertNotNull(
-            engineUnavailableReason("in.opensec.pibolt", listOf("arm64-v8a"), 36, m, true, "/data/user/10/in.opensec.pibolt", "/data/user/0/in.opensec.pibolt"),
+            engineUnavailableReason("in.opensec.rapidpi", listOf("arm64-v8a"), 36, m, true, "/data/user/10/in.opensec.rapidpi", "/data/user/0/in.opensec.rapidpi"),
         ).let { assertTrue("main profile" in it) }
     }
 

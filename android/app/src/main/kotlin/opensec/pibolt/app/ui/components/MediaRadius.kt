@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.components
+package opensec.rapidpi.app.ui.components
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp

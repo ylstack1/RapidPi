@@ -72,7 +72,7 @@ def main():
                                    env=harness.pi_env(home), cwd=cwd, stdin=subprocess.DEVNULL, capture_output=True, timeout=600)
                 out = p.stdout.decode("utf-8", "replace").strip().splitlines()
                 tail = out[-1] if out else ""
-                # ("sent <digest>" covers the system prompt and tool definitions too, which differ between Pi-Bolt, Pi and PiG.)
+                # ("sent <digest>" covers the system prompt and tool definitions too, which differ between Rapid Pi, Pi and PiG.)
                 key = tail.split(", sent ")[0] if ", sent " in tail else tail
                 f = cwd / "big" / "source.ts"
                 if f.exists():

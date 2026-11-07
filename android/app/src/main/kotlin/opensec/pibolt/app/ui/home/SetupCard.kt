@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.home
+package opensec.rapidpi.app.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,10 +24,10 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
 
 /**
  * First run on Home, drawn on the canvas under the title (no card): two numbered steps, connect a model, then create a

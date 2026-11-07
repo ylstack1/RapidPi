@@ -1,6 +1,6 @@
 // An extension that starts programs as Pi and its extensions do, and checks what they get and what Pi learns of them. On macOS
 // they are started through pi-spawn (scripts/lib/darwin-spawn.h): each start must load them at a new address, unlike Pi's
-// own executable, and otherwise as if Pi had started them itself. PIBOLT_TEST_PROBE: a program that prints where its code and stack are.
+// own executable, and otherwise as if Pi had started them itself. RAPIDPI_TEST_PROBE: a program that prints where its code and stack are.
 import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { chmodSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -22,7 +22,7 @@ function output(child) {
 }
 
 async function run() {
-	const probe = process.env.PIBOLT_TEST_PROBE;
+	const probe = process.env.RAPIDPI_TEST_PROBE;
 	if (probe) {
 		// Each start of a program must put it somewhere else, not always at the same place.
 		const places = new Set();
@@ -54,8 +54,8 @@ async function run() {
 	check("stderr", stderr.stderr?.toString() === "to stderr\n", stderr.stderr?.toString());
 	const pwd = spawnSync("/bin/pwd", { cwd: dir }).stdout?.toString().trim();
 	check("cwd", pwd?.endsWith(dir.split("/").pop()), pwd);
-	const env = spawnSync("/usr/bin/env", { env: { PIBOLT_TEST: "value" } }).stdout?.toString();
-	check("environment", env === "PIBOLT_TEST=value\n", env);
+	const env = spawnSync("/usr/bin/env", { env: { RAPIDPI_TEST: "value" } }).stdout?.toString();
+	check("environment", env === "RAPIDPI_TEST=value\n", env);
 	const fd3 = spawn("/bin/sh", ["-c", "echo on fd 3 >&3"], { stdio: ["ignore", "ignore", "ignore", "pipe"] });
 	let fd3Text = "";
 	fd3.stdio[3].on("data", (chunk) => (fd3Text += chunk));

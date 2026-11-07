@@ -1,7 +1,7 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.material.icons.rounded.History
-import opensec.pibolt.app.ui.components.EmptyState
+import opensec.rapidpi.app.ui.components.EmptyState
 import android.os.SystemClock
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -57,33 +57,33 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import kotlinx.coroutines.delay
-import opensec.pibolt.app.ui.components.CopyButton
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.CopyButton
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.pressable
 import androidx.compose.foundation.lazy.itemsIndexed
-import opensec.pibolt.app.ui.components.SOFT_PRESS
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.providers.LogoMark
-import opensec.pibolt.app.ui.session.features2.F2Empty
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.app.ui.providers.ProviderLogos
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.session.DialogKind
-import opensec.pibolt.protocol.session.DialogRequest
-import opensec.pibolt.protocol.session.SessionReducer
+import opensec.rapidpi.app.ui.components.SOFT_PRESS
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.providers.LogoMark
+import opensec.rapidpi.app.ui.session.features2.F2Empty
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.ui.providers.ProviderLogos
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.session.DialogKind
+import opensec.rapidpi.protocol.session.DialogRequest
+import opensec.rapidpi.protocol.session.SessionReducer
 
 /** A 52dp option row: line outline, accent outline and check when selected. */
 @Composable
@@ -169,7 +169,7 @@ fun ModelSheet(
             )
         }
         LazyColumn(Modifier.fillMaxWidth().heightIn(max = 560.dp)) {
-            // By maker, as Pi-Bolt Desktop's picker: "Anthropic" holds Claude from Anthropic, OpenRouter and Bedrock alike;
+            // By maker, as Rapid Pi Desktop's picker: "Anthropic" holds Claude from Anthropic, OpenRouter and Bedrock alike;
             // each row names its provider. The current model comes first under "Current".
             val sections = ModelGroups.of(shown, current)
             for ((title, group) in sections) {
@@ -180,7 +180,7 @@ fun ModelSheet(
                 }
             itemsIndexed(group, key = { _, it -> "${it.provider}/${it.id}" }) { index, model ->
                 val selected = isCurrent(model)
-                // The kit's plain row: the maker's mark (16dp: ink2, the current model's ink1, as Pi-Bolt Desktop's
+                // The kit's plain row: the maker's mark (16dp: ink2, the current model's ink1, as Rapid Pi Desktop's
                 // picker), the name over "OpenRouter · 200k context · reasoning", inset hairlines; the current model
                 // on the soft highlight with a check.
                 InsetRow(
@@ -209,7 +209,7 @@ fun ModelSheet(
 }
 
 /**
- * Models grouped for the picker: "Current" first, then one group per maker (Pi-Bolt Desktop's families: "Anthropic",
+ * Models grouped for the picker: "Current" first, then one group per maker (Rapid Pi Desktop's families: "Anthropic",
  * "Google", "Qwen"…; a model without a known maker goes under its provider's name), groups sorted by title, keeping
  * the order within a group.
  */

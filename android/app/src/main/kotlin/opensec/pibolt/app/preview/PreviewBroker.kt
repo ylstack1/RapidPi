@@ -1,4 +1,4 @@
-package opensec.pibolt.app.preview
+package opensec.rapidpi.app.preview
 
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
@@ -11,7 +11,7 @@ import java.nio.file.StandardCopyOption
 
 /**
  * The app's end of the preview tools: a unix socket ([socket], in a 0700 folder of the app) the engine's extension
- * (assets/extensions/pibolt-preview.js) connects to, its path in [SOCKET_VAR] of project engines only. One request
+ * (assets/extensions/rapidpi-preview.js) connects to, its path in [SOCKET_VAR] of project engines only. One request
  * line per connection, answered with one line ([serve]). [listen] binds the socket and calls its handler per connection
  * (LocalSocketListener on Android, which drops peers of another uid; a JDK unix socket in tests).
  */
@@ -55,7 +55,7 @@ class PreviewBroker(
     }
 
     companion object {
-        const val SOCKET_VAR = "PIBOLT_PREVIEW_SOCKET"
+        const val SOCKET_VAR = "RAPIDPI_PREVIEW_SOCKET"
         const val MAX_REQUEST = 256 * 1024
 
         /** Reads one request line (bounded), runs it, writes the answer line. A malformed request gets an error answer. */
@@ -91,8 +91,8 @@ class PreviewBroker(
  * global extensions. Rewritten whenever the shipped text differs, so the tools always match this app's broker.
  */
 object PreviewExtension {
-    const val ASSET = "extensions/pibolt-preview.js"
-    const val FILE = "pibolt-preview.js"
+    const val ASSET = "extensions/rapidpi-preview.js"
+    const val FILE = "rapidpi-preview.js"
 
     /** Blocking; false when the asset cannot be read or the agent dir cannot be written. */
     fun install(agentDir: File, source: () -> InputStream): Boolean = runCatching {

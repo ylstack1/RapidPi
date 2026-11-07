@@ -1,11 +1,11 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.ui.graphics.Color
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.engine.LocalEngine
-import opensec.pibolt.app.ui.components.GroupSwitchRow
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.engine.LocalEngine
+import opensec.rapidpi.app.ui.components.GroupSwitchRow
 
 /**
  * "Web search" in Settings > Agent: the bundled web tools in on-device chats and projects (AppSettings.webSearch,

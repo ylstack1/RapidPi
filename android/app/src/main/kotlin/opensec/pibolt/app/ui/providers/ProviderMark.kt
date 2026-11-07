@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.providers
+package opensec.rapidpi.app.ui.providers
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
@@ -13,9 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Dp
-import opensec.pibolt.app.R
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.R
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
 
 /** The brand's drawable (`ic_provider_<slug>`); null for [Brand.Generic], which is drawn with the server glyph. */
 @DrawableRes
@@ -76,7 +76,7 @@ fun LogoMark(brand: Brand, modifier: Modifier = Modifier, size: Dp = IconSize.sm
 }
 
 /**
- * A provider row's leading mark: 16dp in ink2 (Pi-Bolt Desktop's settings rows), centred in the rows' 20dp glyph slot
+ * A provider row's leading mark: 16dp in ink2 (Rapid Pi Desktop's settings rows), centred in the rows' 20dp glyph slot
  * so names line up with rows that lead with a Material glyph. No tile: the mark is quiet, like a glyph. Decorative for
  * TalkBack.
  */

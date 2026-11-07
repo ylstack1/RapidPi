@@ -1,4 +1,4 @@
-package opensec.pibolt.app.terminal
+package opensec.rapidpi.app.terminal
 
 /**
  * Parses `/proc/net/tcp` and `/proc/net/tcp6`: the TCP sockets in LISTEN state, with the uid that owns each one.

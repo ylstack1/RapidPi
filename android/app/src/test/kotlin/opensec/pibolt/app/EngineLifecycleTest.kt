@@ -1,9 +1,9 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.engine.ProcessReaper
-import opensec.pibolt.app.engine.ZoneInfo
-import opensec.pibolt.app.engine.setupFailure
-import opensec.pibolt.app.session.RunMarks
+import opensec.rapidpi.app.engine.ProcessReaper
+import opensec.rapidpi.app.engine.ZoneInfo
+import opensec.rapidpi.app.engine.setupFailure
+import opensec.rapidpi.app.session.RunMarks
 import java.io.DataInputStream
 import java.io.File
 import java.nio.file.Files
@@ -84,9 +84,9 @@ class EngineLifecycleTest {
     @Test
     fun theMarkIsReadFromTheEnvironment() {
         val file = File(root, "environ")
-        file.writeBytes("A=1\u0000PIBOLT_ENGINEX=no\u0000PIBOLT_ENGINE=abc-1\u0000B=2\u0000".toByteArray())
+        file.writeBytes("A=1\u0000RAPIDPI_ENGINEX=no\u0000RAPIDPI_ENGINE=abc-1\u0000B=2\u0000".toByteArray())
         assertEquals("abc-1", ProcessReaper.tokenIn(file))
-        file.writeBytes("PIBOLT_ENGINE=last".toByteArray())
+        file.writeBytes("RAPIDPI_ENGINE=last".toByteArray())
         assertEquals("last", ProcessReaper.tokenIn(file))
         file.writeBytes(ByteArray(0))
         assertNull(ProcessReaper.tokenIn(file))
@@ -198,7 +198,7 @@ class EngineLifecycleTest {
         val file = File(root, "running-turns.json")
         val marks = RunMarks(file)
         val notes = RunMarks.Run("local:/p/notes", "notes", "notes", "/s/notes.jsonl", chat = false)
-        val chat = RunMarks.Run("local:/h/.pibolt/chats", null, "Chat", null, chat = true)
+        val chat = RunMarks.Run("local:/h/.rapidpi/chats", null, "Chat", null, chat = true)
         marks.mark(notes)
         marks.mark(chat)
         // The chat's turn ended normally; then the process was killed during the notes turn.

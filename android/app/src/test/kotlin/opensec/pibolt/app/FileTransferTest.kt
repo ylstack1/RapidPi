@@ -1,18 +1,18 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.projects.transfer.ArchiveTooLargeException
-import opensec.pibolt.app.ui.projects.transfer.ShareAction
-import opensec.pibolt.app.ui.projects.transfer.ShareRouting
-import opensec.pibolt.app.ui.projects.transfer.SharedContent
-import opensec.pibolt.app.ui.projects.transfer.SharedItem
-import opensec.pibolt.app.ui.projects.transfer.TransferProgress
-import opensec.pibolt.app.ui.projects.transfer.UnsafeEntryException
-import opensec.pibolt.app.ui.projects.transfer.ZipTransfer
-import opensec.pibolt.app.ui.session.voice.VoiceDraft
+import opensec.rapidpi.app.ui.projects.transfer.ArchiveTooLargeException
+import opensec.rapidpi.app.ui.projects.transfer.ShareAction
+import opensec.rapidpi.app.ui.projects.transfer.ShareRouting
+import opensec.rapidpi.app.ui.projects.transfer.SharedContent
+import opensec.rapidpi.app.ui.projects.transfer.SharedItem
+import opensec.rapidpi.app.ui.projects.transfer.TransferProgress
+import opensec.rapidpi.app.ui.projects.transfer.UnsafeEntryException
+import opensec.rapidpi.app.ui.projects.transfer.ZipTransfer
+import opensec.rapidpi.app.ui.session.voice.VoiceDraft
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -94,7 +94,7 @@ class FileTransferTest {
             assertEquals("../escaped.txt", e.entry)
         }
         assertFalse(File(root, "escaped.txt").exists())
-        val absolute = zipOf("/tmp/pibolt-zip-slip.txt" to "owned")
+        val absolute = zipOf("/tmp/rapidpi-zip-slip.txt" to "owned")
         try {
             ZipTransfer.unzip(ByteArrayInputStream(absolute), target)
             fail("expected an absolute entry to be refused")

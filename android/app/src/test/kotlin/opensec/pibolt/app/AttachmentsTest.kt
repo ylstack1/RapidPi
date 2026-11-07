@@ -1,8 +1,8 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.RecentPrompts
-import opensec.pibolt.app.ui.session.ImageSizing
-import opensec.pibolt.app.ui.session.PendingSend
+import opensec.rapidpi.app.data.RecentPrompts
+import opensec.rapidpi.app.ui.session.ImageSizing
+import opensec.rapidpi.app.ui.session.PendingSend
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

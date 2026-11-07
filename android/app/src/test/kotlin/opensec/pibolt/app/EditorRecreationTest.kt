@@ -1,11 +1,11 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.ui.text.input.TextFieldValue
 import kotlinx.coroutines.runBlocking
-import opensec.pibolt.app.ui.projects.ProjectFiles
-import opensec.pibolt.app.ui.projects.editor.EditorTabs
-import opensec.pibolt.app.ui.projects.editor.EditorTabsHolder
+import opensec.rapidpi.app.ui.projects.ProjectFiles
+import opensec.rapidpi.app.ui.projects.editor.EditorTabs
+import opensec.rapidpi.app.ui.projects.editor.EditorTabsHolder
 import java.nio.file.Files
 import java.nio.file.attribute.PosixFilePermissions
 import kotlin.test.Test
@@ -79,7 +79,7 @@ class EditorRecreationTest {
     // PR #258 review: saving through a temporary file and a rename dropped the executable bit of gradlew and scripts.
     @Test
     fun writeKeepsFilePermissions() = runBlocking {
-        val dir = Files.createTempDirectory("pibolt-write").toFile()
+        val dir = Files.createTempDirectory("rapidpi-write").toFile()
         try {
             val script = dir.resolve("gradlew")
             script.writeText("#!/bin/sh\necho old\n")
@@ -89,7 +89,7 @@ class EditorRecreationTest {
 
             assertEquals("#!/bin/sh\necho new\n", script.readText())
             assertEquals("rwxr-xr-x", PosixFilePermissions.toString(Files.getPosixFilePermissions(script.toPath())))
-            assertFalse(dir.resolve(".gradlew.pibolt-tmp").exists())
+            assertFalse(dir.resolve(".gradlew.rapidpi-tmp").exists())
         } finally {
             dir.deleteRecursively()
         }

@@ -1,34 +1,34 @@
 # Other agents (Model Context Protocol)
 
-`pi-bolt --mcp` runs Pi-Bolt as a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server on stdin and stdout:
-another agent, or any MCP client, gives Pi-Bolt a task with a tool call and gets Pi's answer back. It is built in, so there is
+`rapid-pi --mcp` runs Rapid Pi as a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server on stdin and stdout:
+another agent, or any MCP client, gives Rapid Pi a task with a tool call and gets Pi's answer back. It is built in, so there is
 nothing to install. The MCP server code loads only when `--mcp` is given; the terminal UI, `-p`, and RPC mode do not load it.
 
-Clients launched from the desktop may not see your shell's `PATH`: give them the full path of the executable (`which pi-bolt`).
+Clients launched from the desktop may not see your shell's `PATH`: give them the full path of the executable (`which rapid-pi`).
 
 ## Setting it up
 
 **Claude Code**:
 
 ```bash
-claude mcp add pi-bolt -- /full/path/to/pi-bolt --mcp
+claude mcp add rapid-pi -- /full/path/to/rapid-pi --mcp
 ```
 
 **Codex**, in `~/.codex/config.toml`:
 
 ```toml
-[mcp_servers.pi-bolt]
-command = "/full/path/to/pi-bolt"
+[mcp_servers.rapid-pi]
+command = "/full/path/to/rapid-pi"
 args = ["--mcp"]
 ```
 
-**Cursor, VS Code, Claude Desktop and others**: add a stdio server with the command `pi-bolt` and the argument `--mcp`, for
+**Cursor, VS Code, Claude Desktop and others**: add a stdio server with the command `rapid-pi` and the argument `--mcp`, for
 example in Cursor's `mcp.json`:
 
 ```json
 {
   "mcpServers": {
-    "pi-bolt": { "command": "/full/path/to/pi-bolt", "args": ["--mcp"] }
+    "rapid-pi": { "command": "/full/path/to/rapid-pi", "args": ["--mcp"] }
   }
 }
 ```
@@ -59,7 +59,7 @@ and last activity; `limit` sets how many (default 20, at most 100).
 ## What the client gets
 
 - **Your Pi setup.** Each session is a Pi session made as the terminal makes one: settings, models and logins (`/login` in
-  `pi-bolt`), extensions, skills, prompt templates, context files and `mcp.json` all apply. Pi runs its own tools in `cwd`: it
+  `rapid-pi`), extensions, skills, prompt templates, context files and `mcp.json` all apply. Pi runs its own tools in `cwd`: it
   reads and edits files there and runs commands.
 - **Progress** while Pi works, when the call asks for it (`progressToken`): each tool Pi runs (`Read src/app.ts`, the command it
   runs) and the first line of each of its messages. Clients that reset their timeout on progress wait for long tasks; for others,
@@ -68,15 +68,15 @@ and last activity; `limit` sets how many (default 20, at most 100).
 - **Sessions** that last: a session stays open for later calls in the same server process (the eight used most recently; others
   are closed and reopened from their file when needed). Prompts to the same session run one after the other; different sessions
   run at the same time. Sessions are Pi's session files, so a later server process continues them too, and
-  `pi-bolt --session <id>` opens one in the terminal.
+  `rapid-pi --session <id>` opens one in the terminal.
 - **Questions from extensions**: extensions that ask the user (`confirm`, `select`, `input`, `editor`) reach the client as an
   elicitation form, when the client offers forms. Otherwise they get no answer, as with `-p`.
 
-When no model is set up, the call fails with how to set one up: run `pi-bolt` in a terminal and use `/login`, or give the server
+When no model is set up, the call fails with how to set one up: run `rapid-pi` in a terminal and use `/login`, or give the server
 a provider's API key in its environment (`env` in the client's server settings).
 
 ## Project trust
 
 A project with its own extensions, settings or packages in `.pi/` is trusted as in the other headless modes: by a decision saved
-earlier, or by the `defaultProjectTrust` setting. MCP sessions cannot ask, so to trust a project, open it once with `pi-bolt` in a
+earlier, or by the `defaultProjectTrust` setting. MCP sessions cannot ask, so to trust a project, open it once with `rapid-pi` in a
 terminal and trust it there. (`--approve` in the server's arguments trusts every project a call names.)

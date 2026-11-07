@@ -1,10 +1,10 @@
 <p align="center">
-  <a href="https://github.com/opensec-git/Pi-Bolt">
-    <img alt="Pi-Bolt logo" src="docs/images/logo.svg" width="128">
+  <a href="https://github.com/opensec-git/Rapid Pi">
+    <img alt="Rapid Pi logo" src="docs/images/logo.svg" width="128">
   </a>
 </p>
 
-<h1 align="center">Pi-Bolt</h1>
+<h1 align="center">Rapid Pi</h1>
 
 <p align="center">
   <b>The <a href="https://github.com/earendil-works/pi">Pi</a> coding agent, compiled ahead of time to native code.</b><br>
@@ -13,11 +13,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/opensec-git/Pi-Bolt/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/opensec-git/Pi-Bolt/ci.yml?branch=pi-bolt&event=push&style=flat-square&label=ci&logo=githubactions&logoColor=white" /></a>
-  <a href="https://github.com/opensec-git/Pi-Bolt/releases/latest"><img alt="Latest release" src="https://img.shields.io/npm/v/pi-bolt?style=flat-square&label=release&color=2a78d6" /></a>
-  <a href="https://www.npmjs.com/package/pi-bolt"><img alt="npm downloads" src="https://img.shields.io/npm/dm/pi-bolt?style=flat-square&logo=npm&logoColor=white&label=downloads&color=2a78d6" /></a>
-  <a href="https://github.com/opensec-git/Pi-Bolt/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/opensec-git/Pi-Bolt?style=flat-square&logo=github&logoColor=white&color=f0b03a" /></a>
-  <a href="sources.json"><img alt="The Pi release Pi-Bolt is built on" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fopensec-git%2FPi-Bolt%2Fpi-bolt%2Fsources.json&query=%24.pi.tag&label=built%20on%20pi&color=f0b03a&style=flat-square" /></a>
+  <a href="https://github.com/opensec-git/Rapid Pi/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/opensec-git/Rapid Pi/ci.yml?branch=rapid-pi&event=push&style=flat-square&label=ci&logo=githubactions&logoColor=white" /></a>
+  <a href="https://github.com/opensec-git/Rapid Pi/releases/latest"><img alt="Latest release" src="https://img.shields.io/npm/v/rapid-pi?style=flat-square&label=release&color=2a78d6" /></a>
+  <a href="https://www.npmjs.com/package/rapid-pi"><img alt="npm downloads" src="https://img.shields.io/npm/dm/rapid-pi?style=flat-square&logo=npm&logoColor=white&label=downloads&color=2a78d6" /></a>
+  <a href="https://github.com/opensec-git/Rapid Pi/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/opensec-git/Rapid Pi?style=flat-square&logo=github&logoColor=white&color=f0b03a" /></a>
+  <a href="sources.json"><img alt="The Pi release Rapid Pi is built on" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fopensec-git%2FRapid Pi%2Frapid-pi%2Fsources.json&query=%24.pi.tag&label=built%20on%20pi&color=f0b03a&style=flat-square" /></a>
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-1baf7a?style=flat-square" /></a>
   <br>
   <a href="#requirements"><img alt="Linux x86-64" src="https://img.shields.io/badge/Linux-x86--64-FCC624?style=flat-square&logo=linux&logoColor=white" /></a>
@@ -31,28 +31,28 @@
   <a href="#quick-start"><img alt="Scoop" src="https://img.shields.io/badge/Scoop-opensec--git-3d8fd1?style=flat-square&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0wIDBoMTEuNHYxMS40SDB6TTEyLjYgMEgyNHYxMS40SDEyLjZ6TTAgMTIuNmgxMS40VjI0SDB6TTEyLjYgMTIuNkgyNFYyNEgxMi42eiIvPjwvc3ZnPg%3D%3D" /></a>
   <a href="#quick-start"><img alt="npm" src="https://img.shields.io/badge/npm-pi--bolt-CB3837?style=flat-square&logo=npm&logoColor=white" /></a>
   <a href="#quick-start"><img alt="mise" src="https://img.shields.io/badge/mise-github%20backend-6c47ff?style=flat-square" /></a>
-  <a href="https://aur.archlinux.org/packages/pi-bolt-avx2-bin-release-git"><img alt="AUR" src="https://img.shields.io/badge/AUR-pi--bolt-1793d1?style=flat-square&logo=archlinux&logoColor=white" /></a>
+  <a href="https://aur.archlinux.org/packages/rapid-pi-avx2-bin-release-git"><img alt="AUR" src="https://img.shields.io/badge/AUR-pi--bolt-1793d1?style=flat-square&logo=archlinux&logoColor=white" /></a>
 </p>
 
 <p align="center">
   <a href="#quick-start"><b>Install</b></a> ·
   <a href="#benchmarks"><b>Benchmarks</b></a> ·
   <a href="#documentation"><b>Docs</b></a> ·
-  <a href="https://pi-bolt.opensec.in"><b>Website</b></a>
+  <a href="https://rapid-pi.opensec.in"><b>Website</b></a>
 </p>
 
-Pi-Bolt is the Pi you already use, with the same commands, sessions, settings, providers and extensions, but every function is
+Rapid Pi is the Pi you already use, with the same commands, sessions, settings, providers and extensions, but every function is
 compiled to machine code when the executable is built, so nothing is parsed or JIT-compiled at launch. Against Pi as released on
 Node 24, it writes a 400 KB file 120 times faster, uses 8 times less CPU while a long answer streams, 7 times less over a session
 and a quarter of the memory; against Pi on stock Bun, much the same.
 
-<img alt="Pi-Bolt 1.0.0 against Pi 1.4.0 as released, Linux x86-64: writing a 400 KB file 120 times faster than on Node 24 (162 times than on Bun), 8 times less CPU while a long answer streams, 7.1 times less CPU over an interactive session, 4.5 times less memory after 40 prompts" src="docs/images/pi-bolt-benchmarks.png" width="880">
+<img alt="Rapid Pi 1.0.0 against Pi 1.4.0 as released, Linux x86-64: writing a 400 KB file 120 times faster than on Node 24 (162 times than on Bun), 8 times less CPU while a long answer streams, 7.1 times less CPU over an interactive session, 4.5 times less memory after 40 prompts" src="docs/images/rapid-pi-benchmarks.png" width="880">
 
-<img alt="Pi-Bolt 1.0.0 against Pi 1.4.0 as released on Node 24 and on Bun, on Linux x86-64, Linux ARM64, macOS and Windows: 61 to 162 times faster writing a 400 KB file, 4.8 to 17 times less CPU streaming a long answer, 5.3 to 8.8 times less CPU per prompt, 5.9 to 7.1 times less CPU over a session, 2.5 to 15 times less memory, 3.8 to 11 times sooner ready to type" src="docs/images/pi-bolt-every-platform.png" width="880">
+<img alt="Rapid Pi 1.0.0 against Pi 1.4.0 as released on Node 24 and on Bun, on Linux x86-64, Linux ARM64, macOS and Windows: 61 to 162 times faster writing a 400 KB file, 4.8 to 17 times less CPU streaming a long answer, 5.3 to 8.8 times less CPU per prompt, 5.9 to 7.1 times less CPU over a session, 2.5 to 15 times less memory, 3.8 to 11 times sooner ready to type" src="docs/images/rapid-pi-every-platform.png" width="880">
 
 https://github.com/user-attachments/assets/d043eb7d-ecb2-4837-a3ee-cbd98079adf9
 
-## Why Pi-Bolt
+## Why Rapid Pi
 
 | | Pi on Node&nbsp;24 | Pi&#8209;Bolt |
 |---|---:|---:|
@@ -62,7 +62,7 @@ https://github.com/user-attachments/assets/d043eb7d-ecb2-4837-a3ee-cbd98079adf9
 | CPU per prompt, 40 prompts into a session | 352 ms | **46 ms**<br><sub>7.7×&nbsp;less</sub> |
 | Memory after 40 prompts | 521 MB | **117 MB**<br><sub>4.5×&nbsp;less</sub> |
 
-<sub>Pi-Bolt 1.0.0 against Pi 1.4.0 as released, Linux x86-64, one CPU. Every platform: [Benchmarks](#benchmarks).</sub>
+<sub>Rapid Pi 1.0.0 against Pi 1.4.0 as released, Linux x86-64, one CPU. Every platform: [Benchmarks](#benchmarks).</sub>
 
 - **Nothing to install first:** one executable; no Node.js, Bun or npm to run it.
 - **The same Pi:** same commands, sessions, settings and providers; every Pi extension works unchanged.
@@ -74,40 +74,40 @@ https://github.com/user-attachments/assets/d043eb7d-ecb2-4837-a3ee-cbd98079adf9
 **Linux, macOS, Android (Termux)**
 
 ```bash
-curl -fsSL https://pi-bolt.opensec.in/install.sh | sh
+curl -fsSL https://rapid-pi.opensec.in/install.sh | sh
 ```
 
 **Windows** (PowerShell)
 
 ```powershell
-irm https://pi-bolt.opensec.in/install.ps1 | iex
+irm https://rapid-pi.opensec.in/install.ps1 | iex
 ```
 
 Or:
 
-- Command Prompt: `powershell -c "irm https://pi-bolt.opensec.in/install.ps1 | iex"`
-- Homebrew (macOS on Apple silicon, Linux): `brew install opensec-git/tap/pi-bolt`, updated with `brew upgrade pi-bolt`
+- Command Prompt: `powershell -c "irm https://rapid-pi.opensec.in/install.ps1 | iex"`
+- Homebrew (macOS on Apple silicon, Linux): `brew install opensec-git/tap/rapid-pi`, updated with `brew upgrade rapid-pi`
 - Scoop (Windows): `scoop bucket add opensec-git https://github.com/opensec-git/scoop-bucket`, then
-  `scoop install opensec-git/pi-bolt`, updated with `scoop update pi-bolt`
-- mise: `github:opensec-git/Pi-Bolt` with the options in the
-  [installation guide](https://pi-bolt.opensec.in/docs/installation.html), updated with
-  `mise upgrade --bump github:opensec-git/Pi-Bolt`
-- npm: `npm install -g --allow-scripts=pi-bolt pi-bolt`
-- Bun: `bun add -g --trust pi-bolt`
+  `scoop install opensec-git/rapid-pi`, updated with `scoop update rapid-pi`
+- mise: `github:opensec-git/Rapid Pi` with the options in the
+  [installation guide](https://rapid-pi.opensec.in/docs/installation.html), updated with
+  `mise upgrade --bump github:opensec-git/Rapid Pi`
+- npm: `npm install -g --allow-scripts=rapid-pi rapid-pi`
+- Bun: `bun add -g --trust rapid-pi`
 - Arch Linux: the community AUR package
-  [`pi-bolt-avx2-bin-release-git`](https://aur.archlinux.org/packages/pi-bolt-avx2-bin-release-git) (the x86-64 AVX2 build,
-  signature checked), `paru -S pi-bolt-avx2-bin-release-git`
+  [`rapid-pi-avx2-bin-release-git`](https://aur.archlinux.org/packages/rapid-pi-avx2-bin-release-git) (the x86-64 AVX2 build,
+  signature checked), `paru -S rapid-pi-avx2-bin-release-git`
 
 Then, in your project:
 
 ```bash
-pi-bolt                         # start
-pi-bolt update                  # install the latest release
-pi-bolt update --rollback       # put back the build it replaced
-pi-bolt update --channel beta   # take pre-releases too
+rapid-pi                         # start
+rapid-pi update                  # install the latest release
+rapid-pi update --rollback       # put back the build it replaced
+rapid-pi update --channel beta   # take pre-releases too
 ```
 
-New to Pi? Run `/login` to connect a provider. Your Pi configuration in `~/.pi/agent` is used as is. Pi-Bolt installs next to Pi as `pi-bolt`, so both can stay installed;
+New to Pi? Run `/login` to connect a provider. Your Pi configuration in `~/.pi/agent` is used as is. Rapid Pi installs next to Pi as `rapid-pi`, so both can stay installed;
 running the installer again updates, reinstalls or uninstalls it.
 
 <details>
@@ -133,13 +133,13 @@ stays compiled, so it is within about 5% of the default.
 
 ```bash
 # macOS, Linux ARM64, Termux
-curl -fsSL https://pi-bolt.opensec.in/install.sh | PIBOLT_VARIANT=arm64-jit sh
+curl -fsSL https://rapid-pi.opensec.in/install.sh | RAPIDPI_VARIANT=arm64-jit sh
 # Linux x86-64
-curl -fsSL https://pi-bolt.opensec.in/install.sh | PIBOLT_VARIANT=x64-jit sh
+curl -fsSL https://rapid-pi.opensec.in/install.sh | RAPIDPI_VARIANT=x64-jit sh
 ```
 
-On Windows, run `$env:PIBOLT_VARIANT = "x64-jit"` before the PowerShell command. With npm, keep `PIBOLT_VARIANT` set in your
-shell profile; it is read on every run. `pi-bolt --version` then ends in `JIT on`, and `pi-bolt update` keeps the build you
+On Windows, run `$env:RAPIDPI_VARIANT = "x64-jit"` before the PowerShell command. With npm, keep `RAPIDPI_VARIANT` set in your
+shell profile; it is read on every run. `rapid-pi --version` then ends in `JIT on`, and `rapid-pi update` keeps the build you
 chose.
 
 On the default build, an extension that needs the JIT (it calls into a native library through `bun:ffi`) fails with a line that
@@ -150,18 +150,18 @@ names the extension and gives the command that switches to the JIT build.
 <details>
 <summary><b>Manual download</b></summary>
 
-Download a build from the [latest release](https://github.com/opensec-git/Pi-Bolt/releases/latest), check it against
-`SHA256SUMS`, unpack it and run `./pi` (on Windows, `pi-bolt.exe`).
+Download a build from the [latest release](https://github.com/opensec-git/Rapid Pi/releases/latest), check it against
+`SHA256SUMS`, unpack it and run `./pi` (on Windows, `rapid-pi.exe`).
 
 | Download | For |
 |---|---|
-| `pi-bolt-linux-x64.tar.xz` | **Linux**, CPUs with AVX2 (Intel Haswell, AMD Zen and later) |
-| `pi-bolt-linux-x64-baseline.tar.xz` | Linux, any x86-64 CPU |
-| `pi-bolt-linux-arm64.tar.xz` | **Linux** ARM64, any 64-bit ARM CPU (Raspberry Pi 3 and later, AWS Graviton, Ampere) |
-| `pi-bolt-darwin-arm64.tar.xz` | **macOS**, Apple silicon |
-| `pi-bolt-win32-x64.zip` | **Windows** x64; compiled code on CPUs with AVX2, bytecode on others |
+| `rapid-pi-linux-x64.tar.xz` | **Linux**, CPUs with AVX2 (Intel Haswell, AMD Zen and later) |
+| `rapid-pi-linux-x64-baseline.tar.xz` | Linux, any x86-64 CPU |
+| `rapid-pi-linux-arm64.tar.xz` | **Linux** ARM64, any 64-bit ARM CPU (Raspberry Pi 3 and later, AWS Graviton, Ampere) |
+| `rapid-pi-darwin-arm64.tar.xz` | **macOS**, Apple silicon |
+| `rapid-pi-win32-x64.zip` | **Windows** x64; compiled code on CPUs with AVX2, bytecode on others |
 
-`-jit` builds are for heavy use of plugins loaded at run time; the runtime and kit archives are what `pi-bolt compile` builds
+`-jit` builds are for heavy use of plugins loaded at run time; the runtime and kit archives are what `rapid-pi compile` builds
 with ([compiling plugins in](docs/PLUGINS.md)). In Termux, use the installer: it sets the executable's loader to Termux's glibc
 ([Android](#android-termux)).
 
@@ -171,12 +171,12 @@ with ([compiling plugins in](docs/PLUGINS.md)). In Termux, use the installer: it
 <summary><a id="android-termux"></a><b>Android (Termux)</b></summary>
 
 In [Termux](https://termux.dev) from F-Droid or GitHub (the Google Play version has no glibc packages), run the same
-`curl ... | sh` command. Pi-Bolt is a glibc program and Android's libc is not glibc, so the installer first installs Termux's
-glibc (`pkg install glibc-repo && pkg install glibc`, after asking), sets it as the executable's loader, and links `pi-bolt`
+`curl ... | sh` command. Rapid Pi is a glibc program and Android's libc is not glibc, so the installer first installs Termux's
+glibc (`pkg install glibc-repo && pkg install glibc`, after asking), sets it as the executable's loader, and links `rapid-pi`
 into `$PREFIX/bin`.
 
-`pi-bolt` is a small launcher that starts Pi-Bolt in Android's time zone and without Termux's `LD_PRELOAD` (a library of
-Android's libc, which glibc cannot load); the programs Pi-Bolt starts get it back. The installer copies Termux's `resolv.conf`
+`rapid-pi` is a small launcher that starts Rapid Pi in Android's time zone and without Termux's `LD_PRELOAD` (a library of
+Android's libc, which glibc cannot load); the programs Rapid Pi starts get it back. The installer copies Termux's `resolv.conf`
 and `hosts` to `$PREFIX/glibc/etc`, where Termux's glibc reads them.
 
 </details>
@@ -197,25 +197,25 @@ and `hosts` to `$PREFIX/glibc/etc`, where Termux's glibc reads them.
 
 ## Features
 
-- **Editors:** `pi-bolt --acp` runs Pi-Bolt in the agent panel of Zed, JetBrains IDEs, VS Code, Neovim and other
+- **Editors:** `rapid-pi --acp` runs Rapid Pi in the agent panel of Zed, JetBrains IDEs, VS Code, Neovim and other
   [ACP](https://agentclientprotocol.com) editors, with your Pi settings, extensions, skills and sessions. [Setup](docs/ACP.md)
-- **Other agents:** `pi-bolt --mcp` is an [MCP](https://modelcontextprotocol.io) server; other agents give Pi-Bolt a task with
+- **Other agents:** `rapid-pi --mcp` is an [MCP](https://modelcontextprotocol.io) server; other agents give Rapid Pi a task with
   its `prompt` tool and continue the session in later calls. [Setup](docs/MCP.md)
 - **Built-in search:** the `grep` and `find` tools are on by default and search in-process, following `.gitignore`, with
   nothing to install. With [`opensec-pi-fff`](https://www.npmjs.com/package/opensec-pi-fff) or `@ff-labs/pi-fff` loaded,
   FFF's search tools are used instead. To turn them off (for an extension with search tools of its own), set
   `"defaultTools": ["-grep", "-find"]` in `~/.pi/agent/settings.json`.
-- **Compiled plugins:** `pi-bolt compile` compiles the extensions installed on this machine into your Pi-Bolt (Linux and macOS)
-  with the release's own compiler, where they run as machine code; `pi-bolt update` compiles them into each new release.
+- **Compiled plugins:** `rapid-pi compile` compiles the extensions installed on this machine into your Rapid Pi (Linux and macOS)
+  with the release's own compiler, where they run as machine code; `rapid-pi update` compiles them into each new release.
   [Plugins](docs/PLUGINS.md)
-- **Doctor:** `pi-bolt doctor` prints a plain-text report of your installation to paste into an issue. [Details](#pi-bolt-doctor)
-- **Updates:** `pi-bolt update` installs the latest release, and `--rollback` puts back the build it replaced.
-- **Herdr:** Pi-Bolt shows its state in a [Herdr](https://herdr.dev) pane, and a Herdr restart reopens the conversation.
+- **Doctor:** `rapid-pi doctor` prints a plain-text report of your installation to paste into an issue. [Details](#rapid-pi-doctor)
+- **Updates:** `rapid-pi update` installs the latest release, and `--rollback` puts back the build it replaced.
+- **Herdr:** Rapid Pi shows its state in a [Herdr](https://herdr.dev) pane, and a Herdr restart reopens the conversation.
   [Details](#herdr)
 - **ARM64 and Android:** Linux ARM64 builds, and the same installer in Termux. [Android](#android-termux)
 
 Pi extensions work unchanged. The default build has no JIT, so an extension loaded at run time is interpreted; compile the ones
-you use every day into Pi-Bolt with `pi-bolt compile`, or use the [JIT build](#jit-build-for-heavy-plugins).
+you use every day into Rapid Pi with `rapid-pi compile`, or use the [JIT build](#jit-build-for-heavy-plugins).
 
 <details>
 <summary><b>Setup in Zed and Claude Code</b></summary>
@@ -224,49 +224,49 @@ In Zed's `settings.json` ([other editors](docs/ACP.md)):
 
 ```json
 "agent_servers": {
-  "Pi-Bolt": { "type": "custom", "command": "/full/path/to/pi-bolt", "args": ["--acp"], "env": {} }
+  "Rapid Pi": { "type": "custom", "command": "/full/path/to/rapid-pi", "args": ["--acp"], "env": {} }
 }
 ```
 
 In Claude Code ([other clients](docs/MCP.md)):
 
 ```bash
-claude mcp add pi-bolt -- /full/path/to/pi-bolt --mcp
+claude mcp add rapid-pi -- /full/path/to/rapid-pi --mcp
 ```
 
 </details>
 
 <details>
-<summary><a id="pi-and-pi-bolt-side-by-side"></a><b>Pi and Pi-Bolt side by side</b></summary>
+<summary><a id="pi-and-rapid-pi-side-by-side"></a><b>Pi and Rapid Pi side by side</b></summary>
 
-Pi-Bolt uses Pi's agent directory (`~/.pi/agent`) and shared `packages` list. Ordinary `pi-bolt install` and `pi-bolt remove`
-update that shared list, just as Pi does, and drop Pi-Bolt's own entry for that package, so both load what the shared list
-declares. Add `--pi-bolt` to change only Pi-Bolt's overrides. Using fictional package names:
+Rapid Pi uses Pi's agent directory (`~/.pi/agent`) and shared `packages` list. Ordinary `rapid-pi install` and `rapid-pi remove`
+update that shared list, just as Pi does, and drop Rapid Pi's own entry for that package, so both load what the shared list
+declares. Add `--rapid-pi` to change only Rapid Pi's overrides. Using fictional package names:
 
 ```bash
-pi-bolt install --pi-bolt npm:@example/bolt-tools
-pi-bolt remove --pi-bolt npm:@example/shared-tools
+rapid-pi install --rapid-pi npm:@example/bolt-tools
+rapid-pi remove --rapid-pi npm:@example/shared-tools
 ```
 
-`piBolt.packages` extends the shared list. A `-source` entry excludes an inherited package from Pi-Bolt without changing Pi;
-other shared packages remain inherited. See [Configuration](https://pi-bolt.opensec.in/docs/configuration.html).
+`rapidPi.packages` extends the shared list. A `-source` entry excludes an inherited package from Rapid Pi without changing Pi;
+other shared packages remain inherited. See [Configuration](https://rapid-pi.opensec.in/docs/configuration.html).
 
 ```json
 {
   "packages": ["npm:@juicesharp/rpiv-todo"],
-  "piBolt": { "packages": ["-npm:@juicesharp/rpiv-todo", "npm:opensec-pi-todo"] }
+  "rapidPi": { "packages": ["-npm:@juicesharp/rpiv-todo", "npm:opensec-pi-todo"] }
 }
 ```
 
 </details>
 
 <details>
-<summary><a id="pi-bolt-doctor"></a><b>pi-bolt doctor</b></summary>
+<summary><a id="rapid-pi-doctor"></a><b>rapid-pi doctor</b></summary>
 
-`pi-bolt doctor` prints a report of your installation, in plain text to paste into an issue: the build and how it was installed,
+`rapid-pi doctor` prints a report of your installation, in plain text to paste into an issue: the build and how it was installed,
 whether the release's signature verifies, which extensions are compiled in, run at run time or fail to load, how Pi's `packages`
-and `piBolt.packages` differ, the Herdr and editor setup, and the problems it finds, such as another `pi-bolt` earlier on your
-`PATH`. It prints no keys or tokens, and shows your home folder as `~`. `pi-bolt doctor --offline` leaves out the release
+and `rapidPi.packages` differ, the Herdr and editor setup, and the problems it finds, such as another `rapid-pi` earlier on your
+`PATH`. It prints no keys or tokens, and shows your home folder as `~`. `rapid-pi doctor --offline` leaves out the release
 signature and the check for a newer version.
 
 </details>
@@ -274,22 +274,22 @@ signature and the check for a newer version.
 <details>
 <summary><a id="herdr"></a><b>Herdr</b></summary>
 
-In a [Herdr](https://herdr.dev) pane, Pi-Bolt shows up as `pi-bolt` (idle, working or blocked), and a Herdr restart reopens the
+In a [Herdr](https://herdr.dev) pane, Rapid Pi shows up as `rapid-pi` (idle, working or blocked), and a Herdr restart reopens the
 same conversation in the same pane. There is nothing to install; `"-builtin:herdr"` in the `extensions` setting turns it off.
-Restoring a session needs Herdr 0.9.2 or later. To start other agents in Herdr panes from Pi-Bolt, install
-[pi-herdr](https://www.npmjs.com/package/@andrewjacop/pi-herdr): `pi-bolt install npm:@andrewjacop/pi-herdr`.
+Restoring a session needs Herdr 0.9.2 or later. To start other agents in Herdr panes from Rapid Pi, install
+[pi-herdr](https://www.npmjs.com/package/@andrewjacop/pi-herdr): `rapid-pi install npm:@andrewjacop/pi-herdr`.
 
 </details>
 
 ## Benchmarks
 
-Pi-Bolt 1.0.0 against Pi 1.4.0 as released on npm, run by stock Bun 1.4.4 and by Node 24, doing the same work against the same
+Rapid Pi 1.0.0 against Pi 1.4.0 as released on npm, run by stock Bun 1.4.4 and by Node 24, doing the same work against the same
 local model; lower is better.
 
 <details open>
 <summary><b>Linux x86-64</b></summary>
 
-| Benchmark | Pi-Bolt | Pi on Bun | Pi on Node 24 |
+| Benchmark | Rapid Pi | Pi on Bun | Pi on Node 24 |
 |---|---:|---:|---:|
 | Writing a 400 KB file through a tool call, s | **1.2** | 194.8 | 143.7 |
 | CPU, streaming a 60,000-character answer, s | **2.34** | 21.92 | 18.62 |
@@ -303,7 +303,7 @@ local model; lower is better.
 <details>
 <summary><b>Linux ARM64</b></summary>
 
-| Benchmark | Pi-Bolt | Pi on Bun | Pi on Node 24 |
+| Benchmark | Rapid Pi | Pi on Bun | Pi on Node 24 |
 |---|---:|---:|---:|
 | Writing a 400 KB file through a tool call, s | **1.3** | 164.1 | 134.5 |
 | CPU, streaming a 60,000-character answer, s | **2.32** | 18.82 | 18.19 |
@@ -317,7 +317,7 @@ local model; lower is better.
 <details>
 <summary><b>macOS (Apple M5)</b></summary>
 
-| Benchmark | Pi-Bolt | Pi on Bun | Pi on Node 24 |
+| Benchmark | Rapid Pi | Pi on Bun | Pi on Node 24 |
 |---|---:|---:|---:|
 | Writing a 400 KB file through a tool call, s | **0.6** | 76.2 | 96.7 |
 | CPU, streaming a 60,000-character answer, s | **1.35** | 7.10 | 6.47 |
@@ -331,7 +331,7 @@ local model; lower is better.
 <details>
 <summary><b>Windows x64</b></summary>
 
-| Benchmark | Pi-Bolt | Pi on Bun | Pi on Node 24 |
+| Benchmark | Rapid Pi | Pi on Bun | Pi on Node 24 |
 |---|---:|---:|---:|
 | Writing a 400 KB file through a tool call, s | **1.8** | 131.0 | 110.1 |
 | CPU, streaming a 60,000-character answer, s | **2.69** | 44.86 | 39.01 |
@@ -346,7 +346,7 @@ GitHub's runners for Linux (pinned to one CPU) and Windows (2 cores; memory ther
 not pinned. Node 22, the method and the raw data: [`bench/results/2026-10-23-stock-bun-1.0.0`](bench/results/2026-10-23-stock-bun-1.0.0).
 
 Against [PiG](https://github.com/MichaelKinsy/PiG) 0.5.1 (Pi ported to Go):
-[Pi-Bolt against PiG](docs/BENCHMARKS.md#100-against-pig-051-and-099). Every other result, and the method:
+[Rapid Pi against PiG](docs/BENCHMARKS.md#100-against-pig-051-and-099). Every other result, and the method:
 [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
 ## How it works
@@ -366,9 +366,9 @@ Against [PiG](https://github.com/MichaelKinsy/PiG) 0.5.1 (Pi ported to Go):
   <img alt="Build time: Pi is bundled and compiled to bytecode by bun build, then every function is compiled to machine code by the AOT compiler, guided by a training profile. The result is one executable holding the Bun runtime, a prebuilt heap and the machine code. At launch, pi maps the code and heap from the file and runs main()." src="docs/images/how-it-works-light.svg">
 </picture>
 
-The compiler builds on [oven-sh/WebKit#743](https://github.com/oven-sh/WebKit/pull/743). Pi-Bolt ports it to x86-64 and macOS
+The compiler builds on [oven-sh/WebKit#743](https://github.com/oven-sh/WebKit/pull/743). Rapid Pi ports it to x86-64 and macOS
 and adds its own code generation and runtime work ([docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)). `packages/` is the Pi release
-named in [`sources.json`](sources.json) with Pi-Bolt's changes on top; the engine changes are in `patches/`.
+named in [`sources.json`](sources.json) with Rapid Pi's changes on top; the engine changes are in `patches/`.
 
 </details>
 
@@ -378,8 +378,8 @@ named in [`sources.json`](sources.json) with Pi-Bolt's changes on top; the engin
 - [Building](docs/BUILDING.md): building the runtime and Pi from source, training profiles, tests
 - [Benchmarks](docs/BENCHMARKS.md): method, results and raw data
 - [Plugins](docs/PLUGINS.md): porting Pi extensions and writing them for AOT
-- [Editors](docs/ACP.md): Pi-Bolt in Zed, JetBrains IDEs, VS Code and other ACP editors
-- [Other agents](docs/MCP.md): Pi-Bolt as a tool of other agents and MCP clients
+- [Editors](docs/ACP.md): Rapid Pi in Zed, JetBrains IDEs, VS Code and other ACP editors
+- [Other agents](docs/MCP.md): Rapid Pi as a tool of other agents and MCP clients
 - [Troubleshooting](docs/TROUBLESHOOTING.md): diagnostics, environment variables, known limitations
 - [Releasing](docs/RELEASING.md): CI, releases, signing
 
@@ -392,10 +392,10 @@ issues privately, as described in [SECURITY.md](SECURITY.md).
 <summary><b>Build from source</b></summary>
 
 ```bash
-git clone https://github.com/opensec-git/Pi-Bolt.git && cd Pi-Bolt
-scripts/fetch-runtime.sh            # the released Pi-Bolt runtime (or build it: docs/BUILDING.md)
+git clone https://github.com/opensec-git/Rapid Pi.git && cd Rapid Pi
+scripts/fetch-runtime.sh            # the released Rapid Pi runtime (or build it: docs/BUILDING.md)
 scripts/prepare-pi.sh               # builds the Pi in this repository
-scripts/build-pi.sh                 # out/pi-bolt/pi
+scripts/build-pi.sh                 # out/rapid-pi/pi
 tests/aot/run.sh                    # engine tests
 ```
 
@@ -403,10 +403,10 @@ tests/aot/run.sh                    # engine tests
 
 ## Star history
 
-<a href="https://www.star-history.com/#opensec-git/pi-bolt&Date">
+<a href="https://www.star-history.com/#opensec-git/rapid-pi&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=opensec-git/pi-bolt&type=Date&theme=dark">
-    <img alt="Star history of Pi-Bolt" src="https://api.star-history.com/svg?repos=opensec-git/pi-bolt&type=Date" width="600">
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=opensec-git/rapid-pi&type=Date&theme=dark">
+    <img alt="Star history of Rapid Pi" src="https://api.star-history.com/svg?repos=opensec-git/rapid-pi&type=Date" width="600">
   </picture>
 </a>
 
@@ -416,7 +416,7 @@ MIT. Release executables include Bun (MIT), JavaScriptCore (LGPL-2.0 and BSD), I
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 > [!NOTE]
-> Pi-Bolt is an independent fork of [Pi](https://github.com/earendil-works/pi), not affiliated with Pi's authors or with Oven.
+> Rapid Pi is an independent fork of [Pi](https://github.com/earendil-works/pi), not affiliated with Pi's authors or with Oven.
 
 <p align="center">
   Built on <a href="https://github.com/earendil-works/pi">Pi</a> by Mario Zechner and contributors,

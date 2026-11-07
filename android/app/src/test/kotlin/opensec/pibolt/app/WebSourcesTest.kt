@@ -1,23 +1,23 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.ui.session.FoldRow
-import opensec.pibolt.app.ui.session.MdCache
-import opensec.pibolt.app.ui.session.SourcesRow
-import opensec.pibolt.app.ui.session.ToolRow
-import opensec.pibolt.app.ui.session.TranscriptModel
-import opensec.pibolt.app.ui.session.toolLabel
-import opensec.pibolt.app.ui.session.turnSummary
-import opensec.pibolt.app.ui.session.web.SourceState
-import opensec.pibolt.app.ui.session.web.WebTools
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.ui.session.FoldRow
+import opensec.rapidpi.app.ui.session.MdCache
+import opensec.rapidpi.app.ui.session.SourcesRow
+import opensec.rapidpi.app.ui.session.ToolRow
+import opensec.rapidpi.app.ui.session.TranscriptModel
+import opensec.rapidpi.app.ui.session.toolLabel
+import opensec.rapidpi.app.ui.session.turnSummary
+import opensec.rapidpi.app.ui.session.web.SourceState
+import opensec.rapidpi.app.ui.session.web.WebTools
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -198,7 +198,7 @@ class WebSourcesTest {
         assertEquals("Searched the web · read 1 page", fold.summary)
         val after = folded.filterIsInstance<SourcesRow>().single()
         assertEquals("sources:u1", after.key)
-        assertTrue(folded.indexOf(after) > folded.indexOfFirst { it is opensec.pibolt.app.ui.session.TextRow })
+        assertTrue(folded.indexOf(after) > folded.indexOfFirst { it is opensec.rapidpi.app.ui.session.TextRow })
         // Opened fold: the pill sits on its rail, and the turn's pill after the answer is not repeated.
         val open = TranscriptModel.rows(items, false, setOf("u1"), emptyMap(), MdCache(), openGroups = setOf("sources:${search.key}"))
         val inFold = open.filterIsInstance<SourcesRow>().single()

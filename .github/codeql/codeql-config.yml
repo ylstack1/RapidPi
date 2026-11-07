@@ -1,5 +1,5 @@
-# What ships in Pi-Bolt is scanned; tests, benchmarks, build and maintenance scripts and example extensions are not.
-name: Pi-Bolt
+# What ships in Rapid Pi is scanned; tests, benchmarks, build and maintenance scripts and example extensions are not.
+name: Rapid Pi
 paths-ignore:
   - "**/test/**"
   - "**/tests/**"

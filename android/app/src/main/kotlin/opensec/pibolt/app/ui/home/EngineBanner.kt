@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.home
+package opensec.rapidpi.app.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,20 +26,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.engine.EngineStatus
-import opensec.pibolt.app.ui.components.ButtonRow
-import opensec.pibolt.app.ui.components.CopyButton
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.engine.EngineStatus
+import opensec.rapidpi.app.ui.components.ButtonRow
+import opensec.rapidpi.app.ui.components.CopyButton
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 
 /** Statuses Home explains with a banner; Idle and Ready need none. */
 fun EngineStatus.needsBanner(): Boolean = this is EngineStatus.Preparing || this is EngineStatus.Failed || this is EngineStatus.Unavailable
@@ -76,9 +76,9 @@ fun EngineBanner(status: EngineStatus, onRetry: () -> Unit, onDetails: () -> Uni
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f).padding(end = 8.dp)) {
             val (title, detail) = when (status) {
-                is EngineStatus.Preparing -> "Setting up Pi-Bolt" to status.step
+                is EngineStatus.Preparing -> "Setting up Rapid Pi" to status.step
                 is EngineStatus.Failed -> status.message to "Projects open once it runs"
-                is EngineStatus.Unavailable -> "Pi-Bolt can't run on this phone" to status.reason
+                is EngineStatus.Unavailable -> "Rapid Pi can't run on this phone" to status.reason
                 else -> "" to ""
             }
             Text(title, style = type.bodyStrong, color = colors.ink1, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -103,10 +103,10 @@ fun EngineDetailsSheet(status: EngineStatus, onRetry: () -> Unit, onDismiss: () 
     PiSheet(onDismiss = onDismiss, state = state) {
         val (title, message, detail) = when (status) {
             is EngineStatus.Failed -> Triple(status.message, "The engine didn't start. Computers you control still work.", status.detail)
-            is EngineStatus.Unavailable -> Triple("Pi-Bolt can't run on this phone", status.reason, null)
-            is EngineStatus.Preparing -> Triple("Setting up Pi-Bolt", status.step, null)
-            is EngineStatus.Ready -> Triple("Pi-Bolt is running", "Engine ${status.engineVersion}", null)
-            EngineStatus.Idle -> Triple("Pi-Bolt has not started", "", null)
+            is EngineStatus.Unavailable -> Triple("Rapid Pi can't run on this phone", status.reason, null)
+            is EngineStatus.Preparing -> Triple("Setting up Rapid Pi", status.step, null)
+            is EngineStatus.Ready -> Triple("Rapid Pi is running", "Engine ${status.engineVersion}", null)
+            EngineStatus.Idle -> Triple("Rapid Pi has not started", "", null)
         }
         SheetHeader(title, subtitle = message)
         if (!detail.isNullOrBlank()) {

@@ -3,7 +3,7 @@
 /quit, driven through a pseudo-terminal. Run it in a Pi checkout (--project), whose .pi/ folder holds extensions, prompt templates
 and skills, so that they are loaded once the folder is trusted.
 
-Example: bench/ui_check.py --project ./pi --build pi-bolt=./out/pi/pi --build bun=./out/pi-stable/pi
+Example: bench/ui_check.py --project ./pi --build rapid-pi=./out/pi/pi --build bun=./out/pi-stable/pi
 """
 
 import argparse
@@ -42,7 +42,7 @@ def run(build, project):
         step("/hotkeys", b"/hotkeys\r", ["Run bash command", "Navigation"], 10)
         tty.send(b"\x1b"); tty.settle(0.2, time.perf_counter() + 2)
         step("/session", b"/session\r", ["Session"], 10)
-        step("! bash command", b"!echo pi-bolt-ok-$((6*7))\r", ["pi-bolt-ok-42"], 15)
+        step("! bash command", b"!echo rapid-pi-ok-$((6*7))\r", ["rapid-pi-ok-42"], 15)
         step("keystroke echo", b"zqxjkvbw", ["zqxjkvbw"], 5, 0.05)
         tty.send(b"\x15"); tty.settle(0.2, time.perf_counter() + 2)
         step("model turn with 4 tool calls", b"Read the four fixture files\r", [DONE + " (prompt "], 30)

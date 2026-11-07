@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects.transfer
+package opensec.rapidpi.app.ui.projects.transfer
 
 import android.content.Intent
 import android.net.Uri
@@ -36,15 +36,15 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.Segmented
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.projects.ProjectEntry
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.Segmented
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.projects.ProjectEntry
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 
 /** What the user picked in [ShareInSheet]: the action and, for all but a new project, the project's folder name. */
 data class ShareChoice(val action: ShareAction, val project: String?)
@@ -82,7 +82,7 @@ private fun ShareAction.label(): String = when (this) {
 }
 
 /**
- * Content shared into Pi-Bolt: what to do with it (the default first, see [ShareRouting]) and which project it goes
+ * Content shared into Rapid Pi: what to do with it (the default first, see [ShareRouting]) and which project it goes
  * to. A new project from a zip needs no project. [onChoose] runs the choice after the sheet closes.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,7 +105,7 @@ fun ShareInSheet(content: SharedContent, maxImages: Int, projects: suspend () ->
             route.images == route.files -> if (route.images == 1) "1 image" else "${route.images} images"
             else -> if (route.files == 1) "1 file" else "${route.files} files"
         }
-        SheetHeader("Share to Pi-Bolt", subtitle = what)
+        SheetHeader("Share to Rapid Pi", subtitle = what)
         if (route.actions.size > 1) {
             Segmented(
                 options = route.actions.map { it to it.label() },

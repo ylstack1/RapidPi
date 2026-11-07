@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,7 +14,7 @@ class PairingTest {
     fun roundTrip() {
         val payload = PairingPayload(1, "macbook", key, secret, listOf("ws://192.168.1.20:48123/rc", "wss://quiet-fox.trycloudflare.com/rc"), 1793000000)
         val text = payload.encode()
-        assertTrue(text.startsWith("pibolt://pair#"))
+        assertTrue(text.startsWith("rapidpi://pair#"))
         assertFalse(text.contains("="))
         assertEquals(payload, PairingPayload.parse(text))
         assertEquals(payload, PairingPayload.parse("  $text\n"))
@@ -24,7 +24,7 @@ class PairingTest {
     fun parsesHostJson() {
         // As the host writes it: field order and extra fields do not matter.
         val json = """{"x":1793000000,"e":["ws://10.0.0.2:1/rc","http://bad","wss://a.trycloudflare.com/rc"],"k":"${Base64Url.encode(key)}","s":"${Base64Url.encode(secret)}","n":"studio","v":1,"extra":true}"""
-        val parsed = PairingPayload.parse("pibolt://pair#" + Base64Url.encode(json.toByteArray()))
+        val parsed = PairingPayload.parse("rapidpi://pair#" + Base64Url.encode(json.toByteArray()))
         assertEquals("studio", parsed.hostName)
         assertEquals(listOf("ws://10.0.0.2:1/rc", "wss://a.trycloudflare.com/rc"), parsed.endpoints)
         assertEquals(1793000000, parsed.expiresAt)
@@ -35,8 +35,8 @@ class PairingTest {
     @Test
     fun rejectsBadCodes() {
         assertFailsWith<PairingParseException> { PairingPayload.parse("https://example.com") }
-        assertFailsWith<PairingParseException> { PairingPayload.parse("pibolt://pair#!!!") }
-        fun code(json: String) = "pibolt://pair#" + Base64Url.encode(json.toByteArray())
+        assertFailsWith<PairingParseException> { PairingPayload.parse("rapidpi://pair#!!!") }
+        fun code(json: String) = "rapidpi://pair#" + Base64Url.encode(json.toByteArray())
         val k = Base64Url.encode(key)
         val s = Base64Url.encode(secret)
         assertFailsWith<PairingParseException> { PairingPayload.parse(code("""{"v":2,"k":"$k","s":"$s","e":["ws://a/rc"],"x":1}""")) }

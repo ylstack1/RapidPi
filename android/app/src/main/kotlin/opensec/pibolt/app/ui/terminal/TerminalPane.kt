@@ -1,9 +1,9 @@
-package opensec.pibolt.app.ui.terminal
+package opensec.rapidpi.app.ui.terminal
 
-import opensec.pibolt.app.ui.projects.EmptyCard
-import opensec.pibolt.app.ui.projects.WorkspaceMenu
-import opensec.pibolt.app.ui.projects.WorkspaceMenuRow
-import opensec.pibolt.app.ui.projects.WorkspaceTab
+import opensec.rapidpi.app.ui.projects.EmptyCard
+import opensec.rapidpi.app.ui.projects.WorkspaceMenu
+import opensec.rapidpi.app.ui.projects.WorkspaceMenuRow
+import opensec.rapidpi.app.ui.projects.WorkspaceTab
 import androidx.compose.material.icons.rounded.FormatSize
 import androidx.compose.material.icons.rounded.Terminal
 import android.annotation.SuppressLint
@@ -15,12 +15,12 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.GlassPill
-import opensec.pibolt.app.ui.components.SOFT_PRESS
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.GlassPill
+import opensec.rapidpi.app.ui.components.SOFT_PRESS
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -81,19 +81,19 @@ import com.termux.terminal.TerminalSession
 import com.termux.view.TerminalView
 import com.termux.view.TerminalViewClient
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.R
-import opensec.pibolt.app.terminal.TerminalTab
-import opensec.pibolt.app.terminal.Terminals
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.session.Ansi
-import opensec.pibolt.app.ui.session.AnsiColor
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.R
+import opensec.rapidpi.app.terminal.TerminalTab
+import opensec.rapidpi.app.terminal.Terminals
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.session.Ansi
+import opensec.rapidpi.app.ui.session.AnsiColor
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
 import java.io.File
 
 /**

@@ -12,7 +12,7 @@
 // Path data is re-tokenised and written with explicit separators (SVG's packed arc flags, "a1 1 0 00.5.5", are
 // read differently by some Android path parsers).
 //
-// Treatment follows Pi-Bolt Desktop (src/lib/modelLogos.tsx): Claude's mark for Claude models and Anthropic's for the
+// Treatment follows Rapid Pi Desktop (src/lib/modelLogos.tsx): Claude's mark for Claude models and Anthropic's for the
 // provider, Grok's for xAI, Google's "G" for Gemma, Gemini's for Gemini and the Google provider.
 //
 // The brand list must match `Brand` in ui/providers/ProviderLogos.kt (ProviderLogosTest checks both ways).

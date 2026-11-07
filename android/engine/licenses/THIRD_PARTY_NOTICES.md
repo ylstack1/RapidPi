@@ -1,19 +1,19 @@
-# Third-party software in the Pi-Bolt Android app's on-device engine
+# Third-party software in the Rapid Pi Android app's on-device engine
 
-The app runs Pi-Bolt on the phone with the programs and libraries below, shipped inside the APK as separate files
+The app runs Rapid Pi on the phone with the programs and libraries below, shipped inside the APK as separate files
 (lib*.so in the app's native library directory). Exact versions: `VERSIONS.txt`. Full licence texts: `texts/`.
-Per-package copyright files: `userland/` (Debian packages), `pi-bolt/` (the engine itself), `extensions/` (the
+Per-package copyright files: `userland/` (Debian packages), `rapid-pi/` (the engine itself), `extensions/` (the
 bundled Pi extensions), `runtimes/` (Node.js, npm, Python, pip) and `esbuild/` (esbuild, Go, golang.org/x/sys).
 
 ## Corresponding source
 
 The complete corresponding source of every GPL and LGPL component listed here, including our build scripts and
 the changes we made, is published with each release of the app as the asset
-`pi-bolt-android-engine-sources.tar` next to the APK (https://github.com/opensec-git/Pi-Bolt/releases). It contains
+`rapid-pi-android-engine-sources.tar` next to the APK (https://github.com/opensec-git/Rapid Pi/releases). It contains
 the glibc release tarball, Termux's glibc patches, the git and curl release tarballs, the Debian source packages of
 bash and busybox, and the scripts that build this engine pack (`android/engine/` in the repository). The source is
 also available on request for three years from the release date: open an issue at
-https://github.com/opensec-git/Pi-Bolt/issues.
+https://github.com/opensec-git/Rapid Pi/issues.
 
 ## Components
 
@@ -59,7 +59,7 @@ https://github.com/opensec-git/Pi-Bolt/issues.
 ## glibc is modified
 
 The glibc in this app is GNU C Library release 2.44 with Termux's Android patches applied and rebuilt for the app's
-private directory (`/data/data/in.opensec.pibolt/files/usr`): its library directory, configuration files (`etc/`),
+private directory (`/data/data/in.opensec.rapidpi/files/usr`): its library directory, configuration files (`etc/`),
 temporary directory and `/bin/sh` point there. Its `execve` is replaced by ours (`android/engine/glibc/execve.c`): it
 runs scripts and programs in the app's data directory, which Android does not let the kernel execute, the way the
 kernel would. It is a separate shared library: you may replace it with a modified

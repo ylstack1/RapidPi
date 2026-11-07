@@ -1,6 +1,6 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
-import opensec.pibolt.app.ui.markdown.CodeInfo
+import opensec.rapidpi.app.ui.markdown.CodeInfo
 
 /** How the Files tab draws a file and how the viewer opens it. */
 enum class FileKind { Markdown, Code, Text, Image, Binary }

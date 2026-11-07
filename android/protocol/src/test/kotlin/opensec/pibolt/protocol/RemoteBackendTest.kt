@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -24,17 +24,17 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
-import opensec.pibolt.protocol.backend.ConnectionState
-import opensec.pibolt.protocol.backend.DisconnectReason
-import opensec.pibolt.protocol.backend.RemoteBackend
-import opensec.pibolt.protocol.backend.RemoteConfig
-import opensec.pibolt.protocol.noise.CipherState
-import opensec.pibolt.protocol.noise.IkHandshake
-import opensec.pibolt.protocol.noise.KeyPair
-import opensec.pibolt.protocol.rpc.RpcClient
-import opensec.pibolt.protocol.rpc.StreamingBehavior
-import opensec.pibolt.protocol.transport.Framing
-import opensec.pibolt.protocol.transport.Reassembler
+import opensec.rapidpi.protocol.backend.ConnectionState
+import opensec.rapidpi.protocol.backend.DisconnectReason
+import opensec.rapidpi.protocol.backend.RemoteBackend
+import opensec.rapidpi.protocol.backend.RemoteConfig
+import opensec.rapidpi.protocol.noise.CipherState
+import opensec.rapidpi.protocol.noise.IkHandshake
+import opensec.rapidpi.protocol.noise.KeyPair
+import opensec.rapidpi.protocol.rpc.RpcClient
+import opensec.rapidpi.protocol.rpc.StreamingBehavior
+import opensec.rapidpi.protocol.transport.Framing
+import opensec.rapidpi.protocol.transport.Reassembler
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -291,7 +291,7 @@ class RemoteBackendTest {
         server.enqueue(MockResponse.Builder().webSocketUpgrade(host).build())
         val backend = RemoteBackend(config(KeyPair.generate(), secret, listOf(endpoint())))
         assertTrue(backend.connect())
-        assertEquals("pibolt-rc.1", server.takeRequest().headers["Sec-WebSocket-Protocol"])
+        assertEquals("rapidpi-rc.1", server.takeRequest().headers["Sec-WebSocket-Protocol"])
         assertContentEquals(hostKey.publicKey, backend.config.hostKey)
         backend.close()
     }

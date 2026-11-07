@@ -1,4 +1,4 @@
-package opensec.pibolt.app.secrets
+package opensec.rapidpi.app.secrets
 
 import android.content.Context
 import java.io.File

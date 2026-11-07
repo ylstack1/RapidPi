@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import android.content.ClipboardManager
 import android.content.ContentResolver
@@ -17,7 +17,7 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.scale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import opensec.pibolt.protocol.rpc.ImageAttachment
+import opensec.rapidpi.protocol.rpc.ImageAttachment
 import java.io.ByteArrayOutputStream
 import kotlin.math.max
 import kotlin.math.roundToInt

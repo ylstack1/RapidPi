@@ -13,17 +13,17 @@ import {
 import { loadExtensions } from "../src/core/extensions/loader.ts";
 import { ExtensionRunner } from "../src/core/extensions/runner.ts";
 import { SessionManager } from "../src/core/session-manager.ts";
-import type * as PiBoltModule from "../src/pi-bolt.ts";
-import { type PiBoltBuild, parsePiBoltBuild, piBoltJitSwitchCommand, piBoltJitVariant } from "../src/pi-bolt.ts";
+import type * as PiBoltModule from "../src/rapid-pi.ts";
+import { type PiBoltBuild, parsePiBoltBuild, rapidPiJitSwitchCommand, rapidPiJitVariant } from "../src/rapid-pi.ts";
 import { createInMemoryModelRegistry } from "./model-runtime-test-utils.ts";
 
-// The build these tests run as: Pi-Bolt without the JIT, unless a test says otherwise. (In source runs PIBOLT is undefined.)
+// The build these tests run as: Rapid Pi without the JIT, unless a test says otherwise. (In source runs RAPIDPI is undefined.)
 const build = vi.hoisted(() => ({ value: undefined as PiBoltBuild | undefined }));
-vi.mock("../src/pi-bolt.ts", async (importOriginal) => {
+vi.mock("../src/rapid-pi.ts", async (importOriginal) => {
 	const original = await importOriginal<typeof PiBoltModule>();
 	return {
 		...original,
-		get PIBOLT() {
+		get RAPIDPI() {
 			return build.value;
 		},
 	};
@@ -33,7 +33,7 @@ let tempDir: string;
 
 beforeEach(() => {
 	build.value = { version: "0.8.8", variant: "arm64", jit: false };
-	tempDir = mkdtempSync(join(tmpdir(), "pi-bolt-jit-hint-"));
+	tempDir = mkdtempSync(join(tmpdir(), "rapid-pi-jit-hint-"));
 });
 
 afterEach(() => {
@@ -49,7 +49,7 @@ function writePackage(name: string, files: Record<string, string>): string {
 	return root;
 }
 
-describe("PIBOLT_BUILD", () => {
+describe("RAPIDPI_BUILD", () => {
 	it("reads the runtime stamp when the build has one", () => {
 		expect(parsePiBoltBuild("0.8.8 arm64 jit-off 0f61517d28995399")).toEqual({
 			version: "0.8.8",
@@ -64,25 +64,25 @@ describe("PIBOLT_BUILD", () => {
 
 describe("the JIT build to switch to", () => {
 	it("is the -jit variant for the CPU", () => {
-		expect(piBoltJitVariant("x64")).toBe("x64-jit");
-		expect(piBoltJitVariant("x64-baseline")).toBe("x64-jit");
-		expect(piBoltJitVariant("arm64")).toBe("arm64-jit");
-		expect(piBoltJitVariant("arm64-jit")).toBe("arm64-jit");
+		expect(rapidPiJitVariant("x64")).toBe("x64-jit");
+		expect(rapidPiJitVariant("x64-baseline")).toBe("x64-jit");
+		expect(rapidPiJitVariant("arm64")).toBe("arm64-jit");
+		expect(rapidPiJitVariant("arm64-jit")).toBe("arm64-jit");
 	});
 
 	it("is installed as this one was installed", () => {
-		expect(piBoltJitSwitchCommand("installer", "linux", "x64-jit")).toBe(
-			"curl -fsSL https://pi-bolt.opensec.in/install.sh | PIBOLT_VARIANT=x64-jit sh",
+		expect(rapidPiJitSwitchCommand("installer", "linux", "x64-jit")).toBe(
+			"curl -fsSL https://rapid-pi.opensec.in/install.sh | RAPIDPI_VARIANT=x64-jit sh",
 		);
-		expect(piBoltJitSwitchCommand("installer", "win32", "x64-jit")).toBe(
-			'$env:PIBOLT_VARIANT = "x64-jit"; irm https://pi-bolt.opensec.in/install.ps1 | iex',
+		expect(rapidPiJitSwitchCommand("installer", "win32", "x64-jit")).toBe(
+			'$env:RAPIDPI_VARIANT = "x64-jit"; irm https://rapid-pi.opensec.in/install.ps1 | iex',
 		);
-		// The npm package reads PIBOLT_VARIANT at every run on macOS and Linux, and when it is installed on Windows.
-		expect(piBoltJitSwitchCommand("npm", "darwin", "arm64-jit")).toBe(
-			"export PIBOLT_VARIANT=arm64-jit (in your shell profile)",
+		// The npm package reads RAPIDPI_VARIANT at every run on macOS and Linux, and when it is installed on Windows.
+		expect(rapidPiJitSwitchCommand("npm", "darwin", "arm64-jit")).toBe(
+			"export RAPIDPI_VARIANT=arm64-jit (in your shell profile)",
 		);
-		expect(piBoltJitSwitchCommand("npm", "win32", "x64-jit")).toBe(
-			'$env:PIBOLT_VARIANT = "x64-jit"; npm install -g --allow-scripts=pi-bolt pi-bolt',
+		expect(rapidPiJitSwitchCommand("npm", "win32", "x64-jit")).toBe(
+			'$env:RAPIDPI_VARIANT = "x64-jit"; npm install -g --allow-scripts=rapid-pi rapid-pi',
 		);
 	});
 });
@@ -91,10 +91,10 @@ describe("withJitHint", () => {
 	it("names the extension and the command after the engine's message", () => {
 		const message = withJitHint(`FFF init failed: ${JIT_REQUIRED_MESSAGE}`, () => "pi-foo");
 		expect(message).toMatch(
-			/^FFF init failed: bun:ffi requires the JIT\. pi-foo needs Pi-Bolt's JIT build \(bun:ffi\);/,
+			/^FFF init failed: bun:ffi requires the JIT\. pi-foo needs Rapid Pi's JIT build \(bun:ffi\);/,
 		);
 		expect(message).toContain("switch with: ");
-		expect(message).toContain("PIBOLT_VARIANT=");
+		expect(message).toContain("RAPIDPI_VARIANT=");
 		// Once: a message that has the hint already keeps it as it is.
 		expect(withJitHint(message, () => "pi-foo")).toBe(message);
 	});
@@ -148,7 +148,7 @@ describe("extensionDisplayName and extensionOfStack", () => {
 	});
 });
 
-describe("where Pi-Bolt shows the error", () => {
+describe("where Rapid Pi shows the error", () => {
 	it("says which extension that failed to load needs the JIT build", async () => {
 		const root = writePackage("pi-ffi", {
 			"index.ts": `export default function () { throw new TypeError("${JIT_REQUIRED_MESSAGE}"); }\n`,
@@ -156,7 +156,7 @@ describe("where Pi-Bolt shows the error", () => {
 		const result = await loadExtensions([join(root, "index.ts")], tempDir);
 		expect(result.errors).toHaveLength(1);
 		expect(result.errors[0].error).toMatch(
-			/^Failed to load extension: bun:ffi requires the JIT\. pi-ffi needs Pi-Bolt's JIT build \(bun:ffi\); switch with: /,
+			/^Failed to load extension: bun:ffi requires the JIT\. pi-ffi needs Rapid Pi's JIT build \(bun:ffi\); switch with: /,
 		);
 	});
 
@@ -204,9 +204,9 @@ describe("where Pi-Bolt shows the error", () => {
 		await runner.emit({ type: "session_start", reason: "startup" });
 
 		expect(notices).toHaveLength(1);
-		expect(notices[0]).toMatch(/^FFF init failed: bun:ffi requires the JIT\. pi-notifier needs Pi-Bolt's JIT build/);
+		expect(notices[0]).toMatch(/^FFF init failed: bun:ffi requires the JIT\. pi-notifier needs Rapid Pi's JIT build/);
 		expect(errors).toHaveLength(1);
-		expect(errors[0]).toMatch(/^bun:ffi requires the JIT\. pi-thrower needs Pi-Bolt's JIT build/);
+		expect(errors[0]).toMatch(/^bun:ffi requires the JIT\. pi-thrower needs Rapid Pi's JIT build/);
 	});
 
 	it("passes other notices through unchanged", async () => {

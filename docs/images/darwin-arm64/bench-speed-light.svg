@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="880" height="528" viewBox="0 0 880 528" role="img" aria-label="Time: Wall-clock time, lower is better. Ratios compare Pi-Bolt with Bun. Pi 1.1.0, medians.">
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="528" viewBox="0 0 880 528" role="img" aria-label="Time: Wall-clock time, lower is better. Ratios compare Rapid Pi with Bun. Pi 1.1.0, medians.">
 <style>text{font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif}</style>
 <text x="24" y="32" font-size="21" font-weight="650" fill="#1f2328">Time</text>
-<text x="24" y="56" font-size="13.5" fill="#59636e">Wall-clock time, lower is better. Ratios compare Pi-Bolt with Bun. Pi 1.1.0, medians.</text>
+<text x="24" y="56" font-size="13.5" fill="#59636e">Wall-clock time, lower is better. Ratios compare Rapid Pi with Bun. Pi 1.1.0, medians.</text>
 <text x="24" y="96" font-size="15" font-weight="600" fill="#1f2328">Launch to interactive (TUI)</text>
-<text x="137" y="126.5" font-size="13.5" text-anchor="end" fill="#59636e">Pi-Bolt 0.8.5</text>
+<text x="137" y="126.5" font-size="13.5" text-anchor="end" fill="#59636e">Rapid Pi 0.8.5</text>
 <path d="M147,114 h19.4 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-19.4 z" fill="#2a78d6"/>
 <text x="178.4" y="126.5" font-size="13.5" font-weight="650" fill="#1f2328">41 ms</text>
 <text x="230.5" y="126.5" font-size="12.5" fill="#59636e">2.4× faster</text>
@@ -15,7 +15,7 @@
 <text x="352.0" y="186.5" font-size="13.5" font-weight="400" fill="#1f2328">348 ms</text>
 <line x1="147" y1="108" x2="147" y2="196" stroke="#d1d9e0"/>
 <text x="452" y="96" font-size="15" font-weight="600" fill="#1f2328">pi --version</text>
-<text x="565" y="126.5" font-size="13.5" text-anchor="end" fill="#59636e">Pi-Bolt 0.8.5</text>
+<text x="565" y="126.5" font-size="13.5" text-anchor="end" fill="#59636e">Rapid Pi 0.8.5</text>
 <path d="M575,114 h9.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-9.1 z" fill="#2a78d6"/>
 <text x="596.1" y="126.5" font-size="13.5" font-weight="650" fill="#1f2328">19 ms</text>
 <text x="648.2" y="126.5" font-size="12.5" fill="#59636e">2.9× faster</text>
@@ -27,7 +27,7 @@
 <text x="780.0" y="186.5" font-size="13.5" font-weight="400" fill="#1f2328">284 ms</text>
 <line x1="575" y1="108" x2="575" y2="196" stroke="#d1d9e0"/>
 <text x="24" y="246" font-size="15" font-weight="600" fill="#1f2328">pi -p: one prompt, 4 tool calls</text>
-<text x="137" y="276.5" font-size="13.5" text-anchor="end" fill="#59636e">Pi-Bolt 0.8.5</text>
+<text x="137" y="276.5" font-size="13.5" text-anchor="end" fill="#59636e">Rapid Pi 0.8.5</text>
 <path d="M147,264 h23.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-23.3 z" fill="#2a78d6"/>
 <text x="182.3" y="276.5" font-size="13.5" font-weight="650" fill="#1f2328">55 ms</text>
 <text x="234.4" y="276.5" font-size="12.5" fill="#59636e">2.1× faster</text>
@@ -39,7 +39,7 @@
 <text x="352.0" y="336.5" font-size="13.5" font-weight="400" fill="#1f2328">400 ms</text>
 <line x1="147" y1="258" x2="147" y2="346" stroke="#d1d9e0"/>
 <text x="452" y="246" font-size="15" font-weight="600" fill="#1f2328">Time per prompt, 4.2M-token session</text>
-<text x="565" y="276.5" font-size="13.5" text-anchor="end" fill="#59636e">Pi-Bolt 0.8.5</text>
+<text x="565" y="276.5" font-size="13.5" text-anchor="end" fill="#59636e">Rapid Pi 0.8.5</text>
 <path d="M575,264 h99.5 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-99.5 z" fill="#2a78d6"/>
 <text x="686.5" y="276.5" font-size="13.5" font-weight="650" fill="#1f2328">330 ms</text>
 <text x="746.5" y="276.5" font-size="12.5" fill="#59636e">1.5× faster</text>
@@ -51,7 +51,7 @@
 <text x="780.0" y="336.5" font-size="13.5" font-weight="400" fill="#1f2328">629 ms</text>
 <line x1="575" y1="258" x2="575" y2="346" stroke="#d1d9e0"/>
 <text x="24" y="396" font-size="15" font-weight="600" fill="#1f2328">Launch to interactive (TUI), default theme</text>
-<text x="137" y="426.5" font-size="13.5" text-anchor="end" fill="#59636e">Pi-Bolt 0.8.5</text>
+<text x="137" y="426.5" font-size="13.5" text-anchor="end" fill="#59636e">Rapid Pi 0.8.5</text>
 <path d="M147,414 h18.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-18.6 z" fill="#2a78d6"/>
 <text x="177.6" y="426.5" font-size="13.5" font-weight="650" fill="#1f2328">40 ms</text>
 <text x="229.6" y="426.5" font-size="12.5" fill="#59636e">2.5× faster</text>

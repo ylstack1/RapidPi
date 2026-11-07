@@ -8,7 +8,7 @@ import type { ResourceDiagnostic } from "./diagnostics.ts";
 
 export type { ResourceCollision, ResourceDiagnostic } from "./diagnostics.ts";
 
-import { PIBOLT } from "../pi-bolt.ts";
+import { RAPIDPI } from "../rapid-pi.ts";
 import { canonicalizePath, isLocalPath, isPathWithin, pathsEqual, resolvePath } from "../utils/paths.ts";
 import { stripBom } from "../utils/text.ts";
 import { createEventBus, type EventBus } from "./event-bus.ts";
@@ -47,10 +47,10 @@ import {
 } from "./source-info.ts";
 import { resetTimings } from "./timings.ts";
 
-// Pi-Bolt shares Pi's agent directory, so a package installed for one runtime is loaded by the other too.
+// Rapid Pi shares Pi's agent directory, so a package installed for one runtime is loaded by the other too.
 const TOOL_CONFLICT_HINT =
-	". Two packages provide this tool: exclude one with pi-bolt remove --pi-bolt <source>" +
-	" (add --local for a project package; https://github.com/opensec-git/Pi-Bolt#pi-and-pi-bolt-side-by-side)";
+	". Two packages provide this tool: exclude one with rapid-pi remove --rapid-pi <source>" +
+	" (add --local for a project package; https://github.com/opensec-git/Rapid Pi#pi-and-rapid-pi-side-by-side)";
 
 export interface ResourceExtensionPaths {
 	skillPaths?: Array<{ path: string; metadata: PathMetadata }>;
@@ -1299,7 +1299,7 @@ export class DefaultResourceLoader implements ResourceLoader {
 				if (existingOwner && existingOwner !== ext.path) {
 					conflicts.push({
 						path: ext.path,
-						message: `Tool "${toolName}" conflicts with ${existingOwner}${PIBOLT ? TOOL_CONFLICT_HINT : ""}`,
+						message: `Tool "${toolName}" conflicts with ${existingOwner}${RAPIDPI ? TOOL_CONFLICT_HINT : ""}`,
 					});
 				} else {
 					toolOwners.set(toolName, ext.path);

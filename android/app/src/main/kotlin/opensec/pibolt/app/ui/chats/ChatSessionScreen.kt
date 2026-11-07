@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.chats
+package opensec.rapidpi.app.ui.chats
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AutoAwesome
@@ -20,13 +20,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.engine.ChatSpace
-import opensec.pibolt.app.ui.session.LocalUi
-import opensec.pibolt.app.ui.session.SessionContent
-import opensec.pibolt.app.ui.session.StarterPrompt
-import opensec.pibolt.app.ui.session.WelcomeContent
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.engine.ChatSpace
+import opensec.rapidpi.app.ui.session.LocalUi
+import opensec.rapidpi.app.ui.session.SessionContent
+import opensec.rapidpi.app.ui.session.StarterPrompt
+import opensec.rapidpi.app.ui.session.WelcomeContent
+import opensec.rapidpi.protocol.session.UserItem
 import androidx.compose.ui.graphics.vector.ImageVector
 import java.time.LocalDateTime
 

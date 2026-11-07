@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,17 +27,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.background.BackgroundSetup
-import opensec.pibolt.app.background.OemSetup
-import opensec.pibolt.app.ui.components.GroupRow
-import opensec.pibolt.app.ui.components.GhostButton
-import opensec.pibolt.app.ui.components.ListRow
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.RowEnd
-import opensec.pibolt.app.ui.components.RowInsetSheet
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.background.BackgroundSetup
+import opensec.rapidpi.app.background.OemSetup
+import opensec.rapidpi.app.ui.components.GroupRow
+import opensec.rapidpi.app.ui.components.GhostButton
+import opensec.rapidpi.app.ui.components.ListRow
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.RowEnd
+import opensec.rapidpi.app.ui.components.RowInsetSheet
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.Pi
 
 /**
  * Settings → Run in background: one row with the current state; it opens [BackgroundRunSheet]. Self-contained, for any

@@ -1,11 +1,11 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.app.ui.projects.PillPlus
-import opensec.pibolt.app.ui.projects.ProjectRules
-import opensec.pibolt.app.ui.session.SwitcherRules
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.app.ui.session.Welcome
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.app.ui.projects.PillPlus
+import opensec.rapidpi.app.ui.projects.ProjectRules
+import opensec.rapidpi.app.ui.session.SwitcherRules
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.app.ui.session.Welcome
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

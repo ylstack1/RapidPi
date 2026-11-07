@@ -1,32 +1,32 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.app.engine.SessionIndex
-import opensec.pibolt.app.session.SubagentTail
-import opensec.pibolt.app.ui.session.FoldRow
-import opensec.pibolt.app.ui.session.MdCache
-import opensec.pibolt.app.ui.session.SubagentNoticeRow
-import opensec.pibolt.app.ui.session.SubagentRow
-import opensec.pibolt.app.ui.session.SubagentStackRow
-import opensec.pibolt.app.ui.session.ToolRow
-import opensec.pibolt.app.ui.session.TranscriptModel
-import opensec.pibolt.app.ui.session.subagent.SubagentFormat
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.Subagent
-import opensec.pibolt.protocol.session.SubagentNoticeItem
-import opensec.pibolt.protocol.session.SubagentStatus
-import opensec.pibolt.protocol.session.SubagentTranscript
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.app.engine.SessionIndex
+import opensec.rapidpi.app.session.SubagentTail
+import opensec.rapidpi.app.ui.session.FoldRow
+import opensec.rapidpi.app.ui.session.MdCache
+import opensec.rapidpi.app.ui.session.SubagentNoticeRow
+import opensec.rapidpi.app.ui.session.SubagentRow
+import opensec.rapidpi.app.ui.session.SubagentStackRow
+import opensec.rapidpi.app.ui.session.ToolRow
+import opensec.rapidpi.app.ui.session.TranscriptModel
+import opensec.rapidpi.app.ui.session.subagent.SubagentFormat
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.Subagent
+import opensec.rapidpi.protocol.session.SubagentNoticeItem
+import opensec.rapidpi.protocol.session.SubagentStatus
+import opensec.rapidpi.protocol.session.SubagentTranscript
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
+import opensec.rapidpi.protocol.str
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test
@@ -321,7 +321,7 @@ class SubagentUiTest {
     fun theNoteSaysWhereMessagesComeFrom() {
         val running = run("n")
         val withMessages = running.copy(transcript = SubagentTranscript("/f", items = listOf(UserItem("u", "go"))))
-        assertEquals("Live view needs Pi-Bolt 1.1.5 on the computer", SubagentFormat.note(running, SubagentFormat.Source.Unavailable))
+        assertEquals("Live view needs Rapid Pi 1.1.5 on the computer", SubagentFormat.note(running, SubagentFormat.Source.Unavailable))
         assertEquals("Loading messages…", SubagentFormat.note(running, SubagentFormat.Source.Stream))
         assertEquals("Loading messages…", SubagentFormat.note(running, SubagentFormat.Source.Device))
         assertEquals(null, SubagentFormat.note(withMessages, SubagentFormat.Source.Stream))

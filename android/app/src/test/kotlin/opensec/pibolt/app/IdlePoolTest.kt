@@ -1,7 +1,7 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.engine.IdlePool
-import opensec.pibolt.app.engine.IdlePool.Want
+import opensec.rapidpi.app.engine.IdlePool
+import opensec.rapidpi.app.engine.IdlePool.Want
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

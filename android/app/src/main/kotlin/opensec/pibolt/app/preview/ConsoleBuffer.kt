@@ -1,9 +1,9 @@
-package opensec.pibolt.app.preview
+package opensec.rapidpi.app.preview
 
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.int
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.protocol.str
 
 /**
  * The preview page's console: messages from `WebChromeClient.onConsoleMessage`, uncaught errors with their stacks from
@@ -74,7 +74,7 @@ class ConsoleBuffer(private val capacity: Int = 500, private val maxChars: Int =
 
     companion object {
         /** An invisible separator and a word: what the page hook's console errors start with. */
-        const val HOOK_MARK = "⁣pibolt-error "
+        const val HOOK_MARK = "⁣rapidpi-error "
         private const val STACK_LINES = 6
 
         /** The most text `preview_console` returns: the newest entries that fit. */

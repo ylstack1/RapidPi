@@ -1,4 +1,4 @@
-package opensec.pibolt.app.update
+package opensec.rapidpi.app.update
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -35,7 +35,7 @@ sealed interface VerifyResult {
  */
 object UpdateVerifier {
     const val NOT_OPENSEC = "This update is not signed by OpenSec; not installed."
-    const val TEST_BUILD = "This copy of Pi-Bolt is a test build signed with another key. Install the update from pi-bolt.opensec.in."
+    const val TEST_BUILD = "This copy of Rapid Pi is a test build signed with another key. Install the update from rapid-pi.opensec.in."
 
     fun verify(file: File, info: UpdateInfo, inspector: PackageInspector): VerifyResult {
         if (!file.isFile) return VerifyResult.Refused("The download is missing; try again.")

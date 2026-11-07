@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,16 +11,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.backend.ConnectionState
-import opensec.pibolt.protocol.backend.DisconnectReason
-import opensec.pibolt.protocol.backend.HostHello
-import opensec.pibolt.protocol.backend.SessionBackend
-import opensec.pibolt.protocol.rpc.RemoteProject
-import opensec.pibolt.protocol.rpc.RemoteSessionInfo
-import opensec.pibolt.protocol.rpc.RpcClient
-import opensec.pibolt.protocol.rpc.RpcResponse
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SessionState
+import opensec.rapidpi.protocol.backend.ConnectionState
+import opensec.rapidpi.protocol.backend.DisconnectReason
+import opensec.rapidpi.protocol.backend.HostHello
+import opensec.rapidpi.protocol.backend.SessionBackend
+import opensec.rapidpi.protocol.rpc.RemoteProject
+import opensec.rapidpi.protocol.rpc.RemoteSessionInfo
+import opensec.rapidpi.protocol.rpc.RpcClient
+import opensec.rapidpi.protocol.rpc.RpcResponse
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SessionState
 import java.time.Instant
 import kotlin.test.AfterTest
 import kotlin.test.Test

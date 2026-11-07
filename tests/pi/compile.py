@@ -1,7 +1,7 @@
-"""`pi-bolt compile` with a release's compile kit and runtime, into an installation made from the build under test:
+"""`rapid-pi compile` with a release's compile kit and runtime, into an installation made from the build under test:
 the extensions installed here are compiled in and used in place of their files, and find the skills and prompts beside their
-modules from import.meta.url as they do loaded from their files (#53); one changed since is loaded from its files with a warning; one removed since is not loaded; the build it replaced is kept, and `pi-bolt update --rollback` swaps the two
-(and back); `pi-bolt update --channel beta` is kept for the installation; and `--out` builds without installing. An import()
+modules from import.meta.url as they do loaded from their files (#53); one changed since is loaded from its files with a warning; one removed since is not loaded; the build it replaced is kept, and `rapid-pi update --rollback` swaps the two
+(and back); `rapid-pi update --channel beta` is kept for the installation; and `--out` builds without installing. An import()
 of a package that is not installed is left to run time, where it fails inside the extension as loaded from its files (#160);
 and an extension finds files, modules and Pi's packages from where it is installed, as loaded from its files (loader parity). An
 extension that imports Pi's modules by the other names Pi's loader gives them (@mariozechner/pi-*, @sinclair/typebox, the pi-ai
@@ -14,7 +14,7 @@ error, and doctor, `compile --status` and `update --rollback` still work.
 It says what it does as it goes, lists a project's extensions as not compiled in, removes the work folder of a compile that
 was killed and an old compile.log, and an extension that writes into its own folder is not "changed" by that. Uses the bench
 fake model.
-  python3 tests/pi/compile.py PI KIT RUNTIME     (KIT: pi-bolt-kit-<platform>.tar.gz or its folder; RUNTIME: the runtime's bun)
+  python3 tests/pi/compile.py PI KIT RUNTIME     (KIT: rapid-pi-kit-<platform>.tar.gz or its folder; RUNTIME: the runtime's bun)
 """
 import json
 import os
@@ -46,7 +46,7 @@ def check(name, ok, detail=""):
 PROBE = """import { writeFileSync } from "node:fs";
 export default function () {
 	const how = new Error().stack.split("\\n")[1].includes("/$bunfs/") ? "compiled" : "files";
-	writeFileSync(`${process.env.PIBOLT_PROBE}/NAME`, `${how} ${import.meta.url}`);
+	writeFileSync(`${process.env.RAPIDPI_PROBE}/NAME`, `${how} ${import.meta.url}`);
 }
 """
 # And one that registers the skills and prompts beside its module, found from import.meta.url as extensions commonly do.
@@ -73,7 +73,7 @@ export default async function () {
 	} catch (error) {
 		found = "caught";
 	}
-	writeFileSync(`${process.env.PIBOLT_PROBE}/optional-ext`, `${how} ${found}`);
+	writeFileSync(`${process.env.RAPIDPI_PROBE}/optional-ext`, `${how} ${found}`);
 }
 """
 
@@ -86,7 +86,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 function default_1() {
 	const how = new Error().stack.split("\\n")[1].includes("/$bunfs/") ? "compiled" : "files";
-	require("node:fs").writeFileSync(`${process.env.PIBOLT_PROBE}/tsc-cjs`, how);
+	require("node:fs").writeFileSync(`${process.env.RAPIDPI_PROBE}/tsc-cjs`, how);
 }
 """
 PARITY = """import { readFileSync, writeFileSync } from "node:fs";
@@ -109,7 +109,7 @@ export default async function () {
 	await see("require", () => require(name("./dyn.cjs")));
 	await see("metaResolve", () => import.meta.resolve("./data.txt"));
 	await see("fromDisk", async () => (await import(pathToFileURL(join(__dirname, name("disk.ts"))).href)).found);
-	writeFileSync(`${process.env.PIBOLT_PROBE}/parity-ext`, `${how} ${JSON.stringify(seen)}`);
+	writeFileSync(`${process.env.RAPIDPI_PROBE}/parity-ext`, `${how} ${JSON.stringify(seen)}`);
 }
 """
 DISK = """import { Type } from "typebox";
@@ -130,16 +130,16 @@ export default async function () {
 	const { Container } = await import("@mariozechner/pi-tui");
 	const same = Object.getPrototypeOf(CustomEditor) === Editor;
 	const got = [visibleWidth("abc"), typeof getModel, typeof Type.Object, typeof Container, same].join(",");
-	writeFileSync(`${process.env.PIBOLT_PROBE}/old-names-ext`, `${how} ${got}`);
+	writeFileSync(`${process.env.RAPIDPI_PROBE}/old-names-ext`, `${how} ${got}`);
 }
 """
 
 version = subprocess.run([pi, "--version"], capture_output=True, text=True, check=True).stdout
-platform, variant = re.search(r"Pi-Bolt [^,]+, (\w+)-(\S+), JIT", version).groups()
+platform, variant = re.search(r"Rapid Pi [^,]+, (\w+)-(\S+), JIT", version).groups()
 with tempfile.TemporaryDirectory(prefix="pibolt-compile-") as tmp:
     tmp = Path(tmp)
     install = tmp / "install"
-    build = install / f"pi-bolt-{platform}-{variant}"
+    build = install / f"rapid-pi-{platform}-{variant}"
     shutil.copytree(Path(pi).parent, build, symlinks=True)
     agent, probe = tmp / "agent", tmp / "probe"
     (agent / "extensions" / "folder-ext").mkdir(parents=True)
@@ -172,7 +172,7 @@ with tempfile.TemporaryDirectory(prefix="pibolt-compile-") as tmp:
     with harness.fake_model() as port, harness.pi_home(port) as home:
         for name in ("models.json", "auth.json", "settings.json"):
             shutil.copy(home / name, agent / name)
-        env = harness.pi_env(agent, {"PIBOLT_PROBE": str(probe)})
+        env = harness.pi_env(agent, {"RAPIDPI_PROBE": str(probe)})
 
         def compile_(*args, cwd=tmp):
             return subprocess.run([str(build / "pi"), "compile", "--kit", kit, "--runtime", runtime, *args], env=env,
@@ -227,10 +227,10 @@ with tempfile.TemporaryDirectory(prefix="pibolt-compile-") as tmp:
         started = time.time()
         r = compile_()
         took = time.time() - started
-        check("pi-bolt compile succeeds", r.returncode == 0, r.stdout[-500:] + r.stderr[-1500:])
+        check("rapid-pi compile succeeds", r.returncode == 0, r.stdout[-500:] + r.stderr[-1500:])
         check("it says what it does as it goes",
               all(phase in r.stderr for phase in ("finding the extensions", "bundling Pi", "compiling ahead of time"))
-              and re.search(r"Compiled into Pi-Bolt \S+ in \d+ s:", r.stdout), r.stdout[-300:] + r.stderr[-800:])
+              and re.search(r"Compiled into Rapid Pi \S+ in \d+ s:", r.stdout), r.stdout[-300:] + r.stderr[-800:])
         check("it removes the work folder of a compile that was killed, and the old compile.log",
               not (install / ".compile-Kil1ed").exists() and not (install / "compile.log").exists()
               and "removed what a compile that was killed left" in r.stderr, r.stderr[-800:])
@@ -244,8 +244,8 @@ with tempfile.TemporaryDirectory(prefix="pibolt-compile-") as tmp:
               sorted(record.get("extensions", []))
               == ["file-ext", "folder-ext", "old-names-ext", "optional-ext", "parity-ext", "tsc-cjs"], str(record))
         check("the build it replaced is kept as .previous", (install / f"{build.name}.previous" / "pi").exists())
-        about = (build / "pi-bolt.txt").read_text()
-        check("pi-bolt.txt says what is compiled in", "Extensions compiled in" in about and "file-ext" in about, about)
+        about = (build / "rapid-pi.txt").read_text()
+        check("rapid-pi.txt says what is compiled in", "Extensions compiled in" in about and "file-ext" in about, about)
         out = subprocess.run([str(build / "pi"), "--version"], capture_output=True, text=True).stdout
         check("--version is the same version", out == version, f"{out!r} vs {version!r}")
 
@@ -299,14 +299,14 @@ with tempfile.TemporaryDirectory(prefix="pibolt-compile-") as tmp:
 
         r = pi_bolt("update", "--rollback")
         check("update --rollback puts back the build compile replaced",
-              r.returncode == 0 and "Extensions compiled in" not in (build / "pi-bolt.txt").read_text()
-              and "Extensions compiled in" in (install / f"{build.name}.previous" / "pi-bolt.txt").read_text(),
+              r.returncode == 0 and "Extensions compiled in" not in (build / "rapid-pi.txt").read_text()
+              and "Extensions compiled in" in (install / f"{build.name}.previous" / "rapid-pi.txt").read_text(),
               r.stdout + r.stderr)
         r, loaded = session()
         check("after the rollback the extensions load from their files again", loaded["folder-ext"][0] == "files", str(loaded))
         r = pi_bolt("update", "--rollback")
         check("update --rollback again goes forward again",
-              r.returncode == 0 and "Extensions compiled in" in (build / "pi-bolt.txt").read_text(), r.stdout + r.stderr)
+              r.returncode == 0 and "Extensions compiled in" in (build / "rapid-pi.txt").read_text(), r.stdout + r.stderr)
         r = pi_bolt("update", "--channel", "beta")
         check("update --channel beta is kept for the installation",
               (install / "channel").exists() and (install / "channel").read_text().strip() == "beta", r.stdout + r.stderr)
@@ -334,10 +334,10 @@ with tempfile.TemporaryDirectory(prefix="pibolt-compile-") as tmp:
         (agent / "extensions" / "compiled-only.ts").write_text(
             'import { writeFileSync } from "node:fs";\n'
             'if (new Error().stack.includes("/$bunfs/")) throw new Error("compiled-only: not in a compiled build");\n'
-            'export default function () {\n\twriteFileSync(`${process.env.PIBOLT_PROBE}/compiled-only`, "files ok");\n}\n')
-        # One whose top-level code throws at a start, when its configuration is missing (PIBOLT_ENV_THROW).
+            'export default function () {\n\twriteFileSync(`${process.env.RAPIDPI_PROBE}/compiled-only`, "files ok");\n}\n')
+        # One whose top-level code throws at a start, when its configuration is missing (RAPIDPI_ENV_THROW).
         (agent / "extensions" / "env-throw.ts").write_text(
-            'if (process.env.PIBOLT_ENV_THROW) throw new Error("env-throw: missing config");\n'
+            'if (process.env.RAPIDPI_ENV_THROW) throw new Error("env-throw: missing config");\n'
             + PROBE.replace("NAME", "env-throw"))
         r = compile_()
         check("one extension that does not bundle, or fails compiled in, does not stop the compile", r.returncode == 0,
@@ -366,19 +366,19 @@ with tempfile.TemporaryDirectory(prefix="pibolt-compile-") as tmp:
               f"{seen} {r.stderr[-500:]}")
         check("the one that does not resolve fails alone from its files, as in Pi",
               re.search(r'Failed to load extension ".*required-ext\.ts"', r.stderr) is not None, r.stderr[-800:])
-        r, seen = probes({"PIBOLT_ENV_THROW": "1"})
+        r, seen = probes({"RAPIDPI_ENV_THROW": "1"})
         check("an extension whose top-level code throws at a start fails alone, with Pi's error",
               "env-throw: missing config" in r.stderr and seen.get("folder-ext", [None])[0] == "compiled"
               and "env-throw" not in seen, f"{r.returncode} {seen} {r.stderr[-800:]}")
-        throw_env = {**env, "PIBOLT_ENV_THROW": "1"}
+        throw_env = {**env, "RAPIDPI_ENV_THROW": "1"}
         for args in (["doctor", "--offline"], ["compile", "--status"], ["update", "--rollback"], ["update", "--rollback"]):
             r = subprocess.run([str(build / "pi"), *args], env=throw_env, capture_output=True, text=True,
                                stdin=subprocess.DEVNULL, cwd=tmp)
-            check(f"with it throwing, `pi-bolt {' '.join(args)}` works", r.returncode == 0 and "missing config" not in r.stderr,
+            check(f"with it throwing, `rapid-pi {' '.join(args)}` works", r.returncode == 0 and "missing config" not in r.stderr,
                   r.stdout[-300:] + r.stderr[-500:])
         doctor = subprocess.run([str(build / "pi"), "doctor", "--offline"], env=env, capture_output=True, text=True,
                                 stdin=subprocess.DEVNULL, cwd=tmp).stdout
-        check("doctor lists the extensions compiled in", "compiled in" in doctor and "env-throw.ts: by pi-bolt compile" in doctor,
+        check("doctor lists the extensions compiled in", "compiled in" in doctor and "env-throw.ts: by rapid-pi compile" in doctor,
               doctor[-1500:])
 
         # A function too big for the compiler (a CommonJS dependency of 40,000 statements, one function of over 256 KB of

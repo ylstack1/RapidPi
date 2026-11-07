@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -68,15 +68,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import opensec.pibolt.app.ui.components.CodeBlock
-import opensec.pibolt.app.ui.components.MdTable
-import opensec.pibolt.app.ui.diagram.MermaidBlock
-import opensec.pibolt.app.ui.theme.Mono
-import opensec.pibolt.app.ui.theme.MonoFeatures
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.components.CodeBlock
+import opensec.rapidpi.app.ui.components.MdTable
+import opensec.rapidpi.app.ui.diagram.MermaidBlock
+import opensec.rapidpi.app.ui.theme.Mono
+import opensec.rapidpi.app.ui.theme.MonoFeatures
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
 
 private const val CODE_TAG = "code"
 private const val IMAGE_TAG = "image"

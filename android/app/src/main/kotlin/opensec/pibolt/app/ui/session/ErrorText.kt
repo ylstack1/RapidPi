@@ -1,13 +1,13 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.intOrNull
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.NoticeKind
-import opensec.pibolt.protocol.session.RetryInfo
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.NoticeKind
+import opensec.rapidpi.protocol.session.RetryInfo
 
 /** What went wrong, as far as the user can act on it. */
 enum class ErrorClass { ContextOverflow, Auth, Billing, RateLimit, Overloaded, Network, Other }

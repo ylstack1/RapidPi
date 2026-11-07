@@ -1,4 +1,4 @@
-// Pi-Bolt documentation: copy buttons, platform tabs, the mobile menu, the current section in "On this page", and search.
+// Rapid Pi documentation: copy buttons, platform tabs, the mobile menu, the current section in "On this page", and search.
 (function () {
   "use strict";
 

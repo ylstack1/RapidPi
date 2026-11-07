@@ -6,7 +6,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import lockfile from "proper-lockfile";
 import { CONFIG_DIR_NAME, getAgentDir } from "../config.ts";
-import { PIBOLT } from "../pi-bolt.ts";
+import { RAPIDPI } from "../rapid-pi.ts";
 import { getFileRevision, normalizePath, resolvePath } from "../utils/paths.ts";
 import { stripBom } from "../utils/text.ts";
 import type { CompactionSettings as ResolvedCompactionSettings } from "./compaction/compaction.ts";
@@ -95,19 +95,19 @@ function deepMergeObjects(base: Record<string, unknown>, overrides: Record<strin
 }
 
 /** Tools enabled at startup when `defaultTools` does not change them. */
-/** Pi's default tools; in Pi-Bolt, grep and find too (searching in-process: core/tools/native-search.ts). */
+/** Pi's default tools; in Rapid Pi, grep and find too (searching in-process: core/tools/native-search.ts). */
 export const DEFAULT_TOOL_NAMES: readonly string[] =
-	PIBOLT !== undefined ? ["read", "bash", "edit", "write", "grep", "find"] : ["read", "bash", "edit", "write"];
+	RAPIDPI !== undefined ? ["read", "bash", "edit", "write", "grep", "find"] : ["read", "bash", "edit", "write"];
 
 /** FFF's extension (opensec-pi-fff, @ff-labs/pi-fff), by the path it is loaded from: it brings search tools of its own. */
 const FFF_EXTENSION = /(?:^builtin:|[\\/]node_modules[\\/])(?:opensec-pi-fff|@ff-labs[\\/]pi-fff)(?:[\\/]|$)/;
 
 /**
- * The default tools with these extensions loaded: in Pi-Bolt, without its grep and find when FFF is loaded (it registers
+ * The default tools with these extensions loaded: in Rapid Pi, without its grep and find when FFF is loaded (it registers
  * its own, under those names or as ffgrep and fffind).
  */
 export function defaultToolNamesFor(extensionPaths: readonly string[]): readonly string[] {
-	if (PIBOLT === undefined || !extensionPaths.some((path) => FFF_EXTENSION.test(path))) return DEFAULT_TOOL_NAMES;
+	if (RAPIDPI === undefined || !extensionPaths.some((path) => FFF_EXTENSION.test(path))) return DEFAULT_TOOL_NAMES;
 	return DEFAULT_TOOL_NAMES.filter((name) => name !== "grep" && name !== "find");
 }
 
@@ -335,10 +335,10 @@ export class InMemorySettingsStorage implements SettingsStorage {
 }
 
 /**
- * OpenSec's extensions for Pi-Bolt are Bun builds, which Pi on Node cannot load; installers before Pi-Bolt 0.8.4 added them
- * to `packages`, so Pi stopped at them. Move only those entries to Pi-Bolt's additive list.
+ * OpenSec's extensions for Rapid Pi are Bun builds, which Pi on Node cannot load; installers before Rapid Pi 0.8.4 added them
+ * to `packages`, so Pi stopped at them. Move only those entries to Rapid Pi's additive list.
  */
-const PIBOLT_ONLY_PACKAGE = /^npm:opensec-pi-(?:subagents|todo|fff)(?:@|$)/;
+const RAPIDPI_ONLY_PACKAGE = /^npm:opensec-pi-(?:subagents|todo|fff)(?:@|$)/;
 
 function sourceOfPackage(entry: unknown): string | undefined {
 	if (typeof entry === "string") return entry;
@@ -350,11 +350,11 @@ function sourceOfPackage(entry: unknown): string | undefined {
 
 function isPiBoltOnlyPackage(entry: unknown): boolean {
 	const source = sourceOfPackage(entry);
-	return source !== undefined && PIBOLT_ONLY_PACKAGE.test(source);
+	return source !== undefined && RAPIDPI_ONLY_PACKAGE.test(source);
 }
 
-function piBoltSettingsOf(settings: Record<string, unknown>): Record<string, unknown> {
-	return (typeof settings.piBolt === "object" && settings.piBolt !== null ? settings.piBolt : {}) as Record<
+function rapidPiSettingsOf(settings: Record<string, unknown>): Record<string, unknown> {
+	return (typeof settings.rapidPi === "object" && settings.rapidPi !== null ? settings.rapidPi : {}) as Record<
 		string,
 		unknown
 	>;
@@ -367,16 +367,16 @@ function packageIdentityOf(entry: unknown, baseDir: string): string | undefined 
 		: getPackageIdentity(source.startsWith("-") ? source.slice(1) : source, baseDir);
 }
 
-/** `settings` with Pi-Bolt's only packages moved out of Pi's list, or undefined when Pi's list has none. */
+/** `settings` with Rapid Pi's only packages moved out of Pi's list, or undefined when Pi's list has none. */
 function withPiBoltOnlyPackagesMoved(
 	settings: Record<string, unknown>,
 	baseDir: string,
 ): Record<string, unknown> | undefined {
 	const packages = settings.packages;
 	if (!Array.isArray(packages) || !packages.some(isPiBoltOnlyPackage)) return undefined;
-	const piBolt = piBoltSettingsOf(settings);
-	const hasList = Array.isArray(piBolt.packages);
-	const own: unknown[] = hasList ? (piBolt.packages as unknown[]) : [];
+	const rapidPi = rapidPiSettingsOf(settings);
+	const hasList = Array.isArray(rapidPi.packages);
+	const own: unknown[] = hasList ? (rapidPi.packages as unknown[]) : [];
 	const ownSources = new Set(own.map((entry) => packageIdentityOf(entry, baseDir)));
 	const moved = packages.filter(
 		(entry) => isPiBoltOnlyPackage(entry) && !ownSources.has(packageIdentityOf(entry, baseDir)),
@@ -385,7 +385,7 @@ function withPiBoltOnlyPackagesMoved(
 		...settings,
 		packages: packages.filter((entry) => !isPiBoltOnlyPackage(entry)),
 		// A list made here is an overlay; an existing unmarked one is a legacy copy, converted next.
-		piBolt: { ...piBolt, packages: [...own, ...moved], ...(hasList ? {} : { packagesOverlay: true }) },
+		rapidPi: { ...rapidPi, packages: [...own, ...moved], ...(hasList ? {} : { packagesOverlay: true }) },
 	};
 }
 
@@ -401,22 +401,22 @@ function isSamePackageDeclaration(left: unknown, right: unknown, baseDir: string
 }
 
 /**
- * Pi-Bolt before 0.9.1 kept `piBolt.packages` as an independent list: its first install or removal copied `packages` into it
+ * Rapid Pi before 0.9.1 kept `rapidPi.packages` as an independent list: its first install or removal copied `packages` into it
  * and edited the copy. The list is now an overlay on `packages`, so a shared package missing from a copy would be loaded again.
  * Convert a copy once: exclude each shared package it lacks, drop entries identical to their shared entry, and keep the rest
- * (replacements and Pi-Bolt-only additions). `packagesOverlay` marks a list as an overlay; every writer of the list sets it.
+ * (replacements and Rapid Pi-only additions). `packagesOverlay` marks a list as an overlay; every writer of the list sets it.
  * Returns undefined when there is nothing to change.
  */
 function withLegacyPiBoltPackagesConverted(
 	settings: Record<string, unknown>,
 	baseDir: string,
 ): Record<string, unknown> | undefined {
-	const piBolt = piBoltSettingsOf(settings);
-	if (!Array.isArray(piBolt.packages) || piBolt.packagesOverlay === true) return undefined;
-	const own: unknown[] = piBolt.packages;
+	const rapidPi = rapidPiSettingsOf(settings);
+	if (!Array.isArray(rapidPi.packages) || rapidPi.packagesOverlay === true) return undefined;
+	const own: unknown[] = rapidPi.packages;
 	// Exclusions exist only in overlays: such a list was written for the overlay format and is only marked.
 	if (own.some((entry) => typeof entry === "string" && entry.startsWith("-"))) {
-		return { ...settings, piBolt: { ...piBolt, packagesOverlay: true } };
+		return { ...settings, rapidPi: { ...rapidPi, packagesOverlay: true } };
 	}
 	const shared: unknown[] = Array.isArray(settings.packages) ? settings.packages : [];
 	const identity = (entry: unknown) => packageIdentityOf(entry, baseDir);
@@ -433,10 +433,10 @@ function withLegacyPiBoltPackagesConverted(
 		const same = key === undefined ? [] : shared.filter((sharedEntry) => identity(sharedEntry) === key);
 		return same.length === 0 || !same.every((sharedEntry) => isSamePackageDeclaration(sharedEntry, entry, baseDir));
 	});
-	return { ...settings, piBolt: { ...piBolt, packages: [...exclusions.values(), ...kept], packagesOverlay: true } };
+	return { ...settings, rapidPi: { ...rapidPi, packages: [...exclusions.values(), ...kept], packagesOverlay: true } };
 }
 
-/** Pi-Bolt's package migrations for one settings file, or undefined when it needs none. */
+/** Rapid Pi's package migrations for one settings file, or undefined when it needs none. */
 function withPiBoltPackagesMigrated(
 	settings: Record<string, unknown>,
 	scope: SettingsScope,
@@ -572,7 +572,7 @@ export class SettingsManager {
 			return {};
 		}
 		let settings = JSON.parse(stripBom(content));
-		if (PIBOLT !== undefined) {
+		if (RAPIDPI !== undefined) {
 			const baseDir = getPackageBaseDir(scope, settingsPaths);
 			const migrated = withPiBoltPackagesMigrated(settings, scope, baseDir);
 			if (migrated) {
@@ -585,7 +585,7 @@ export class SettingsManager {
 						return next ? JSON.stringify(next, null, 2) : undefined;
 					});
 				} catch {
-					// (Not written: Pi-Bolt uses the migrated lists in memory, and migrates the file at a later start.)
+					// (Not written: Rapid Pi uses the migrated lists in memory, and migrates the file at a later start.)
 				}
 			}
 		}
@@ -675,7 +675,7 @@ export class SettingsManager {
 		return structuredClone(this.settings);
 	}
 
-	/** Raw global declarations, including separate shared and Pi-Bolt package lists. */
+	/** Raw global declarations, including separate shared and Rapid Pi package lists. */
 	getGlobalSettings(): Settings {
 		return structuredClone(this.globalSettings);
 	}
@@ -1063,7 +1063,7 @@ export class SettingsManager {
 		this.save();
 	}
 
-	/** The background service's tunnel (`pi-bolt service install --no-tunnel` sets "off"). */
+	/** The background service's tunnel (`rapid-pi service install --no-tunnel` sets "off"). */
 	setRemoteControlServiceTunnel(tunnel: NonNullable<RemoteControlSettings["tunnel"]>): void {
 		const current = this.globalSettings.remoteControl;
 		const remoteControl = current && typeof current === "object" ? current : {};
@@ -1387,7 +1387,7 @@ export class SettingsManager {
 		return this.globalSettings.deviceId;
 	}
 
-	/** As in Pi, a project `packages` list replaces the global one. A project Pi-Bolt list alone does not. */
+	/** As in Pi, a project `packages` list replaces the global one. A project Rapid Pi list alone does not. */
 	private getPackageSettingsScope(): SettingsScope {
 		return this.projectSettings.packages !== undefined ? "project" : "global";
 	}
@@ -1401,10 +1401,10 @@ export class SettingsManager {
 	getPackages(): PackageSource[] {
 		const scope = this.getPackageSettingsScope();
 		const packages = this.resolvePackages(this.packageSettings, scope);
-		if (scope === "project" || PIBOLT === undefined || !Array.isArray(this.projectSettings.piBolt?.packages)) {
+		if (scope === "project" || RAPIDPI === undefined || !Array.isArray(this.projectSettings.rapidPi?.packages)) {
 			return packages;
 		}
-		// Project Pi-Bolt entries without project `packages` add to the global packages or replace one of the same
+		// Project Rapid Pi entries without project `packages` add to the global packages or replace one of the same
 		// identity, as the package manager loads them; their exclusions apply only to the project's own (empty) list.
 		const project = this.resolvePackages(this.projectSettings, "project");
 		const identity = (entry: PackageSource, entryScope: SettingsScope) =>
@@ -1423,7 +1423,7 @@ export class SettingsManager {
 	}
 
 	/** Flush queued writes and read current package declarations without resetting unrelated runtime settings. */
-	async getCurrentPackageSettings(scope: SettingsScope): Promise<Pick<Settings, "packages" | "piBolt">> {
+	async getCurrentPackageSettings(scope: SettingsScope): Promise<Pick<Settings, "packages" | "rapidPi">> {
 		await this.flush();
 		if (scope === "project" && !this.projectTrusted) return {};
 		let content: string | undefined;
@@ -1435,8 +1435,8 @@ export class SettingsManager {
 			});
 		// An unreadable declaration file must abort removal, not authorise deletion of shared files.
 		let persisted: Settings = content ? JSON.parse(stripBom(content)) : {};
-		if (PIBOLT !== undefined) {
-			// A file written by an older Pi-Bolt since this manager loaded it still holds a legacy copy.
+		if (RAPIDPI !== undefined) {
+			// A file written by an older Rapid Pi since this manager loaded it still holds a legacy copy.
 			persisted =
 				(withLegacyPiBoltPackagesConverted(
 					persisted as Record<string, unknown>,
@@ -1448,8 +1448,8 @@ export class SettingsManager {
 		const nested = scope === "project" ? this.modifiedProjectNestedFields : this.modifiedNestedFields;
 		return structuredClone({
 			packages: modified.has("packages") ? current.packages : persisted.packages,
-			piBolt: {
-				packages: nested.get("piBolt")?.has("packages") ? current.piBolt?.packages : persisted.piBolt?.packages,
+			rapidPi: {
+				packages: nested.get("rapidPi")?.has("packages") ? current.rapidPi?.packages : persisted.rapidPi?.packages,
 			},
 		});
 	}
@@ -1457,24 +1457,24 @@ export class SettingsManager {
 	private resolvePackages(settings: Settings, scope: SettingsScope, baseDir?: string): PackageSource[] {
 		const shared = settings.packages ?? [];
 		baseDir ??= getPackageBaseDir(scope, this.settingsPaths);
-		const own = Array.isArray(settings.piBolt?.packages) ? settings.piBolt.packages : [];
-		return structuredClone(PIBOLT === undefined ? shared : resolvePackageOverlay(shared, own, baseDir));
+		const own = Array.isArray(settings.rapidPi?.packages) ? settings.rapidPi.packages : [];
+		return structuredClone(RAPIDPI === undefined ? shared : resolvePackageOverlay(shared, own, baseDir));
 	}
 
 	/**
-	 * Write raw shared declarations. The piBolt option explicitly selects the additive Pi-Bolt list, marked as an overlay so
+	 * Write raw shared declarations. The rapidPi option explicitly selects the additive Rapid Pi list, marked as an overlay so
 	 * it is never taken for a legacy copy (withLegacyPiBoltPackagesConverted).
 	 */
-	setPackages(packages: PackageSource[], options?: { piBolt?: boolean }): void {
-		if (options?.piBolt) {
-			if (PIBOLT === undefined) throw new Error("Pi-Bolt packages require a Pi-Bolt build");
-			this.globalSettings.piBolt = {
-				...this.globalSettings.piBolt,
+	setPackages(packages: PackageSource[], options?: { rapidPi?: boolean }): void {
+		if (options?.rapidPi) {
+			if (RAPIDPI === undefined) throw new Error("Rapid Pi packages require a Rapid Pi build");
+			this.globalSettings.rapidPi = {
+				...this.globalSettings.rapidPi,
 				packages: structuredClone(packages),
 				packagesOverlay: true,
 			};
-			this.markModified("piBolt", "packages");
-			this.markModified("piBolt", "packagesOverlay");
+			this.markModified("rapidPi", "packages");
+			this.markModified("rapidPi", "packagesOverlay");
 		} else {
 			this.globalSettings.packages = structuredClone(packages);
 			this.markModified("packages");
@@ -1483,14 +1483,14 @@ export class SettingsManager {
 	}
 
 	/** Write raw project declarations; never pass the resolved overlay here. */
-	setProjectPackages(packages: PackageSource[], options?: { piBolt?: boolean }): void {
-		if (options?.piBolt) {
-			if (PIBOLT === undefined) throw new Error("Pi-Bolt packages require a Pi-Bolt build");
+	setProjectPackages(packages: PackageSource[], options?: { rapidPi?: boolean }): void {
+		if (options?.rapidPi) {
+			if (RAPIDPI === undefined) throw new Error("Rapid Pi packages require a Rapid Pi build");
 			this.assertProjectTrustedForWrite();
 			const settings = this.getProjectSettings();
-			settings.piBolt = { ...settings.piBolt, packages: structuredClone(packages), packagesOverlay: true };
-			this.markProjectModified("piBolt", "packages");
-			this.markProjectModified("piBolt", "packagesOverlay");
+			settings.rapidPi = { ...settings.rapidPi, packages: structuredClone(packages), packagesOverlay: true };
+			this.markProjectModified("rapidPi", "packages");
+			this.markProjectModified("rapidPi", "packagesOverlay");
 			this.saveProjectSettings(settings);
 		} else {
 			this.updateProjectSettings("packages", (settings) => {
@@ -1736,7 +1736,7 @@ export class SettingsManager {
 	}
 
 	/** The resolved `defaultTools` selection, or undefined when no settings layer sets it. */
-	/** `base`: what a list of only `+name`/`-name` entries changes (Pi-Bolt: `defaultToolNamesFor()`, which knows the extensions). */
+	/** `base`: what a list of only `+name`/`-name` entries changes (Rapid Pi: `defaultToolNamesFor()`, which knows the extensions). */
 	getDefaultTools(base: readonly string[] = DEFAULT_TOOL_NAMES): string[] | undefined {
 		const tools = this.settings.defaultTools;
 		if (tools === undefined) return undefined;

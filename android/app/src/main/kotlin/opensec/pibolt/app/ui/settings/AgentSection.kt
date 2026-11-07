@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,14 +11,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.AgentDefaults
-import opensec.pibolt.app.data.AgentSettingsFile
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.providers.Brand
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.protocol.rpc.ModelInfo
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.AgentDefaults
+import opensec.rapidpi.app.data.AgentSettingsFile
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.providers.Brand
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.protocol.rpc.ModelInfo
 import java.io.File
 
 /**

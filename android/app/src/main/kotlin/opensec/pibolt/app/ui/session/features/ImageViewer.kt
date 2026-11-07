@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features
+package opensec.rapidpi.app.ui.session.features
 
 import android.content.ContentValues
 import android.content.Context
@@ -57,11 +57,11 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.protocol.rpc.ImageAttachment
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.protocol.rpc.ImageAttachment
 import java.io.File
 
 /** Images for the full-screen viewer: the full encoded image when this phone has it, else the thumbnail. */
@@ -92,7 +92,7 @@ object ImageZoom {
 
 /**
  * Full-screen images on black: swipe between them, pinch or double-tap to zoom, drag to pan. Save puts the image in
- * Pictures/Pi-Bolt (Android 10+); Share sends it anywhere. Back closes.
+ * Pictures/Rapid Pi (Android 10+); Share sends it anywhere. Back closes.
  */
 @Composable
 fun ImageViewer(content: ViewerImages, onClose: () -> Unit, onMessage: (String) -> Unit) {
@@ -132,7 +132,7 @@ fun ImageViewer(content: ViewerImages, onClose: () -> Unit, onMessage: (String) 
                 IconAction(Icons.Rounded.Download, "Save to Pictures", onClick = {
                     scope.launch {
                         val saved = withContext(Dispatchers.IO) { current()?.let { saveToPictures(context, it) } ?: false }
-                        onMessage(if (saved) "Saved to Pictures/Pi-Bolt" else "Could not save the image")
+                        onMessage(if (saved) "Saved to Pictures/Rapid Pi" else "Could not save the image")
                     }
                 }, tint = Color.White)
             }
@@ -217,7 +217,7 @@ private fun saveToPictures(context: Context, bitmap: Bitmap): Boolean {
     val values = ContentValues().apply {
         put(MediaStore.Images.Media.DISPLAY_NAME, "pi-${System.currentTimeMillis()}.png")
         put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Pi-Bolt")
+        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Rapid Pi")
         put(MediaStore.Images.Media.IS_PENDING, 1)
     }
     val resolver = context.contentResolver

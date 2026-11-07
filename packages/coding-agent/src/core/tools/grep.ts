@@ -2,7 +2,7 @@ import { readFile as fsReadFile, stat as fsStat } from "node:fs/promises";
 import { spawn } from "child_process";
 import path from "path";
 import { type Static, Type } from "typebox";
-import { PIBOLT } from "../../pi-bolt.ts";
+import { RAPIDPI } from "../../rapid-pi.ts";
 import { createInterface } from "../../utils/readline.ts";
 import { detachString } from "../../utils/text.ts";
 import { ensureTool } from "../../utils/tools-manager.ts";
@@ -72,7 +72,7 @@ const defaultGrepOperations: GrepOperations = {
 export interface GrepToolOptions {
 	/** Custom operations for grep. Default: local filesystem plus ripgrep */
 	operations?: GrepOperations;
-	/** Search in-process instead of with ripgrep (native-search.ts). Default: in Pi-Bolt builds, without custom operations. */
+	/** Search in-process instead of with ripgrep (native-search.ts). Default: in Rapid Pi builds, without custom operations. */
 	native?: boolean;
 }
 
@@ -163,7 +163,7 @@ export function createGrepToolDefinition(
 	options?: GrepToolOptions,
 ): ToolDefinition<typeof grepSchema, GrepToolDetails | undefined> {
 	const customOps = options?.operations;
-	const native = !customOps && (options?.native ?? PIBOLT !== undefined);
+	const native = !customOps && (options?.native ?? RAPIDPI !== undefined);
 	return {
 		name: "grep",
 		label: "grep",

@@ -1,16 +1,16 @@
-package opensec.pibolt.protocol
+package opensec.rapidpi.protocol
 
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.SessionReducer
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.SubagentNoticeItem
-import opensec.pibolt.protocol.session.SubagentReducer
-import opensec.pibolt.protocol.session.SubagentStatus
-import opensec.pibolt.protocol.session.ThinkingItem
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.SessionReducer
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.SubagentNoticeItem
+import opensec.rapidpi.protocol.session.SubagentReducer
+import opensec.rapidpi.protocol.session.SubagentStatus
+import opensec.rapidpi.protocol.session.ThinkingItem
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

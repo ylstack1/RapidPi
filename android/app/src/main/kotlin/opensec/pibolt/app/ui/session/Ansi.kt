@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
@@ -8,7 +8,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import opensec.pibolt.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.PiColors
 
 /**
  * A terminal colour: one of the 256 palette entries ([index] 0..255) or a 24-bit [rgb] (index -1). The 16 base colours

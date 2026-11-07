@@ -5,15 +5,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { runDoctor } from "../src/cli/doctor.ts";
 import { ENV_AGENT_DIR } from "../src/config.ts";
 import { handlePackageCommand } from "../src/package-manager-cli.ts";
-import type * as PiBolt from "../src/pi-bolt.ts";
-import { piBoltInstallMethod, piBoltJitSwitchCommand, piBoltUpdateCommand } from "../src/pi-bolt.ts";
-import { runPiBoltCompile } from "../src/pi-bolt-compile.ts";
+import type * as PiBolt from "../src/rapid-pi.ts";
+import { rapidPiInstallMethod, rapidPiJitSwitchCommand, rapidPiUpdateCommand } from "../src/rapid-pi.ts";
+import { runPiBoltCompile } from "../src/rapid-pi-compile.ts";
 import type * as VersionCheck from "../src/utils/version-check.ts";
 
-// A Pi-Bolt build (scripts/build-pi.sh defines PIBOLT_BUILD); the tests run as Pi otherwise. (vi.mock runs before the imports.)
-vi.mock("../src/pi-bolt.ts", async (importOriginal) => ({
+// A Rapid Pi build (scripts/build-pi.sh defines RAPIDPI_BUILD); the tests run as Pi otherwise. (vi.mock runs before the imports.)
+vi.mock("../src/rapid-pi.ts", async (importOriginal) => ({
 	...(await importOriginal<typeof PiBolt>()),
-	PIBOLT: { version: "1.0.0", variant: "arm64", jit: false },
+	RAPIDPI: { version: "1.0.0", variant: "arm64", jit: false },
 }));
 // A newer release, without going online.
 vi.mock("../src/utils/version-check.ts", async (importOriginal) => ({
@@ -29,20 +29,20 @@ function runningFrom(execPath: string): void {
 	Object.defineProperty(process, "execPath", { value: execPath, configurable: true });
 }
 
-/** What the formula installs: the release's folder in <prefix>/Cellar/pi-bolt/<version>/libexec, linked from <prefix>/bin. */
+/** What the formula installs: the release's folder in <prefix>/Cellar/rapid-pi/<version>/libexec, linked from <prefix>/bin. */
 function brewInstall(prefix: string): string {
-	keg = join(prefix, "Cellar", "pi-bolt", "1.0.0");
+	keg = join(prefix, "Cellar", "rapid-pi", "1.0.0");
 	const libexec = join(keg, "libexec");
 	mkdirSync(libexec, { recursive: true });
 	for (const name of ["pi", "pi-bin"]) {
-		writeFileSync(join(libexec, name), "#!/bin/sh\necho '1.4.0 (Pi-Bolt 1.0.0, darwin-arm64, JIT off)'\n");
+		writeFileSync(join(libexec, name), "#!/bin/sh\necho '1.4.0 (Rapid Pi 1.0.0, darwin-arm64, JIT off)'\n");
 		chmodSync(join(libexec, name), 0o755);
 	}
-	writeFileSync(join(libexec, "pi-bolt.txt"), "Pi-Bolt 1.0.0 (Pi 1.4.0), darwin-arm64, JIT off, built 2026-10-23\n");
+	writeFileSync(join(libexec, "rapid-pi.txt"), "Rapid Pi 1.0.0 (Pi 1.4.0), darwin-arm64, JIT off, built 2026-10-23\n");
 	mkdirSync(join(prefix, "bin"));
-	symlinkSync(join(libexec, "pi"), join(prefix, "bin", "pi-bolt"));
+	symlinkSync(join(libexec, "pi"), join(prefix, "bin", "rapid-pi"));
 	mkdirSync(join(prefix, "opt"));
-	symlinkSync(keg, join(prefix, "opt", "pi-bolt"));
+	symlinkSync(keg, join(prefix, "opt", "rapid-pi"));
 	return libexec;
 }
 
@@ -53,7 +53,7 @@ function filesIn(folder: string): string[] {
 
 beforeEach(() => {
 	dir = mkdtempSync(join(tmpdir(), "pibolt-brew-"));
-	vi.stubEnv("PIBOLT_NPM", "");
+	vi.stubEnv("RAPIDPI_NPM", "");
 	vi.stubEnv(ENV_AGENT_DIR, join(dir, "agent"));
 });
 
@@ -65,26 +65,26 @@ afterEach(() => {
 	rmSync(dir, { recursive: true, force: true });
 });
 
-describe.skipIf(process.platform === "win32")("a Pi-Bolt installed with Homebrew", () => {
+describe.skipIf(process.platform === "win32")("a Rapid Pi installed with Homebrew", () => {
 	it("is told by where the executable really is, in the Cellar", () => {
 		const libexec = brewInstall(join(dir, "homebrew"));
 		runningFrom(join(libexec, "pi-bin"));
-		expect(piBoltInstallMethod()).toBe("homebrew");
+		expect(rapidPiInstallMethod()).toBe("homebrew");
 		// Through the opt link, as from Homebrew's bin: the real path decides.
-		runningFrom(join(dir, "homebrew", "opt", "pi-bolt", "libexec", "pi-bin"));
-		expect(piBoltInstallMethod()).toBe("homebrew");
+		runningFrom(join(dir, "homebrew", "opt", "rapid-pi", "libexec", "pi-bin"));
+		expect(rapidPiInstallMethod()).toBe("homebrew");
 		// Linuxbrew's prefix, not there to resolve.
-		runningFrom("/home/linuxbrew/.linuxbrew/Cellar/pi-bolt/1.0.0/libexec/pi");
-		expect(piBoltInstallMethod()).toBe("homebrew");
+		runningFrom("/home/linuxbrew/.linuxbrew/Cellar/rapid-pi/1.0.0/libexec/pi");
+		expect(rapidPiInstallMethod()).toBe("homebrew");
 		// Another formula's Cellar, and the installer's folder, are not.
-		runningFrom("/opt/homebrew/Cellar/pi-bolt-other/1.0.0/libexec/pi");
-		expect(piBoltInstallMethod()).toBe("installer");
-		runningFrom("/Users/me/.pi-bolt/pi-bolt-darwin-arm64/pi-bin");
-		expect(piBoltInstallMethod()).toBe("installer");
-		expect(piBoltUpdateCommand("homebrew")).toBe("brew upgrade pi-bolt");
-		expect(piBoltUpdateCommand("installer")).toBe("pi-bolt update");
-		expect(piBoltJitSwitchCommand("homebrew", "darwin", "arm64-jit")).toBe(
-			"brew uninstall pi-bolt && curl -fsSL https://pi-bolt.opensec.in/install.sh | PIBOLT_VARIANT=arm64-jit sh",
+		runningFrom("/opt/homebrew/Cellar/rapid-pi-other/1.0.0/libexec/pi");
+		expect(rapidPiInstallMethod()).toBe("installer");
+		runningFrom("/Users/me/.rapid-pi/rapid-pi-darwin-arm64/pi-bin");
+		expect(rapidPiInstallMethod()).toBe("installer");
+		expect(rapidPiUpdateCommand("homebrew")).toBe("brew upgrade rapid-pi");
+		expect(rapidPiUpdateCommand("installer")).toBe("rapid-pi update");
+		expect(rapidPiJitSwitchCommand("homebrew", "darwin", "arm64-jit")).toBe(
+			"brew uninstall rapid-pi && curl -fsSL https://rapid-pi.opensec.in/install.sh | RAPIDPI_VARIANT=arm64-jit sh",
 		);
 	});
 
@@ -96,9 +96,9 @@ describe.skipIf(process.platform === "win32")("a Pi-Bolt installed with Homebrew
 		vi.spyOn(console, "error").mockImplementation(() => {});
 		expect(await handlePackageCommand(["update", "--self"])).toBe(true);
 		const output = log.mock.calls.flat().join("\n");
-		expect(output).toContain("This Pi-Bolt was installed with Homebrew");
-		expect(output).toContain("brew upgrade pi-bolt");
-		expect(output).not.toContain("Updating Pi-Bolt");
+		expect(output).toContain("This Rapid Pi was installed with Homebrew");
+		expect(output).toContain("brew upgrade rapid-pi");
+		expect(output).not.toContain("Updating Rapid Pi");
 		expect(process.exitCode).toBe(1);
 		expect(filesIn(keg)).toEqual(before);
 	});
@@ -111,7 +111,7 @@ describe.skipIf(process.platform === "win32")("a Pi-Bolt installed with Homebrew
 		expect(await handlePackageCommand(["update", "--rollback"])).toBe(true);
 		expect(process.exitCode).toBe(1);
 		expect(error.mock.calls.flat().join("\n")).toContain("installed with Homebrew");
-		expect(error.mock.calls.flat().join("\n")).toContain("brew uninstall pi-bolt");
+		expect(error.mock.calls.flat().join("\n")).toContain("brew uninstall rapid-pi");
 		expect(filesIn(keg)).toEqual(before);
 	});
 
@@ -123,7 +123,7 @@ describe.skipIf(process.platform === "win32")("a Pi-Bolt installed with Homebrew
 		const installAgain = vi.fn(async () => true);
 		expect(await runPiBoltCompile([], installAgain)).toBe(1);
 		expect(error.mock.calls.flat().join("\n")).toContain(
-			"this Pi-Bolt was installed with Homebrew, whose folder brew owns",
+			"this Rapid Pi was installed with Homebrew, whose folder brew owns",
 		);
 		expect(installAgain).not.toHaveBeenCalled();
 		expect(filesIn(keg)).toEqual(before);
@@ -145,7 +145,7 @@ describe.skipIf(process.platform === "win32")("a Pi-Bolt installed with Homebrew
 			return true;
 		});
 		expect(await runDoctor(["--offline"], { cwd: home, agentDir, extensionFactories: [] })).toBe(0);
-		expect(output).toMatch(/installed +Homebrew \(the opensec-git\/tap\/pi-bolt formula\), run from .*libexec/);
-		expect(output).toContain("(this Pi-Bolt)");
+		expect(output).toMatch(/installed +Homebrew \(the opensec-git\/tap\/rapid-pi formula\), run from .*libexec/);
+		expect(output).toContain("(this Rapid Pi)");
 	});
 });

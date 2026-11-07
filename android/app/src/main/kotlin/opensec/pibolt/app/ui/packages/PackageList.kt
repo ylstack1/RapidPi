@@ -1,14 +1,14 @@
-package opensec.pibolt.app.ui.packages
+package opensec.rapidpi.app.ui.packages
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.ui.session.features2.PiJsonFile
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.app.ui.session.features2.PiJsonFile
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 import java.io.File
 
 enum class PackageScope { User, Project }

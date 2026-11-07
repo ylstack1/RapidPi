@@ -1,8 +1,8 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.components.ComposerPrimaryMode
-import opensec.pibolt.app.ui.components.DotWaveMath
-import opensec.pibolt.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.components.ComposerPrimaryMode
+import opensec.rapidpi.app.ui.components.DotWaveMath
+import opensec.rapidpi.app.ui.theme.PiMotion
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

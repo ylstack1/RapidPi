@@ -126,7 +126,7 @@ import type { TruncationResult } from "../../core/tools/truncate.ts";
 import { hasTrustRequiringProjectResources, ProjectTrustStore } from "../../core/trust-manager.ts";
 import { getUsageCostBreakdown } from "../../core/usage-totals.ts";
 import { addMcpServerConfig, loadMcpConfig } from "../../extensions/mcp/config.ts";
-import { PIBOLT, PIBOLT_RELEASES_URL, piBoltUpdateCommand } from "../../pi-bolt.ts";
+import { RAPIDPI, RAPIDPI_RELEASES_URL, rapidPiUpdateCommand } from "../../rapid-pi.ts";
 import type { RemoteControlController } from "../../remote-control/controller.ts";
 import { loadRemoteControl } from "../../remote-control/remote-control.lazy.ts";
 import {
@@ -908,12 +908,12 @@ export class InteractiveMode {
 			if (this.settingsManager.getCollapseChangelog()) {
 				const versionMatch = this.changelogMarkdown.match(/##\s+\[?(\d+\.\d+\.\d+)\]?/);
 				const latestVersion = versionMatch ? versionMatch[1] : this.version;
-				// (A Pi-Bolt build shows Pi's changelog: the version is Pi's, not Pi-Bolt's.)
-				const condensedText = `Updated to ${PIBOLT ? "Pi " : "v"}${latestVersion}. Use ${theme.bold("/changelog")} to view full changelog.`;
+				// (A Rapid Pi build shows Pi's changelog: the version is Pi's, not Rapid Pi's.)
+				const condensedText = `Updated to ${RAPIDPI ? "Pi " : "v"}${latestVersion}. Use ${theme.bold("/changelog")} to view full changelog.`;
 				this.chatContainer.addChild(new Text(condensedText, 1, 0));
 			} else {
 				this.chatContainer.addChild(
-					new ThemedText(() => theme.bold(theme.fg("accent", PIBOLT ? "What's New in Pi" : "What's New")), 1, 0),
+					new ThemedText(() => theme.bold(theme.fg("accent", RAPIDPI ? "What's New in Pi" : "What's New")), 1, 0),
 				);
 				this.chatContainer.addChild(new Spacer(1));
 				this.chatContainer.addChild(
@@ -1209,7 +1209,7 @@ export class InteractiveMode {
 			const onboarding = () =>
 				theme.fg(
 					"dim",
-					`${PIBOLT ? PRODUCT_NAME : "Pi"} can explain its own features and look up its docs. Ask it how to use or extend ${PIBOLT ? PRODUCT_NAME : "Pi"}.`,
+					`${RAPIDPI ? PRODUCT_NAME : "Pi"} can explain its own features and look up its docs. Ask it how to use or extend ${RAPIDPI ? PRODUCT_NAME : "Pi"}.`,
 				);
 			const header = new BuiltInHeader(
 				() => `${withLogo(compactInstructions())}\n${compactOnboarding()}\n\n${onboarding()}`,
@@ -1426,7 +1426,7 @@ export class InteractiveMode {
 		}
 
 		if (extendedKeysFormat === "xterm") {
-			return `tmux extended-keys-format is xterm. ${PIBOLT ? PRODUCT_NAME : "Pi"} works best with csi-u. Add \`set -g extended-keys-format csi-u\` to ~/.tmux.conf and restart tmux.`;
+			return `tmux extended-keys-format is xterm. ${RAPIDPI ? PRODUCT_NAME : "Pi"} works best with csi-u. Add \`set -g extended-keys-format csi-u\` to ~/.tmux.conf and restart tmux.`;
 		}
 
 		return undefined;
@@ -4897,9 +4897,9 @@ export class InteractiveMode {
 
 	showNewVersionNotification(release: LatestPiRelease): void {
 		const updateInstruction = () =>
-			theme.fg("muted", `New ${PIBOLT ? "Pi-Bolt " : ""}version ${release.version} is available. Run `) +
-			theme.fg("accent", PIBOLT ? piBoltUpdateCommand() : `${COMMAND_NAME} update`);
-		const changelogUrl = PIBOLT ? PIBOLT_RELEASES_URL : "https://pi.dev/changelog";
+			theme.fg("muted", `New ${RAPIDPI ? "Rapid Pi " : ""}version ${release.version} is available. Run `) +
+			theme.fg("accent", RAPIDPI ? rapidPiUpdateCommand() : `${COMMAND_NAME} update`);
+		const changelogUrl = RAPIDPI ? RAPIDPI_RELEASES_URL : "https://pi.dev/changelog";
 		const changelogLine = () => {
 			const changelogLink = getCapabilities().hyperlinks
 				? hyperlink(theme.fg("accent", changelogUrl), changelogUrl)
@@ -6947,7 +6947,7 @@ export class InteractiveMode {
 				getSession: () => this.session,
 				settingsManager: this.settingsManager,
 				agentDir: getAgentDir(),
-				version: PIBOLT?.version ?? VERSION,
+				version: RAPIDPI?.version ?? VERSION,
 				showStatus: (message) => this.showStatus(message),
 				showWarning: (message) => this.showWarning(message),
 				showError: (message) => this.showError(message),
@@ -7144,7 +7144,7 @@ export class InteractiveMode {
 		this.chatContainer.addChild(new Spacer(1));
 		this.chatContainer.addChild(new DynamicBorder());
 		this.chatContainer.addChild(
-			new ThemedText(() => theme.bold(theme.fg("accent", PIBOLT ? "What's New in Pi" : "What's New")), 1, 0),
+			new ThemedText(() => theme.bold(theme.fg("accent", RAPIDPI ? "What's New in Pi" : "What's New")), 1, 0),
 		);
 		this.chatContainer.addChild(new Spacer(1));
 		this.chatContainer.addChild(new Markdown(changelogMarkdown, 1, 1, this.getMarkdownThemeWithSettings()));

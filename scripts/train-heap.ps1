@@ -14,7 +14,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $Root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$Work = if ($env:PIBOLT_WORK) { $env:PIBOLT_WORK } else { Join-Path $Root '.work' }
+$Work = if ($env:RAPIDPI_WORK) { $env:RAPIDPI_WORK } else { Join-Path $Root '.work' }
 function Log($message) { Write-Host "==> $message" -ForegroundColor Cyan }
 function Die($message) { Write-Host "error: $message" -ForegroundColor Red; exit 1 }
 if (-not (Get-Command py -ErrorAction SilentlyContinue)) { Die "'py' is required but not installed" }
@@ -26,7 +26,7 @@ $Profile = [System.IO.Path]::GetFullPath($Profile)
 if (-not (Test-Path (Join-Path $Profile 'bytecode.order'))) { Die "no $Profile\bytecode.order: run scripts/train-profile.sh" }
 $Build = Join-Path $Work 'heap-training'
 $Cells = Join-Path $Work 'heap-training-function-cells.txt'
-Log "a Pi-Bolt build to trace -> $Build"
+Log "a Rapid Pi build to trace -> $Build"
 $withPlugins = if ($Plugins) { @{ Plugins = [System.IO.Path]::GetFullPath($Plugins) } } else { @{} }
 & (Join-Path $Root 'scripts\build-pi.ps1') -Out $Build -Profile $Profile -FunctionCellsOut $Cells @withPlugins
 if ($LASTEXITCODE -ne 0) { Die 'the build failed' }

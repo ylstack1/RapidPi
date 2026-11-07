@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features2
+package opensec.rapidpi.app.ui.session.features2
 
 import androidx.compose.material.icons.rounded.Description
 import androidx.compose.foundation.layout.Column
@@ -37,21 +37,21 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.Chip
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.Segmented
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.session.ViewerContent
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.Chip
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.Segmented
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.session.ViewerContent
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.str
 import java.io.File
 
 /** A skill or prompt template (`get_commands`), with the file it comes from. */
@@ -347,7 +347,7 @@ fun BugSheet(initial: String, diagnostics: String, onShare: (String) -> Unit, on
             SecondaryButton("Cancel", onClick = { close(onDismiss) }, modifier = Modifier.weight(1f))
             Spacer(Modifier.width(12.dp))
             PrimaryButton("Share report", enabled = text.isNotBlank(), onClick = {
-                val report = "Pi-Bolt Android bug report\n\n" + text.trim() + "\n\n---\n" + diagnostics
+                val report = "Rapid Pi Android bug report\n\n" + text.trim() + "\n\n---\n" + diagnostics
                 close { onShare(report) }
             }, modifier = Modifier.weight(1f))
         }

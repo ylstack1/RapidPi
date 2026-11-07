@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.review
+package opensec.rapidpi.app.ui.session.review
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -35,20 +35,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.checkpoints.RestoreKind
-import opensec.pibolt.app.checkpoints.RestorePlan
-import opensec.pibolt.app.checkpoints.TurnCheckpoints
-import opensec.pibolt.app.checkpoints.TurnRecord
-import opensec.pibolt.app.checkpoints.UndoEntry
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.checkpoints.RestoreKind
+import opensec.rapidpi.app.checkpoints.RestorePlan
+import opensec.rapidpi.app.checkpoints.TurnCheckpoints
+import opensec.rapidpi.app.checkpoints.TurnRecord
+import opensec.rapidpi.app.checkpoints.UndoEntry
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.UserItem
 
 /**
  * Review and undo of a session's turns (the transcript's "Review changes" entries, the review screen and its sheets).

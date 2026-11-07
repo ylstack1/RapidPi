@@ -1,11 +1,11 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.runtime.Immutable
 
 /**
  * The project-only parts of the session screen, per kind of session: a project's session on this phone has them all;
  * a session with a computer has the folder; a plain chat (engine.ChatSpace: no project, no tools) has none. Turn
- * checkpoints, undo and the changes pill need [opensec.pibolt.app.session.SessionController.checkpoints], which a chat
+ * checkpoints, undo and the changes pill need [opensec.rapidpi.app.session.SessionController.checkpoints], which a chat
  * has none of; the workspace tabs (Files, Changes, Terminal) belong to the project screen, which a chat never opens.
  */
 @Immutable

@@ -229,7 +229,7 @@ export class IkInitiator {
 	}
 }
 
-/** The responder (Pi-Bolt). */
+/** The responder (Rapid Pi). */
 export class IkResponder {
 	private readonly state = new SymmetricState(NOISE_PROTOCOL_NAME);
 	private readonly s: KeyPair;

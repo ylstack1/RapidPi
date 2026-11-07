@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import android.text.format.DateUtils
 import androidx.compose.material.icons.Icons
@@ -18,15 +18,15 @@ import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.Host
-import opensec.pibolt.app.session.LinkState
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.GroupEnd
-import opensec.pibolt.app.ui.components.GroupRow
-import opensec.pibolt.app.ui.hosts.PasteSheet
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.Host
+import opensec.rapidpi.app.session.LinkState
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.GroupEnd
+import opensec.rapidpi.app.ui.components.GroupRow
+import opensec.rapidpi.app.ui.hosts.PasteSheet
+import opensec.rapidpi.app.ui.theme.Pi
 
 /** The line under a paired computer in Settings > Remote control (unit-tested). */
 object RemoteRows {

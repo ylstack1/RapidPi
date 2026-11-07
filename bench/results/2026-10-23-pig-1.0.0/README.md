@@ -1,8 +1,8 @@
-# Pi-Bolt 1.0.0 against PiG 0.5.1 and Pi-Bolt 0.9.9
+# Rapid Pi 1.0.0 against PiG 0.5.1 and Rapid Pi 0.9.9
 
-Pi-Bolt 1.0.0 (branch `perf/v1.0.0` at d35149cb0, built with `scripts/build-pi.sh` on the runtimes of CI run 39894603087: the
+Rapid Pi 1.0.0 (branch `perf/v1.0.0` at d35149cb0, built with `scripts/build-pi.sh` on the runtimes of CI run 39894603087: the
 release's code and runtimes) against [PiG](https://github.com/MichaelKinsy/PiG) 0.5.1 (its release binaries, checked against
-SHA256SUMS and their attestation) and Pi-Bolt 0.9.9 (its release archives, checked against SHA256SUMS). Same work against the
+SHA256SUMS and their attestation) and Rapid Pi 0.9.9 (its release archives, checked against SHA256SUMS). Same work against the
 same local model: `verify.txt` in each folder is `bench/pig_verify.py`'s check of the requests, tool results, answers and files.
 
 | Folder | Machine | Run |

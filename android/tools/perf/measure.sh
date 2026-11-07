@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Measures the installed Pi-Bolt app on a phone, without installing anything or touching its UI:
+# Measures the installed Rapid Pi app on a phone, without installing anything or touching its UI:
 #   cold start (am start -W), the engine's prepare and spare-engine times (logcat PiBoltEngine), PSS of the app and its
 #   engine processes, the dex compilation state (baseline profile applied or not), wake locks and the APK's size.
 #
@@ -10,8 +10,8 @@
 set -euo pipefail
 S=${1:?serial}
 RUNS=${2:-5}
-PKG=in.opensec.pibolt
-ACT=$PKG/opensec.pibolt.app.MainActivity
+PKG=in.opensec.rapidpi
+ACT=$PKG/opensec.rapidpi.app.MainActivity
 ADB=${ADB:-adb}
 a() { "$ADB" -s "$S" "$@"; }
 
@@ -48,11 +48,11 @@ echo "== memory (PSS kB), app idle on Home with the spare engine"
 sleep 5
 app=$(a shell pidof $PKG | tr -d '\r')
 a shell dumpsys meminfo "$app" | grep -E 'TOTAL PSS|TOTAL:|Java Heap|Native Heap|Graphics|Code:' | head -8
-for pid in $(a shell "ps -A -o PID,NAME" | awk '/libpibolt/ {print $1}' | tr -d '\r'); do
+for pid in $(a shell "ps -A -o PID,NAME" | awk '/librapidpi/ {print $1}' | tr -d '\r'); do
 	pss=$(a shell "run-as $PKG cat /proc/$pid/smaps_rollup" 2>/dev/null | awk '/^Pss:/ {print $2}' | tr -d '\r')
 	rss=$(a shell "run-as $PKG cat /proc/$pid/smaps_rollup" 2>/dev/null | awk '/^Rss:/ {print $2}' | tr -d '\r')
 	echo "engine pid $pid: Pss ${pss} kB, Rss ${rss} kB"
 done
 
 echo "== wake locks held by the app"
-a shell dumpsys power | grep -i "pibolt" || echo "none"
+a shell dumpsys power | grep -i "rapidpi" || echo "none"

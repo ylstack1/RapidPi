@@ -1,9 +1,9 @@
-package opensec.pibolt.app.data
+package opensec.rapidpi.app.data
 
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import opensec.pibolt.protocol.noise.KeyPair
+import opensec.rapidpi.protocol.noise.KeyPair
 import java.io.File
 import java.security.KeyStore
 import javax.crypto.Cipher
@@ -86,7 +86,7 @@ class DeviceIdentity(context: Context) {
 
     private companion object {
         const val KEYSTORE = "AndroidKeyStore"
-        const val ALIAS = "pibolt-device-key"
+        const val ALIAS = "rapidpi-device-key"
         const val TRANSFORMATION = "AES/GCM/NoPadding"
     }
 }

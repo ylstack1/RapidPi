@@ -1,4 +1,4 @@
-package opensec.pibolt.app.session
+package opensec.rapidpi.app.session
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,12 +14,12 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.session.Subagent
-import opensec.pibolt.protocol.session.SubagentReducer
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.session.Subagent
+import opensec.rapidpi.protocol.session.SubagentReducer
+import opensec.rapidpi.protocol.str
 import java.io.File
 import java.io.RandomAccessFile
 

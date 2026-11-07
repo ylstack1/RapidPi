@@ -1,12 +1,12 @@
-package opensec.pibolt.app.ui.session.web
+package opensec.rapidpi.app.ui.session.web
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
 import java.net.URI
 
 /** Where a source is: found by a search, being read (`fetch_content`), read, or it could not be read. */

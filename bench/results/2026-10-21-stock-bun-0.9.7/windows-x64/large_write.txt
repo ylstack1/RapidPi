@@ -1,6 +1,6 @@
 build           file   wall s    cpu s  result
-pi-bolt        200 KB      1.5      0.3  ok
-pi-bolt        400 KB      1.6      0.4  ok
+rapid-pi        200 KB      1.5      0.3  ok
+rapid-pi        400 KB      1.6      0.4  ok
 bun            200 KB     33.8     54.8  ok
 bun            400 KB    139.4    250.5  ok
 node22         200 KB     37.8     38.5  ok

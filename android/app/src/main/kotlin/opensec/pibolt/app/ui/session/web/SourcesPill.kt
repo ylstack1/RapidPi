@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.web
+package opensec.rapidpi.app.ui.session.web
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -57,19 +57,19 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SOFT_PRESS
-import opensec.pibolt.app.ui.components.ShimmerText
-import opensec.pibolt.app.ui.components.glass
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.session.SourcesRow
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SOFT_PRESS
+import opensec.rapidpi.app.ui.components.ShimmerText
+import opensec.rapidpi.app.ui.components.glass
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.session.SourcesRow
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Tnum
 
 /** Favicons in the pill: 24dp circles, a 1.5dp ring of the canvas between overlapping ones, at most [STACK] of them. */
 private val ICON = 24.dp

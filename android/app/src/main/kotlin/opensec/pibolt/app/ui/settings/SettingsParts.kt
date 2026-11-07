@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.settings
+package opensec.rapidpi.app.ui.settings
 
 import android.content.Context
 import android.content.Intent
@@ -28,24 +28,24 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.ui.components.GhostButton
-import opensec.pibolt.app.ui.components.GroupControl
-import opensec.pibolt.app.ui.components.GroupEnd
-import opensec.pibolt.app.ui.components.GroupRow
-import opensec.pibolt.app.ui.components.GroupSwitchRow
-import opensec.pibolt.app.ui.components.InsetGroup
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.ProgressLine
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.update.updateStatus
-import opensec.pibolt.app.update.UpdateJob
-import opensec.pibolt.app.update.UpdateRules
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.ui.components.GhostButton
+import opensec.rapidpi.app.ui.components.GroupControl
+import opensec.rapidpi.app.ui.components.GroupEnd
+import opensec.rapidpi.app.ui.components.GroupRow
+import opensec.rapidpi.app.ui.components.GroupSwitchRow
+import opensec.rapidpi.app.ui.components.InsetGroup
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.ProgressLine
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.update.updateStatus
+import opensec.rapidpi.app.update.UpdateJob
+import opensec.rapidpi.app.update.UpdateRules
 
 /** One row of a Settings group: drawn with a divider under it unless it is the group's last. */
 internal typealias SettingsRow = @Composable (divider: Boolean) -> Unit
@@ -151,7 +151,7 @@ private fun UpdateActionRow(app: PiBoltApp, divider: Boolean) {
         when {
             // A test build cannot take the release in place: the website, never a download that is refused at the end.
             job == UpdateJob.Idle && decision is UpdateRules.Decision.TestBuild ->
-                SecondaryButton("Open pi-bolt.opensec.in", onClick = { uri.openUri(UpdateRules.WEBSITE) }, modifier = Modifier.fillMaxWidth())
+                SecondaryButton("Open rapid-pi.opensec.in", onClick = { uri.openUri(UpdateRules.WEBSITE) }, modifier = Modifier.fillMaxWidth())
             job is UpdateJob.Downloading -> SecondaryButton("Cancel download", onClick = updates::cancelDownload, modifier = Modifier.fillMaxWidth())
             job is UpdateJob.Ready -> PrimaryButton("Install ${job.info.version}", onClick = updates::requestInstall, modifier = Modifier.fillMaxWidth())
             // The offer can be a cached or snoozed release: a newer one stays discoverable with automatic checks off. One

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.update
+package opensec.rapidpi.app.update
 
 import android.content.Context
 import android.content.Intent
@@ -24,9 +24,9 @@ import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import opensec.pibolt.app.BuildConfig
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.BackgroundFile
+import opensec.rapidpi.app.BuildConfig
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.BackgroundFile
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -259,9 +259,9 @@ class UpdateManager(private val app: PiBoltApp) {
         if (!app.isForeground) UpdateNotifications.failed(app, info, message)
     }
 
-    private fun partFile(info: UpdateInfo) = File(dir, "pi-bolt-${info.version}.apk.part")
+    private fun partFile(info: UpdateInfo) = File(dir, "rapid-pi-${info.version}.apk.part")
 
-    private fun apkFile(info: UpdateInfo) = File(dir, "pi-bolt-${info.version}.apk")
+    private fun apkFile(info: UpdateInfo) = File(dir, "rapid-pi-${info.version}.apk")
 
     /**
      * Downloads [info]'s APK, resuming with an HTTP Range request after a dropped connection. Waits for the network to
@@ -351,7 +351,7 @@ class UpdateManager(private val app: PiBoltApp) {
         }
     }
 
-    /** True when Android lets this app install packages ("Install unknown apps" is on for Pi-Bolt). */
+    /** True when Android lets this app install packages ("Install unknown apps" is on for Rapid Pi). */
     fun canInstall(): Boolean = app.packageManager.canRequestPackageInstalls()
 
     /**

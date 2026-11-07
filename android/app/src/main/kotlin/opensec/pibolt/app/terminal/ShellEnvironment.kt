@@ -1,6 +1,6 @@
-package opensec.pibolt.app.terminal
+package opensec.rapidpi.app.terminal
 
-import opensec.pibolt.app.secrets.SecretEnv
+import opensec.rapidpi.app.secrets.SecretEnv
 
 /**
  * A terminal shell's environment: the engine's ([engine]: PATH, HOME, the CA bundle, git's paths, TMPDIR...), a real

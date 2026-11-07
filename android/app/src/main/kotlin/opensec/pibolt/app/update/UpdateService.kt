@@ -1,4 +1,4 @@
-package opensec.pibolt.app.update
+package opensec.rapidpi.app.update
 
 import android.Manifest
 import android.app.Notification
@@ -23,8 +23,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.MainActivity
-import opensec.pibolt.app.R
+import opensec.rapidpi.app.MainActivity
+import opensec.rapidpi.app.R
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -84,7 +84,7 @@ class UpdateService : Service() {
     }
 
     companion object {
-        const val ACTION_CANCEL = "opensec.pibolt.app.update.CANCEL"
+        const val ACTION_CANCEL = "opensec.rapidpi.app.update.CANCEL"
         private val running = AtomicBoolean(false)
 
         fun ensureRunning(context: Context) {
@@ -134,13 +134,13 @@ object UpdateNotifications {
                     Intent(context, UpdateService::class.java).setAction(UpdateService.ACTION_CANCEL),
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
                 )
-                builder.setContentTitle("Downloading Pi-Bolt ${job.info.version}")
+                builder.setContentTitle("Downloading Rapid Pi ${job.info.version}")
                     .setContentText(progressText(job))
                     .setProgress(100, job.percent, false)
                     .addAction(0, "Cancel", cancel)
             }
-            is UpdateJob.Verifying -> builder.setContentTitle("Checking Pi-Bolt ${job.info.version}").setProgress(0, 0, true)
-            else -> builder.setContentTitle("Updating Pi-Bolt")
+            is UpdateJob.Verifying -> builder.setContentTitle("Checking Rapid Pi ${job.info.version}").setProgress(0, 0, true)
+            else -> builder.setContentTitle("Updating Rapid Pi")
         }
         return builder.build()
     }
@@ -150,9 +150,9 @@ object UpdateNotifications {
         return if (job.waitingForNetwork) "Waiting for network · $amount" else "$amount · ${job.percent}%"
     }
 
-    fun ready(context: Context, info: UpdateInfo) = result(context, "Pi-Bolt ${info.version} is ready to install", "Tap to install")
+    fun ready(context: Context, info: UpdateInfo) = result(context, "Rapid Pi ${info.version} is ready to install", "Tap to install")
 
-    fun failed(context: Context, info: UpdateInfo, message: String) = result(context, "Pi-Bolt ${info.version} was not installed", message)
+    fun failed(context: Context, info: UpdateInfo, message: String) = result(context, "Rapid Pi ${info.version} was not installed", message)
 
     private fun result(context: Context, title: String, text: String) = post(
         context,

@@ -2,7 +2,7 @@
 # Differential fuzzing of the ahead-of-time compiler: random programs (gen.mjs) aimed at what it specializes (loops and their
 # guards, module and closure variables, methods of several classes, arithmetic on edge-case numbers, try/catch, typed arrays,
 # arrays, dictionaries, generators, array callbacks, and changes the program makes between calls). Each is compiled ahead of time
-# and must print what the same bundle prints as bytecode with the JIT. Failures are kept in $PIBOLT_WORK/fuzz/fail.
+# and must print what the same bundle prints as bytecode with the JIT. Failures are kept in $RAPIDPI_WORK/fuzz/fail.
 #
 # Usage: tests/aot/fuzz/run.sh [--mode jit-off|jit-on|baseline|compact] [--from SEED] [--count N] [--jobs N]
 # Environment: AOT_BUILD_ENV, extra variables for the compile step, e.g. "BUN_JSC_useAOTVariableNarrowing=0"
@@ -23,17 +23,17 @@ while [ $# -gt 0 ]; do
 done
 case "$MODE" in jit-off | jit-on | baseline | compact) ;; *) die "--mode takes jit-off, jit-on, baseline or compact" ;; esac
 BUN="$(runtime_bun)"
-OUT="$PIBOLT_WORK/fuzz"
+OUT="$RAPIDPI_WORK/fuzz"
 mkdir -p "$OUT/work" "$OUT/fail"
 GEN="$(cd "$(dirname "$0")" && pwd)/gen.mjs"
-export BUN MODE OUT GEN AOT_BUILD_ENV PIBOLT_PLATFORM
+export BUN MODE OUT GEN AOT_BUILD_ENV RAPIDPI_PLATFORM
 
 one() {
 	local seed=$1 w
 	w=$(mktemp -d "$OUT/work/s$seed-XXXX") && cd "$w" || return
 	"$BUN" "$GEN" "$seed" >p.mjs
 	# The reference: the same bundle as bytecode, JIT on. (Bundling rewrites some source text that error messages quote.)
-	"$BUN" build --compile --bytecode --format=esm --target="bun-$PIBOLT_PLATFORM" p.mjs --outfile p-bc >/dev/null 2>&1
+	"$BUN" build --compile --bytecode --format=esm --target="bun-$RAPIDPI_PLATFORM" p.mjs --outfile p-bc >/dev/null 2>&1
 	if ! BUN_BYTECODE_ORDER_OUT=p.order timeout 60 ./p-bc >ref.txt 2>ref.err; then
 		echo "SKIP $seed"; rm -rf "$w"; return
 	fi
@@ -44,7 +44,7 @@ one() {
 	# shellcheck disable=SC2086 # AOT_BUILD_ENV is a list of words
 	env "${extra[@]}" ${AOT_BUILD_ENV:-} BUN_JSC_useAOTLoopSplitting=1 BUN_JSC_aotLoopSplittingPolicy=5 BUN_JSC_useImmutableIntrinsics=1 BUN_JSC_useJIT=0 \
 		BUN_STATIC_HEAP=1 BUN_AOT=1 BUN_JSC_omitBytecodeFromStaticHeap=1 \
-		timeout 300 "$BUN" build --compile --bytecode --format=esm --target="bun-$PIBOLT_PLATFORM" --bytecode-order=p.order p.mjs --outfile p-aot >build.log 2>&1
+		timeout 300 "$BUN" build --compile --bytecode --format=esm --target="bun-$RAPIDPI_PLATFORM" --bytecode-order=p.order p.mjs --outfile p-aot >build.log 2>&1
 	local why=""
 	if [ ! -x p-aot ]; then why="the compiler failed (see build.log)"
 	else

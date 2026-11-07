@@ -1,16 +1,16 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
-import opensec.pibolt.app.ui.session.ErrorNotices
-import opensec.pibolt.app.ui.session.ErrorText
-import opensec.pibolt.app.ui.session.ToolKind
-import opensec.pibolt.app.ui.session.toolLabel
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.ChatItem
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.NoticeKind
-import opensec.pibolt.protocol.session.ToolItem
-import opensec.pibolt.protocol.session.ToolStatus
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.ui.session.ErrorNotices
+import opensec.rapidpi.app.ui.session.ErrorText
+import opensec.rapidpi.app.ui.session.ToolKind
+import opensec.rapidpi.app.ui.session.toolLabel
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.ChatItem
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.NoticeKind
+import opensec.rapidpi.protocol.session.ToolItem
+import opensec.rapidpi.protocol.session.ToolStatus
+import opensec.rapidpi.protocol.session.UserItem
 
 /**
  * What voice mode says when a turn ends (pure, unit-tested). No model call: the reply's first paragraph as plain prose

@@ -1,10 +1,10 @@
-package opensec.pibolt.app.bench
+package opensec.rapidpi.app.bench
 
-import opensec.pibolt.app.data.SafeFiles
-import opensec.pibolt.app.engine.AssetSource
-import opensec.pibolt.app.engine.BundledExtensions
-import opensec.pibolt.app.engine.EngineManifest
-import opensec.pibolt.app.engine.EnginePaths
+import opensec.rapidpi.app.data.SafeFiles
+import opensec.rapidpi.app.engine.AssetSource
+import opensec.rapidpi.app.engine.BundledExtensions
+import opensec.rapidpi.app.engine.EngineManifest
+import opensec.rapidpi.app.engine.EnginePaths
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException

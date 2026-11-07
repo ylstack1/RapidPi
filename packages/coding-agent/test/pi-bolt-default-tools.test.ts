@@ -1,14 +1,14 @@
 import { describe, expect, test, vi } from "vitest";
 import { DEFAULT_TOOL_NAMES, defaultToolNamesFor, SettingsManager } from "../src/core/settings-manager.ts";
-import type * as PiBolt from "../src/pi-bolt.ts";
+import type * as PiBolt from "../src/rapid-pi.ts";
 
-// A Pi-Bolt build (scripts/build-pi.sh defines PIBOLT_BUILD); the tests run as Pi otherwise. (vi.mock runs before the imports.)
-vi.mock("../src/pi-bolt.ts", async (importOriginal) => ({
+// A Rapid Pi build (scripts/build-pi.sh defines RAPIDPI_BUILD); the tests run as Pi otherwise. (vi.mock runs before the imports.)
+vi.mock("../src/rapid-pi.ts", async (importOriginal) => ({
 	...(await importOriginal<typeof PiBolt>()),
-	PIBOLT: { version: "0.9.0", variant: "arm64", jit: false },
+	RAPIDPI: { version: "0.9.0", variant: "arm64", jit: false },
 }));
 
-describe("Pi-Bolt's default tools", () => {
+describe("Rapid Pi's default tools", () => {
 	test("grep and find are on by default", () => {
 		expect(DEFAULT_TOOL_NAMES).toEqual(["read", "bash", "edit", "write", "grep", "find"]);
 		expect(defaultToolNamesFor(["/home/me/.pi/agent/extensions/word-count.ts"])).toEqual(DEFAULT_TOOL_NAMES);

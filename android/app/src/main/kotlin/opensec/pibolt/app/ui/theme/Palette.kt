@@ -1,17 +1,17 @@
-package opensec.pibolt.app.ui.theme
+package opensec.rapidpi.app.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import opensec.pibolt.app.data.AccentId
-import opensec.pibolt.app.data.ThemeId
+import opensec.rapidpi.app.data.AccentId
+import opensec.rapidpi.app.data.ThemeId
 
 /** The text selection's fill: the accent at this alpha (ink1 stays AA on it over every surface, ContrastTest). */
 const val SELECTION_ALPHA = 0.28f
 
 /**
  * Every colour the app draws. Text uses ink1…ink3 (ink4 is decorative only), colour is reserved for state, and the
- * accent marks what can be acted on. The default theme (Graphite, labelled Pi-Bolt) is a warm charcoal. Every
+ * accent marks what can be acted on. The default theme (Graphite, labelled Rapid Pi) is a warm charcoal. Every
  * text ink passes WCAG AA (4.5:1) on canvas and on surface1 to surface3 in every theme (ContrastTest). See
  * android/DESIGN.md.
  */
@@ -57,7 +57,7 @@ data class PiColors(
     val ansiMagenta: Color = syntax.keyword,
     val ansiCyan: Color = syntax.operator,
     /**
-     * Subagent tints, one per parallel agent (Pi-Bolt Desktop's --tint-0…4: apricot, rose, orchid, violet, seafoam, the
+     * Subagent tints, one per parallel agent (Rapid Pi Desktop's --tint-0…4: apricot, rose, orchid, violet, seafoam, the
      * same OKLCH lightness and chroma, hues clear of the status colours, the brand and blue). Never state. See [tints].
      */
     val tint0: Color = Tints[0],
@@ -200,7 +200,7 @@ data class PiColors(
         }
 
         /**
-         * Pi-Bolt, the default: warm charcoal. A charcoal canvas (#1C1B19) with surfaces a warm step above it, quiet
+         * Rapid Pi, the default: warm charcoal. A charcoal canvas (#1C1B19) with surfaces a warm step above it, quiet
          * warm-grey ink, hairlines and overlays as white alphas, the warm white ink as the only accent, green, amber
          * and red for state only, and no blue. The inks are lifted from the reference's #A8A6A1 / #77756F so ink2
          * passes AA on a pressed menu row (4.56:1) and ink3 on surface3 (4.62:1).

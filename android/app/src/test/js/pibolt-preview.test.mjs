@@ -1,13 +1,13 @@
-// node --test android/app/src/test/js/pibolt-preview.test.mjs (also run by PreviewExtensionTest when node is on PATH).
+// node --test android/app/src/test/js/rapidpi-preview.test.mjs (also run by PreviewExtensionTest when node is on PATH).
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { after, test } from "node:test";
-import extension, { ask, requestFor, resultOf, SOCKET_VAR, TOOLS } from "../../main/assets/extensions/pibolt-preview.js";
+import extension, { ask, requestFor, resultOf, SOCKET_VAR, TOOLS } from "../../main/assets/extensions/rapidpi-preview.js";
 
-const dir = mkdtempSync(join(tmpdir(), "pibolt-preview-"));
+const dir = mkdtempSync(join(tmpdir(), "rapidpi-preview-"));
 after(() => rmSync(dir, { recursive: true, force: true }));
 let n = 0;
 

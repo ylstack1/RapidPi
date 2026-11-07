@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features2
+package opensec.rapidpi.app.ui.session.features2
 
 import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.foundation.layout.Row
@@ -31,21 +31,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import opensec.pibolt.app.engine.EngineApi
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.Segmented
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.projects.ProjectRules
-import opensec.pibolt.app.ui.session.ActionsSheet
-import opensec.pibolt.app.ui.session.SheetAction
-import opensec.pibolt.app.ui.session.TextPromptSheet
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.engine.EngineApi
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.Segmented
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.projects.ProjectRules
+import opensec.rapidpi.app.ui.session.ActionsSheet
+import opensec.rapidpi.app.ui.session.SheetAction
+import opensec.rapidpi.app.ui.session.TextPromptSheet
+import opensec.rapidpi.app.ui.theme.Pi
 import java.io.File
 
 /**

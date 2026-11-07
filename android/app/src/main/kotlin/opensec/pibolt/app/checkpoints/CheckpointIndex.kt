@@ -1,16 +1,16 @@
-package opensec.pibolt.app.checkpoints
+package opensec.rapidpi.app.checkpoints
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.int
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.str
 import java.io.File
 
 /**

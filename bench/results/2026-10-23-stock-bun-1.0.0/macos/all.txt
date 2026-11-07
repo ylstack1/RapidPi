@@ -74,32 +74,32 @@ interactive: round 24/24
 
 startup
   build                          wall_ms          cpu_ms         peak_mb      peak_fp_mb         instr_m
-  pi-bolt                      13 (-91%)        9 (-95%)       24 (-79%)        8 (-89%)       87 (-95%)
+  rapid-pi                      13 (-91%)        9 (-95%)       24 (-79%)        8 (-89%)       87 (-95%)
   bun                         103 (-28%)      148 (-13%)       88 (-26%)       52 (-30%)     1361 (-29%)
   node22                       150 (+4%)       168 (-1%)      102 (-14%)       63 (-14%)      1888 (-1%)
   node24                             144             170             118              74            1916
 
 headless
   build                          wall_ms          cpu_ms         peak_mb      peak_fp_mb         instr_m
-  pi-bolt                      53 (-85%)       46 (-90%)       63 (-60%)       24 (-79%)      275 (-92%)
+  rapid-pi                      53 (-85%)       46 (-90%)       63 (-60%)       24 (-79%)      275 (-92%)
   bun                         274 (-23%)      391 (-16%)      137 (-14%)       92 (-20%)     2278 (-32%)
   node22                      414 (+16%)       502 (+8%)      138 (-14%)       98 (-15%)      3513 (+4%)
   node24                             356             466             160             115            3370
 
 interactive
   build                           tti_ms        turns_ms         wall_ms          cpu_ms         peak_mb      peak_fp_mb         instr_m
-  pi-bolt                      24 (-84%)      121 (-50%)      425 (-40%)       80 (-85%)       73 (-68%)       31 (-84%)      667 (-89%)
+  rapid-pi                      24 (-84%)      121 (-50%)      425 (-40%)       80 (-85%)       73 (-68%)       31 (-84%)      667 (-89%)
   bun                         120 (-21%)      210 (-13%)      634 (-11%)       485 (-7%)      202 (-12%)      139 (-27%)     4585 (-28%)
   node22                       155 (+3%)      274 (+13%)       745 (+5%)      580 (+11%)       223 (-3%)       190 (-0%)     6951 (+10%)
   node24                             151             242             710             523             231             190            6325
 ## long_answer
 build        characters   wall s    cpu s  of a core  own MB
-pi-bolt           60000     60.0     1.35         2%      46
+rapid-pi           60000     60.0     1.35         2%      46
 bun               60000     60.9     7.10        12%      95
 node22            60000     60.8     8.01        13%     201
 node24            60000     60.6     6.47        11%     269
 ## long_session
-== pi-bolt (exit 0)
+== rapid-pi (exit 0)
      20:    76.7 ms/prompt   cpu    12.0 ms/prompt   memory 78.6 MB (own 34.8 MB)   request   4.5 MB (~1.1M tokens)
      40:   121.1 ms/prompt   cpu    16.9 ms/prompt   memory 88.8 MB (own 42.0 MB)   request   9.0 MB (~2.2M tokens)
 == bun (exit 0)
@@ -113,8 +113,8 @@ node24            60000     60.6     6.47        11%     269
      40:   220.8 ms/prompt   cpu   149.0 ms/prompt   memory 1362.7 MB (own 1338.3 MB)   request   9.0 MB (~2.2M tokens)
 ## large_write
 build           file   wall s    cpu s  result
-pi-bolt        200 KB      0.2      0.1  ok
-pi-bolt        400 KB      0.6      0.1  ok
+rapid-pi        200 KB      0.2      0.1  ok
+rapid-pi        400 KB      0.6      0.1  ok
 bun            200 KB     15.1     26.3  ok
 bun            400 KB     76.2    159.8  ok
 node22         200 KB     31.1     30.9  ok
@@ -123,8 +123,8 @@ node24         200 KB     23.1     23.0  ok
 node24         400 KB     96.7     95.9  ok
 ## tmux_load
 build          step        wall s  pi cpu s tmux cpu s pi wrote KB to client KB  own MB
-pi-bolt        md:20000      19.9      0.60       0.27         571         1336      23
-pi-bolt        write:50      77.4      1.13       0.29         625          587      25
+rapid-pi        md:20000      19.9      0.60       0.27         571         1336      23
+rapid-pi        write:50      77.4      1.13       0.29         625          587      25
 bun            md:20000      20.1      4.22       0.65        3738         1316     118
 bun            write:50      78.1      7.74       0.28        1020          660     103
 node22         md:20000      20.0      4.47       0.62        3738         1315     153

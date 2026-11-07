@@ -1,4 +1,4 @@
-package opensec.pibolt.app.cost
+package opensec.rapidpi.app.cost
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonArray
@@ -7,12 +7,12 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.double
-import opensec.pibolt.protocol.int
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.double
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
 import java.time.Instant
 import java.time.YearMonth
 import java.time.ZoneId

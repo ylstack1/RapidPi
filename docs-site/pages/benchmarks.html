@@ -1,7 +1,7 @@
-<!-- {"title": "Benchmarks", "description": "Pi-Bolt 1.0.0 against Pi 1.4.0 as released on stock Bun, Node 22 and Node 24 on Linux x86-64, Linux ARM64, macOS and Windows, and against PiG 0.5.1 and Pi-Bolt 0.9.9: large files, streaming, sessions, memory and startup."} -->
+<!-- {"title": "Benchmarks", "description": "Rapid Pi 1.0.0 against Pi 1.4.0 as released on stock Bun, Node 22 and Node 24 on Linux x86-64, Linux ARM64, macOS and Windows, and against PiG 0.5.1 and Rapid Pi 0.9.9: large files, streaming, sessions, memory and startup."} -->
 <p class="eyebrow">Reference</p>
 <h1>Benchmarks</h1>
-<p class="lede">Pi-Bolt 1.0.0 against Pi 1.4.0 as released, run by stock Bun 1.4.4, Node 22 and Node 24, on GitHub's Linux
+<p class="lede">Rapid Pi 1.0.0 against Pi 1.4.0 as released, run by stock Bun 1.4.4, Node 22 and Node 24, on GitHub's Linux
   x86-64, Linux ARM64 and Windows runners and an Apple M5 Mac. Lower is better in every row.</p>
 
 <h2>How it is measured</h2>
@@ -9,7 +9,7 @@
   <li><strong>The same work for every build.</strong> Each build runs the same prompts against a local server that replays the
     same model responses, so there is no network or provider variance.</li>
   <li><strong>Pi as released.</strong> "Pi on Bun" and "Pi on Node" are Pi 1.4.0 from its npm package
-    (<code>@earendil-works/pi-coding-agent</code>), not Pi-Bolt's tree. Pi-Bolt is the release's code built on its runtimes.
+    (<code>@earendil-works/pi-coding-agent</code>), not Rapid Pi's tree. Rapid Pi is the release's code built on its runtimes.
     Every downloaded build is checked against its checksums.</li>
   <li><strong>Interleaved.</strong> Builds take turns, so a change in the machine's state affects all of them alike. Times to start
     and sessions are medians of 21 runs.</li>
@@ -17,15 +17,15 @@
     (on Windows, the working set).</li>
 </ul>
 <p>The benchmark scripts, the method in full and the raw data are in the repository:
-  <a href="https://github.com/opensec-git/Pi-Bolt/blob/pi-bolt/docs/BENCHMARKS.md">BENCHMARKS.md</a> and
-  <a href="https://github.com/opensec-git/Pi-Bolt/tree/pi-bolt/bench/results/2026-10-23-stock-bun-1.0.0">bench/results</a>.</p>
+  <a href="https://github.com/opensec-git/Rapid Pi/blob/rapid-pi/docs/BENCHMARKS.md">BENCHMARKS.md</a> and
+  <a href="https://github.com/opensec-git/Rapid Pi/tree/rapid-pi/bench/results/2026-10-23-stock-bun-1.0.0">bench/results</a>.</p>
 
 <h2>Against Pi on Bun and Node</h2>
 <div class="tabs" data-group="platform">
   <div data-tab="linux-x64" data-title="Linux x86-64">
 <p>GitHub's <code>ubuntu-24.04</code> runner, Intel Xeon Platinum 8573C, every build pinned to one CPU.</p>
 <div class="table"><table>
-  <thead><tr><th>Benchmark</th><th class="n">Pi-Bolt 1.0.0</th><th class="n">Pi on Bun 1.4.4</th><th class="n">Pi on Node 22</th><th class="n">Pi on Node 24</th></tr></thead>
+  <thead><tr><th>Benchmark</th><th class="n">Rapid Pi 1.0.0</th><th class="n">Pi on Bun 1.4.4</th><th class="n">Pi on Node 22</th><th class="n">Pi on Node 24</th></tr></thead>
   <tbody>
     <tr><td>Writing a 400 KB file through a tool call</td><td class="n best">1.2 s</td><td class="n">194.8 s</td><td class="n">189.6 s</td><td class="n">143.7 s</td></tr>
     <tr><td>CPU, streaming a 60,000-character answer</td><td class="n best">2.34 s</td><td class="n">21.92 s</td><td class="n">22.17 s</td><td class="n">18.62 s</td></tr>
@@ -41,7 +41,7 @@
   <div data-tab="linux-arm64" data-title="Linux ARM64">
 <p>GitHub's <code>ubuntu-24.04-arm</code> runner, Neoverse-N2, every build pinned to one CPU.</p>
 <div class="table"><table>
-  <thead><tr><th>Benchmark</th><th class="n">Pi-Bolt 1.0.0</th><th class="n">Pi on Bun 1.4.4</th><th class="n">Pi on Node 22</th><th class="n">Pi on Node 24</th></tr></thead>
+  <thead><tr><th>Benchmark</th><th class="n">Rapid Pi 1.0.0</th><th class="n">Pi on Bun 1.4.4</th><th class="n">Pi on Node 22</th><th class="n">Pi on Node 24</th></tr></thead>
   <tbody>
     <tr><td>Writing a 400 KB file through a tool call</td><td class="n best">1.3 s</td><td class="n">164.1 s</td><td class="n">177.1 s</td><td class="n">134.5 s</td></tr>
     <tr><td>CPU, streaming a 60,000-character answer</td><td class="n best">2.32 s</td><td class="n">18.82 s</td><td class="n">21.10 s</td><td class="n">18.19 s</td></tr>
@@ -57,7 +57,7 @@
   <div data-tab="macos" data-title="macOS">
 <p>An Apple M5 Mac, not pinned.</p>
 <div class="table"><table>
-  <thead><tr><th>Benchmark</th><th class="n">Pi-Bolt 1.0.0</th><th class="n">Pi on Bun 1.4.4</th><th class="n">Pi on Node 22</th><th class="n">Pi on Node 24</th></tr></thead>
+  <thead><tr><th>Benchmark</th><th class="n">Rapid Pi 1.0.0</th><th class="n">Pi on Bun 1.4.4</th><th class="n">Pi on Node 22</th><th class="n">Pi on Node 24</th></tr></thead>
   <tbody>
     <tr><td>Writing a 400 KB file through a tool call</td><td class="n best">0.6 s</td><td class="n">76.2 s</td><td class="n">143.8 s</td><td class="n">96.7 s</td></tr>
     <tr><td>CPU, streaming a 60,000-character answer</td><td class="n best">1.35 s</td><td class="n">7.10 s</td><td class="n">8.01 s</td><td class="n">6.47 s</td></tr>
@@ -74,7 +74,7 @@
 <p>GitHub's <code>windows-2025</code> runner, AMD EPYC 9V74, 2 cores. Memory is the working set. There is no tmux test on
   Windows.</p>
 <div class="table"><table>
-  <thead><tr><th>Benchmark</th><th class="n">Pi-Bolt 1.0.0</th><th class="n">Pi on Bun 1.4.4</th><th class="n">Pi on Node 22</th><th class="n">Pi on Node 24</th></tr></thead>
+  <thead><tr><th>Benchmark</th><th class="n">Rapid Pi 1.0.0</th><th class="n">Pi on Bun 1.4.4</th><th class="n">Pi on Node 22</th><th class="n">Pi on Node 24</th></tr></thead>
   <tbody>
     <tr><td>Writing a 400 KB file through a tool call</td><td class="n best">1.8 s</td><td class="n">131.0 s</td><td class="n">172.9 s</td><td class="n">110.1 s</td></tr>
     <tr><td>CPU, streaming a 60,000-character answer</td><td class="n best">2.69 s</td><td class="n">44.86 s</td><td class="n">42.17 s</td><td class="n">39.01 s</td></tr>
@@ -86,18 +86,18 @@
 </table></div>
   </div>
 </div>
-<p>Against Pi on Node 24, Pi-Bolt writes the large file 61 to 161 times faster, uses 4.8 to 15 times less CPU while a long answer
+<p>Against Pi on Node 24, Rapid Pi writes the large file 61 to 161 times faster, uses 4.8 to 15 times less CPU while a long answer
   streams, 6.0 to 8.8 times less per prompt and per session, 4.5 to 15 times less memory, and is ready to type 4.7 to 11 times
   sooner.</p>
 
 <h2>Against PiG</h2>
-<p>Pi-Bolt 1.0.0 against <a href="https://github.com/MichaelKinsy/PiG">PiG</a> 0.5.1, a port of Pi 1.3.0 to Go, and Pi-Bolt
+<p>Rapid Pi 1.0.0 against <a href="https://github.com/MichaelKinsy/PiG">PiG</a> 0.5.1, a port of Pi 1.3.0 to Go, and Rapid Pi
   0.9.9, doing the same work.</p>
 <div class="tabs" data-group="platform">
   <div data-tab="linux-x64" data-title="Linux x86-64">
 <p>GitHub's <code>ubuntu-24.04</code> runner, AMD EPYC 7763, every build pinned to one CPU.</p>
 <div class="table"><table>
-  <thead><tr><th>Benchmark</th><th class="n">Pi-Bolt 1.0.0</th><th class="n">PiG 0.5.1</th><th class="n">Pi-Bolt 0.9.9</th></tr></thead>
+  <thead><tr><th>Benchmark</th><th class="n">Rapid Pi 1.0.0</th><th class="n">PiG 0.5.1</th><th class="n">Rapid Pi 0.9.9</th></tr></thead>
   <tbody>
     <tr><td>Ready to type</td><td class="n">43 ms</td><td class="n"><strong>16 ms</strong></td><td class="n">48 ms</td></tr>
     <tr><td>CPU, one prompt (<code>-p</code>)</td><td class="n">58 ms</td><td class="n"><strong>24 ms</strong></td><td class="n">63 ms</td></tr>
@@ -115,7 +115,7 @@
   <div data-tab="linux-arm64" data-title="Linux ARM64">
 <p>GitHub's <code>ubuntu-24.04-arm</code> runner, Neoverse-N2, every build pinned to one CPU.</p>
 <div class="table"><table>
-  <thead><tr><th>Benchmark</th><th class="n">Pi-Bolt 1.0.0</th><th class="n">PiG 0.5.1</th><th class="n">Pi-Bolt 0.9.9</th></tr></thead>
+  <thead><tr><th>Benchmark</th><th class="n">Rapid Pi 1.0.0</th><th class="n">PiG 0.5.1</th><th class="n">Rapid Pi 0.9.9</th></tr></thead>
   <tbody>
     <tr><td>Ready to type</td><td class="n">39 ms</td><td class="n"><strong>15 ms</strong></td><td class="n">43 ms</td></tr>
     <tr><td>CPU, one prompt (<code>-p</code>)</td><td class="n">55 ms</td><td class="n"><strong>26 ms</strong></td><td class="n">60 ms</td></tr>
@@ -133,7 +133,7 @@
 <p>An Apple M5 Mac, not pinned. Own memory is the footprint; CPU per prompt and memory after 40 prompts are the range of two
   runs.</p>
 <div class="table"><table>
-  <thead><tr><th>Benchmark</th><th class="n">Pi-Bolt 1.0.0</th><th class="n">PiG 0.5.1</th><th class="n">Pi-Bolt 0.9.9</th></tr></thead>
+  <thead><tr><th>Benchmark</th><th class="n">Rapid Pi 1.0.0</th><th class="n">PiG 0.5.1</th><th class="n">Rapid Pi 0.9.9</th></tr></thead>
   <tbody>
     <tr><td>Ready to type</td><td class="n">25 ms</td><td class="n"><strong>17 ms</strong></td><td class="n">26 ms</td></tr>
     <tr><td>CPU, one prompt (<code>-p</code>)</td><td class="n">34 ms</td><td class="n"><strong>24 ms</strong></td><td class="n">37 ms</td></tr>
@@ -152,7 +152,7 @@
 <p>GitHub's <code>windows-2025</code> runner, AMD EPYC 7763, 2 cores. Own memory is the private bytes (the memory the process has committed). There is no tmux
   test on Windows.</p>
 <div class="table"><table>
-  <thead><tr><th>Benchmark</th><th class="n">Pi-Bolt 1.0.0</th><th class="n">PiG 0.5.1</th><th class="n">Pi-Bolt 0.9.9</th></tr></thead>
+  <thead><tr><th>Benchmark</th><th class="n">Rapid Pi 1.0.0</th><th class="n">PiG 0.5.1</th><th class="n">Rapid Pi 0.9.9</th></tr></thead>
   <tbody>
     <tr><td>Ready to type</td><td class="n"><strong>93 ms</strong></td><td class="n">106 ms</td><td class="n">107 ms</td></tr>
     <tr><td>CPU, one prompt (<code>-p</code>)</td><td class="n">97 ms</td><td class="n"><strong>93 ms</strong></td><td class="n">106 ms</td></tr>
@@ -168,8 +168,8 @@
   </div>
 </div>
 <p class="caption">The lowest of each row is in bold. On Linux, own memory is the process's anonymous resident memory.</p>
-<p>PiG starts sooner, streams with less CPU and is a third of the size: it is a native Go program. Pi-Bolt runs Pi's own code, so
-  every Pi extension works unchanged, and over a long session it uses less CPU than PiG. Against Pi-Bolt 0.9.9, CPU per prompt 40
+<p>PiG starts sooner, streams with less CPU and is a third of the size: it is a native Go program. Rapid Pi runs Pi's own code, so
+  every Pi extension works unchanged, and over a long session it uses less CPU than PiG. Against Rapid Pi 0.9.9, CPU per prompt 40
   prompts in falls by a third on Linux x86-64 and own memory by 44%, and an answer streaming into a 4,000-entry session takes a
   tenth of the CPU.</p>
 
@@ -177,17 +177,17 @@
 <p>Those two to three minutes are not the disk. A model writes a file by streaming the <code>write</code> tool call's arguments,
   the whole file, a few characters at a time, so a 400 KB file arrives in thousands of chunks. For every chunk, stock Pi parses the
   whole tool call again, redraws the screen even when nothing shown has changed, and highlights every line of the file. Each chunk
-  costs more than the last, and the total grows with the square of the file's size. Pi-Bolt parses again only once the arguments
+  costs more than the last, and the total grows with the square of the file's size. Rapid Pi parses again only once the arguments
   have grown by an eighth, draws a frame only when what is shown changes, and highlights only the lines it shows.</p>
 <p>In the benchmark the model streams as fast as it can, so the cost shows as wall time. With a real model, which streams more
   slowly, it shows as CPU.</p>
 
 <h2>Why streaming and long sessions cost less</h2>
 <p><strong>Streaming.</strong> Stock Pi redraws the message every time a few words arrive, and each redraw re-lexes the whole
-  Markdown, re-wraps every block and re-highlights every code block. Pi-Bolt keeps what it has rendered and redoes only the last
+  Markdown, re-wraps every block and re-highlights every code block. Rapid Pi keeps what it has rendered and redoes only the last
   block or two, with highlighted code cached. The screen shows the same output, line for line.</p>
 <p><strong>Long sessions.</strong> Every request sends the whole conversation to the model again, and stock Pi serializes all of it
-  from scratch each time, so each prompt costs more than the last. Pi-Bolt builds each request from the previous one's bytes plus
+  from scratch each time, so each prompt costs more than the last. Rapid Pi builds each request from the previous one's bytes plus
   what is new. The bytes sent are identical.</p>
 
 <div class="callout">

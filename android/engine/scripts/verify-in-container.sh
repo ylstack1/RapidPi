@@ -2,7 +2,7 @@
 # Inside the Alpine container of verify-pack.sh. $1 = nativeLibraryDir, $2 = --engine-only or empty.
 NLD=$1
 MODE=$2
-DATA=/data/data/in.opensec.pibolt
+DATA=/data/data/in.opensec.rapidpi
 HOMEDIR=$DATA/files/home
 PKGDIR=$DATA/files/pkg
 . /setup.sh
@@ -36,18 +36,18 @@ ms() { awk '{printf "%d", $1 * 1000}' /proc/uptime; }
 
 echo "nativeLibraryDir $NLD; prefix $PREFIX; system: $(ls /lib/ld-* 2>/dev/null) (no glibc); /bin/bash: $(ls /bin/bash 2>&1 | tail -c 30)"
 t0=$(ms)
-check "engine --version" E "$NLD/libpibolt.so" --version
+check "engine --version" E "$NLD/librapidpi.so" --version
 echo "time: $(($(ms) - t0)) ms (first run)"
 t0=$(ms)
-E "$NLD/libpibolt.so" --version >/dev/null
+E "$NLD/librapidpi.so" --version >/dev/null
 echo "time: $(($(ms) - t0)) ms (warm)"
 t_loader() {
-	env -i LD_DEBUG=libs "$NLD/libpibolt.so" --version >/tmp/ld.txt 2>&1
+	env -i LD_DEBUG=libs "$NLD/librapidpi.so" --version >/tmp/ld.txt 2>&1
 	if grep -E 'calling init|trying file' /tmp/ld.txt | grep -v "$PREFIX/lib/"; then return 1; fi
 	grep 'calling init' /tmp/ld.txt | sed 's/^ *[0-9]*: *//'
 }
 check "loader resolves libraries from PREFIX/lib only" t_loader
-t_aot() { ! E "$NLD/libpibolt.so" --version 2>&1 | grep 'ahead-of-time compiled code is not used'; }
+t_aot() { ! E "$NLD/librapidpi.so" --version 2>&1 | grep 'ahead-of-time compiled code is not used'; }
 check "AOT code in use (no fallback notice)" t_aot
 
 if [ "$MODE" = --engine-only ]; then
@@ -60,7 +60,7 @@ t_rpc() {
 		printf '%s\n' '{"id":"1","type":"get_state"}'
 		printf '%s\n' "{\"id\":\"2\",\"type\":\"bash\",\"command\":\"$BASH_CMD\"}"
 		sleep 6
-	} | timeout 60 env -i $ENGINE_ENV HOME="$HOMEDIR" TZ=UTC PI_PACKAGE_DIR="$PKGDIR" "$NLD/libpibolt.so" \
+	} | timeout 60 env -i $ENGINE_ENV HOME="$HOMEDIR" TZ=UTC PI_PACKAGE_DIR="$PKGDIR" "$NLD/librapidpi.so" \
 		--mode rpc --no-session >/tmp/rpc.txt 2>/tmp/rpc.err
 	cut -c1-300 /tmp/rpc.txt
 	cat /tmp/rpc.err
@@ -77,7 +77,7 @@ t_extensions() {
 	{
 		printf '%s\n' '{"id":"1","type":"get_commands"}'
 		sleep 8
-	} | timeout 60 env -i $ENGINE_ENV HOME="$HOMEDIR" TZ=UTC PI_PACKAGE_DIR="$PKGDIR" "$NLD/libpibolt.so" \
+	} | timeout 60 env -i $ENGINE_ENV HOME="$HOMEDIR" TZ=UTC PI_PACKAGE_DIR="$PKGDIR" "$NLD/librapidpi.so" \
 		--mode rpc --no-session >/tmp/ext.txt 2>/tmp/ext.err
 	grep -o '"name":"[^"]*","description":"[^"]\{0,40\}' /tmp/ext.txt | head -20
 	cat /tmp/ext.err | head -20

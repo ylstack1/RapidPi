@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.projects
+package opensec.rapidpi.app.ui.projects
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,13 +31,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.Tnum
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Tnum
 
 /**
- * Where a row sits in its group, so a list of lazy items reads as one card (Pi-Bolt Desktop's `.hd-recent`): the
+ * Where a row sits in its group, so a list of lazy items reads as one card (Rapid Pi Desktop's `.hd-recent`): the
  * first rounds its top corners, the last its bottom ones, and every row but the first draws the 1dp line above it.
  */
 enum class GroupPos {
@@ -87,7 +87,7 @@ fun Modifier.groupCell(pos: GroupPos, fill: Color, line: Color, radius: Dp = Rad
 /**
  * A section head over a grouped list (desktop `.hd-head`): the title in metaStrong ink2 (a heading for TalkBack), an
  * optional count or summary in meta ink3 with tabular figures, and an optional [end] (a text action). Inset 20dp
- * (the 16dp gutter plus 4dp), like [opensec.pibolt.app.ui.components.SectionLabel].
+ * (the 16dp gutter plus 4dp), like [opensec.rapidpi.app.ui.components.SectionLabel].
  */
 @Composable
 fun ListHead(title: String, modifier: Modifier = Modifier, sub: String? = null, subColor: Color = Pi.colors.ink3, end: (@Composable RowScope.() -> Unit)? = null) {
@@ -105,7 +105,7 @@ fun ListHead(title: String, modifier: Modifier = Modifier, sub: String? = null, 
 
 /**
  * One row of a grouped list (desktop `.hd-row` and `.sb-row`, made for touch): at least
- * [opensec.pibolt.app.ui.theme.PiDims.homeRow] (56dp) tall, 16dp in, a 20dp state slot ([lead]: a dot, the live Quad
+ * [opensec.rapidpi.app.ui.theme.PiDims.homeRow] (56dp) tall, 16dp in, a 20dp state slot ([lead]: a dot, the live Quad
  * or a glyph), 12dp, the [title], then [trailing] (the dimmed project, counts, the time). Text at a large font scale
  * grows the row. [interaction] (press, semantics, shared bounds) sits between the row's size and its fill.
  */

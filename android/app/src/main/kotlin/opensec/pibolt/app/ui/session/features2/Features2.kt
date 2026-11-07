@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.features2
+package opensec.rapidpi.app.ui.session.features2
 
 import android.content.Context
 import android.content.Intent
@@ -44,27 +44,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.engine.EngineStatus
-import opensec.pibolt.app.engine.LocalEngine
-import opensec.pibolt.app.engine.SessionIndex
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.ui.components.Chip
-import opensec.pibolt.app.ui.packages.McpSheet
-import opensec.pibolt.app.ui.packages.PackagesSheet
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.session.ViewerContent
-import opensec.pibolt.app.ui.session.features.Builtin
-import opensec.pibolt.app.ui.session.tree.TreeRow
-import opensec.pibolt.app.ui.session.tree.TreeSheet
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.session.SessionState
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.engine.EngineStatus
+import opensec.rapidpi.app.engine.LocalEngine
+import opensec.rapidpi.app.engine.SessionIndex
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.ui.components.Chip
+import opensec.rapidpi.app.ui.packages.McpSheet
+import opensec.rapidpi.app.ui.packages.PackagesSheet
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.session.ViewerContent
+import opensec.rapidpi.app.ui.session.features.Builtin
+import opensec.rapidpi.app.ui.session.tree.TreeRow
+import opensec.rapidpi.app.ui.session.tree.TreeSheet
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.session.SessionState
+import opensec.rapidpi.protocol.str
 import java.io.File
 
 /** The sheets this module adds to the session screen. */
@@ -141,7 +141,7 @@ object Features2 {
     }
 
     fun diagnostics(app: PiBoltApp, controller: SessionController, state: SessionState): String = buildString {
-        append("App: Pi-Bolt Android ").append(app.appVersion).append('\n')
+        append("App: Rapid Pi Android ").append(app.appVersion).append('\n')
         (app.engine.status.value as? EngineStatus.Ready)?.let { append("Engine: ").append(it.engineVersion).append('\n') }
         append("Android: ").append(Build.VERSION.RELEASE).append(" (API ").append(Build.VERSION.SDK_INT).append("), ")
             .append(Build.MANUFACTURER).append(' ').append(Build.MODEL).append(", ").append(Build.SUPPORTED_ABIS.firstOrNull().orEmpty()).append('\n')
@@ -192,7 +192,7 @@ private fun Features2State.openTree(host: Features2Host, scope: kotlinx.coroutin
     sheet = F2Sheet.Tree
     scope.launch {
         val response = host.controller.request("get_entries", timeoutMs = 60_000)
-        val (data, error) = opensec.pibolt.app.ui.session.tree.SessionTree.load(response.success, response.dataObject, response.error)
+        val (data, error) = opensec.rapidpi.app.ui.session.tree.SessionTree.load(response.success, response.dataObject, response.error)
         tree = data
         treeError = error
     }
@@ -205,7 +205,7 @@ fun Features2Sheets(f2: Features2State, host: Features2Host, state: State<Sessio
     val context = LocalContext.current
     val controller = host.controller
     val app = host.app
-    val tmp = remember { File(context.cacheDir, "pibolt-app") }
+    val tmp = remember { File(context.cacheDir, "rapidpi-app") }
     val reload: (() -> Unit)? = if (host.isLocal) {
         {
             scope.launch {
@@ -233,7 +233,7 @@ fun Features2Sheets(f2: Features2State, host: Features2Host, state: State<Sessio
                             controller.resync()
                             // A prompt comes back to the composer, as in the terminal.
                             it.str("editorText")?.let(host.insert)
-                            host.message(if (row.kind == opensec.pibolt.app.ui.session.tree.TreeKind.User) "Moved before that prompt. Edit it and send to branch." else "Moved there. Your next message starts a branch.")
+                            host.message(if (row.kind == opensec.rapidpi.app.ui.session.tree.TreeKind.User) "Moved before that prompt. Edit it and send to branch." else "Moved there. Your next message starts a branch.")
                         }
                         .onFailure { host.message(it.message ?: "Could not move there") }
                 }
@@ -268,7 +268,7 @@ fun Features2Sheets(f2: Features2State, host: Features2Host, state: State<Sessio
             remember { Features2.diagnostics(app, controller, state.value) },
             onShare = { report ->
                 close()
-                val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_SUBJECT, "Pi-Bolt Android bug report").putExtra(Intent.EXTRA_TEXT, report)
+                val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_SUBJECT, "Rapid Pi Android bug report").putExtra(Intent.EXTRA_TEXT, report)
                 context.startActivity(Intent.createChooser(send, null))
             },
             onDismiss = close,

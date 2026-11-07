@@ -1,4 +1,4 @@
-package opensec.pibolt.app.preview
+package opensec.rapidpi.app.preview
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -49,10 +49,10 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.int
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.int
+import opensec.rapidpi.protocol.str
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.lang.ref.WeakReference
@@ -266,7 +266,7 @@ class PreviewController(
         }
         val notes = buildList {
             if (blank) add("The page looks blank: check preview_console for errors.")
-            if (!onScreen && startedActivities == 0) add("Pi-Bolt is in the background, so the picture may lag behind the page.")
+            if (!onScreen && startedActivities == 0) add("Rapid Pi is in the background, so the picture may lag behind the page.")
         }
         val text = "Screenshot of $url (${size.width}×${size.height} px; the preview is ${viewW}×$viewH device px)." +
             notes.joinToString("") { "\n$it" }

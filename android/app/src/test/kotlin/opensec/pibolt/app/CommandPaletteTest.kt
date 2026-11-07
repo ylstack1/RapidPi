@@ -1,14 +1,14 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.ui.input.key.Key
-import opensec.pibolt.app.ui.session.ComposerKeys
-import opensec.pibolt.app.ui.session.compactionLabel
-import opensec.pibolt.app.ui.session.features.Builtin
-import opensec.pibolt.app.ui.session.features.CommandPalette
-import opensec.pibolt.app.ui.session.features.CommandSource
-import opensec.pibolt.app.ui.session.features.Fuzzy
-import opensec.pibolt.app.ui.session.features.ShellCommand
-import opensec.pibolt.protocol.session.SlashCommand
+import opensec.rapidpi.app.ui.session.ComposerKeys
+import opensec.rapidpi.app.ui.session.compactionLabel
+import opensec.rapidpi.app.ui.session.features.Builtin
+import opensec.rapidpi.app.ui.session.features.CommandPalette
+import opensec.rapidpi.app.ui.session.features.CommandSource
+import opensec.rapidpi.app.ui.session.features.Fuzzy
+import opensec.rapidpi.app.ui.session.features.ShellCommand
+import opensec.rapidpi.protocol.session.SlashCommand
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

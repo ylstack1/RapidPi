@@ -1,12 +1,12 @@
-package opensec.pibolt.app.update
+package opensec.rapidpi.app.update
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.ProtocolJson
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.str
+import opensec.rapidpi.protocol.ProtocolJson
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.str
 import java.net.URI
 import java.util.Locale
 
@@ -29,9 +29,9 @@ data class UpdateInfo(
 data class UpdateSource(val manifestUrl: String, val apkPrefix: String, val githubReleasesUrl: String?) {
     companion object {
         val RELEASE = UpdateSource(
-            manifestUrl = "https://pi-bolt.opensec.in/android.json",
-            apkPrefix = "https://github.com/opensec-git/Pi-Bolt/releases/download/",
-            githubReleasesUrl = "https://api.github.com/repos/opensec-git/Pi-Bolt/releases?per_page=100",
+            manifestUrl = "https://rapid-pi.opensec.in/android.json",
+            apkPrefix = "https://github.com/opensec-git/Rapid Pi/releases/download/",
+            githubReleasesUrl = "https://api.github.com/repos/opensec-git/Rapid Pi/releases?per_page=100",
         )
     }
 }
@@ -84,7 +84,7 @@ object UpdateRules {
         val json = ProtocolJson.parseToJsonElement(text) as? JsonObject ?: error("not a JSON object")
         val version = json.str("version")?.let(AppVersion::normalize) ?: error("no version")
         val apk = json.str("apk") ?: error("no apk")
-        require(isAllowedApkUrl(apk, source.apkPrefix)) { "the APK is not on Pi-Bolt's GitHub releases" }
+        require(isAllowedApkUrl(apk, source.apkPrefix)) { "the APK is not on Rapid Pi's GitHub releases" }
         val size = json.long("size")?.takeIf { it in 1..MAX_APK_BYTES } ?: error("no size")
         val sha = hex(json.str("sha256")) ?: error("no sha256")
         val cert = hex(json.str("certSha256")) ?: error("no certSha256")
@@ -106,10 +106,10 @@ object UpdateRules {
             version to r
         }
         val (version, release) = candidates.maxWithOrNull { a, b -> AppVersion.compare(a.first, b.first) ?: 0 } ?: error("no Android release")
-        val asset = release.arr("assets")?.mapNotNull { it as? JsonObject }?.firstOrNull { it.str("name") == "pi-bolt-android-$version.apk" }
+        val asset = release.arr("assets")?.mapNotNull { it as? JsonObject }?.firstOrNull { it.str("name") == "rapid-pi-android-$version.apk" }
             ?: error("the release has no APK")
         val apk = asset.str("browser_download_url") ?: error("no download URL")
-        require(isAllowedApkUrl(apk, source.apkPrefix)) { "the APK is not on Pi-Bolt's GitHub releases" }
+        require(isAllowedApkUrl(apk, source.apkPrefix)) { "the APK is not on Rapid Pi's GitHub releases" }
         val size = asset.long("size")?.takeIf { it in 1..MAX_APK_BYTES } ?: error("no size")
         val sha = hex(asset.str("digest")?.removePrefix("sha256:")) ?: error("no digest")
         val cert = hex(Regex("SHA-256 digest:\\s*([0-9a-fA-F:]{64,95})").find(release.str("body").orEmpty())?.groupValues?.get(1))
@@ -132,7 +132,7 @@ object UpdateRules {
     }
 
     /** Where a test build gets the release from. */
-    const val WEBSITE = "https://pi-bolt.opensec.in/android"
+    const val WEBSITE = "https://rapid-pi.opensec.in/android"
 
     /** SHA-256 of the certificate OpenSec signs release APKs with. */
     const val RELEASE_CERT = "f752464c8b6d5906d7fd467346b89316518e3ddfe77843f66b1fa673818a2c90"

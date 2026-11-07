@@ -1,4 +1,4 @@
-package opensec.pibolt.app.background
+package opensec.rapidpi.app.background
 
 /**
  * The extra background switches of OEM builds that stop apps Android itself would keep running (MIUI, ColorOS,

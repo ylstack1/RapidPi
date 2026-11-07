@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.voice
+package opensec.rapidpi.app.ui.session.voice
 
 import android.content.Context
 import android.media.audiofx.AcousticEchoCanceler
@@ -28,12 +28,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
-import opensec.pibolt.app.data.AppSettings
-import opensec.pibolt.app.session.SessionEffect
-import opensec.pibolt.app.ui.session.LiveStatus
-import opensec.pibolt.app.ui.session.ask.AskQuestions
-import opensec.pibolt.app.ui.session.ask.AskSubmission
-import opensec.pibolt.protocol.session.SessionState
+import opensec.rapidpi.app.data.AppSettings
+import opensec.rapidpi.app.session.SessionEffect
+import opensec.rapidpi.app.ui.session.LiveStatus
+import opensec.rapidpi.app.ui.session.ask.AskQuestions
+import opensec.rapidpi.app.ui.session.ask.AskSubmission
+import opensec.rapidpi.protocol.session.SessionState
 
 /**
  * Hands-free voice mode for a chat or project session: listen, send when the speaker stops, show Pi working, say a

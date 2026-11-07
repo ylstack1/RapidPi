@@ -1,4 +1,4 @@
-package opensec.pibolt.protocol.rpc
+package opensec.rapidpi.protocol.rpc
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -15,12 +15,12 @@ import kotlinx.serialization.json.JsonObjectBuilder
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.backend.ConnectionState
-import opensec.pibolt.protocol.backend.SessionBackend
-import opensec.pibolt.protocol.bool
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.type
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.backend.ConnectionState
+import opensec.rapidpi.protocol.backend.SessionBackend
+import opensec.rapidpi.protocol.bool
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.type
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 

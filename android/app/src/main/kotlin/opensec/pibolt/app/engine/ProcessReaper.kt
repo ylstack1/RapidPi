@@ -1,8 +1,8 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 import android.os.Process
 import android.util.Log
-import opensec.pibolt.protocol.backend.ProcessKiller
+import opensec.rapidpi.protocol.backend.ProcessKiller
 import java.io.File
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -93,7 +93,7 @@ class ProcessReaper(
 
     companion object {
         /** The variable that marks an engine's processes with its token. */
-        const val ENV = "PIBOLT_ENGINE"
+        const val ENV = "RAPIDPI_ENGINE"
 
         private val PREFIX = "$ENV=".toByteArray()
 

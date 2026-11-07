@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Starts or stops the suite's headless emulators. Never touches pibolt-api36 / emulator-5554 (shared).
+# Starts or stops the suite's headless emulators. Never touches rapidpi-api36 / emulator-5554 (shared).
 #
-#   ./emulators.sh create                       pibolt-e2e-1 and pibolt-e2e-2 (android-36 google_apis arm64, pixel_8, 4 GB)
-#   ./emulators.sh start pibolt-bench:5556 pibolt-e2e-1:5558 pibolt-e2e-2:5560   (waits for boot)
+#   ./emulators.sh create                       rapidpi-e2e-1 and rapidpi-e2e-2 (android-36 google_apis arm64, pixel_8, 4 GB)
+#   ./emulators.sh start rapidpi-bench:5556 rapidpi-e2e-1:5558 rapidpi-e2e-2:5560   (waits for boot)
 #   ./emulators.sh stop 5556 5558 5560
 set -u
 ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
@@ -16,7 +16,7 @@ shift || true
 case "$cmd" in
 create)
 	for n in 1 2; do
-		name=pibolt-e2e-$n
+		name=rapidpi-e2e-$n
 		[ -d "$HOME/.android/avd/$name.avd" ] && { echo "$name exists"; continue; }
 		echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd -n "$name" -k "system-images;android-36;google_apis;arm64-v8a" -d pixel_8 >/dev/null
 		sed -i '' 's/^hw.ramSize=.*/hw.ramSize=4096/' "$HOME/.android/avd/$name.avd/config.ini"
@@ -30,7 +30,7 @@ start)
 	for spec in "$@"; do
 		avd=${spec%%:*}
 		port=${spec##*:}
-		{ [ "$avd" = pibolt-api36 ] || [ "$port" = 5554 ]; } && { echo "refusing $spec (shared)" >&2; exit 2; }
+		{ [ "$avd" = rapidpi-api36 ] || [ "$port" = 5554 ]; } && { echo "refusing $spec (shared)" >&2; exit 2; }
 		nohup "$ANDROID_HOME/emulator/emulator" -avd "$avd" -port "$port" -no-window -no-audio -no-boot-anim -no-snapshot >"$LOGS/$avd.log" 2>&1 &
 		echo "starting $avd on emulator-$port"
 	done

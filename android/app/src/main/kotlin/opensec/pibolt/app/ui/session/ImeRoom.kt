@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp

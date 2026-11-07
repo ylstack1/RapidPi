@@ -1,7 +1,7 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.settings.SettingsGroup
-import opensec.pibolt.app.ui.settings.SettingsIndex
+import opensec.rapidpi.app.ui.settings.SettingsGroup
+import opensec.rapidpi.app.ui.settings.SettingsIndex
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.engine
+package opensec.rapidpi.app.engine
 
 /**
  * The idle engines [LocalEngine] keeps for fast opens: at most one fresh spare (started for the next open: a new, empty

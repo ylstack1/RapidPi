@@ -1,12 +1,12 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import kotlinx.coroutines.runBlocking
-import opensec.pibolt.app.git.Change
-import opensec.pibolt.app.git.GitException
-import opensec.pibolt.app.git.GitRepo
-import opensec.pibolt.app.git.LineCount
-import opensec.pibolt.app.git.ProcessGitRunner
-import opensec.pibolt.app.git.github.GitCredentials
+import opensec.rapidpi.app.git.Change
+import opensec.rapidpi.app.git.GitException
+import opensec.rapidpi.app.git.GitRepo
+import opensec.rapidpi.app.git.LineCount
+import opensec.rapidpi.app.git.ProcessGitRunner
+import opensec.rapidpi.app.git.github.GitCredentials
 import org.junit.After
 import org.junit.Assume.assumeTrue
 import org.junit.Before
@@ -43,7 +43,7 @@ class GitRepoTest {
     @Before
     fun setUp() {
         assumeTrue("host git", hostGit != null)
-        root = Files.createTempDirectory("pibolt-git").toFile()
+        root = Files.createTempDirectory("rapidpi-git").toFile()
         File(root, "home").mkdirs()
         work = File(root, "work").apply { mkdirs() }
     }
@@ -178,7 +178,7 @@ class GitRepoTest {
         val bin = File(root, "bin").apply { mkdirs() }
         val sock = File(root, "cred/socket").path
         File(bin, "curl").apply {
-            writeText("#!/bin/sh\ncase \"\$*\" in *\"--unix-socket $sock http://pibolt/github\"*) printf 'username=octocat\\npassword=$token\\n' ;; esac\n")
+            writeText("#!/bin/sh\ncase \"\$*\" in *\"--unix-socket $sock http://rapidpi/github\"*) printf 'username=octocat\\npassword=$token\\n' ;; esac\n")
             setExecutable(true)
         }
         extraEnv = GitCredentials.env(sock) + ("PATH" to "${bin.path}:${System.getenv("PATH") ?: "/usr/bin:/bin"}")

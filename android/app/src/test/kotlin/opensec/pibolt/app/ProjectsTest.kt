@@ -1,16 +1,16 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.data.ProjectMeta
-import opensec.pibolt.app.data.ProjectsCodec
-import opensec.pibolt.app.data.ProjectsFile
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.ui.markdown.Markdown
-import opensec.pibolt.app.ui.markdown.MdBlock
-import opensec.pibolt.app.ui.projects.FileEntry
-import opensec.pibolt.app.ui.projects.ProjectEntry
-import opensec.pibolt.app.ui.projects.ProjectFiles
-import opensec.pibolt.app.ui.projects.ProjectRules
-import opensec.pibolt.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.data.ProjectMeta
+import opensec.rapidpi.app.data.ProjectsCodec
+import opensec.rapidpi.app.data.ProjectsFile
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.ui.markdown.Markdown
+import opensec.rapidpi.app.ui.markdown.MdBlock
+import opensec.rapidpi.app.ui.projects.FileEntry
+import opensec.rapidpi.app.ui.projects.ProjectEntry
+import opensec.rapidpi.app.ui.projects.ProjectFiles
+import opensec.rapidpi.app.ui.projects.ProjectRules
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -65,7 +65,7 @@ class ProjectsTest {
     fun repoNames() {
         assertEquals("repo", ProjectRules.repoName("https://github.com/user/repo.git"))
         assertEquals("repo", ProjectRules.repoName("https://github.com/user/repo/"))
-        assertEquals("pi-bolt", ProjectRules.repoName("git@github.com:opensec/pi-bolt.git"))
+        assertEquals("rapid-pi", ProjectRules.repoName("git@github.com:opensec/rapid-pi.git"))
         assertEquals("tool", ProjectRules.repoName("git@host:tool.git"))
         assertEquals("", ProjectRules.repoName(""))
     }

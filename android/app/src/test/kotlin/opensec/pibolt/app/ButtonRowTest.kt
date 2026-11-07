@@ -1,7 +1,7 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.components.buttonSlot
-import opensec.pibolt.app.ui.components.buttonsFitSideBySide
+import opensec.rapidpi.app.ui.components.buttonSlot
+import opensec.rapidpi.app.ui.components.buttonsFitSideBySide
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import androidx.activity.BackEventCompat
 import androidx.activity.compose.PredictiveBackHandler
@@ -38,17 +38,17 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CancellationException
-import opensec.pibolt.app.ui.components.GlassBar
-import opensec.pibolt.app.ui.components.GlassCopyButton
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.DiffGutter
-import opensec.pibolt.app.ui.components.DiffRow
-import opensec.pibolt.app.ui.markdown.CodeFold
-import opensec.pibolt.app.ui.markdown.CodeInfo
-import opensec.pibolt.app.ui.markdown.UnifiedDiff
-import opensec.pibolt.app.ui.markdown.highlightedCached
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.components.GlassBar
+import opensec.rapidpi.app.ui.components.GlassCopyButton
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.DiffGutter
+import opensec.rapidpi.app.ui.components.DiffRow
+import opensec.rapidpi.app.ui.markdown.CodeFold
+import opensec.rapidpi.app.ui.markdown.CodeInfo
+import opensec.rapidpi.app.ui.markdown.UnifiedDiff
+import opensec.rapidpi.app.ui.markdown.highlightedCached
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 
 private const val MAX_LINE = 2_000
 

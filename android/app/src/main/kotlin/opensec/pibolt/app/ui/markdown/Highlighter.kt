@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.markdown
+package opensec.rapidpi.app.ui.markdown
 
 /**
  * Syntax highlighting for code blocks: one linear pass per language family (see [Languages]) that emits sorted,

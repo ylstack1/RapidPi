@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session
+package opensec.rapidpi.app.ui.session
 
 import android.Manifest
 import android.net.Uri
@@ -17,11 +17,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import java.io.File
-import opensec.pibolt.app.ui.providers.ProviderCatalog
-import opensec.pibolt.app.ui.providers.ProviderSheet
-import opensec.pibolt.protocol.session.NoticeItem
-import opensec.pibolt.protocol.session.ThinkingItem
-import opensec.pibolt.protocol.session.TodoStatus
+import opensec.rapidpi.app.ui.providers.ProviderCatalog
+import opensec.rapidpi.app.ui.providers.ProviderSheet
+import opensec.rapidpi.protocol.session.NoticeItem
+import opensec.rapidpi.protocol.session.ThinkingItem
+import opensec.rapidpi.protocol.session.TodoStatus
 import android.content.ClipData
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -43,44 +43,44 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import opensec.pibolt.app.engine.SessionSummary
-import opensec.pibolt.app.session.ForkPoint
-import opensec.pibolt.app.ui.session.ask.AskQuestions
-import opensec.pibolt.app.ui.session.ask.QuestionSheet
-import opensec.pibolt.app.ui.session.features.Builtin
-import opensec.pibolt.app.ui.session.review.LocalTurnReview
-import opensec.pibolt.app.ui.session.review.TurnReviewOverlay
-import opensec.pibolt.app.ui.session.review.rememberTurnReview
-import opensec.pibolt.app.ui.session.features2.F2Sheet
-import opensec.pibolt.protocol.str
-import opensec.pibolt.app.ui.session.features2.AppExtension
-import opensec.pibolt.app.ui.session.tree.SessionTree
-import opensec.pibolt.app.ui.session.features2.Features2
-import opensec.pibolt.app.ui.session.features2.Features2Host
-import opensec.pibolt.app.ui.session.features2.Features2Sheets
-import opensec.pibolt.app.ui.session.features2.rememberFeatures2
-import opensec.pibolt.app.ui.session.features2.rememberImportPicker
-import opensec.pibolt.app.ui.session.features2.rememberScopedModels
-import opensec.pibolt.app.ui.session.features2.run
-import opensec.pibolt.app.ui.session.features.BuiltinCall
-import opensec.pibolt.app.ui.session.features.CommandPalette
-import opensec.pibolt.app.ui.session.features.Drafts
-import opensec.pibolt.app.ui.session.features.ForkSheet
-import opensec.pibolt.app.ui.session.features.ImageViewer
-import opensec.pibolt.app.ui.session.features.MessageText
-import opensec.pibolt.app.ui.session.features.ProjectFileIndex
-import opensec.pibolt.app.ui.session.features.ResumeSheet
-import opensec.pibolt.app.ui.session.features.SearchBar
-import opensec.pibolt.app.ui.session.features.SearchHit
-import opensec.pibolt.app.ui.session.features.SearchJump
-import opensec.pibolt.app.ui.session.features.SessionFacts
-import opensec.pibolt.app.ui.session.features.SessionMarkdown
-import opensec.pibolt.app.ui.session.features.SessionStats
-import opensec.pibolt.app.ui.session.features.SessionStatsSheet
-import opensec.pibolt.app.ui.session.features.ShareFiles
-import opensec.pibolt.app.ui.session.features.ShellCommand
-import opensec.pibolt.app.ui.session.features.TranscriptSearch
-import opensec.pibolt.app.ui.session.features.ViewerImages
+import opensec.rapidpi.app.engine.SessionSummary
+import opensec.rapidpi.app.session.ForkPoint
+import opensec.rapidpi.app.ui.session.ask.AskQuestions
+import opensec.rapidpi.app.ui.session.ask.QuestionSheet
+import opensec.rapidpi.app.ui.session.features.Builtin
+import opensec.rapidpi.app.ui.session.review.LocalTurnReview
+import opensec.rapidpi.app.ui.session.review.TurnReviewOverlay
+import opensec.rapidpi.app.ui.session.review.rememberTurnReview
+import opensec.rapidpi.app.ui.session.features2.F2Sheet
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.app.ui.session.features2.AppExtension
+import opensec.rapidpi.app.ui.session.tree.SessionTree
+import opensec.rapidpi.app.ui.session.features2.Features2
+import opensec.rapidpi.app.ui.session.features2.Features2Host
+import opensec.rapidpi.app.ui.session.features2.Features2Sheets
+import opensec.rapidpi.app.ui.session.features2.rememberFeatures2
+import opensec.rapidpi.app.ui.session.features2.rememberImportPicker
+import opensec.rapidpi.app.ui.session.features2.rememberScopedModels
+import opensec.rapidpi.app.ui.session.features2.run
+import opensec.rapidpi.app.ui.session.features.BuiltinCall
+import opensec.rapidpi.app.ui.session.features.CommandPalette
+import opensec.rapidpi.app.ui.session.features.Drafts
+import opensec.rapidpi.app.ui.session.features.ForkSheet
+import opensec.rapidpi.app.ui.session.features.ImageViewer
+import opensec.rapidpi.app.ui.session.features.MessageText
+import opensec.rapidpi.app.ui.session.features.ProjectFileIndex
+import opensec.rapidpi.app.ui.session.features.ResumeSheet
+import opensec.rapidpi.app.ui.session.features.SearchBar
+import opensec.rapidpi.app.ui.session.features.SearchHit
+import opensec.rapidpi.app.ui.session.features.SearchJump
+import opensec.rapidpi.app.ui.session.features.SessionFacts
+import opensec.rapidpi.app.ui.session.features.SessionMarkdown
+import opensec.rapidpi.app.ui.session.features.SessionStats
+import opensec.rapidpi.app.ui.session.features.SessionStatsSheet
+import opensec.rapidpi.app.ui.session.features.ShareFiles
+import opensec.rapidpi.app.ui.session.features.ShellCommand
+import opensec.rapidpi.app.ui.session.features.TranscriptSearch
+import opensec.rapidpi.app.ui.session.features.ViewerImages
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -138,49 +138,49 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.ui.terminal.PreviewChipRow
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.app.ui.projects.FileViewer
-import opensec.pibolt.app.ui.projects.editor.AskPi
-import opensec.pibolt.app.ui.projects.editor.EditorTabs
-import opensec.pibolt.app.ui.projects.editor.viewerPlace
-import opensec.pibolt.app.ui.session.voice.VoiceModeEffects
-import opensec.pibolt.app.ui.session.voice.VoiceRationale
-import opensec.pibolt.app.ui.session.voice.rememberVoiceMode
-import opensec.pibolt.app.ui.session.voice.rememberVoiceInput
-import opensec.pibolt.app.ui.session.remote.RemoteChangesPill
-import opensec.pibolt.app.ui.session.remote.RemoteReviewOverlays
-import opensec.pibolt.app.ui.session.remote.RemoteView
-import opensec.pibolt.app.ui.session.remote.rememberRemoteReview
-import opensec.pibolt.app.ui.session.review.SessionChangesPill
-import opensec.pibolt.app.data.RecentPrompts
-import opensec.pibolt.app.session.LinkState
-import opensec.pibolt.app.session.SessionController
-import opensec.pibolt.app.session.SessionEffect
-import opensec.pibolt.app.cost.Cost
-import opensec.pibolt.app.cost.Money
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.cost.CapNotice
-import opensec.pibolt.app.ui.cost.SpendLimitsSheet
-import opensec.pibolt.app.ui.cost.SpendSheet
-import opensec.pibolt.app.ui.components.PiSnackHost
-import opensec.pibolt.app.ui.components.QuadMath
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.SharedKeys
-import opensec.pibolt.app.ui.components.SnackKind
-import opensec.pibolt.app.ui.components.sharedHostBounds
-import opensec.pibolt.app.ui.components.show
-import opensec.pibolt.app.ui.components.snackKindOf
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.PiMotion
-import opensec.pibolt.protocol.rpc.ModelInfo
-import opensec.pibolt.protocol.rpc.StreamingBehavior
-import opensec.pibolt.protocol.session.AssistantTextItem
-import opensec.pibolt.protocol.session.UserItem
-import opensec.pibolt.protocol.session.SessionState
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.ui.terminal.PreviewChipRow
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.app.ui.projects.FileViewer
+import opensec.rapidpi.app.ui.projects.editor.AskPi
+import opensec.rapidpi.app.ui.projects.editor.EditorTabs
+import opensec.rapidpi.app.ui.projects.editor.viewerPlace
+import opensec.rapidpi.app.ui.session.voice.VoiceModeEffects
+import opensec.rapidpi.app.ui.session.voice.VoiceRationale
+import opensec.rapidpi.app.ui.session.voice.rememberVoiceMode
+import opensec.rapidpi.app.ui.session.voice.rememberVoiceInput
+import opensec.rapidpi.app.ui.session.remote.RemoteChangesPill
+import opensec.rapidpi.app.ui.session.remote.RemoteReviewOverlays
+import opensec.rapidpi.app.ui.session.remote.RemoteView
+import opensec.rapidpi.app.ui.session.remote.rememberRemoteReview
+import opensec.rapidpi.app.ui.session.review.SessionChangesPill
+import opensec.rapidpi.app.data.RecentPrompts
+import opensec.rapidpi.app.session.LinkState
+import opensec.rapidpi.app.session.SessionController
+import opensec.rapidpi.app.session.SessionEffect
+import opensec.rapidpi.app.cost.Cost
+import opensec.rapidpi.app.cost.Money
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.cost.CapNotice
+import opensec.rapidpi.app.ui.cost.SpendLimitsSheet
+import opensec.rapidpi.app.ui.cost.SpendSheet
+import opensec.rapidpi.app.ui.components.PiSnackHost
+import opensec.rapidpi.app.ui.components.QuadMath
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.SharedKeys
+import opensec.rapidpi.app.ui.components.SnackKind
+import opensec.rapidpi.app.ui.components.sharedHostBounds
+import opensec.rapidpi.app.ui.components.show
+import opensec.rapidpi.app.ui.components.snackKindOf
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.PiMotion
+import opensec.rapidpi.protocol.rpc.ModelInfo
+import opensec.rapidpi.protocol.rpc.StreamingBehavior
+import opensec.rapidpi.protocol.session.AssistantTextItem
+import opensec.rapidpi.protocol.session.UserItem
+import opensec.rapidpi.protocol.session.SessionState
 
 /**
  * A session running on this phone (the on-device engine): shown under its project's [title], with the engine's own
@@ -486,7 +486,7 @@ internal fun SessionContent(
     val voice = rememberVoiceInput(draft, onDraft = { draft = it }, onMessage = { m -> scope.launch { snackbar.show(m) } }, onHeard = { dictated = true })
 
     fun copy(text: String) {
-        scope.launch { clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Pi-Bolt", text))) }
+        scope.launch { clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Rapid Pi", text))) }
         haptics.confirm()
         if (Build.VERSION.SDK_INT < 33) scope.launch { snackbar.show("Copied") }
     }
@@ -648,7 +648,7 @@ internal fun SessionContent(
         val entries = controller.request("get_entries", timeoutMs = 60_000)
         val id = SessionTree.rewindTarget(entries.dataObject?.takeIf { entries.success }, text, fromEnd).takeIf { fromEnd >= 0 }
             ?: return Result.failure(IllegalStateException("That message can't be edited"))
-        return AppExtension.run(controller, File(context.cacheDir, "pibolt-app"), "goto", id).map { r ->
+        return AppExtension.run(controller, File(context.cacheDir, "rapidpi-app"), "goto", id).map { r ->
             controller.resync()
             r.str("editorText")?.takeIf { it.isNotBlank() } ?: text
         }
@@ -966,7 +966,7 @@ internal fun SessionContent(
             val s = state.value
             buildList {
                 // Retries are told by the error notice (with Stop retrying) and the status line, not here.
-                addAll(s.statuses.filterKeys { it != opensec.pibolt.app.engine.BackgroundJobs.STATUS_KEY }.values.map { it to false })
+                addAll(s.statuses.filterKeys { it != opensec.rapidpi.app.engine.BackgroundJobs.STATUS_KEY }.values.map { it to false })
                 s.widgets.values.forEach { lines -> addAll(lines.map { it to false }) }
             }
         }

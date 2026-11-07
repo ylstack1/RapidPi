@@ -1,7 +1,7 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
-import opensec.pibolt.app.ui.components.QuadMath
-import opensec.pibolt.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadMath
+import opensec.rapidpi.app.ui.components.QuadMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

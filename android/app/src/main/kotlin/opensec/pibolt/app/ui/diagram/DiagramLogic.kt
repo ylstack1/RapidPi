@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.diagram
+package opensec.rapidpi.app.ui.diagram
 
 import java.security.MessageDigest
 

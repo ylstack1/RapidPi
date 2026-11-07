@@ -1,6 +1,6 @@
 ﻿### Time
 
-|  | Pi-Bolt 0.8.0 | Pi 1.1.0 on stock Bun 1.4.2 | Node 22 | Node 24 |
+|  | Rapid Pi 0.8.0 | Pi 1.1.0 on stock Bun 1.4.2 | Node 22 | Node 24 |
 |---|---:|---:|---:|---:|
 | Launch to interactive (TUI) | 92 ms | 177 ms | 345 ms | 311 ms |
 | pi --version | 35 ms | 98 ms | 242 ms | 219 ms |
@@ -16,7 +16,7 @@
 
 ### CPU
 
-|  | Pi-Bolt 0.8.0 | Pi 1.1.0 on stock Bun 1.4.2 | Node 22 | Node 24 |
+|  | Rapid Pi 0.8.0 | Pi 1.1.0 on stock Bun 1.4.2 | Node 22 | Node 24 |
 |---|---:|---:|---:|---:|
 | Interactive session: 5 prompts | 291 ms | 805 ms | 1,206 ms | 1,125 ms |
 | pi -p: one prompt | 92 ms | 329 ms | 582 ms | 544 ms |
@@ -33,7 +33,7 @@ Process floor: a minimal native program (bench/floor/floor.c: prints a line; in 
 
 ### Memory and streaming
 
-|  | Pi-Bolt 0.8.0 | Pi 1.1.0 on stock Bun 1.4.2 | Node 22 | Node 24 |
+|  | Rapid Pi 0.8.0 | Pi 1.1.0 on stock Bun 1.4.2 | Node 22 | Node 24 |
 |---|---:|---:|---:|---:|
 | Peak working set, interactive session | 95 MB | 164 MB | 165 MB | 178 MB |
 | Peak private working set, interactive session | 56 MB | 126 MB | 132 MB | 138 MB |
@@ -58,10 +58,10 @@ Process floor: a minimal native program (bench/floor/floor.c: prints a line; in 
 
 |  | launch | hot loop |
 |---|---:|---:|
-| Pi-Bolt 0.8.0, compiled in | 114 ms | 41 ms |
-| Pi-Bolt (JIT on), compiled in | 125 ms | 36 ms |
-| Pi-Bolt 0.8.0, run time | 146 ms | 756 ms |
-| Pi-Bolt (JIT on), run time | 161 ms | 32 ms |
+| Rapid Pi 0.8.0, compiled in | 114 ms | 41 ms |
+| Rapid Pi (JIT on), compiled in | 125 ms | 36 ms |
+| Rapid Pi 0.8.0, run time | 146 ms | 756 ms |
+| Rapid Pi (JIT on), run time | 161 ms | 32 ms |
 | Pi 1.1.0 on stock Bun 1.4.2, run time | 249 ms | 32 ms |
 
 runs: {'startup': 11, 'headless': 11, 'interactive': 11}, long sessions: 4, ConPTY rounds: 5

@@ -1,4 +1,4 @@
-package opensec.pibolt.baselineprofile
+package opensec.rapidpi.baselineprofile
 
 import androidx.benchmark.macro.BaselineProfileMode
 import androidx.benchmark.macro.CompilationMode

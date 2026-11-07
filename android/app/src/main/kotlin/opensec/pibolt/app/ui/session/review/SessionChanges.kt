@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.session.review
+package opensec.rapidpi.app.ui.session.review
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -13,17 +13,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import opensec.pibolt.app.checkpoints.TurnCheckpoints
-import opensec.pibolt.app.checkpoints.TurnRecord
-import opensec.pibolt.app.ui.components.GlassPill
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.theme.Tnum
-import opensec.pibolt.protocol.session.UserItem
+import opensec.rapidpi.app.checkpoints.TurnCheckpoints
+import opensec.rapidpi.app.checkpoints.TurnRecord
+import opensec.rapidpi.app.ui.components.GlassPill
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.theme.Tnum
+import opensec.rapidpi.protocol.session.UserItem
 
 /**
  * What this session changed in the project, from the turn checkpoints: the turns whose files changed (oldest first, an

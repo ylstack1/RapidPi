@@ -4,52 +4,52 @@ import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import {
-	piBoltInstallDir,
-	piBoltInstallerProcess,
-	piBoltInstallMethod,
-	piBoltUpdateEnvironment,
-} from "../src/pi-bolt.ts";
+	rapidPiInstallDir,
+	rapidPiInstallerProcess,
+	rapidPiInstallMethod,
+	rapidPiUpdateEnvironment,
+} from "../src/rapid-pi.ts";
 
 const originalExecPath = process.execPath;
-const originalNpm = process.env.PIBOLT_NPM;
+const originalNpm = process.env.RAPIDPI_NPM;
 
 afterEach(() => {
 	Object.defineProperty(process, "execPath", { configurable: true, writable: true, value: originalExecPath });
-	if (originalNpm === undefined) delete process.env.PIBOLT_NPM;
-	else process.env.PIBOLT_NPM = originalNpm;
+	if (originalNpm === undefined) delete process.env.RAPIDPI_NPM;
+	else process.env.RAPIDPI_NPM = originalNpm;
 });
 
 function setExecPath(value: string): void {
 	Object.defineProperty(process, "execPath", { configurable: true, writable: true, value });
 }
 
-describe("piBoltInstallMethod", () => {
+describe("rapidPiInstallMethod", () => {
 	it("tells an executable the npm package downloaded, on every platform", () => {
-		delete process.env.PIBOLT_NPM;
-		setExecPath("/home/me/.pi-bolt/npm/0.7.0/pi-bolt-linux-x64/pi");
-		expect(piBoltInstallMethod()).toBe("npm");
-		setExecPath("/Users/me/.pi-bolt/npm/0.7.0/pi-bolt-darwin-arm64/pi");
-		expect(piBoltInstallMethod()).toBe("npm");
-		setExecPath("C:\\Users\\me\\.pi-bolt\\npm\\0.7.0\\pi-bolt-win32-x64\\pi-bolt.exe");
-		expect(piBoltInstallMethod()).toBe("npm");
+		delete process.env.RAPIDPI_NPM;
+		setExecPath("/home/me/.rapid-pi/npm/0.7.0/rapid-pi-linux-x64/pi");
+		expect(rapidPiInstallMethod()).toBe("npm");
+		setExecPath("/Users/me/.rapid-pi/npm/0.7.0/rapid-pi-darwin-arm64/pi");
+		expect(rapidPiInstallMethod()).toBe("npm");
+		setExecPath("C:\\Users\\me\\.rapid-pi\\npm\\0.7.0\\rapid-pi-win32-x64\\rapid-pi.exe");
+		expect(rapidPiInstallMethod()).toBe("npm");
 		// Windows: the package's install script puts the executable in its own bin folder (npm/install.cjs).
-		setExecPath("C:\\Users\\me\\AppData\\Roaming\\npm\\node_modules\\pi-bolt\\bin\\pi-bolt.exe");
-		expect(piBoltInstallMethod()).toBe("npm");
+		setExecPath("C:\\Users\\me\\AppData\\Roaming\\npm\\node_modules\\rapid-pi\\bin\\rapid-pi.exe");
+		expect(rapidPiInstallMethod()).toBe("npm");
 	});
 
 	it("tells an executable the installer put in place", () => {
-		delete process.env.PIBOLT_NPM;
-		setExecPath("/home/me/.pi-bolt/pi-bolt-linux-x64/pi");
-		expect(piBoltInstallMethod()).toBe("installer");
-		setExecPath("C:\\Users\\me\\.pi-bolt\\pi-bolt-win32-x64\\pi-bolt.exe");
-		expect(piBoltInstallMethod()).toBe("installer");
+		delete process.env.RAPIDPI_NPM;
+		setExecPath("/home/me/.rapid-pi/rapid-pi-linux-x64/pi");
+		expect(rapidPiInstallMethod()).toBe("installer");
+		setExecPath("C:\\Users\\me\\.rapid-pi\\rapid-pi-win32-x64\\rapid-pi.exe");
+		expect(rapidPiInstallMethod()).toBe("installer");
 	});
 });
 
-describe("piBoltUpdateEnvironment", () => {
+describe("rapidPiUpdateEnvironment", () => {
 	const saved = { ...process.env };
 	afterEach(() => {
-		for (const name of ["PIBOLT_INSTALL", "PIBOLT_DOWNLOAD_BASE", "PIBOLT_SOURCE", "PIBOLT_VERSION"]) {
+		for (const name of ["RAPIDPI_INSTALL", "RAPIDPI_DOWNLOAD_BASE", "RAPIDPI_SOURCE", "RAPIDPI_VERSION"]) {
 			if (saved[name] === undefined) delete process.env[name];
 			else process.env[name] = saved[name];
 		}
@@ -57,52 +57,52 @@ describe("piBoltUpdateEnvironment", () => {
 
 	it("updates the installation where it is, to the version decided on, from the signed release", () => {
 		const root = process.platform === "win32" ? "D:\\Tools\\Pi" : "/opt/tools/pi";
-		setExecPath(join(root, `pi-bolt-${process.platform}-x64`, process.platform === "win32" ? "pi-bolt.exe" : "pi"));
-		process.env.PIBOLT_INSTALL = join(root, "elsewhere");
-		process.env.PIBOLT_DOWNLOAD_BASE = "https://mirror.example";
-		process.env.PIBOLT_SOURCE = "github";
-		process.env.PIBOLT_VERSION = "bolt-v0.1.0";
-		process.env.PIBOLT_INSTALLER_NO_MAIN = "1";
-		const env = piBoltUpdateEnvironment("0.8.0");
-		delete process.env.PIBOLT_INSTALLER_NO_MAIN;
-		expect(env.PIBOLT_INSTALLER_NO_MAIN).toBeUndefined();
-		expect(env.PIBOLT_INSTALL).toBe(root);
-		expect(env.PIBOLT_VERSION).toBe("bolt-v0.8.0");
-		expect(env.PIBOLT_DOWNLOAD_BASE).toBeUndefined();
-		expect(env.PIBOLT_SOURCE).toBeUndefined();
+		setExecPath(join(root, `rapid-pi-${process.platform}-x64`, process.platform === "win32" ? "rapid-pi.exe" : "pi"));
+		process.env.RAPIDPI_INSTALL = join(root, "elsewhere");
+		process.env.RAPIDPI_DOWNLOAD_BASE = "https://mirror.example";
+		process.env.RAPIDPI_SOURCE = "github";
+		process.env.RAPIDPI_VERSION = "bolt-v0.1.0";
+		process.env.RAPIDPI_INSTALLER_NO_MAIN = "1";
+		const env = rapidPiUpdateEnvironment("0.8.0");
+		delete process.env.RAPIDPI_INSTALLER_NO_MAIN;
+		expect(env.RAPIDPI_INSTALLER_NO_MAIN).toBeUndefined();
+		expect(env.RAPIDPI_INSTALL).toBe(root);
+		expect(env.RAPIDPI_VERSION).toBe("bolt-v0.8.0");
+		expect(env.RAPIDPI_DOWNLOAD_BASE).toBeUndefined();
+		expect(env.RAPIDPI_SOURCE).toBeUndefined();
 		// PATH stays as the user left it (on Windows the installer would add this folder without asking).
-		expect(env.PIBOLT_NO_PATH).toBe("1");
+		expect(env.RAPIDPI_NO_PATH).toBe("1");
 	});
 
-	it("falls back to PIBOLT_INSTALL, then ~/.pi-bolt, for an executable outside a variant's folder", () => {
-		setExecPath(process.platform === "win32" ? "C:\\bin\\pi-bolt.exe" : "/usr/local/bin/pi");
-		delete process.env.PIBOLT_INSTALL;
-		expect(piBoltInstallDir()).toBeUndefined();
-		expect(piBoltUpdateEnvironment("0.8.0").PIBOLT_INSTALL).toBe(join(homedir(), ".pi-bolt"));
+	it("falls back to RAPIDPI_INSTALL, then ~/.rapid-pi, for an executable outside a variant's folder", () => {
+		setExecPath(process.platform === "win32" ? "C:\\bin\\rapid-pi.exe" : "/usr/local/bin/pi");
+		delete process.env.RAPIDPI_INSTALL;
+		expect(rapidPiInstallDir()).toBeUndefined();
+		expect(rapidPiUpdateEnvironment("0.8.0").RAPIDPI_INSTALL).toBe(join(homedir(), ".rapid-pi"));
 	});
 });
 
-describe("piBoltInstallerProcess", () => {
+describe("rapidPiInstallerProcess", () => {
 	it("runs the installer for this platform, with an exit status that says whether it installed", () => {
-		const { command, args } = piBoltInstallerProcess();
+		const { command, args } = rapidPiInstallerProcess();
 		if (process.platform === "win32") {
 			expect(command.toLowerCase()).toMatch(/\\system32\\windowspowershell\\v1\.0\\powershell\.exe$/);
 			expect(args.at(-1)).toBe(
-				"[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072; try { $installer = irm https://pi-bolt.opensec.in/install.ps1 -ErrorAction Stop } catch { Write-Error $_; exit 1 }; iex $installer; exit $LASTEXITCODE",
+				"[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072; try { $installer = irm https://rapid-pi.opensec.in/install.ps1 -ErrorAction Stop } catch { Write-Error $_; exit 1 }; iex $installer; exit $LASTEXITCODE",
 			);
 		} else {
 			expect(command).toBe("sh");
 			expect(args[0]).toBe("-c");
-			expect(args[1]).toContain("curl -fsSL https://pi-bolt.opensec.in/install.sh");
-			expect(args[1]).toContain("wget -qO- https://pi-bolt.opensec.in/install.sh");
+			expect(args[1]).toContain("curl -fsSL https://rapid-pi.opensec.in/install.sh");
+			expect(args[1]).toContain("wget -qO- https://rapid-pi.opensec.in/install.sh");
 		}
 	});
 
 	it.skipIf(process.platform === "win32")(
 		"downloads with wget where there is no curl; a failed download fails",
 		() => {
-			const { args } = piBoltInstallerProcess();
-			const bin = mkdtempSync(join(tmpdir(), "pi-bolt-installer-"));
+			const { args } = rapidPiInstallerProcess();
+			const bin = mkdtempSync(join(tmpdir(), "rapid-pi-installer-"));
 			try {
 				// A PATH with only sh and a wget that prints a tiny installer: no curl.
 				symlinkSync("/bin/sh", join(bin, "sh"));

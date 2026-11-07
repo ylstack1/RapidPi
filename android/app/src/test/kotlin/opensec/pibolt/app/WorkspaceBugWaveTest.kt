@@ -1,19 +1,19 @@
-package opensec.pibolt.app
+package opensec.rapidpi.app
 
 import androidx.compose.ui.text.input.TextFieldValue
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import opensec.pibolt.app.git.Commit
-import opensec.pibolt.app.git.GitException
-import opensec.pibolt.app.git.GitResult
-import opensec.pibolt.app.git.GitRunner
-import opensec.pibolt.app.ui.git.GitOverlay
-import opensec.pibolt.app.ui.git.HistoryPages
-import opensec.pibolt.app.ui.projects.ProjectClone
-import opensec.pibolt.app.ui.projects.ProjectFiles
-import opensec.pibolt.app.ui.projects.editor.EditorTabs
+import opensec.rapidpi.app.git.Commit
+import opensec.rapidpi.app.git.GitException
+import opensec.rapidpi.app.git.GitResult
+import opensec.rapidpi.app.git.GitRunner
+import opensec.rapidpi.app.ui.git.GitOverlay
+import opensec.rapidpi.app.ui.git.HistoryPages
+import opensec.rapidpi.app.ui.projects.ProjectClone
+import opensec.rapidpi.app.ui.projects.ProjectFiles
+import opensec.rapidpi.app.ui.projects.editor.EditorTabs
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.AfterTest
@@ -31,7 +31,7 @@ class WorkspaceBugWaveTest {
 
     @BeforeTest
     fun setUp() {
-        dir = Files.createTempDirectory("pibolt-workspace").toFile()
+        dir = Files.createTempDirectory("rapidpi-workspace").toFile()
     }
 
     @AfterTest

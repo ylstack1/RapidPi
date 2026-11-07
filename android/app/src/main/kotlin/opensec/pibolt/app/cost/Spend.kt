@@ -1,13 +1,13 @@
-package opensec.pibolt.app.cost
+package opensec.rapidpi.app.cost
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.json.JsonObject
-import opensec.pibolt.protocol.arr
-import opensec.pibolt.protocol.double
-import opensec.pibolt.protocol.long
-import opensec.pibolt.protocol.obj
-import opensec.pibolt.protocol.str
-import opensec.pibolt.protocol.type
+import opensec.rapidpi.protocol.arr
+import opensec.rapidpi.protocol.double
+import opensec.rapidpi.protocol.long
+import opensec.rapidpi.protocol.obj
+import opensec.rapidpi.protocol.str
+import opensec.rapidpi.protocol.type
 import java.util.Locale
 
 /**

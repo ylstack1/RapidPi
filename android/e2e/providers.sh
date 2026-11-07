@@ -24,14 +24,14 @@ case_first_run_sheet() {
 	clear_data
 	install_provider_config openai-key
 	launch_app
-	assert_visible "text=Welcome to Pi-Bolt" "no first-run key sheet without keys"
+	assert_visible "text=Welcome to Rapid Pi" "no first-run key sheet without keys"
 	assert_visible "text=Connect a model"
 	assert_visible "text=Later"
 	assert_visible "text=OpenAI"
 }
 
 case_add_key_hides_sheet() {
-	ui_find "text=Welcome to Pi-Bolt" >/dev/null || case_first_run_sheet
+	ui_find "text=Welcome to Rapid Pi" >/dev/null || case_first_run_sheet
 	# Search narrows the list.
 	tap "text~=Search"
 	type_text "openai"
@@ -47,9 +47,9 @@ case_add_key_hides_sheet() {
 	ui_find "text~=$KEY" >/dev/null && fail "the key is shown in clear text before Show"
 	hide_keyboard
 	tap "text=Save key"
-	assert_gone "text=Welcome to Pi-Bolt" "the sheet did not close after Save key"
+	assert_gone "text=Welcome to Rapid Pi" "the sheet did not close after Save key"
 	assert_gone "text~=Paste your OpenAI API key"
-	assert_visible "text=Pi-Bolt"
+	assert_visible "text=Rapid Pi"
 	sleep 1
 	auth_has openai || fail "the key was not stored for openai"
 	if [ "$E2E_ENGINE" = real ]; then
@@ -60,7 +60,7 @@ case_add_key_hides_sheet() {
 	ui_find "text=Add key" >/dev/null && fail "the 'Connect a model' card shows although a key exists"
 	restart_app
 	sleep 1
-	ui_find "text=Welcome to Pi-Bolt" >/dev/null && fail "the first-run sheet came back after a restart"
+	ui_find "text=Welcome to Rapid Pi" >/dev/null && fail "the first-run sheet came back after a restart"
 	return 0
 }
 
@@ -101,18 +101,18 @@ case_later_leaves_card() {
 	clear_data
 	install_provider_config openai-key
 	launch_app
-	assert_visible "text=Welcome to Pi-Bolt"
+	assert_visible "text=Welcome to Rapid Pi"
 	tap "text=Later"
-	assert_gone "text=Welcome to Pi-Bolt" "Later did not close the sheet"
+	assert_gone "text=Welcome to Rapid Pi" "Later did not close the sheet"
 	assert_visible "text=Add key" "no 'Connect a model' card after Later"
 	restart_app
 	sleep 1
-	ui_find "text=Welcome to Pi-Bolt" >/dev/null && fail "the first-run sheet showed again after Later and a restart"
+	ui_find "text=Welcome to Rapid Pi" >/dev/null && fail "the first-run sheet showed again after Later and a restart"
 	assert_visible "text=Add key"
 	# The card opens the same sheet without the welcome line.
 	tap "text=Add key"
 	assert_visible "text=Connect a model"
-	ui_find "text=Welcome to Pi-Bolt" >/dev/null && fail "the card's sheet shows the first-run welcome"
+	ui_find "text=Welcome to Rapid Pi" >/dev/null && fail "the card's sheet shows the first-run welcome"
 	back
 	return 0
 }
