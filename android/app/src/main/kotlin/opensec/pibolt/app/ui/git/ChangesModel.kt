@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.git
+package opensec.rapidpi.app.ui.git
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -11,20 +11,20 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
-import opensec.pibolt.app.data.ProjectStore
-import opensec.pibolt.app.engine.EngineApi
-import opensec.pibolt.app.git.DiffStats
-import opensec.pibolt.app.git.GitException
-import opensec.pibolt.app.git.GitProgress
-import opensec.pibolt.app.git.GitRepo
-import opensec.pibolt.app.git.GitRunner
-import opensec.pibolt.app.git.GitSource
-import opensec.pibolt.app.git.GitStatus
-import opensec.pibolt.app.git.github.GitHubException
-import opensec.pibolt.app.session.LinkState
-import opensec.pibolt.app.ui.projects.LocalSessions
-import opensec.pibolt.protocol.rpc.StreamingBehavior
-import opensec.pibolt.protocol.session.AssistantTextItem
+import opensec.rapidpi.app.data.ProjectStore
+import opensec.rapidpi.app.engine.EngineApi
+import opensec.rapidpi.app.git.DiffStats
+import opensec.rapidpi.app.git.GitException
+import opensec.rapidpi.app.git.GitProgress
+import opensec.rapidpi.app.git.GitRepo
+import opensec.rapidpi.app.git.GitRunner
+import opensec.rapidpi.app.git.GitSource
+import opensec.rapidpi.app.git.GitStatus
+import opensec.rapidpi.app.git.github.GitHubException
+import opensec.rapidpi.app.session.LinkState
+import opensec.rapidpi.app.ui.projects.LocalSessions
+import opensec.rapidpi.protocol.rpc.StreamingBehavior
+import opensec.rapidpi.protocol.session.AssistantTextItem
 import java.io.File
 
 /**

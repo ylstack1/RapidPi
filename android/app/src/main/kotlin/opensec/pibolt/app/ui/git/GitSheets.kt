@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.git
+package opensec.rapidpi.app.ui.git
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -47,25 +47,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.git.Branch
-import opensec.pibolt.app.git.GitException
-import opensec.pibolt.app.git.GitLogFormat
-import opensec.pibolt.app.git.github.GitHubException
-import opensec.pibolt.app.git.github.GitHubRemote
-import opensec.pibolt.app.git.github.PullRequest
-import opensec.pibolt.app.ui.components.CopyButton
-import opensec.pibolt.app.ui.components.InsetRow
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PiTextField
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.SOFT_PRESS
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SectionLabel
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.pressable
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.IconSize
+import opensec.rapidpi.app.git.Branch
+import opensec.rapidpi.app.git.GitException
+import opensec.rapidpi.app.git.GitLogFormat
+import opensec.rapidpi.app.git.github.GitHubException
+import opensec.rapidpi.app.git.github.GitHubRemote
+import opensec.rapidpi.app.git.github.PullRequest
+import opensec.rapidpi.app.ui.components.CopyButton
+import opensec.rapidpi.app.ui.components.InsetRow
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PiTextField
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.SOFT_PRESS
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SectionLabel
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.pressable
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.IconSize
 
 /** Local branches (current first), then remote ones; tap switches, the field on top creates and switches. */
 @OptIn(ExperimentalMaterial3Api::class)

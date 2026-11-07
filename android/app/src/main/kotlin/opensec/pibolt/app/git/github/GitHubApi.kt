@@ -1,4 +1,4 @@
-package opensec.pibolt.app.git.github
+package opensec.rapidpi.app.git.github
 
 import androidx.compose.runtime.Immutable
 import kotlinx.coroutines.Dispatchers

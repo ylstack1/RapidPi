@@ -1,4 +1,4 @@
-package opensec.pibolt.app.git
+package opensec.rapidpi.app.git
 
 import androidx.compose.runtime.Immutable
 

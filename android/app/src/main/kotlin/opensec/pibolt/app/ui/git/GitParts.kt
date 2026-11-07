@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.git
+package opensec.rapidpi.app.ui.git
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,18 +24,18 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.git.Change
-import opensec.pibolt.app.git.FileDiff
-import opensec.pibolt.app.git.Hunk
-import opensec.pibolt.app.ui.components.GlassBar
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.session.DiffKind
-import opensec.pibolt.app.ui.session.DiffLine
-import opensec.pibolt.app.ui.session.parseDiff
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.PiColors
-import opensec.pibolt.app.ui.theme.Radius
-import opensec.pibolt.app.ui.theme.Space
+import opensec.rapidpi.app.git.Change
+import opensec.rapidpi.app.git.FileDiff
+import opensec.rapidpi.app.git.Hunk
+import opensec.rapidpi.app.ui.components.GlassBar
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.session.DiffKind
+import opensec.rapidpi.app.ui.session.DiffLine
+import opensec.rapidpi.app.ui.session.parseDiff
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.PiColors
+import opensec.rapidpi.app.ui.theme.Radius
+import opensec.rapidpi.app.ui.theme.Space
 
 /** A code card (a hunk, a commit's file): surface1 with a 1dp line, radius lg, 16dp in from the sides, clipped. */
 @Composable

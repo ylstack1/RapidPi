@@ -1,4 +1,4 @@
-package opensec.pibolt.app.git.github
+package opensec.rapidpi.app.git.github
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers

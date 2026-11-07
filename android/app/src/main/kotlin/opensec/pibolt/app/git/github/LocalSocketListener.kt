@@ -1,4 +1,4 @@
-package opensec.pibolt.app.git.github
+package opensec.rapidpi.app.git.github
 
 import android.net.LocalServerSocket
 import android.net.LocalSocket

@@ -1,4 +1,4 @@
-package opensec.pibolt.app.git
+package opensec.rapidpi.app.git
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runInterruptible

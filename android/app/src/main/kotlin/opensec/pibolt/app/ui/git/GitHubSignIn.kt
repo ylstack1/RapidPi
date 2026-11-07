@@ -1,7 +1,7 @@
-package opensec.pibolt.app.ui.git
+package opensec.rapidpi.app.ui.git
 
-import opensec.pibolt.app.ui.components.FieldHint
-import opensec.pibolt.app.ui.components.SecretField
+import opensec.rapidpi.app.ui.components.FieldHint
+import opensec.rapidpi.app.ui.components.SecretField
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,9 +22,9 @@ import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.Key
-import opensec.pibolt.app.ui.components.GroupEnd
-import opensec.pibolt.app.ui.components.GroupRow
-import opensec.pibolt.app.ui.components.InsetGroup
+import opensec.rapidpi.app.ui.components.GroupEnd
+import opensec.rapidpi.app.ui.components.GroupRow
+import opensec.rapidpi.app.ui.components.InsetGroup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -46,24 +46,24 @@ import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import opensec.pibolt.app.PiBoltApp
-import opensec.pibolt.app.git.GitRepo
-import opensec.pibolt.app.git.github.DeviceFlowState
-import opensec.pibolt.app.git.github.GitHub
-import opensec.pibolt.app.git.github.GitHubException
-import opensec.pibolt.app.git.github.GitHubState
-import opensec.pibolt.app.git.github.TokenKind
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.CopyButton
-import opensec.pibolt.app.ui.components.PiSheet
-import opensec.pibolt.app.ui.components.PrimaryButton
-import opensec.pibolt.app.ui.components.QuadMode
-import opensec.pibolt.app.ui.components.QuadSpinner
-import opensec.pibolt.app.ui.components.SecondaryButton
-import opensec.pibolt.app.ui.components.SheetHeader
-import opensec.pibolt.app.ui.components.rememberSheetCloser
-import opensec.pibolt.app.ui.theme.Pi
-import opensec.pibolt.app.ui.theme.Radius
+import opensec.rapidpi.app.PiBoltApp
+import opensec.rapidpi.app.git.GitRepo
+import opensec.rapidpi.app.git.github.DeviceFlowState
+import opensec.rapidpi.app.git.github.GitHub
+import opensec.rapidpi.app.git.github.GitHubException
+import opensec.rapidpi.app.git.github.GitHubState
+import opensec.rapidpi.app.git.github.TokenKind
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.CopyButton
+import opensec.rapidpi.app.ui.components.PiSheet
+import opensec.rapidpi.app.ui.components.PrimaryButton
+import opensec.rapidpi.app.ui.components.QuadMode
+import opensec.rapidpi.app.ui.components.QuadSpinner
+import opensec.rapidpi.app.ui.components.SecondaryButton
+import opensec.rapidpi.app.ui.components.SheetHeader
+import opensec.rapidpi.app.ui.components.rememberSheetCloser
+import opensec.rapidpi.app.ui.theme.Pi
+import opensec.rapidpi.app.ui.theme.Radius
 
 /**
  * Settings > GitHub, as a group. Signed out: "Sign in with GitHub" (device flow, when this build has an OAuth client

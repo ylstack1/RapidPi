@@ -1,4 +1,4 @@
-package opensec.pibolt.app.ui.git
+package opensec.rapidpi.app.ui.git
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,15 +23,15 @@ import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import opensec.pibolt.app.ui.components.GlassChip
-import opensec.pibolt.app.ui.components.GlassIconButton
-import opensec.pibolt.app.ui.components.GlassPill
-import opensec.pibolt.app.ui.components.LineCounts
-import opensec.pibolt.app.ui.theme.IconSize
-import opensec.pibolt.app.ui.theme.Space
-import opensec.pibolt.app.ui.components.ErrorState
-import opensec.pibolt.app.ui.components.LoadingRow
-import opensec.pibolt.app.ui.projects.EmptyCard
+import opensec.rapidpi.app.ui.components.GlassChip
+import opensec.rapidpi.app.ui.components.GlassIconButton
+import opensec.rapidpi.app.ui.components.GlassPill
+import opensec.rapidpi.app.ui.components.LineCounts
+import opensec.rapidpi.app.ui.theme.IconSize
+import opensec.rapidpi.app.ui.theme.Space
+import opensec.rapidpi.app.ui.components.ErrorState
+import opensec.rapidpi.app.ui.components.LoadingRow
+import opensec.rapidpi.app.ui.projects.EmptyCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,16 +44,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import opensec.pibolt.app.git.FileDiff
-import opensec.pibolt.app.git.GitException
-import opensec.pibolt.app.git.Hunk
-import opensec.pibolt.app.ui.components.ConfirmSheet
-import opensec.pibolt.app.ui.components.DiffBlock
-import opensec.pibolt.app.ui.components.IconAction
-import opensec.pibolt.app.ui.components.TextAction
-import opensec.pibolt.app.ui.components.diffText
-import opensec.pibolt.app.ui.markdown.CodeInfo
-import opensec.pibolt.app.ui.theme.Pi
+import opensec.rapidpi.app.git.FileDiff
+import opensec.rapidpi.app.git.GitException
+import opensec.rapidpi.app.git.Hunk
+import opensec.rapidpi.app.ui.components.ConfirmSheet
+import opensec.rapidpi.app.ui.components.DiffBlock
+import opensec.rapidpi.app.ui.components.IconAction
+import opensec.rapidpi.app.ui.components.TextAction
+import opensec.rapidpi.app.ui.components.diffText
+import opensec.rapidpi.app.ui.markdown.CodeInfo
+import opensec.rapidpi.app.ui.theme.Pi
 
 /**
  * One file's diff, staged or not, hunk by hunk in the rows renderer (two gutters, syntax colours, word marks). Each

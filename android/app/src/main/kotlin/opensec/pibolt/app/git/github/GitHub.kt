@@ -1,4 +1,4 @@
-package opensec.pibolt.app.git.github
+package opensec.rapidpi.app.git.github
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
