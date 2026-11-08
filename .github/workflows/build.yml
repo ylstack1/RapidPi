@@ -140,3 +140,23 @@ jobs:
         with:
           name: rapid-pi-android-debug-engine
           path: android/app/build/outputs/apk/debug/*.apk
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [android-debug, android-with-engine]
+    if: always() && (needs.android-debug.result == 'success' || needs.android-with-engine.result == 'success')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.event.inputs.target == 'android-with-engine' && 'rapid-pi-android-debug-engine' || 'rapid-pi-android-debug' }}
+          path: release/
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-v${{ github.run_number }}
+          name: Rapid Pi Android ${{ github.run_number }}
+          files: release/*.apk
+          draft: false
+          prerelease: true
