@@ -158,5 +158,5 @@ jobs:
           tag_name: android-v${{ github.run_number }}
           name: Rapid Pi Android ${{ github.run_number }}
           files: release/*.apk
-          draft: false
+          draft: true
           prerelease: true
