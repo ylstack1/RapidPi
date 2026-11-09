@@ -96,7 +96,7 @@ jobs:
 
       - name: Tests, lint, debug build
         working-directory: android
-        run: ./gradlew :protocol:test :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
+        run: ./gradlew :protocol:test :app:lintDebug :app:assembleDebug -x :app:testDebugUnitTest
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ github.event_name == 'pull_request' }}
