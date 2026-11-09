@@ -82,6 +82,7 @@ jobs:
             android/**/*.gradle.kts
 
       - name: NDK and CMake
+        working-directory: android
         run: |
           ndk=$(sed -n 's/^ *ndkVersion = "\(.*\)"$/\1/p' app/build.gradle.kts)
           cmake=$(sed -n 's/^ *version = "\(.*\)"$/\1/p' app/build.gradle.kts)
