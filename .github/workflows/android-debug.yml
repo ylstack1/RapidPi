@@ -1,0 +1,115 @@
+name: android-debug
+
+# Debug APK build using a pre-built engine pack from a release.
+# Skips the engine pack compilation (Docker on ubuntu-24.04-arm) entirely:
+# downloads rapid-pi-engine-pack.zip from a release, extracts it to
+# android/engine/out/, then builds the debug APK with Gradle.
+# Uploads the debug APK as a workflow artifact.
+#
+# Triggers: push to any branch, pull requests, manual dispatch.
+
+on:
+  push:
+    branches: ["*"]
+    paths:
+      - "android/**"
+      - "extensions.txt"
+      - ".github/workflows/android-debug.yml"
+  pull_request:
+    paths:
+      - "android/**"
+      - "extensions.txt"
+      - ".github/workflows/android-debug.yml"
+  workflow_dispatch:
+    inputs:
+      engine_pack_tag:
+        description: "Release tag whose rapid-pi-engine-pack.zip to use (defaults to latest)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-debug-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: Debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Resolve the engine pack release tag: explicit input, else latest release.
+      - name: Resolve engine pack tag
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.engine_pack_tag }}" ]; then
+            echo "tag=${{ github.event.inputs.engine_pack_tag }}" >> "$GITHUB_OUTPUT"
+          else
+            tag=$(gh release list --repo "${{ github.repository }}" --limit 1 --json tagName -q '.[0].tagName')
+            echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      # Download the pre-built engine pack from the release instead of compiling it.
+      - name: Download engine pack
+        run: |
+          tag="${{ steps.tag.outputs.tag }}"
+          echo "Using engine pack from release $tag"
+          curl -fsSL -o /tmp/engine-pack.zip \
+            "https://github.com/${{ github.repository }}/releases/download/$tag/rapid-pi-engine-pack.zip"
+          unzip -q -o /tmp/engine-pack.zip -d /tmp/engine-pack
+          mkdir -p android/engine/out
+          cp -r /tmp/engine-pack/jniLibs android/engine/out/
+          cp -r /tmp/engine-pack/assets android/engine/out/
+          echo "jniLibs: $(find android/engine/out/jniLibs -name '*.so' | wc -l) .so files"
+          echo "assets:  $(find android/engine/out/assets/engine -type f | wc -l) files"
+
+      - uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+          cache-dependency-path: |
+            android/gradle/libs.versions.toml
+            android/gradle/wrapper/gradle-wrapper.properties
+            android/**/*.gradle.kts
+
+      - name: NDK and CMake
+        run: |
+          ndk=$(sed -n 's/^ *ndkVersion = "\(.*\)"$/\1/p' app/build.gradle.kts)
+          cmake=$(sed -n 's/^ *version = "\(.*\)"$/\1/p' app/build.gradle.kts)
+          test -n "$ndk" && test -n "$cmake"
+          sdkmanager="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          [ -f "$ANDROID_HOME/ndk/$ndk/source.properties" ] || { (yes || true) | "$sdkmanager" --install "ndk;$ndk" > /dev/null; }
+          [ -x "$ANDROID_HOME/cmake/$cmake/bin/cmake" ] || { (yes || true) | "$sdkmanager" --install "cmake;$cmake" > /dev/null; }
+          test -f "$ANDROID_HOME/ndk/$ndk/source.properties"
+          test -x "$ANDROID_HOME/cmake/$cmake/bin/cmake"
+          echo "NDK $ndk, CMake $cmake"
+
+      - name: Tests, lint, debug build
+        working-directory: android
+        run: ./gradlew :protocol:test :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          name: rapid-pi-android-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ failure() }}
+        with:
+          name: android-reports
+          path: |
+            android/app/build/reports/
+            android/protocol/build/reports/
+          retention-days: 7
