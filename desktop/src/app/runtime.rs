@@ -830,14 +830,14 @@ fn perform_response_fork(mut request: ResponseForkRequest) -> Result<PreparedRes
             ProviderKind::RapidPi => {
                 if !matches!(
                     request.source.provider_cursor.as_ref(),
-                    Some(ProviderResumeCursor::Pi {
+                    Some(ProviderResumeCursor::RapidPi {
                         session_file: Some(_),
                         ..
                     })
                 ) {
                     anyhow::bail!(tr!(
                         "errors.provider_session_file_unavailable",
-                        provider = "Pi"
+                        provider = "Rapid Pi"
                     ));
                 }
                 let (cursor, prepared_driver) = fork_response_with_driver(&mut request)?;

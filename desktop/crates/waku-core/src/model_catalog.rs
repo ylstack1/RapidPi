@@ -311,65 +311,16 @@ fn claude_release_label(label: &str, description: Option<&str>) -> String {
     }
 }
 
-fn discover_cursor_models(binary: &Path) -> Vec<ProviderModel> {
-    let discovered = discover_cursor_models_via_acp(binary);
-    if !discovered.is_empty() {
-        return discovered;
-    }
-    let mut command = crate::command_env::command(binary);
-    let command = command.arg("models");
-    let Ok(output) = crate::command_env::output(command) else {
-        return Vec::new();
-    };
-    let combined = format!(
-        "{}\n{}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    parse_cursor_models(&combined)
+fn discover_cursor_models(_binary: &Path) -> Vec<ProviderModel> {
+    Vec::new()
 }
 
 /// Cursor's parameterized picker is an ACP extension: `cursor-agent models`
 /// still prints exploded CLI aliases, while `cursor/list_available_models`
 /// returns the base slug plus per-model config options (effort, fast, context).
-fn discover_cursor_models_via_acp(binary: &Path) -> Vec<ProviderModel> {
-    let Ok(cwd) = crate::acp_session::catalog_working_directory() else {
-        return Vec::new();
-    };
-    let Ok(agent) = crate::driver::catalog_agent(ProviderKind::Cursor, binary, &cwd) else {
-        return Vec::new();
-    };
-    let request = Client
-        .builder()
-        .name("waku-cursor-model-discovery")
-        .connect_with(agent, async move |connection: ConnectionTo<Agent>| {
-            let mut capabilities = ClientCapabilities::new().terminal(false);
-            let mut meta = Map::new();
-            meta.insert("parameterizedModelPicker".to_owned(), Value::Bool(true));
-            capabilities = capabilities.meta(meta);
-            connection
-                .send_request(
-                    InitializeRequest::new(ProtocolVersion::V1)
-                        .client_capabilities(capabilities)
-                        .client_info(Implementation::new("waku", env!("CARGO_PKG_VERSION"))),
-                )
-                .block_task()
-                .await?;
-            let request = UntypedMessage::new("cursor/list_available_models", json!({}))?;
-            connection.send_request(request).block_task().await
-        });
-    let response = smol::block_on(smol::future::race(
-        async move { request.await.map_err(|_| ()) },
-        async move {
-            smol::Timer::after(CURSOR_ACP_DISCOVERY_TIMEOUT).await;
-            Err(())
-        },
-    ));
-    response
-        .ok()
-        .map(|value| parse_cursor_available_models(&value))
-        .unwrap_or_default()
-}
+/// Cursor's parameterized picker is an ACP extension: `cursor-agent models`
+/// still prints exploded CLI aliases, while `cursor/list_available_models`
+/// returns the base slug plus per-model config options (effort, fast, context).
 
 fn parse_cursor_available_models(value: &Value) -> Vec<ProviderModel> {
     value
@@ -1015,7 +966,7 @@ enum PiDialect {
 impl PiDialect {
     fn probe_args(self) -> &'static [&'static str] {
         match self {
-            Self::RapidPi => &[
+            Self::Pi => &[
                 "--mode",
                 "rpc",
                 "--no-session",

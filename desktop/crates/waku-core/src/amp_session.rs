@@ -22,7 +22,7 @@ const CONTEXT_GUIDANCE: &str = concat!(
 const PROMPT_PREFIX: &str = "WAKU_AMP_CURRENT_PROMPT_V1 ";
 
 fn thread_list(binary: &Path, limit: usize) -> anyhow::Result<Value> {
-    let cwd = crate::acp_session::catalog_working_directory()?;
+    let cwd = crate::driver::computer_use::get_cwd();
     let mut command = crate::command_env::command(binary);
     let command = command
         .args([

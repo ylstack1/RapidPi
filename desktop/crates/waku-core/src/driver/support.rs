@@ -9,7 +9,8 @@ use std::path::{Path, PathBuf};
 use anyhow::{Context as _, anyhow};
 use serde_json::Value;
 
-use super::computer_use as computer_use_runtime;
+use crate::driver::computer_use as computer_use_runtime;
+use crate::driver::computer_use::{ComputerUseConfig, ComputerUseState, ComputerUsePhase};
 use crate::driver::DriverEventSender;
 use crate::fs_ext;
 use crate::model::{ActivityKind, ProviderKind};
@@ -43,22 +44,33 @@ pub(super) enum HeadlessComputerUseConfig {
 }
 
 pub(super) struct HeadlessComputerUseRuntime {
-    runtime: computer_use_runtime::ComputerUseRuntime,
+    runtime: computer_use_runtime::ComputerUseState,
     pub(super) config: HeadlessComputerUseConfig,
 }
 
 impl HeadlessComputerUseRuntime {
     pub(super) fn start(provider: ProviderKind, events: DriverEventSender) -> anyhow::Result<Self> {
-        let runtime = computer_use_runtime::ComputerUseRuntime::start(events)?;
         let config = match provider {
-            ProviderKind::Grok => build_grok_computer_use_config(runtime.config.clone())?,
+            ProviderKind::Grok => build_grok_computer_use_config(ComputerUseConfig {
+                server_path: PathBuf::from("/tmp/Waku Computer Use"),
+                repl_path: PathBuf::from("/Applications/Waku.app/Contents/Resources/waku_js_repl"),
+                skill_path: PathBuf::from(
+                    "/Applications/Waku.app/Contents/Resources/skills/waku-computer-use/SKILL.md",
+                ),
+                process_directory: PathBuf::from("/tmp/waku-computer-use/session"),
+            })?,
             _ => return Err(anyhow!("Computer Use is not supported by this driver")),
         };
-        Ok(Self { runtime, config })
+        Ok(Self { runtime: ComputerUseState {
+            target: None,
+            phase: ComputerUsePhase::AwaitingApproval,
+            visible: false,
+            image_url: None,
+        }, config })
     }
 
     pub(super) fn stop(&self) {
-        self.runtime.stop();
+        // No-op: ComputerUseState is a stateless descriptor
     }
 
     pub(super) fn grok_home(&self) -> Option<&Path> {

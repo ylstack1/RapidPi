@@ -19,7 +19,7 @@ import {
 	verifyReleaseSums,
 } from "../src/cli/doctor.ts";
 import type * as PiBoltModule from "../src/rapid-pi.ts";
-import { RAPIDPI_RELEASE_KEY, type PiBoltBuild } from "../src/rapid-pi.ts";
+import { type PiBoltBuild, RAPIDPI_RELEASE_KEY } from "../src/rapid-pi.ts";
 
 const build = vi.hoisted(() => ({ value: undefined as PiBoltBuild | undefined }));
 vi.mock("../src/rapid-pi.ts", async (importOriginal) => {

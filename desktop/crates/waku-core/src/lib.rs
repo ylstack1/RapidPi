@@ -17,7 +17,7 @@ macro_rules! tr {
     };
 }
 
-pub mod acp_session;
+
 pub mod amp_session;
 pub mod attachments;
 pub mod blob_store;
@@ -27,12 +27,16 @@ pub mod claude_session;
 pub mod codex_session;
 pub mod command_env;
 pub mod composer_complete;
-pub mod computer_use;
+
+
+pub use computer_use::ComputerUseConfig;
+pub use computer_use::get_cwd;
 pub mod cursor_session;
 pub mod daemon;
 pub mod deepseek_pool;
 pub mod deepseek_session;
 pub mod driver;
+pub use driver::computer_use as computer_use;
 mod frontmatter;
 pub mod git_branch;
 pub mod git_commit;

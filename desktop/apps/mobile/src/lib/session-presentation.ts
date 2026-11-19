@@ -174,7 +174,7 @@ export function providerLabel(provider: ProviderKind): string {
     grok: 'Grok',
     kimi: 'Kimi',
     ohMyPi: 'Oh My Pi',
-    pi: 'Pi',
+    rapidPi: 'Rapid Pi',
   };
   return labels[provider];
 }

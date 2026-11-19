@@ -123,11 +123,7 @@ fn session_summary(session: &SessionInfo) -> Option<ProviderSessionSummary> {
             // reuse the very string the service stored.
             directory: Some(session.location.directory.clone()),
         },
-        title: crate::acp_session::session_title(
-            ProviderKind::OpenCode,
-            session.title.as_deref(),
-            session_id,
-        ),
+        title: session.title.as_deref().unwrap_or("OpenCode").to_owned(),
         cwd,
         created_at,
         updated_at: unix_seconds(session.time.updated).max(created_at),
@@ -195,7 +191,7 @@ fn strip_provider_state(messages: &mut [MessageInfo]) {
 /// Projects stored messages onto Waku's turn model.
 ///
 /// Only `user` and assistant TEXT survive: reasoning is dropped from an
-/// imported transcript the way `acp_session` drops it, and every other message
+/// imported transcript the way `acp_session` used to drop it, and every other message
 /// kind — synthetic, system, skill, shell, compaction, idle and the three
 /// `*-switched` records — is provider bookkeeping rather than conversation.
 fn history_from_messages(messages: &[MessageInfo]) -> ProviderSessionHistory {

@@ -14,5 +14,5 @@ export const PROVIDER_MENU_ICONS: Record<ProviderKind, ImageSourcePropType> = {
   grok: require('@/assets/images/providers/grok.png'),
   kimi: require('@/assets/images/providers/kimi.png'),
   ohMyPi: require('@/assets/images/providers/ohMyPi.png'),
-  pi: require('@/assets/images/providers/pi.png'),
+  rapidPi: require('@/assets/images/providers/rapidPi.png'),
 };

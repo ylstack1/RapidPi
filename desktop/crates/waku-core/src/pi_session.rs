@@ -265,7 +265,7 @@ fn summary_from_session(
         .filter(|title| !title.trim().is_empty())
         .or(first_prompt)?;
     let cursor = match provider {
-        ProviderKind::RapidPi => ProviderResumeCursor::Pi {
+        ProviderKind::RapidPi => ProviderResumeCursor::RapidPi {
             session_id: session.session_id.clone(),
             session_file: Some(path.to_path_buf()),
         },

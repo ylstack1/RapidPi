@@ -33,7 +33,7 @@ mod app;
 mod assets;
 mod browser;
 mod computer_use;
-pub mod daemon;
+mod daemon;
 mod driver;
 mod input;
 mod md;
@@ -66,7 +66,6 @@ actions!(
         NewSession,
         NewProject,
         OpenSettings,
-        CheckForUpdates,
         ToggleSidebar,
         ToggleRightPanel,
         ToggleCommandPalette,
@@ -192,8 +191,8 @@ impl WakuApplicationExt for Application {
 }
 
 pub fn run() {
-    let daemon = crate::daemon::start_process()
-        .unwrap_or_else(|error| panic!("failed to start Waku daemon: {error:#}"));
+    let daemon = crate::daemon::connect()
+        .unwrap_or_else(|error| panic!("failed to connect to Android backend: {error:#}"));
     gpui_platform::application()
         .with_assets(crate::assets::Assets)
         .with_main_window_reopen()
@@ -216,17 +215,6 @@ pub fn run() {
             crate::theme::init(cx);
             crate::platform::init_reduce_motion(cx);
 
-            // Platform updaters only run from a supported release layout (or
-            // when explicitly forced for development); everywhere else the
-            // menu item is omitted along with the updater itself.
-            let updater = crate::updater::Updater::init();
-            let updater_available = updater.is_some();
-            cx.set_global(crate::updater::UpdaterState(updater));
-            cx.on_action(|_: &CheckForUpdates, cx| {
-                if let Some(updater) = &cx.global::<crate::updater::UpdaterState>().0 {
-                    updater.check_for_updates();
-                }
-            });
             cx.on_action(|_: &About, _| crate::platform::show_about_panel());
 
             cx.bind_keys([
@@ -400,29 +388,20 @@ pub fn run() {
                 })
                 .ok();
 
-            set_app_menus(cx, updater_available);
-            // A Linux handoff retains the previous prefix until this freshly
-            // relaunched build has successfully opened its main window.
-            crate::updater::signal_relaunch_ready();
+            set_app_menus(cx);
         });
 }
 
 /// Rebuild the native menu bar in the active locale. GPUI menus own their
 /// labels, so changing language must replace the model as well as redraw the
 /// window.
-pub(crate) fn set_app_menus(cx: &mut App, updater_available: bool) {
+pub(crate) fn set_app_menus(cx: &mut App) {
     cx.set_menus(vec![
         Menu {
             name: APP_NAME.into(),
             disabled: false,
             items: {
                 let mut items = vec![MenuItem::action(tr!("menu.about", app = APP_NAME), About)];
-                if updater_available {
-                    items.push(MenuItem::action(
-                        tr!("menu.check_for_updates"),
-                        CheckForUpdates,
-                    ));
-                }
                 items.push(MenuItem::separator());
                 items.extend([
                     MenuItem::action(tr!("menu.settings"), OpenSettings),

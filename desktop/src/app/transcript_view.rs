@@ -84,7 +84,7 @@ impl ConversationNavigationRail {
     }
 
     pub(super) fn set_waku(&mut self, waku: WeakEntity<Waku>) {
-        self.rapidpi = Some(waku);
+        self.waku = Some(waku);
     }
 
     fn set_snapshot(
@@ -812,7 +812,7 @@ impl ConversationNavigationRail {
     }
 
     fn activate_turn(&self, message_id: Uuid, cx: &mut Context<Self>) {
-        if let Some(waku) = &self.rapidpi {
+        if let Some(waku) = &self.waku {
             let _ = waku.update(cx, |waku, cx| {
                 waku.scroll_to_navigation_turn(message_id, cx)
             });

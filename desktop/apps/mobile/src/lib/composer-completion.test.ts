@@ -143,7 +143,7 @@ describe('mobile slash command submission', () => {
   test('uses provider-native skill syntax and leaves native command templates to the provider', () => {
     expect(composerProviderPrompt('codex', '/deploy prod', [skill])).toBe('$deploy prod');
     expect(composerProviderPrompt('fx', '/deploy prod', [skill])).toBe('$deploy prod');
-    expect(composerProviderPrompt('pi', '/deploy prod', [skill])).toBe('/skill:deploy prod');
+    expect(composerProviderPrompt('rapidPi', '/deploy prod', [skill])).toBe('/skill:deploy prod');
     expect(composerProviderPrompt('ohMyPi', '/deploy prod', [skill])).toBe('/skill:deploy prod');
     expect(composerProviderPrompt('claude', '/deploy prod', [skill])).toBeUndefined();
     expect(composerProviderPrompt('openCode', '/review @src', [{ ...template, template: null }])).toBeUndefined();

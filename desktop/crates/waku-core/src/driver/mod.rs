@@ -1,26 +1,19 @@
 //! Local provider runtime owned by `waku-daemon`.
 
-mod acp;
 mod activity;
-mod amp;
-mod claude;
-mod codex;
-mod computer_use;
-mod deepseek;
-mod opencode;
-mod opencode_computer_use;
+pub mod computer_use;
 mod pi;
 mod support;
 mod title_refresh;
 
-pub(crate) use acp::catalog_agent;
+
 
 use std::path::PathBuf;
 use std::sync::Arc;
 
 use crossbeam_channel::{Receiver, SendError, Sender, unbounded};
 
-use crate::computer_use::ComputerToolRequest;
+use crate::driver::computer_use::ComputerToolRequest;
 use crate::model::{
     BackgroundWorkKey, DriverEvent, GoalOperation, ProviderKind, ProviderResumeCursor, RuntimeMode,
     UserInputAnswer,
@@ -216,31 +209,10 @@ pub(crate) fn start_local(
     // asks for. Every driver reads the clamped flag, which also means only
     // debug builds register the REPL server's Cua bridge or attach the skill.
     options.computer_use_enabled =
-        crate::computer_use::resolve_enabled(options.computer_use_enabled);
+        crate::driver::computer_use::resolve_enabled(options.computer_use_enabled);
     let inner: Arc<dyn DriverControl> = match provider {
-        ProviderKind::Codex => Arc::new(codex::CodexDriver::start(options, events)?),
         ProviderKind::RapidPi => Arc::new(pi::PiDriver::start(pi::PiFlavor::Pi, options, events)?),
-        ProviderKind::OhMyPi => {
-            Arc::new(pi::PiDriver::start(pi::PiFlavor::OhMyPi, options, events)?)
-        }
-        // Cursor, Fx, Grok, and Kimi Code all serve a long-lived ACP session,
-        // which is the only way their Supervised mode can actually ask the user
-        // rather than silently forcing or denying.
-        ProviderKind::Cursor | ProviderKind::Fx | ProviderKind::Grok | ProviderKind::Kimi => {
-            Arc::new(acp::AcpDriver::start(provider, options, events)?)
-        }
-        ProviderKind::DeepSeek => Arc::new(deepseek::DeepSeekDriver::start(options, events)?),
-        // OpenCode is not a per-workspace server: one adopted background
-        // service carries every workspace, and every Waku task rides its one
-        // event stream.
-        ProviderKind::OpenCode => Arc::new(opencode::OpenCodeDriver::start(options, events)?),
-        // Claude serves a realtime stream of user messages on stdin — the same
-        // transport the Agent SDK drives — which is what lets its Supervised
-        // mode ask rather than decide alone.
-        ProviderKind::Claude => Arc::new(claude::ClaudeDriver::start(options, events)?),
-        // Amp reads newline-delimited user messages on stdin and stays alive
-        // until stdin closes, so it too serves the whole conversation.
-        ProviderKind::Amp => Arc::new(amp::AmpDriver::start(options, events)?),
+        other => return Err(anyhow::anyhow!("provider not available: {:?}", other)),
     };
     Ok(DriverHandle { inner })
 }

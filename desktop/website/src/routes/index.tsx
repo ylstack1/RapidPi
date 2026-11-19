@@ -49,7 +49,7 @@ const PROVIDERS = [
   { slug: 'cursor', label: 'Cursor' },
   { slug: 'opencode', label: 'OpenCode' },
   { slug: 'grok', label: 'Grok' },
-  { slug: 'pi', label: 'Pi' },
+  { slug: 'rapidPi', label: 'Rapid Pi' },
   { slug: 'kimi', label: 'Kimi' },
 ]
 

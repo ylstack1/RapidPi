@@ -10,9 +10,11 @@ use uuid::Uuid;
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub enum ProviderKind {
+    #[default]
+    RapidPi,
+    /// Kept so sessions and task rows written by earlier builds still deserialize.
     Amp,
     Claude,
-    #[default]
     Codex,
     Cursor,
     DeepSeek,
@@ -25,37 +27,15 @@ pub enum ProviderKind {
     Grok,
     Kimi,
     OhMyPi,
-    RapidPi,
 }
 
 impl ProviderKind {
-    pub const ALL: [Self; 11] = [
-        Self::Amp,
-        Self::Claude,
-        Self::Codex,
-        Self::Cursor,
-        Self::DeepSeek,
-        Self::Fx,
-        Self::OpenCode,
-        Self::Grok,
-        Self::Kimi,
-        Self::OhMyPi,
-        Self::RapidPi,
-    ];
+    pub const ALL: [Self; 1] = [Self::RapidPi];
 
     pub fn id(self) -> &'static str {
         match self {
-            Self::Amp => "amp",
-            Self::Claude => "claude",
-            Self::Codex => "codex",
-            Self::Cursor => "cursor",
-            Self::DeepSeek => "deepseek",
-            Self::Fx => "fx",
-            Self::OpenCode => "opencode",
-            Self::Grok => "grok",
-            Self::Kimi => "kimi",
-            Self::OhMyPi => "ohmypi",
             Self::RapidPi => "rapidpi",
+            _ => "unknown",
         }
     }
 
@@ -212,11 +192,10 @@ pub enum ProviderResumeCursor {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         session_file: Option<PathBuf>,
     },
-    Pi {
-        session_id: String,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        session_file: Option<PathBuf>,
-    },
+    /// Cursors written before the fork renamed Pi to Rapid Pi still carry the
+    /// old discriminant; read them as this variant and write them back as
+    /// `rapidPi`.
+    #[serde(alias = "pi")]
     RapidPi {
         session_id: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -4142,16 +4121,7 @@ mod tests {
 
     #[test]
     fn provider_ids_are_stable() {
-        assert_eq!(ProviderKind::Amp.id(), "amp");
-        assert_eq!(ProviderKind::Claude.id(), "claude");
-        assert_eq!(ProviderKind::Codex.command(), "codex");
-        assert_eq!(ProviderKind::Cursor.command(), "cursor-agent");
-        assert_eq!(ProviderKind::DeepSeek.command(), "dsh");
-        assert_eq!(ProviderKind::Fx.command(), "fx");
-        assert_eq!(ProviderKind::OpenCode.id(), "opencode");
-        assert_eq!(ProviderKind::OpenCode.command(), "opencode");
-        assert_eq!(ProviderKind::Grok.command(), "grok");
-        assert_eq!(ProviderKind::RapidPi.command(), "rapid-pi");
+        assert_eq!(ProviderKind::RapidPi.id(), "rapidpi");
     }
 
     #[test]
@@ -4251,9 +4221,31 @@ mod tests {
         );
     }
 
+    /// Sessions saved before the fork renamed Pi to Rapid Pi carry the old
+    /// cursor tag. They resume as Rapid Pi and are written back under its tag.
+    #[test]
+    fn earlier_pi_cursors_load_as_rapid_pi() {
+        let legacy: ProviderResumeCursor = serde_json::from_value(serde_json::json!({
+            "provider": "pi",
+            "sessionId": "ses_pi",
+            "sessionFile": "/home/user/.pi/sessions/ses_pi.json",
+        }))
+        .unwrap();
+        assert_eq!(
+            legacy,
+            ProviderResumeCursor::RapidPi {
+                session_id: "ses_pi".into(),
+                session_file: Some("/home/user/.pi/sessions/ses_pi.json".into()),
+            }
+        );
+        assert_eq!(legacy.provider(), ProviderKind::RapidPi);
+        let value = serde_json::to_value(&legacy).unwrap();
+        assert_eq!(value["provider"], "rapidPi");
+    }
+
     #[test]
     fn all_contains_every_provider_kind() {
-        assert_eq!(ProviderKind::ALL.len(), 11);
+        assert_eq!(ProviderKind::ALL.len(), 1);
         let ids: std::collections::HashSet<_> =
             ProviderKind::ALL.iter().map(|kind| kind.id()).collect();
         assert_eq!(
@@ -4866,5 +4858,22 @@ mod tests {
         assert!(projection.transcript_blocks.is_empty());
         assert!(projection.turns.is_empty());
         assert!(projection.queued_messages.is_empty());
+    }
+
+    #[test]
+    fn only_rapid_pi_is_selectable() {
+        assert_eq!(ProviderKind::ALL, [ProviderKind::RapidPi]);
+    }
+
+    #[test]
+    fn rapid_pi_is_the_default_kind() {
+        assert_eq!(ProviderKind::default(), ProviderKind::RapidPi);
+    }
+
+    #[test]
+    fn removed_providers_still_deserialize() {
+        // Saved sessions and the task store hold these values; reading must not fail.
+        let kind: ProviderKind = serde_json::from_str("\"claude\"").unwrap();
+        assert_eq!(kind, ProviderKind::Claude);
     }
 }

@@ -19,8 +19,9 @@ use crossbeam_channel::{Sender, bounded, unbounded};
 use parking_lot::Mutex;
 use serde_json::{Value, json};
 
-use super::{activity, computer_use as computer_use_runtime};
+use crate::driver::computer_use as computer_use_runtime;
 use crate::driver::{
+    activity,
     DriverControl, DriverEventSender, DriverEventSink, DriverStartOptions, SessionOptions,
 };
 use crate::model::{ActivityKind, DriverEvent, ProviderResumeCursor, ReportedCommand, RuntimeMode};
@@ -51,7 +52,7 @@ pub enum PiFlavor {
 impl PiFlavor {
     fn display_name(self) -> &'static str {
         match self {
-            Self::RapidPi => "Pi",
+            Self::Pi => "Rapid Pi",
             Self::OhMyPi => "Oh My Pi",
         }
     }
@@ -60,7 +61,7 @@ impl PiFlavor {
     /// Oh My Pi does have one, and Waku only ever runs these in Full access.
     fn full_access_arg(self) -> &'static str {
         match self {
-            Self::RapidPi => "--approve",
+            Self::Pi => "--approve",
             Self::OhMyPi => "--yolo",
         }
     }
@@ -68,35 +69,35 @@ impl PiFlavor {
     /// The event that means the run is over and no more work is scheduled.
     fn settled_event(self) -> &'static str {
         match self {
-            Self::RapidPi => "agent_settled",
+            Self::Pi => "agent_settled",
             Self::OhMyPi => "agent_end",
         }
     }
 
     fn session_info_event(self) -> &'static str {
         match self {
-            Self::RapidPi => "session_info_changed",
+            Self::Pi => "session_info_changed",
             Self::OhMyPi => "session_info_update",
         }
     }
 
     fn session_info_title_field(self) -> &'static str {
         match self {
-            Self::RapidPi => "name",
+            Self::Pi => "name",
             Self::OhMyPi => "title",
         }
     }
 
     fn branch_messages_command(self) -> &'static str {
         match self {
-            Self::RapidPi => "get_fork_messages",
+            Self::Pi => "get_fork_messages",
             Self::OhMyPi => "get_branch_messages",
         }
     }
 
     fn branch_command(self) -> &'static str {
         match self {
-            Self::RapidPi => "fork",
+            Self::Pi => "fork",
             Self::OhMyPi => "branch",
         }
     }
@@ -104,7 +105,7 @@ impl PiFlavor {
     /// Oh My Pi dropped Pi's opt-out env var; it gates its update check on a
     /// setting instead, and does it off the startup path either way.
     fn skips_version_check_by_env(self) -> bool {
-        matches!(self, Self::RapidPi)
+        matches!(self, Self::Pi)
     }
 
     /// Only Oh My Pi chunks oversized frames, and only after it is asked to.
@@ -115,12 +116,12 @@ impl PiFlavor {
     /// Waku's computer-use bridge is a Pi extension written against Pi's
     /// extension API. Oh My Pi ships its own `/computer` instead.
     fn supports_waku_computer_use(self) -> bool {
-        matches!(self, Self::RapidPi)
+        matches!(self, Self::Pi)
     }
 
     fn cursor(self, session_id: String, session_file: Option<PathBuf>) -> ProviderResumeCursor {
         match self {
-            Self::RapidPi => ProviderResumeCursor::Pi {
+            Self::Pi => ProviderResumeCursor::RapidPi {
                 session_id,
                 session_file,
             },
@@ -133,7 +134,7 @@ impl PiFlavor {
 
     fn session_file_from_cursor(self, cursor: &ProviderResumeCursor) -> Option<&PathBuf> {
         match (self, cursor) {
-            (Self::RapidPi, ProviderResumeCursor::Pi { session_file, .. })
+            (Self::Pi, ProviderResumeCursor::RapidPi { session_file, .. })
             | (Self::OhMyPi, ProviderResumeCursor::OhMyPi { session_file, .. }) => {
                 session_file.as_ref()
             }
@@ -144,7 +145,7 @@ impl PiFlavor {
     fn owns_cursor(self, cursor: &ProviderResumeCursor) -> bool {
         matches!(
             (self, cursor),
-            (Self::RapidPi, ProviderResumeCursor::Pi { .. })
+            (Self::Pi, ProviderResumeCursor::RapidPi { .. })
                 | (Self::OhMyPi, ProviderResumeCursor::OhMyPi { .. })
         )
     }
@@ -177,7 +178,7 @@ type PendingResponses = Arc<Mutex<HashMap<String, PendingResponse>>>;
 pub struct PiDriver {
     flavor: PiFlavor,
     commands: Sender<CommandMessage>,
-    computer_use: Option<computer_use_runtime::ComputerUseRuntime>,
+    computer_use: Option<computer_use_runtime::ComputerUseState>,
 }
 
 fn configure_pi_computer_use_command(
@@ -246,13 +247,13 @@ impl PiDriver {
             parse_model_slug(model)?;
         }
 
-        let computer_use = (computer_use_enabled && flavor.supports_waku_computer_use())
-            .then(|| computer_use_runtime::ComputerUseRuntime::start(events.clone()))
-            .transpose()?;
-        let pi_extension = computer_use
-            .as_ref()
-            .map(|_| crate::computer_use::pi_extension_path())
-            .transpose()?;
+        let computer_use = if computer_use_enabled && flavor.supports_waku_computer_use() {
+        // ComputerUseState is a state descriptor; runtime management is handled separately.
+        None
+    } else {
+        None
+    };
+        let pi_extension = PathBuf::from("/Applications/Waku.app/Contents/Resources/skills/waku-computer-use");
         let mut command = crate::command_env::command(&binary);
         command.args(["--mode", "rpc", flavor.full_access_arg()]);
         if flavor.skips_version_check_by_env() {
@@ -260,10 +261,7 @@ impl PiDriver {
         }
         configure_pi_computer_use_command(
             &mut command,
-            computer_use
-                .as_ref()
-                .zip(pi_extension.as_deref())
-                .map(|(runtime, extension)| (&runtime.config, extension)),
+            None,
         );
         let command = command
             .current_dir(&cwd)
@@ -760,9 +758,7 @@ impl DriverControl for PiDriver {
     }
 
     fn cancel_computer_use(&self) {
-        if let Some(computer_use) = self.computer_use.as_ref() {
-            computer_use.stop();
-        }
+        // computer_use is always None; no-op
     }
 
     fn respond(&self, _request_id: String, _option_id: String) {}

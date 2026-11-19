@@ -120,7 +120,7 @@ describe('slash command templates', () => {
     const commands = [command('deploy', 'Skill', '', null)]
     expect(expandedComposerSubmission('fx', '/deploy production', commands))
       .toBe('$deploy production')
-    expect(expandedComposerSubmission('pi', '/deploy production', commands))
+    expect(expandedComposerSubmission('rapidPi', '/deploy production', commands))
       .toBe('/skill:deploy production')
   })
 })

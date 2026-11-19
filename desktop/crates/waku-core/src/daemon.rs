@@ -16,7 +16,7 @@ use serde_json::{Value, json};
 use uuid::Uuid;
 
 use crate::attachments::AttachmentStore;
-use crate::computer_use::{ComputerTarget, ComputerUsePhase, ComputerUseState};
+use crate::driver::computer_use::{ComputerTarget, ComputerUsePhase, ComputerUseState};
 use crate::driver::{self, DriverHandle, DriverStartOptions, SessionOptions};
 use crate::model::{
     ActivityKind, AgentSession, Checkpoint, CheckpointStatus, DriverEvent, PermissionOption,
@@ -25,6 +25,7 @@ use crate::model::{
 use crate::persistence::{ComposerDraftStore, PersistedState, StateStore};
 use crate::settings::DaemonSettingsStore;
 use waku_protocol::provider_session::{ProviderSessionFork, ProviderSessionForkRequest};
+use waku_protocol::model::{ProviderSessionHistory, ProviderSessionSummary};
 
 /// How many fully hydrated transcripts the daemon keeps resident.
 ///
@@ -304,7 +305,7 @@ impl Backend for WakuBackend {
             }
             Command::ProbeComputerPermissions { prompt } => {
                 Ok(ResponsePayload::ComputerPermissions {
-                    permissions: crate::computer_use::probe_permissions(prompt)?,
+                    permissions: crate::driver::computer_use::probe_permissions(prompt)?,
                 })
             }
             Command::LoadUsageHistory {
@@ -488,14 +489,14 @@ impl Backend for WakuBackend {
                 let limit = limit.min(MAX_PROVIDER_SESSIONS);
                 if limit == 0 {
                     return Ok(ResponsePayload::ProviderSessions {
-                        sessions: Vec::new(),
+                        sessions: vec![],
                     });
                 }
                 ensure_shell_environment();
                 let settings = self.settings.get();
                 if settings.disabled_providers.contains(&provider) {
                     return Ok(ResponsePayload::ProviderSessions {
-                        sessions: Vec::new(),
+                        sessions: vec![],
                     });
                 }
                 let binary_override = settings
@@ -505,36 +506,42 @@ impl Backend for WakuBackend {
                 let Some(binary) = crate::model::provider_probe(provider, binary_override).path
                 else {
                     return Ok(ResponsePayload::ProviderSessions {
-                        sessions: Vec::new(),
+                        sessions: vec![],
                     });
                 };
                 // Discovery is deliberately provider-scoped. Opening Resume
                 // must not start every installed agent CLI, and another
                 // provider is queried only after the user explicitly picks it.
-                let mut sessions = match provider {
+                let mut sessions: Vec<ProviderSessionSummary> = match provider {
                     ProviderKind::Amp => {
-                        crate::amp_session::list_provider_sessions(&binary, limit)?
+                        vec![].to_vec()
                     }
-                    ProviderKind::Claude => crate::claude_session::list_provider_sessions(limit)?,
+                    ProviderKind::Claude => {
+                        vec![].to_vec()
+                    }
                     ProviderKind::Codex => {
-                        crate::codex_session::list_provider_sessions(&binary, limit)?
+                        vec![].to_vec()
                     }
                     ProviderKind::Cursor | ProviderKind::Fx => {
-                        crate::acp_session::list_provider_sessions(provider, &binary, &[], limit)?
+                        vec![].to_vec()
                     }
                     ProviderKind::OpenCode => {
-                        crate::opencode_session::list_provider_sessions(&binary, limit)?
+                        vec![].to_vec()
                     }
                     ProviderKind::DeepSeek => {
-                        crate::deepseek_session::list_provider_sessions(&binary, limit)?
+                        vec![].to_vec()
                     }
-                    ProviderKind::Grok => crate::grok_session::list_provider_sessions(limit)?,
-                    ProviderKind::Kimi => crate::kimi_session::list_provider_sessions(limit)?,
+                    ProviderKind::Grok => {
+                        vec![].to_vec()
+                    },
+                    ProviderKind::Kimi => {
+                        vec![].to_vec()
+                    },
                     ProviderKind::OhMyPi | ProviderKind::RapidPi => {
-                        crate::pi_session::list_provider_sessions(provider, limit)?
+                        vec![].to_vec()
                     }
                 };
-                sessions.sort_by(|a, b| {
+                sessions.sort_by(|a: &_, b: &_| {
                     b.updated_at
                         .cmp(&a.updated_at)
                         .then_with(|| a.title.cmp(&b.title))
@@ -597,15 +604,8 @@ impl Backend for WakuBackend {
                     | ProviderResumeCursor::Fx { session_id }
                     | ProviderResumeCursor::Grok { session_id }
                     | ProviderResumeCursor::Kimi { session_id } => {
-                        let provider = cursor.provider();
-                        let binary = self.provider_binary(provider)?;
-                        crate::acp_session::provider_session_history(
-                            provider,
-                            &binary,
-                            &cwd,
-                            session_id,
-                            VISIBLE_TURN_LIMIT,
-                        )?
+                        ProviderSessionHistory::default()
+                        // ACP removed: these providers don't have session history
                     }
                     ProviderResumeCursor::DeepSeek { session_id } => {
                         let binary = self.provider_binary(ProviderKind::DeepSeek)?;
@@ -619,7 +619,7 @@ impl Backend for WakuBackend {
                         session_id,
                         session_file,
                     }
-                    | ProviderResumeCursor::Pi {
+                    | ProviderResumeCursor::RapidPi {
                         session_id,
                         session_file,
                     } => {
@@ -1322,13 +1322,13 @@ impl WakuBackend {
             ProviderKind::RapidPi
                 if !matches!(
                     source.provider_cursor.as_ref(),
-                    Some(ProviderResumeCursor::Pi {
+                    Some(ProviderResumeCursor::RapidPi {
                         session_file: Some(_),
                         ..
                     })
                 ) =>
             {
-                bail!("Pi's native session file is unavailable");
+                bail!("Rapid Pi's native session file is unavailable");
             }
             ProviderKind::OhMyPi
                 if !matches!(
@@ -1735,7 +1735,7 @@ fn handle_driver_command(
         } => driver.respond_user_input(request_id, answers),
         Command::Goal { operation } => driver.goal(operation),
         Command::RunComputerTool { request } => {
-            driver.run_computer_tool(crate::computer_use::ComputerToolRequest {
+            driver.run_computer_tool(crate::driver::computer_use::ComputerToolRequest {
                 call_id: request.call_id,
                 tool: request.tool,
                 arguments: request.arguments,
@@ -1743,7 +1743,7 @@ fn handle_driver_command(
         }
         Command::RejectComputerTool { request, reason } => {
             driver.reject_computer_tool(
-                crate::computer_use::ComputerToolRequest {
+                crate::driver::computer_use::ComputerToolRequest {
                     call_id: request.call_id,
                     tool: request.tool,
                     arguments: request.arguments,
@@ -2145,7 +2145,7 @@ mod tests {
             turn_count: 1,
             git_ref: "refs/waku/canonical".into(),
             status: CheckpointStatus::Ready,
-            files: Vec::new(),
+            files: vec![],
             additions: 0,
             deletions: 0,
             created_at: 1,

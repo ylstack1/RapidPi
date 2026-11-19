@@ -32,7 +32,10 @@ afterEach(() => {
 /** A build folder whose `pi` says it is Rapid Pi `version`, as `pi --version` does. */
 function build(folder: string, version: string, runs = true): void {
 	mkdirSync(join(folder, "theme"), { recursive: true });
-	writeFileSync(join(folder, "rapid-pi.txt"), `Rapid Pi ${version} (Pi 1.2.0), linux-x64, JIT off, built 2026-10-15\n`);
+	writeFileSync(
+		join(folder, "rapid-pi.txt"),
+		`Rapid Pi ${version} (Pi 1.2.0), linux-x64, JIT off, built 2026-10-15\n`,
+	);
 	writeFileSync(join(folder, "theme", "dark.json"), `{"version":"${version}"}`);
 	writeFileSync(
 		join(folder, "pi"),

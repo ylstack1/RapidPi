@@ -6,7 +6,12 @@ import { runDoctor } from "../src/cli/doctor.ts";
 import { ENV_AGENT_DIR } from "../src/config.ts";
 import { handlePackageCommand } from "../src/package-manager-cli.ts";
 import type * as PiBolt from "../src/rapid-pi.ts";
-import { rapidPiInstallMethod, rapidPiJitSwitchCommand, rapidPiMiseTool, rapidPiUpdateCommand } from "../src/rapid-pi.ts";
+import {
+	rapidPiInstallMethod,
+	rapidPiJitSwitchCommand,
+	rapidPiMiseTool,
+	rapidPiUpdateCommand,
+} from "../src/rapid-pi.ts";
 import { runPiBoltCompile } from "../src/rapid-pi-compile.ts";
 import type * as VersionCheck from "../src/utils/version-check.ts";
 

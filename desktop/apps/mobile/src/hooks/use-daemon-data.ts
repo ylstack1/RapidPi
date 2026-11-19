@@ -29,7 +29,7 @@ const PROVIDERS: ProviderKind[] = [
   'deepSeek',
   'fx',
   'ohMyPi',
-  'pi',
+  'rapidPi',
 ];
 
 export function useTaskState() {

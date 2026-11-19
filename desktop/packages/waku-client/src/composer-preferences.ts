@@ -39,7 +39,7 @@ const PROVIDERS = new Set<ProviderKind>([
   'grok',
   'kimi',
   'ohMyPi',
-  'pi',
+  'rapidPi',
 ])
 
 export function browserComposerPreferenceStorage(): StorageLike | null {

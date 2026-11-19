@@ -82,9 +82,9 @@ settings.daemon: デーモン
 settings.computer_use: コンピュータ操作
 settings.general_keywords: 一般 ローカル プロジェクト 会話 プライバシー 分析 テレメトリ 匿名 共有 アップデート 自動 バージョン 数学 数式 math latex
 settings.appearance_keywords: 外観 テーマ システム ライト ダーク 言語 英語 中国語 簡体字 日本語 フォント サイズ 文字 エディタ
-settings.providers_keywords: プロバイダー エージェント モデル CLI バージョン インストール 検出 claude codex cursor opencode amp grok pi
+settings.providers_keywords: プロバイダー エージェント モデル CLI バージョン インストール 検出 claude codex cursor opencode amp grok rapid pi
 settings.skills: スキル
-settings.skills_keywords: スキル ライブラリ エージェント 無効 有効 削除 claude codex cursor opencode pi amp 共有
+settings.skills_keywords: スキル ライブラリ エージェント 無効 有効 削除 claude codex cursor opencode rapid pi amp 共有
 settings.usage_keywords: 使用状況 トークン コスト 支出 キャッシュ 日別 グラフ モデル 内訳 履歴 claude codex
 settings.daemon_keywords: デーモン サーバー リモート ウェブ ネットワーク 公開 オリジン トークン ポート websocket
 settings.computer_use_keywords: コンピュータ 操作 画面収録 アクセシビリティ アプリ 制御 codex
@@ -218,7 +218,7 @@ providers.checked_minutes_ago: "%{count} 分前に確認済み"
 providers.checked_hours_ago: "%{count} 時間前に確認済み"
 
 computer_use.allow_apps: Waku にアプリの操作を許可
-computer_use.availability: コンピュータ操作は Codex、OpenCode、Grok、Pi で利用できます
+computer_use.availability: コンピュータ操作は Codex、OpenCode、Grok、Rapid Pi で利用できます
 computer_use.desktop_access: デスクトップのアクセス権
 computer_use.windows_access_description: 現在の Windows デスクトップセッションでアプリを操作します。管理者権限で実行中のアプリやセキュリティで保護されたデスクトップへのアクセスは Windows により制限される場合があります。
 computer_use.linux_access_description: 現在の Linux デスクトップセッションでアプリを操作します。画面の取得と入力の対応状況は、コンポジターとアクセシビリティサービスによって異なります。
