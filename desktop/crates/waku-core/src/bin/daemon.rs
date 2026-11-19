@@ -1,19 +1,24 @@
 //! Waku daemon binary — spawned by the desktop to manage provider runtimes locally.
-//! Listens on a TCP port, accepts WebSocket connections from the desktop,
-//! and starts/stops provider processes (rapid-pi, etc.).
+//! Listens on a TCP port for the desktop WebSocket client, and also runs a
+//! remote-control server (/rc) for paired phones via the Noise IK protocol.
+//! Shows a QR code pairing link on startup.
 
 use std::env;
 use std::net::TcpListener;
+use std::path::PathBuf;
 use std::sync::atomic::AtomicBool;
 use std::sync::Arc;
+use std::thread;
 
-use anyhow::{bail, Context as _};
+use anyhow::{Context as _, bail};
+use serde_json::json;
 
 use waku_core::{
     daemon::WakuBackend,
     persistence::StateStore,
-    serve, ServerOptions,
+    remote_control::RemoteControlServer,
     settings::DaemonSettingsStore,
+    serve, ServerOptions,
 };
 use waku_protocol::{DAEMON_TOKEN_ENV, DaemonReady, PROTOCOL_VERSION};
 
@@ -27,6 +32,7 @@ fn main() {
 fn run() -> anyhow::Result<()> {
     let mut args = env::args().skip(1);
     let mut bind = "127.0.0.1:0".to_string();
+    let mut rc_port: u16 = 48123;
     let mut allowed_origins = Vec::new();
 
     while let Some(arg) = args.next() {
@@ -34,6 +40,13 @@ fn run() -> anyhow::Result<()> {
             "--bind" => bind = args.next().context("--bind requires a value")?,
             "--parent-pid" => {
                 let _ = args.next();
+            }
+            "--rc-port" => {
+                rc_port = args
+                    .next()
+                    .context("--rc-port requires a value")?
+                    .parse::<u16>()
+                    .context("--rc-port must be a port number")?;
             }
             "--allow-origin" => {
                 allowed_origins.push(args.next().context("--allow-origin requires a value")?);
@@ -46,17 +59,30 @@ fn run() -> anyhow::Result<()> {
     let _app_executable = env::var(waku_protocol::APP_EXECUTABLE_ENV)
         .context("WAKU_APP_EXECUTABLE not set")?;
 
-    let settings_path = dirs::home_dir()
+    let agent_dir = dirs::home_dir()
         .unwrap_or_else(std::env::temp_dir)
-        .join(".rapidpi")
-        .join("daemon-settings.json");
+        .join(".rapidpi");
+
+    // --- Remote-control server (phone pairing) ---
+    let mut rc_server = RemoteControlServer::new(&agent_dir)?;
+    let rc_endpoints = vec![format!("ws://127.0.0.1:{rc_port}/rc")];
+    let pairing_uri = rc_server.create_pairing(rc_endpoints.clone())?;
+    rc_server.listen(rc_port)?;
+
+    // Print QR code for pairing (terminal-friendly)
+    render_qr_code(&pairing_uri);
+    eprintln!(
+        "remote-control: pairing code: {pairing_uri}\n\
+         remote-control: listening on ws://127.0.0.1:{rc_port}/rc\n\
+         remote-control: pair a phone with the QR code above"
+    );
+
+    // --- Daemon settings + state stores ---
+    let settings_path = agent_dir.join("daemon-settings.json");
     let settings_store = DaemonSettingsStore::open(settings_path)
         .context("could not open daemon settings store")?;
 
-    let state_path = dirs::home_dir()
-        .unwrap_or_else(std::env::temp_dir)
-        .join(".rapidpi")
-        .join("daemon-app.db");
+    let state_path = agent_dir.join("daemon-app.db");
     let state_store = StateStore::daemon(state_path);
 
     let backend = WakuBackend::new(settings_store, state_store)
@@ -79,6 +105,7 @@ fn run() -> anyhow::Result<()> {
         allow_shutdown: true,
     };
 
+    // Run the WebSocket daemon server (blocks forever)
     serve(
         listener,
         token,
@@ -87,4 +114,33 @@ fn run() -> anyhow::Result<()> {
         options,
     )
     .context("waku-daemon server stopped")
+}
+
+/// Render a QR code to the terminal using half-block characters.
+fn render_qr_code(uri: &str) {
+    match qrcode::QrCode::new(uri.as_bytes()) {
+        Ok(qr) => {
+            eprintln!("\nremote-control: scan this QR code to pair a phone:");
+            let modules = qr.to_vec();
+            let width = qr.width();
+            for y in (0..width).step_by(2) {
+                for x in 0..width {
+                    let top = modules[y * width + x];
+                    let bottom = y + 1 < width && modules[(y + 1) * width + x];
+                    match (top, bottom) {
+                        (true, true) => eprint!("██"),
+                        (true, false) => eprint!("▀█"),
+                        (false, true) => eprint!("█▀"),
+                        (false, false) => eprint!("  "),
+                    }
+                }
+                eprintln!();
+            }
+            eprintln!();
+        }
+        Err(e) => {
+            eprintln!("remote-control: could not render QR code: {e}");
+            eprintln!("remote-control: pairing link: {uri}");
+        }
+    }
 }

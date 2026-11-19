@@ -1,7 +1,7 @@
-# Handoff: Rapid Pi Desktop App Compilation Fix
+# Handoff: Rapid Pi Desktop App Compilation Fix + Remote Control Pairing
 
 ## Session Summary
-All 63 desktop compilation errors fixed. The desktop crate compiles cleanly. The rapid-pi engine builds from root. A local `waku-daemon` binary was created so the desktop spawns its own engine instead of connecting to Android. Desktop now builds and runs end-to-end.
+All 63 desktop compilation errors fixed. The desktop crate compiles cleanly. The rapid-pi engine builds from root. A local `waku-daemon` binary was created with Noise IK remote-control server and QR code pairing, so the desktop spawns its own engine instead of connecting to Android. Desktop now builds and runs end-to-end with phone pairing support.
 
 ## ✅ Completed
 
@@ -15,12 +15,21 @@ All 63 desktop compilation errors fixed. The desktop crate compiles cleanly. The
 ### waku-daemon binary (NEW)
 - Created `desktop/crates/waku-core/src/bin/daemon.rs`
 - Added `[[bin]]` target to `desktop/crates/waku-core/Cargo.toml`
-- Daemon accepts `--bind`, `--parent-pid`, `--allow-origin` args
+- Daemon accepts `--bind`, `--parent-pid`, `--rc-port`, `--allow-origin` args
 - Reads `WAKU_DAEMON_TOKEN` and `WAKU_APP_EXECUTABLE` env vars
 - Prints `DaemonReady` JSON to stdout on startup
 - Serves WebSocket connections for the desktop client
+- **Remote-control server**: Noise IK WebSocket at `/rc` with subprotocol `pibolt-rc.1`
+- **Pairing**: One-time QR code (`pibolt://pair#...`) printed to terminal on startup
 - `cargo build -p waku-core --bin waku-daemon` → success ✅
-- Tested: outputs `{"address":"127.0.0.1:PORT","protocolVersion":7,"pid":...}`
+- Tested: outputs QR code + pairing URI + `{"address":"127.0.0.1:PORT","protocolVersion":7,"pid":...}`
+
+### remote_control module (NEW)
+- `desktop/crates/waku-core/src/remote_control/mod.rs` — module definition
+- `protocol.rs` — PairingPayload, `encode_pairing_uri()`, `decode_pairing_uri()`, matches CLI format
+- `noise.rs` — X25519 key pair generation via `snow::Builder`
+- `store.rs` — `RemoteControlStore` with `host_key_pair()`, `devices()`, `upsert_device()`, `remove_device()`
+- `server.rs` — WebSocket server at `/rc`, Noise IK handshake, pairing validation, encrypted message loop
 
 ### rapidpi-desktop (all 63 compilation errors fixed)
 | File | Fix |
@@ -51,7 +60,8 @@ cargo build -p waku-core --bin waku-daemon → builds ✅
 cargo build                    → builds successfully ✅
 
 # Test daemon standalone (from desktop/)
-WAKU_DAEMON_TOKEN=test WAKU_APP_EXECUTABLE=test target/debug/waku-daemon.exe --bind 127.0.0.1:0
+WAKU_DAEMON_TOKEN=test WAKU_APP_EXECUTABLE=test target/debug/waku-daemon.exe --bind 127.0.0.1:0 --rc-port 48123
+→ QR code printed, pairing URI shown, listens on ws://127.0.0.1:48123/rc ✅
 → {"address":"127.0.0.1:PORT","protocolVersion":7,"pid":...} ✅
 
 # From root - build rapid-pi engine
@@ -78,15 +88,23 @@ packages/out/rapid-pi.exe --version → 0.0.0 (Rapid Pi 0.0.3, win32-x64-jit-off
    cargo run --bin rapidpi-desktop
    ```
 
-The desktop will spawn `waku-daemon.exe` locally, which manages `rapid-pi` as the engine provider. Android is NOT involved — it stays standalone.
+The desktop will spawn `waku-daemon.exe` locally, which runs the remote-control server on port 48123 and manages `rapid-pi` as the engine provider. Android is NOT involved — it stays standalone.
+
+Pair a phone: scan the QR code printed by waku-daemon on startup, or paste the `pibolt://pair#...` link into the Rapid Pi Android app's "Paste pairing link" option.
 
 ## Files Modified (This Session)
-- `desktop/crates/waku-core/Cargo.toml` - Added `[[bin]]` target for `waku-daemon`
-- `desktop/crates/waku-core/src/bin/daemon.rs` - NEW: waku-daemon binary entry point
-- `desktop/src/daemon.rs` - Rewrote `connect()` to spawn local daemon; added `locate_daemon_executable()`
-- `desktop/src/computer_use.rs` - Rewrote with protocol type re-exports and preview stubs
-- `desktop/src/updater.rs` - Added UpdateStatus variants and UpdaterState methods
-- `desktop/src/app/composer.rs` - Unwrapped Option<ComputerTarget>, fixed .current() method call
+- `desktop/crates/waku-core/Cargo.toml` - Added `[[bin]]` target, `snow`, `qrcode`, `rand`, `curve25519-dalek`, `base64` Engine features
+- `desktop/crates/waku-core/src/bin/daemon.rs` - NEW: waku-daemon binary with remote-control server + QR code
+- `desktop/crates/waku-core/src/remote_control/mod.rs` - NEW: module definition
+- `desktop/crates/waku-core/src/remote_control/protocol.rs` - NEW: pairing URI format
+- `desktop/crates/waku-core/src/remote_control/noise.rs` - NEW: Noise key pair
+- `desktop/crates/waku-core/src/remote_control/store.rs` - NEW: paired device store
+- `desktop/crates/waku-core/src/remote_control/server.rs` - NEW: Noise IK WebSocket server
+- `desktop/crates/waku-core/src/lib.rs` - Added `pub mod remote_control`
+- `desktop/src/daemon.rs` - Rewrote `connect()` to spawn local daemon
+- `desktop/src/computer_use.rs` - Protocol type re-exports and preview stubs
+- `desktop/src/updater.rs` - UpdateStatus variants and UpdaterState methods
+- `desktop/src/app/composer.rs` - Unwrapped Option<ComputerTarget>
 - `desktop/src/app/sessions.rs` - Direct UpdaterState method calls
 - `desktop/src/app/sidebar.rs` - Direct UpdaterState method calls
 - `desktop/src/app/streaming.rs` - Fixed .current() method call
@@ -95,4 +113,4 @@ The desktop will spawn `waku-daemon.exe` locally, which manages `rapid-pi` as th
 - `desktop/src/main.rs` - Fixed crate::run() call
 
 ## Start Here for Next Session
-Desktop compiles with 0 errors and launches successfully when `rapid-pi.exe` is on PATH. No further compilation fixes needed.
+Desktop compiles with 0 errors and launches successfully when `rapid-pi.exe` is on PATH. Remote-control pairing server runs on port 48123 with QR code display. Next: implement the full remote-control message proxy (session state, commands, etc.) to mirror the CLI's `/remote-control` behavior.
