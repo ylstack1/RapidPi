@@ -1,48 +1,75 @@
 # Handoff: Rapid Pi Desktop App — Ready to Launch
 
 ## Session Summary
-Desktop app compiles with 0 errors, builds, and runs successfully. The local `waku-daemon` binary with Noise IK remote-control server and QR code pairing is built and working. The rapid-pi engine builds from root and runs.
+Desktop app compiles with 0 errors, builds, and runs successfully without daemon errors. The local `waku-daemon` binary is a session manager only (no remote-control). Remote-control pairing uses the CLI's `/remote-control` (packages/coding-agent/src/remote-control/), not a custom waku-daemon implementation.
 
 ## ✅ Completed
 
 ### Desktop Compilation: 0 errors ✅
 - `cargo check` → 0 errors
 - `cargo build` → builds successfully
-- `cargo run --bin rapidpi-desktop` → runs and connects to local waku-daemon ✅
+- `cargo run --bin rapidpi-desktop` → runs without "Waku daemon disconnected" errors ✅
 
-### waku-daemon Binary (built) ✅
-- `cargo build -p waku-core --bin waku-daemon` → builds successfully
-- Runs and prints QR code pairing link on terminal
-- Listens on `ws://127.0.0.1:48123/rc` for remote-control connections
-- Noise IK WebSocket server matches `packages/coding-agent/src/remote-control/` protocol
+### waku-daemon Binary (session manager only) ✅
+- `desktop/crates/waku-core/src/bin/daemon.rs` — Waku daemon binary (no remote-control)
+- Added `[[bin]]` target to `desktop/crates/waku-core/Cargo.toml`
+- Accepts `--bind`, `--parent-pid`, `--allow-origin`, `--allow-non-loopback` args
+- Reads `WAKU_DAEMON_TOKEN` and `WAKU_APP_EXECUTABLE` env vars
+- Serves WebSocket connections for the desktop client
+- `cargo build -p waku-core --bin waku-daemon` → success ✅
+
+### Remote-Control ✅
+- Removed `remote_control` module from `waku-core` (user wants CLI's `/remote-control`)
+- Remote-control pairing uses `packages/coding-agent/src/remote-control/` (CLI's `/remote-control`)
+- `waku-daemon` is session manager only; remote-control is separate
 
 ### rapid-pi Engine ✅
 - Built from root: `packages/coding-agent/src/cli.ts` → `packages/out/rapid-pi.exe` (149 MB)
 - `packages/out/rapid-pi.exe --version` → `0.0.0 (Rapid Pi 0.0.3, win32-x64-jit-off, JIT off)` ✅
 
-### End-to-End Launch ✅
-```powershell
-# From root - build engine (one time)
-cd packages/coding-agent
-bun build --compile --target bun-windows-x64 --bytecode --format esm --splitting --compile-exec-argv=--smol --define "RAPIDPI_BUILD=\"0.0.3 x64-jit-off\"" ./src/cli.ts --outfile ../../out/rapid-pi.exe
+## Verification
 
-# Add engine to PATH
-$env:PATH += ";E:\ylstack-space\Developments\ai\Agents\RapidPi\packages\out"
+```bash
+# From desktop/
+cargo check                    → 0 errors ✅
+cargo check -p waku-core       → 0 errors ✅
+cargo build -p waku-core --bin waku-daemon → builds ✅
+cargo build                    → builds successfully ✅
+cargo run --bin rapidpi-desktop → runs without daemon errors ✅
 
-# Run desktop
-cd desktop
-cargo run --bin rapidpi-desktop
+# Test daemon standalone
+WAKU_DAEMON_TOKEN=test WAKU_APP_EXECUTABLE=test target/debug/waku-daemon.exe --bind 127.0.0.1:0
+→ {"address":"127.0.0.1:PORT","protocolVersion":7,"pid":...} ✅
 ```
-Result: Desktop window opens, waku-daemon spawns locally, QR code pairing displayed for phone pairing. Android is NOT involved — it stays standalone.
 
-## Files on master (pushed to origin)
-- `da3248aaa` — feat(agent): add remote-control pairing server to waku-daemon
-- `49d0b91c8` — fix(agent): carry all current changes to master  
-- `de069b20f` — fix(agent): fix desktop compilation and add local waku-daemon
+## How to Launch
 
-## Remote-Control Pairing (new)
-The desktop daemon now runs a Noise IK WebSocket remote-control server at `/rc`. On startup it prints a QR code (`pibolt://pair#...`) that can be scanned by the Rapid Pi Android app, or the pairing URI can be pasted via the app's "Paste pairing link" option. This lets a phone optionally pair with the desktop without using the CLI directly.
+1. Build the rapid-pi engine (from root):
+   ```bash
+   cd packages/coding-agent
+   bun build --compile --target bun-windows-x64 --bytecode --format esm --splitting --compile-exec-argv=--smol --define "RAPIDPI_BUILD=\"0.0.3 x64-jit-off\"" ./src/cli.ts --outfile ../../out/rapid-pi.exe
+   ```
 
-## Untracked (build artifacts — intentionally not committed)
-- `desktop/tmp.txt`
-- `packages/out/` (149 MB rapid-pi.exe — would cause push timeouts)
+2. Add `packages/out/` to PATH:
+   ```powershell
+   $env:PATH += ";E:\ylstack-space\Developments\ai\Agents\RapidPi\packages\out"
+   ```
+
+3. Run the desktop (from desktop/):
+   ```bash
+   cargo run --bin rapidpi-desktop
+   ```
+
+4. For remote-control pairing: run `rapid-pi` directly and use `/remote-control` slash command (CLI's implementation in `packages/coding-agent/src/remote-control/`)
+
+## Git Status
+- Branch: `master` (pushed to origin)
+- Last commit: `271e31d04` — fix(agent): fix daemon connection, remove custom remote-control from waku-daemon
+- Untracked (build artifacts): `desktop/tmp.txt`, `packages/out/`
+
+## Files Modified (This Session)
+- `desktop/crates/waku-core/Cargo.toml` - Removed remote-control deps, re-added `[[bin]]` target
+- `desktop/crates/waku-core/src/bin/daemon.rs` - Simplified daemon (session manager only)
+- `desktop/crates/waku-core/src/lib.rs` - Removed `pub mod remote_control`
+- `desktop/crates/waku-core/src/remote_control/` - DELETED (5 files)
+- `desktop/Cargo.lock` - Updated
