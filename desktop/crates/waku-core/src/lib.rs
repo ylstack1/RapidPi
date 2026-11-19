@@ -62,7 +62,6 @@ pub mod usage;
 pub mod usage_history;
 pub mod workspace;
 pub mod worktree;
-pub mod remote_control;
 
 mod fs_ext;
 mod protocol;
