@@ -1,15 +1,14 @@
-//! Waku daemon binary — session process manager for the desktop.
+//! Rapid Pi daemon binary — session process manager for the desktop.
 //! Spawned by the desktop to manage provider runtimes and persist session state.
 //! Also runs the remote-control server (/rc) for paired phones via Noise IK WebSocket,
 //! displaying a QR code pairing link on startup.
 
 use std::env;
-use std::net::TcpListener;
+use std::net::{TcpListener, UdpSocket};
 use std::sync::atomic::AtomicBool;
 use std::sync::Arc;
 
 use anyhow::{Context as _, bail};
-use serde_json::json;
 
 use waku_core::{
     daemon::WakuBackend,
@@ -22,14 +21,14 @@ use waku_protocol::{DAEMON_TOKEN_ENV, DaemonReady, PROTOCOL_VERSION};
 
 fn main() {
     if let Err(error) = run() {
-        eprintln!("waku-daemon failed: {error:#}");
+        eprintln!("rapid-pi daemon failed: {error:#}");
         std::process::exit(1);
     }
 }
 
 fn run() -> anyhow::Result<()> {
     let mut args = env::args().skip(1);
-    let mut bind = "127.0.0.1:0".to_string();
+    let mut bind = "0.0.0.0:0".to_string();
     let mut rc_port: u16 = 48123;
 
     while let Some(arg) = args.next() {
@@ -45,10 +44,6 @@ fn run() -> anyhow::Result<()> {
                     .parse::<u16>()
                     .context("--rc-port must be a port number")?;
             }
-            "--allow-origin" => {
-                let _ = args.next();
-            }
-            "--allow-non-loopback" => {}
             _ => bail!("unknown argument: {arg}"),
         }
     }
@@ -61,9 +56,12 @@ fn run() -> anyhow::Result<()> {
         .unwrap_or_else(std::env::temp_dir)
         .join(".rapidpi");
 
+    // --- Detect LAN IP for remote-control pairing ---
+    let lan_ip = detect_lan_ip();
+    let rc_endpoints = vec![format!("ws://{lan_ip}:{rc_port}/rc")];
+
     // --- Remote-control server (phone pairing) ---
     let mut rc_server = RemoteControlServer::new(&agent_dir)?;
-    let rc_endpoints = vec![format!("ws://127.0.0.1:{rc_port}/rc")];
     let pairing_uri = rc_server.create_pairing(rc_endpoints.clone())?;
     rc_server.listen(rc_port)?;
 
@@ -71,7 +69,7 @@ fn run() -> anyhow::Result<()> {
     render_qr_code(&pairing_uri);
     eprintln!(
         "remote-control: pairing code: {pairing_uri}\n\
-         remote-control: listening on ws://127.0.0.1:{rc_port}/rc\n\
+         remote-control: listening on ws://0.0.0.0:{rc_port}/rc (LAN IP: {lan_ip})\n\
          remote-control: pair a phone with the QR code above"
     );
 
@@ -98,6 +96,7 @@ fn run() -> anyhow::Result<()> {
     let ready_json = serde_json::to_string(&ready).context("could not serialize DaemonReady")?;
     println!("{ready_json}");
 
+    // No Origin restrictions — mobile app is not a browser
     let options = ServerOptions {
         allowed_origins: Default::default(),
         allow_shutdown: true,
@@ -111,10 +110,25 @@ fn run() -> anyhow::Result<()> {
         Arc::new(AtomicBool::new(false)),
         options,
     )
-    .context("waku-daemon server stopped")
+    .context("rapid-pi daemon server stopped")
+}
+
+/// Detect the LAN IP address by creating a UDP socket to a public address.
+fn detect_lan_ip() -> String {
+    // Try to detect LAN IP via UDP connect (doesn't actually send packets)
+    if let Ok(socket) = UdpSocket::bind("0.0.0.0:0") {
+        if socket.connect("8.8.8.8:53").is_ok() {
+            if let Ok(local_addr) = socket.local_addr() {
+                return local_addr.ip().to_string();
+            }
+        }
+    }
+    // Fallback: try localhost
+    "127.0.0.1".to_string()
 }
 
 /// Render a QR code to the terminal using half-block characters.
+#[allow(deprecated)]
 fn render_qr_code(uri: &str) {
     match qrcode::QrCode::new(uri.as_bytes()) {
         Ok(qr) => {

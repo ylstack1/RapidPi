@@ -162,9 +162,6 @@ impl DaemonProcess {
         if settings.enabled {
             command.arg("--allow-non-loopback");
         }
-        for origin in &settings.allowed_origins {
-            command.arg("--allow-origin").arg(origin);
-        }
         let mut child = command
             .env(DAEMON_TOKEN_ENV, &token)
             .env(APP_EXECUTABLE_ENV, app_executable)
