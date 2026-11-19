@@ -367,7 +367,7 @@ fn set_client_read_timeout(
 ) -> io::Result<()> {
     match socket.get_mut() {
         MaybeTlsStream::Plain(stream) => stream.set_read_timeout(timeout),
-        MaybeTlsStream::Rustls(stream) => stream.sock.set_read_timeout(timeout),
+        MaybeTlsStream::NativeTls(stream) => stream.get_mut().set_read_timeout(timeout),
         #[allow(unreachable_patterns)]
         _ => Ok(()),
     }
