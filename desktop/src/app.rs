@@ -677,7 +677,7 @@ impl WakuPane {
     }
 
     fn bind(&mut self, waku: &Entity<Waku>, cx: &mut Context<Self>) {
-        self.rapidpi = Some(waku.downgrade());
+        self.waku = Some(waku.downgrade());
         cx.observe(waku, |_, waku, cx| {
             // A panel slide notifies the root at display rate for its 200ms,
             // and this fan-out would price every one of those ticks at a
@@ -700,7 +700,7 @@ impl WakuPane {
 
 impl Render for WakuPane {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        let Some(waku) = self.rapidpi.as_ref().and_then(WeakEntity::upgrade) else {
+        let Some(waku) = self.waku.as_ref().and_then(WeakEntity::upgrade) else {
             return gpui::div().into_any_element();
         };
         let content = self.content;
@@ -2305,7 +2305,6 @@ impl Waku {
         let scene_overlay_enabled = window.enable_scene_overlay().is_ok();
         let (updater_status, updater_events) = cx
             .try_global::<crate::updater::UpdaterState>()
-            .and_then(|state| state.0.as_ref())
             .map(|updater| (updater.status(), Some(updater.events())))
             .unwrap_or_default();
         let entity = cx.new(|cx| {
@@ -2777,7 +2776,6 @@ impl Waku {
                 onboarding_projectless_focus,
                 automatic_updates_enabled: cx
                     .try_global::<crate::updater::UpdaterState>()
-                    .and_then(|updater| updater.0.as_ref())
                     .is_some_and(|updater| updater.automatically_checks_for_updates()),
                 updater_status,
                 updater_button_focus,

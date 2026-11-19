@@ -450,7 +450,6 @@ impl Waku {
         // the settings UI, so re-mirror it each time settings opens.
         self.automatic_updates_enabled = cx
             .try_global::<crate::updater::UpdaterState>()
-            .and_then(|updater| updater.0.as_ref())
             .is_some_and(|updater| updater.automatically_checks_for_updates());
         // Warm the Usage page's transcript scan while the user is still on
         // General, so clicking Usage lands on data instead of a spinner.
@@ -1502,12 +1501,13 @@ impl Waku {
                 "The user denied control of this app.".into(),
             );
         } else {
-            let key = pending.target.grant_key();
+            let target = pending.target.as_ref().unwrap();
+            let key = target.grant_key();
             runtime.computer_session_grants.insert(key);
-            if decision == "always" && pending.target.persistable() {
+            if decision == "always" && target.persistable() {
                 let grant = crate::computer_use::ComputerAppGrant {
-                    bundle_id: pending.target.bundle_id.clone(),
-                    app_name: pending.target.app_name.clone(),
+                    bundle_id: target.bundle_id.clone(),
+                    app_name: target.app_name.clone(),
                 };
                 if !self
                     .state

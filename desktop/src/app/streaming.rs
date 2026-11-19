@@ -847,7 +847,7 @@ impl Waku {
             // window or replaced runtime from receiving its stale completion.
             preview.decode_task = None;
             let renderer = cx.svg_renderer();
-            let current_source = preview.frames.current.as_ref().map(|frame| frame.source_id);
+            let current_source = preview.frames.current().as_ref().map(|frame| frame.source_id);
             let decode = cx.background_executor().spawn(async move {
                 crate::computer_use::decode_preview_image_url(&image_url, renderer, current_source)
                     .ok()

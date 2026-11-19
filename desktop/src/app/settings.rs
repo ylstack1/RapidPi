@@ -597,10 +597,7 @@ impl Waku {
 
     fn set_automatic_updates_enabled(&mut self, enabled: bool, cx: &mut Context<Self>) {
         self.automatic_updates_enabled = enabled;
-        if let Some(updater) = cx
-            .try_global::<crate::updater::UpdaterState>()
-            .and_then(|updater| updater.0.as_ref())
-        {
+        if let Some(updater) = cx.try_global::<crate::updater::UpdaterState>() {
             updater.set_automatically_checks_for_updates(enabled);
         }
         cx.notify();
@@ -2503,11 +2500,7 @@ impl Waku {
         self.refresh_provider_detection(None);
         self.invalidate_composer_sources(cx);
 
-        let updater_available = cx
-            .try_global::<crate::updater::UpdaterState>()
-            .and_then(|updater| updater.0.as_ref())
-            .is_some();
-        crate::set_app_menus(cx, updater_available);
+        crate::set_app_menus(cx);
         self.save();
         window.refresh();
         cx.notify();

@@ -438,7 +438,7 @@ impl Waku {
         cx: &mut Context<Self>,
     ) -> Div {
         let theme = Theme::current(cx);
-        let target = &permission.target;
+        let target = permission.target.as_ref().unwrap();
         let mut buttons = div().mt(px(12.0)).flex().items_center().gap(px(8.0));
         let mut options = vec![
             ("task", tr!("computer_use.allow_for_task"), true),
@@ -608,11 +608,6 @@ impl Waku {
                 let target = state.target.as_ref()?;
                 let window_id = target.window_id;
                 let app_name = target.app_name.clone();
-                let screenshot = state
-                    .frames
-                    .current
-                    .as_ref()
-                    .map(|frame| frame.image.clone());
                 let is_top = index == top_index;
                 let depth = (top_index - index) as f32;
                 let x_offset = depth * stack_x_offset;
@@ -713,16 +708,7 @@ impl Waku {
                                 .rounded(px(COMPUTER_USE_PREVIEW_INNER_RADIUS))
                                 .overflow_hidden()
                                 .bg(theme.inset)
-                                .when_some(screenshot, |element, screenshot| {
-                                    element.child(
-                                        img(screenshot)
-                                            .w_full()
-                                            .h_full()
-                                            .rounded(px(COMPUTER_USE_PREVIEW_INNER_RADIUS))
-                                            .object_fit(ObjectFit::Contain),
-                                    )
-                                })
-                                .when(state.frames.current.is_none(), |element| {
+                                .when(state.frames.current().is_none(), |element| {
                                     element.child(
                                         div()
                                             .absolute()

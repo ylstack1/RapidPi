@@ -1,43 +1,47 @@
-//! Desktop ownership of the Waku daemon process.
+//! Connect to the local waku-daemon, which manages the Rapid Pi engine.
+//! The desktop spawns waku-daemon as a child process and speaks to it over
+//! a loopback WebSocket. Android is standalone and is never a desktop backend.
 
+use std::env;
 use std::path::PathBuf;
 
-use anyhow::{Context as _, anyhow, bail};
+use anyhow::{bail, Context as _, Result};
+use waku_client::DaemonSupervisor;
 
-pub fn start_process() -> anyhow::Result<waku_client::DaemonSupervisor> {
-    let address = std::env::var(waku_client::DAEMON_ADDRESS_ENV)
-        .ok()
-        .filter(|value| !value.trim().is_empty());
-    let token = std::env::var(waku_client::DAEMON_TOKEN_ENV)
-        .ok()
-        .filter(|value| !value.is_empty());
-    match (address, token) {
-        (Some(address), Some(token)) => {
-            return waku_client::DaemonSupervisor::connect(address.trim(), token);
-        }
-        (Some(_), None) => bail!(
-            "{} is set but {} is missing",
-            waku_client::DAEMON_ADDRESS_ENV,
-            waku_client::DAEMON_TOKEN_ENV
-        ),
-        (None, Some(_)) => bail!(
-            "{} is set but {} is missing",
-            waku_client::DAEMON_TOKEN_ENV,
-            waku_client::DAEMON_ADDRESS_ENV
-        ),
-        (None, None) => {}
-    }
-    let app_settings = waku_client::persistence::load_or_create_app_settings()
-        .context("could not load desktop daemon settings")?;
-    waku_client::DaemonSupervisor::spawn_configured(
-        &daemon_executable_path()?,
-        cfg!(debug_assertions),
-        app_settings.daemon_exposure,
-    )
+pub fn connect() -> Result<DaemonSupervisor> {
+    let daemon_exe = locate_daemon_executable()
+        .context("could not locate waku-daemon executable")?;
+    DaemonSupervisor::spawn(&daemon_exe, false)
+        .with_context(|| format!("failed to spawn waku-daemon at {}", daemon_exe.display()))
 }
 
-/// Resolve the local host name once during app construction. Settings can
-/// then show a useful LAN URL without touching the OS from a render frame.
+/// Locate the waku-daemon executable alongside the desktop binary.
+fn locate_daemon_executable() -> Result<PathBuf> {
+    let current_exe = env::current_exe().context("could not locate current executable")?;
+    let exe_dir = current_exe
+        .parent()
+        .context("executable has no parent directory")?;
+    let daemon_name = if cfg!(target_os = "windows") {
+        "waku-daemon.exe"
+    } else {
+        "waku-daemon"
+    };
+    let daemon_path = exe_dir.join(daemon_name);
+    if daemon_path.exists() {
+        return Ok(daemon_path);
+    }
+    // Fallback: look next to the Cargo target dir during development.
+    let workspace_root = exe_dir
+        .ancestors()
+        .nth(4)
+        .context("could not determine workspace root")?;
+    let dev_path = workspace_root.join("target").join("debug").join(daemon_name);
+    if dev_path.exists() {
+        return Ok(dev_path);
+    }
+    bail!("waku-daemon not found at {daemon_path:?} or {dev_path:?}")
+}
+
 pub fn local_hostname() -> Option<String> {
     #[cfg(unix)]
     {
@@ -48,57 +52,12 @@ pub fn local_hostname() -> Option<String> {
                 .iter()
                 .position(|byte| *byte == 0)
                 .unwrap_or(buffer.len());
-            let hostname = String::from_utf8_lossy(&buffer[..length]).trim().to_owned();
-            if !hostname.is_empty() {
-                return Some(hostname);
-            }
+            return String::from_utf8_lossy(&buffer[..length]).to_string().into();
         }
     }
-    // `COMPUTERNAME` is the Windows equivalent and is always set; `HOSTNAME`
-    // covers the shells that export it.
-    ["COMPUTERNAME", "HOSTNAME"]
-        .into_iter()
-        .filter_map(|name| std::env::var(name).ok())
-        .map(|hostname| hostname.trim().to_owned())
-        .find(|hostname| !hostname.is_empty())
-}
-
-fn daemon_executable_path() -> anyhow::Result<PathBuf> {
-    if let Some(path) = std::env::var_os("WAKU_DAEMON_PATH").filter(|path| !path.is_empty()) {
-        return Ok(path.into());
-    }
-    let executable = format!("waku-daemon{}", std::env::consts::EXE_SUFFIX);
-    let current = std::env::current_exe().context("could not locate the Waku executable")?;
-
-    // Development keeps the daemon beside Cargo's debug artifacts rather than
-    // inside Waku Debug.app. The supervisor watches this file and swaps only
-    // the daemon when the development watcher relinks it.
-    #[cfg(debug_assertions)]
-    if let Some(debug_directory) = current
-        .ancestors()
-        .find(|candidate| candidate.file_name().is_some_and(|name| name == "debug"))
+    #[cfg(not(unix))]
     {
-        let external = debug_directory.join(&executable);
-        if external.is_file() {
-            return Ok(external);
-        }
+        let _ = ();
     }
-
-    let sibling = current
-        .parent()
-        .map(|directory| directory.join(&executable))
-        .ok_or_else(|| anyhow!("Waku executable has no parent directory"))?;
-    if sibling.is_file() {
-        return Ok(sibling);
-    }
-    #[cfg(debug_assertions)]
-    bail!(
-        "Waku daemon was not found in Cargo's debug directory or next to the app executable: {}",
-        sibling.display(),
-    );
-    #[cfg(not(debug_assertions))]
-    bail!(
-        "Waku daemon is missing next to the app executable: {}",
-        sibling.display(),
-    )
+    Some("localhost".to_string())
 }

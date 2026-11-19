@@ -793,7 +793,6 @@ impl Waku {
         }
         let started = cx
             .try_global::<crate::updater::UpdaterState>()
-            .and_then(|state| state.0.as_ref())
             .is_some_and(|updater| updater.install_available_update());
         if started {
             self.updater_status = crate::updater::UpdateStatus::Updating;
