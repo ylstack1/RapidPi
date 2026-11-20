@@ -1,6 +1,6 @@
 #![recursion_limit = "256"]
 
-//! Waku's daemon-side core.
+//! Rapid Pi's daemon-side core.
 //!
 //! Provider, database, filesystem, and Git implementations live here, behind
 //! the transport-neutral contract in `waku-protocol`. Client applications
@@ -62,7 +62,6 @@ pub mod usage;
 pub mod usage_history;
 pub mod workspace;
 pub mod worktree;
-pub mod remote_control;
 
 mod fs_ext;
 mod protocol;
