@@ -15,7 +15,7 @@
 //!   Verified against a live service: it replaces the user's prompt, the
 //!   assistant's prose, reasoning, tool input, tool output and tool metadata
 //!   alike with `[redacted:…:msg_…]` placeholders, so importing a sanitized
-//!   export yields a transcript of nothing but placeholders. Waku exports
+//!   export yields a transcript of nothing but placeholders. Rapid Pi exports
 //!   unsanitized and drops the private parts itself — see
 //!   [`strip_provider_state`].
 //! * One agent STEP is one assistant message. A three-tool turn is four
@@ -45,7 +45,7 @@ use crate::opencode_service;
 /// Matches `acp_session`: a catalog that needs more than this many pages is
 /// either enormous or looping, and both deserve the same bound.
 const MAX_PAGES: usize = 20;
-/// The service caps nothing, so the page size is Waku's choice. Large enough
+/// The service caps nothing, so the page size is Rapid Pi's choice. Large enough
 /// that an ordinary catalog is one round trip.
 const PAGE_SIZE: usize = 100;
 /// The largest page `GET …/message` serves.
@@ -171,7 +171,7 @@ pub fn provider_session_history(
 /// memory: a single reasoning blob runs to multiple kilobytes, and the tool
 /// state carries whole tool inputs and outputs an imported transcript never
 /// renders. Doing it unconditionally means a change in what the server
-/// chooses to redact cannot leak anything into Waku.
+/// chooses to redact cannot leak anything into Rapid Pi.
 fn strip_provider_state(messages: &mut [MessageInfo]) {
     for message in messages {
         let MessageInfo::Assistant { content, .. } = message else {
@@ -188,7 +188,7 @@ fn strip_provider_state(messages: &mut [MessageInfo]) {
     }
 }
 
-/// Projects stored messages onto Waku's turn model.
+/// Projects stored messages onto Rapid Pi's turn model.
 ///
 /// Only `user` and assistant TEXT survive: reasoning is dropped from an
 /// imported transcript the way `acp_session` used to drop it, and every other message
@@ -302,7 +302,7 @@ pub fn fork_session_at_turn(
 ///
 /// Deliberately NOT built on `POST …/revert/stage|commit|clear`: revert
 /// mutates the same session, writes files, and answers 409 `SessionBusyError`
-/// while a turn is running, whereas Waku's contract here is "drop the last N
+/// while a turn is running, whereas Rapid Pi's contract here is "drop the last N
 /// turns and hand back a cursor for the continuing conversation". Revert is
 /// real headroom — it survives reconnect via `Session.Info.revert` and carries
 /// per-file patches — and wants its own affordance rather than this one.
@@ -347,14 +347,14 @@ fn native_turn_message_ids(endpoint: &Endpoint, session_id: &str) -> anyhow::Res
 /// Finds the user message that opens each native turn, fed every stored
 /// message in conversation order.
 ///
-/// Steering stores an ordinary `user` message in the running turn, and Waku
+/// Steering stores an ordinary `user` message in the running turn, and Rapid Pi
 /// folds a steer into that turn rather than starting one, so counting user
 /// messages forks at the wrong boundary once any turn was steered. The rule
 /// is OpenCode's own (`session/diff.ts`): a turn opens with the first user
 /// message after an `idle` marker and runs to the next one.
 ///
 /// History migrated from OpenCode 1 carries no markers. There a message sent
-/// mid-turn joined the running loop, which Waku's OpenCode 1 driver showed as
+/// mid-turn joined the running loop, which Rapid Pi's OpenCode 1 driver showed as
 /// a steer too: the loop ran on past a `tool-calls` or `unknown` step unless
 /// the step failed, and took in any message written before its latest step
 /// completed. A message written later opened a turn, including one that
@@ -441,7 +441,7 @@ fn fork_at_boundary(
 fn fork_boundary(message_ids: &[String], retained_turns: usize) -> anyhow::Result<Option<&str>> {
     if retained_turns > message_ids.len() {
         bail!(
-            "OpenCode has only {} native turns, but Waku needs {retained_turns}",
+            "OpenCode has only {} native turns, but Rapid Pi needs {retained_turns}",
             message_ids.len()
         );
     }
@@ -451,7 +451,7 @@ fn fork_boundary(message_ids: &[String], retained_turns: usize) -> anyhow::Resul
 fn retained_turn_count(total_turns: usize, turns_to_remove: usize) -> anyhow::Result<usize> {
     total_turns.checked_sub(turns_to_remove).ok_or_else(|| {
         anyhow!(
-            "OpenCode has only {total_turns} native turns, but Waku needs to remove {turns_to_remove}"
+            "OpenCode has only {total_turns} native turns, but Rapid Pi needs to remove {turns_to_remove}"
         )
     })
 }
@@ -578,7 +578,7 @@ mod tests {
                 "cost": 0,
                 "tokens": {"input": 0, "output": 0, "reasoning": 0, "cache": {"read": 0, "write": 0}},
                 "time": {"created": 1_788_689_510_000_u64, "updated": 1_788_689_514_982_u64},
-                "title": "Review and merge Waku PR #113",
+                "title": "Review and merge Rapid Pi PR #113",
                 "location": {"directory": project_dir}
             },
             {
@@ -868,7 +868,7 @@ mod tests {
         assert_eq!(openers, ["msg_user", "msg_user2"]);
     }
 
-    /// Waku showed a steer inside the turn it steered, so an imported one
+    /// Rapid Pi showed a steer inside the turn it steered, so an imported one
     /// lands there too, with its turn's numbering intact.
     #[test]
     fn imported_steers_join_the_turn_they_steered() {

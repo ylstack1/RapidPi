@@ -35,7 +35,7 @@ pub fn get_cwd() -> PathBuf {
 /// Path to the pi extension skill directory for computer use.
 pub fn pi_extension_path() -> PathBuf {
     // This is a placeholder; the actual path is determined at runtime
-    // based on the Waku application installation.
+    // based on the Rapid Pi application installation.
     PathBuf::from("/Applications/Waku.app/Contents/Resources/skills/waku-computer-use")
 }
 

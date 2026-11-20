@@ -89,7 +89,7 @@ fn discover_codex(binary: &Path, project_root: &Path) -> Option<Vec<SlashCommand
         "params": {
             "clientInfo": {
                 "name": "waku",
-                "title": "Waku",
+                "title": "Rapid Pi",
                 "version": env!("CARGO_PKG_VERSION")
             },
             "capabilities": {"experimentalApi": true}
@@ -101,7 +101,7 @@ fn discover_codex(binary: &Path, project_root: &Path) -> Option<Vec<SlashCommand
     {
         let mut commands = Vec::new();
         // Codex does not publish a TUI command registry, but it does publish
-        // the effective feature set backing the native commands Waku bridges.
+        // the effective feature set backing the native commands Rapid Pi bridges.
         // Availability therefore comes from the installed CLI/config rather
         // than from an unconditional Codex list in the composer.
         let feature_request = json!({

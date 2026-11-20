@@ -252,7 +252,7 @@ fn parse_claude_models(value: &Value) -> Vec<ProviderModel> {
                     .filter(|effort| !effort.is_empty())
                     .map(|effort| ProviderModelOption::new(effort, reasoning_effort_label(effort)))
                     .collect();
-                // `ultracode` is Waku's orchestration effort. Claude accepts
+                // `ultracode` is Rapid Pi's orchestration effort. Claude accepts
                 // it wherever the provider metadata says xhigh is supported.
                 if model
                     .reasoning_efforts
@@ -1181,7 +1181,7 @@ fn discover_codex_models(binary: &Path) -> Vec<ProviderModel> {
         "params": {
             "clientInfo": {
                 "name": "waku",
-                "title": "Waku",
+                "title": "Rapid Pi",
                 "version": env!("CARGO_PKG_VERSION")
             },
             "capabilities": {
@@ -1334,7 +1334,7 @@ fn reasoning_effort_label(effort: &str) -> String {
 /// Attaches a model's OpenCode "variants" as its reasoning-effort ladder.
 ///
 /// OpenCode expresses reasoning effort as a per-model variant whose id is drawn
-/// from the same vocabulary Waku already labels
+/// from the same vocabulary Rapid Pi already labels
 /// (`none`/`minimal`/`low`/`medium`/`high`/`xhigh`/`max`, plus provider-specific
 /// ones such as `thinking`), and the chosen id is sent verbatim as
 /// `ModelRef::variant`. Models with no variants keep an empty ladder, which is

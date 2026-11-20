@@ -3,16 +3,16 @@
 //! OpenCode is not a per-workspace server. One background process, started by
 //! whoever needed it first — usually the user's own TUI — serves every
 //! workspace, because a session carries its own `location.directory` and the
-//! service itself sits in `$HOME`. Waku therefore *finds* that process
+//! service itself sits in `$HOME`. Rapid Pi therefore *finds* that process
 //! through its registration file instead of owning one, and multiplexes every
-//! Waku task over the single `GET /api/event` stream it exposes.
+//! Rapid Pi task over the single `GET /api/event` stream it exposes.
 //!
 //! Three rules make that safe, and all three are load-bearing:
 //!
 //! * **An adopted service is never killed.** Teardown cancels the SSE socket
-//!   and returns. Waku never signals the pid, never calls the service's own
+//!   and returns. Rapid Pi never signals the pid, never calls the service's own
 //!   stop route, and never runs `opencode service stop` — the process it
-//!   found may be driving the user's terminal, and a process Waku started with
+//!   found may be driving the user's terminal, and a process Rapid Pi started with
 //!   `serve --service` is indistinguishable from one it found.
 //! * **The registration file is opened read-only, always.** The service polls
 //!   its own descriptor every 5s and self-terminates when the contents change,
@@ -25,9 +25,9 @@
 //!   torn-down paths unreachable — the reader would keep itself alive forever.
 //!
 //! Demultiplexing is a security boundary rather than an optimization: the one
-//! stream carries the user's own TUI sessions and every other Waku task, so a
+//! stream carries the user's own TUI sessions and every other Rapid Pi task, so a
 //! frame reaches exactly the subscriber that owns its session id, the whole
-//! `tui.*` remote-control family is dropped, and anything Waku does not own is
+//! `tui.*` remote-control family is dropped, and anything Rapid Pi does not own is
 //! dropped too. See [`route`].
 //!
 //! Everything here blocks — file reads, HTTP, thread parks — so every caller
@@ -77,9 +77,9 @@ const RECONNECT_MAX_BACKOFF: Duration = Duration::from_secs(2);
 
 /// The descriptor the service writes for its clients.
 ///
-/// `version` is the service's own build id. Waku surfaces it rather than
+/// `version` is the service's own build id. Rapid Pi surfaces it rather than
 /// comparing it with anything of its own: the CLI's incumbency check compares
-/// against *its* build, and Waku is not an OpenCode build, so equality there
+/// against *its* build, and Rapid Pi is not an OpenCode build, so equality there
 /// would reject every perfectly healthy service.
 #[derive(Clone, Deserialize)]
 pub(crate) struct ServiceRegistration {
@@ -191,15 +191,15 @@ fn accept_info(registration: &ServiceRegistration, info: &ServerInfo) -> anyhow:
     Ok(())
 }
 
-/// How the service Waku is talking to came to exist.
+/// How the service Rapid Pi is talking to came to exist.
 ///
-/// `Adopted` covers both a service Waku found and one it started with
+/// `Adopted` covers both a service Rapid Pi found and one it started with
 /// `serve --service`; the two are indistinguishable by construction, and
 /// neither is ever signalled. `Private` is reserved for the future Computer
-/// Use path (`serve --stdio --port 0` with a Waku-generated password, which
+/// Use path (`serve --stdio --port 0` with a Rapid Pi-generated password, which
 /// prints one JSON line and exits when stdin closes) and is unreachable today;
 /// wiring it up will also need the guardian-script plus `process_group(0)`
-/// wrapper from `deepseek_session`, because the dev watcher SIGTERMs Waku
+/// wrapper from `deepseek_session`, because the dev watcher SIGTERMs Rapid Pi
 /// without running destructors.
 #[allow(dead_code)]
 pub(crate) enum Ownership {
@@ -220,7 +220,7 @@ pub(crate) enum HubFrame {
     Disconnected,
 }
 
-/// Fan-out from the one event stream to the sessions Waku owns.
+/// Fan-out from the one event stream to the sessions Rapid Pi owns.
 #[derive(Default)]
 pub(crate) struct EventHub {
     subscribers: Mutex<HashMap<String, Vec<(usize, Sender<HubFrame>)>>>,
@@ -257,7 +257,7 @@ impl EventHub {
         }
     }
 
-    /// Routes one envelope. Frames for sessions Waku does not own — the user's
+    /// Routes one envelope. Frames for sessions Rapid Pi does not own — the user's
     /// own TUI work, most of what this stream carries — land here and go
     /// nowhere.
     fn publish(&self, envelope: Value) {
@@ -315,8 +315,8 @@ enum Route {
 /// Demultiplexes one `/api/event` envelope.
 ///
 /// This is a security boundary. The stream is shared with the user's terminal
-/// and with every other Waku task, so anything that cannot be attributed to a
-/// session Waku owns must not reach a transcript.
+/// and with every other Rapid Pi task, so anything that cannot be attributed to a
+/// session Rapid Pi owns must not reach a transcript.
 fn route(envelope: &Value) -> Route {
     let kind = envelope
         .get("type")
@@ -325,7 +325,7 @@ fn route(envelope: &Value) -> Route {
     // `tui.*` are remote-control commands the service broadcasts to every
     // connected client — append to the prompt, execute a command, select a
     // session, show a toast. Forwarding them would let a foreign OpenCode
-    // client drive Waku's composer and navigation.
+    // client drive Rapid Pi's composer and navigation.
     if kind.starts_with("tui.") {
         return Route::Drop;
     }
@@ -430,7 +430,7 @@ impl OpenCodeService {
         self.model_windows.read().get(key).copied()
     }
 
-    /// The pid of the adopted service, for reporting only. Waku never signals
+    /// The pid of the adopted service, for reporting only. Rapid Pi never signals
     /// it: see the module doc.
     #[allow(dead_code)]
     pub(crate) fn pid(&self) -> Option<u32> {
@@ -508,7 +508,7 @@ impl Drop for Subscription {
         self.service.hub.unsubscribe(&self.session_id, self.rx_id);
         if self.service.subscribers.fetch_sub(1, Ordering::AcqRel) == 1 {
             // Park the reader rather than tear anything down: with no session
-            // watching, Waku has no business decoding the user's TUI traffic.
+            // watching, Rapid Pi has no business decoding the user's TUI traffic.
             // The adopted process is left completely untouched.
             self.service.stream.cancel();
             self.service.wake.wake();
@@ -614,7 +614,7 @@ fn connect(binary: &Path, may_spawn: bool) -> anyhow::Result<Option<Arc<OpenCode
 /// Re-checks the service the slot has been holding.
 ///
 /// A CLI upgrade replaces the running service with a new url, pid and
-/// password, and the user can stop it outright between two Waku tasks. Both
+/// password, and the user can stop it outright between two Rapid Pi tasks. Both
 /// are absorbed by refreshing the endpoint IN PLACE — minting a second service
 /// object would put a second reader on the same process and orphan every live
 /// subscription.
@@ -636,8 +636,8 @@ fn revalidate(service: &Arc<OpenCodeService>, may_spawn: bool) -> anyhow::Result
 /// Starts a background service and waits for it to register.
 ///
 /// `serve --service` short-circuits on a healthy incumbent, so it is
-/// idempotent and safe to race — including against a second Waku daemon, which
-/// happens routinely when a release build and `Waku Debug.app` run side by
+/// idempotent and safe to race — including against a second Rapid Pi daemon, which
+/// happens routinely when a release build and `Rapid Pi Debug.app` run side by
 /// side. In that race the in-process condvar does nothing at all, and the
 /// pid-checked rediscovery below is the only thing that converges both
 /// processes on one service.
@@ -669,7 +669,7 @@ fn spawn_service(binary: &Path) -> anyhow::Result<(ServiceRegistration, Endpoint
         }
         if Instant::now() >= deadline {
             // A non-zero exit is deliberately NOT fatal on its own: losing the
-            // race to another Waku daemon looks exactly like that, and the
+            // race to another Rapid Pi daemon looks exactly like that, and the
             // winner's service can still be seconds away from healthy.
             match exit {
                 Some(status) => bail!(
@@ -686,7 +686,7 @@ fn spawn_service(binary: &Path) -> anyhow::Result<(ServiceRegistration, Endpoint
 ///
 /// OpenCode 1 has no background service. Its `serve` ignores `--service`,
 /// starts an ordinary foreground server that never registers, and would
-/// outlive the 20s start poll as an orphan Waku never stops. OpenCode 1 still
+/// outlive the 20s start poll as an orphan Rapid Pi never stops. OpenCode 1 still
 /// installs as `opencode` from some channels, so this is the one place where
 /// that binary reaches a spawn, and it is caught before anything runs.
 fn ensure_service_cli(binary: &Path) -> anyhow::Result<()> {
@@ -697,7 +697,7 @@ fn ensure_service_cli(binary: &Path) -> anyhow::Result<()> {
     };
     match opencode_one_version(&output) {
         Some(version) => bail!(
-            "Waku needs OpenCode 2, but {} is OpenCode {version}. Install OpenCode 2 with `npm install -g @opencode/cli`, or choose its binary in Settings → Providers.",
+            "Rapid Pi needs OpenCode 2, but {} is OpenCode {version}. Install OpenCode 2 with `npm install -g @opencode/cli`, or choose its binary in Settings → Providers.",
             binary.display()
         ),
         None => Ok(()),
@@ -746,7 +746,7 @@ fn opencode_one_version(output: &str) -> Option<&str> {
 
 /// Cuts a reconnect backoff short, so neither a reconnect nor a parked
 /// reader's exit waits out the sleep: a registration was just adopted (the
-/// service Waku spawned for a new task, or one the reader rediscovered), or
+/// service Rapid Pi spawned for a new task, or one the reader rediscovered), or
 /// the last subscription went away.
 #[derive(Default)]
 struct ReaderWake {
@@ -777,7 +777,7 @@ impl ReaderWake {
 /// moment it takes to record something. THE RECONNECT LOOP MAY NOT SPAWN — a
 /// user who ran `opencode service stop` must not have their daemon
 /// resurrected by a reader thread no session needs — and the end of the stream
-/// MUST NEVER become `ProcessExited`, because Waku does not own this process.
+/// MUST NEVER become `ProcessExited`, because Rapid Pi does not own this process.
 ///
 /// It never gives up while a session is subscribed, either. A shutdown leaves
 /// the running turn's claim in place and the next boot resumes it, however
@@ -867,7 +867,7 @@ fn pump(
             return;
         };
         // A frame that is not an envelope means the stream is no longer
-        // carrying what Waku thinks it is; dropping it silently would leave a
+        // carrying what Rapid Pi thinks it is; dropping it silently would leave a
         // session waiting forever for events that already stopped.
         if V2Event::deserialize(&envelope).is_err() {
             return;
@@ -936,7 +936,7 @@ fn model_context_windows(endpoint: &Endpoint) -> Option<HashMap<String, u64>> {
 }
 
 /// `/api/model` answers `{location, data: [Model.Info]}`; the key drivers hold
-/// is `"{providerID}/{id}"`, which is also how Waku stores a selected model.
+/// is `"{providerID}/{id}"`, which is also how Rapid Pi stores a selected model.
 fn context_windows(response: &Value) -> HashMap<String, u64> {
     response
         .get("data")
@@ -994,7 +994,7 @@ mod tests {
             })),
             Route::Session("ses_a".to_owned())
         );
-        // Never broadcast a form Waku cannot attribute.
+        // Never broadcast a form Rapid Pi cannot attribute.
         assert_eq!(
             route(&json!({"type": "form.created", "data": {"form": {"id": "frm_1"}}})),
             Route::Drop
@@ -1157,7 +1157,7 @@ mod tests {
         std::fs::remove_dir_all(directory).unwrap();
     }
 
-    /// A registration adopted mid-backoff — the service Waku just spawned
+    /// A registration adopted mid-backoff — the service Rapid Pi just spawned
     /// for a new task — must reconnect at once rather than after the sleep.
     #[test]
     fn a_wake_cuts_one_reconnect_backoff_short() {

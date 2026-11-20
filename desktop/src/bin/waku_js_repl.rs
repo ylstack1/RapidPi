@@ -1,10 +1,10 @@
 #[path = "../js_repl.rs"]
 mod js_repl;
 
-/// Run the dedicated stdio transport without initializing the Waku GUI.
+/// Run the dedicated stdio transport without initializing the Rapid Pi GUI.
 fn main() {
     if let Err(error) = js_repl::serve_stdio() {
-        eprintln!("Waku JavaScript REPL: {error:#}");
+        eprintln!("Rapid Pi JavaScript REPL: {error:#}");
         std::process::exit(1);
     }
 }

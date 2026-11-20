@@ -1,4 +1,4 @@
-//! Minimal blocking HTTP/1.1 and server-sent-event wire for the providers Waku
+//! Minimal blocking HTTP/1.1 and server-sent-event wire for the providers Rapid Pi
 //! drives over a local HTTP server rather than stdio: OpenCode's background
 //! service and DeepSeek Harness's RPC routes.
 //!

@@ -563,7 +563,7 @@ struct DriverStartRequest {
 }
 
 /// A provider process that has started off-thread but is not installed into
-/// Waku's runtime map yet. Its event receiver safely buffers early events.
+/// Rapid Pi's runtime map yet. Its event receiver safely buffers early events.
 struct PreparedDriver {
     handle: DriverHandle,
     events: Receiver<DriverEvent>,
@@ -650,7 +650,7 @@ enum EventPumpSchedule {
 }
 
 /// One cached island of the root view: a region rendered by delegating back
-/// into [`Waku`] under its own view identity.
+/// into [`Rapid Pi`] under its own view identity.
 ///
 /// All state stays on the root entity; what the island buys is scope for
 /// gpui's cached-view machinery. The pulse clock and the streaming veil lease
@@ -1603,7 +1603,7 @@ pub struct Waku {
     menus: RefCell<HashMap<SharedString, ContextMenuHandle>>,
     navigation_rail: Entity<ConversationNavigationRail>,
     navigation_rail_reset_generation: Cell<u64>,
-    /// Cached islands of the root view; see [`WakuPane`].
+    /// Cached islands of the root view; see [`Rapid PiPane`].
     sidebar_pane: Entity<WakuPane>,
     transcript_pane: Entity<WakuPane>,
     right_panel_pane: Entity<WakuPane>,
@@ -2469,7 +2469,7 @@ impl Waku {
             .detach();
 
             // Clipboard images and Finder file copies are attachment payloads,
-            // not text paths. The input owns representation priority; Waku
+            // not text paths. The input owns representation priority; Rapid Pi
             // owns durable staging and composer/session state.
             cx.subscribe(
                 &composer,

@@ -17,7 +17,7 @@ const ACTIVITY_DIFF_GUTTER_WIDTH: f32 = 52.0;
 #[derive(Clone, Debug)]
 struct ConversationNavigationRailSnapshot {
     visible: bool,
-    /// Shared with the `Waku` cache: the turns only change when the row-kinds
+    /// Shared with the `Rapid Pi` cache: the turns only change when the row-kinds
     /// fingerprint moves, so the per-frame equality check here is a pointer
     /// comparison rather than a walk over every turn's snippets.
     turns: Rc<Vec<TranscriptNavigationTurn>>,
@@ -2735,7 +2735,7 @@ fn activity_scroll_follow_state(
     }
 }
 
-/// Pure window arithmetic behind [`Waku::live_reasoning_window_start`]:
+/// Pure window arithmetic behind [`Rapid Pi::live_reasoning_window_start`]:
 /// given the cached start and the current content, the byte offset the
 /// window should render from. Every returned offset is a character boundary
 /// of `content`, so callers may slice with it directly.

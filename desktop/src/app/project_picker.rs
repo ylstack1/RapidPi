@@ -306,7 +306,7 @@ impl Waku {
                             return;
                         };
                         // Close before applying: the toggle observer updates
-                        // `Waku`, so it cannot run inside the update below.
+                        // `Rapid Pi`, so it cannot run inside the update below.
                         confirm_popover.close(window, cx);
                         window.refresh();
                         let _ = confirm_weak.update(cx, |this, cx| {

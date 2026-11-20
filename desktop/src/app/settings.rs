@@ -93,7 +93,7 @@ impl Waku {
         let theme = Theme::current(cx);
 
         div()
-            .key_context("Waku")
+            .key_context("Rapid Pi")
             .track_focus(&self.settings_focus)
             .on_action(|_: &CloseWindow, window, _| crate::platform::hide_window(window))
             .on_action(cx.listener(Self::new_session_action))

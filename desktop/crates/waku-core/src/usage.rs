@@ -273,7 +273,7 @@ fn opencode_database_path(data: &Path) -> PathBuf {
 /// to read, `Some(None)` when the store holds no usable Go key.
 ///
 /// Opened read-only: the store belongs to the user's running OpenCode
-/// service, and Waku must never write to it.
+/// service, and Rapid Pi must never write to it.
 fn opencode_go_api_key_from_store(database: &Path) -> Option<Option<String>> {
     let connection = rusqlite::Connection::open_with_flags(
         database,
