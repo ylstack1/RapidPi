@@ -338,10 +338,12 @@ describe("rapid-pi compile takes the packages Rapid Pi loads", () => {
 		packageAt(npm("pi-web-access"), "pi-web-access", "0.41.0", ["dist/index.js"]);
 		packageAt(npm("opensec-pi-fff"), "opensec-pi-fff", "0.11.0", ["src/index.ts"]);
 		packageAt(join(agentDir, "plugins", "pi-todo"), "pi-todo", "1.0.0", ["index.ts"]);
-		const bundle = packageAt(join(agentDir, "rapid-pi-bundles", "rapid-pi-web-access"), "rapid-pi-web-access", "1.0.0", [
-			"extensions/a.ts",
-			"extensions/b.ts",
-		]);
+		const bundle = packageAt(
+			join(agentDir, "rapid-pi-bundles", "rapid-pi-web-access"),
+			"rapid-pi-web-access",
+			"1.0.0",
+			["extensions/a.ts", "extensions/b.ts"],
+		);
 		mkdirSync(join(agentDir, "rapid-pi-bundles", "skills-only", "skills"), { recursive: true });
 		writeFileSync(
 			join(agentDir, "settings.json"),

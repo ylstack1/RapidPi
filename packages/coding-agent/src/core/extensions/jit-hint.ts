@@ -23,7 +23,9 @@ const HINT_MARK = "needs Rapid Pi's JIT build";
 
 /** Whether `message` is (or includes) the engine's "bun:ffi requires the JIT", on a build where it applies. */
 export function isJitRequiredMessage(message: unknown): message is string {
-	return RAPIDPI !== undefined && !RAPIDPI.jit && typeof message === "string" && message.includes(JIT_REQUIRED_MESSAGE);
+	return (
+		RAPIDPI !== undefined && !RAPIDPI.jit && typeof message === "string" && message.includes(JIT_REQUIRED_MESSAGE)
+	);
 }
 
 /** The line that says `extension` needs the JIT build, and how to switch to it. */

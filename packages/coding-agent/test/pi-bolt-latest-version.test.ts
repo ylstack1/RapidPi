@@ -96,9 +96,7 @@ afterEach(() => {
 
 describe("the latest Rapid Pi release", () => {
 	it("is read from a release page's address", () => {
-		expect(rapidPiVersionOfReleaseUrl("https://github.com/ylstack1/RapidPi/releases/tag/bolt-v1.0.3")).toBe(
-			"1.0.3",
-		);
+		expect(rapidPiVersionOfReleaseUrl("https://github.com/ylstack1/RapidPi/releases/tag/bolt-v1.0.3")).toBe("1.0.3");
 		expect(rapidPiVersionOfReleaseUrl("/ylstack1/RapidPi/releases/tag/bolt-v1.0.3")).toBe("1.0.3");
 		expect(rapidPiVersionOfReleaseUrl("https://github.com/ylstack1/RapidPi/releases")).toBeUndefined();
 		expect(rapidPiVersionOfReleaseUrl("https://github.com/ylstack1/RapidPi/releases/tag/v1.4.0")).toBeUndefined();

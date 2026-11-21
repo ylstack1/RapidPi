@@ -258,7 +258,9 @@ export async function fetchSignedSums(version: string, publicKeyPem: string = RA
 			"the release has no signature (SHA256SUMS.sig), and every release since 0.6.0 is signed. Nothing was installed.",
 		);
 	if (!sumsSignatureValid(sumsBytes, signature, publicKeyPem)) {
-		throw new Error("the release's signature does not verify: the download is not Rapid Pi's. Nothing was installed.");
+		throw new Error(
+			"the release's signature does not verify: the download is not Rapid Pi's. Nothing was installed.",
+		);
 	}
 	// The first line says which release the signed files are: an older release (signed all the same) is not taken for a newer one.
 	const sums = sumsBytes.toString("utf8");

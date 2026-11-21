@@ -32,10 +32,10 @@ import { hasTrustRequiringProjectResources, ProjectTrustStore } from "../core/tr
 import { isHerdrPiIntegration } from "../extensions/herdr/integration-file.ts";
 import { herdrFromEnvironment } from "../extensions/herdr/transport.ts";
 import {
+	type PiBoltPackageManagerId,
 	RAPIDPI,
 	RAPIDPI_RELEASE_KEY,
 	RAPIDPI_RELEASES_URL,
-	type PiBoltPackageManagerId,
 	rapidPiInstallDir,
 	rapidPiInstallMethod,
 	rapidPiJitSwitchCommand,
@@ -207,7 +207,8 @@ interface PathEntry {
 
 /** Every `rapid-pi` on PATH, in PATH's order, with where each leads. */
 function rapidPiOnPath(env: NodeJS.ProcessEnv = process.env): PathEntry[] {
-	const names = process.platform === "win32" ? ["rapid-pi.exe", "rapid-pi.cmd", "rapid-pi.ps1", "rapid-pi"] : ["rapid-pi"];
+	const names =
+		process.platform === "win32" ? ["rapid-pi.exe", "rapid-pi.cmd", "rapid-pi.ps1", "rapid-pi"] : ["rapid-pi"];
 	const seen = new Set<string>();
 	const entries: PathEntry[] = [];
 	for (const dir of (env.PATH ?? env.Path ?? "").split(delimiter)) {
@@ -351,7 +352,8 @@ async function checkReleaseSignature(): Promise<SignatureResult | undefined> {
 			fetchBytes(`${base}/SHA256SUMS`),
 			fetchBytes(`${base}/SHA256SUMS.sig`),
 		]);
-		if (sums.status === 404) return { status: "not-released", detail: `there is no release bolt-v${RAPIDPI.version}` };
+		if (sums.status === 404)
+			return { status: "not-released", detail: `there is no release bolt-v${RAPIDPI.version}` };
 		if (!sums.body) return { status: "error", detail: `SHA256SUMS: HTTP ${sums.status}` };
 		if (!signature.body) return { status: "bad", detail: `the release has no signature (HTTP ${signature.status})` };
 		return verifyReleaseSums(sums.body, signature.body, RAPIDPI.version, archiveNames());

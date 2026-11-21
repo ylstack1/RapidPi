@@ -9,7 +9,13 @@ import { spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import chalk from "chalk";
-import { RAPIDPI, RAPIDPI_INSTALL_URL, rapidPiInstallDir, rapidPiInstallMethod, rapidPiPackageManager } from "./rapid-pi.ts";
+import {
+	RAPIDPI,
+	RAPIDPI_INSTALL_URL,
+	rapidPiInstallDir,
+	rapidPiInstallMethod,
+	rapidPiPackageManager,
+} from "./rapid-pi.ts";
 
 /** "Rapid Pi 0.9.0 (Pi 1.2.0), linux-x64, JIT off, built ..." and what is compiled in, from a build's rapid-pi.txt. */
 function describe(folder: string): string {
@@ -135,7 +141,9 @@ export function rollbackPiBolt(): number {
 	}
 	const manager = rapidPiPackageManager(method);
 	if (manager?.switchVersion) {
-		console.error(`This Rapid Pi was installed with ${manager.name}. Switch to another version with ${manager.name}:`);
+		console.error(
+			`This Rapid Pi was installed with ${manager.name}. Switch to another version with ${manager.name}:`,
+		);
 		console.error(`  ${manager.switchVersion}`);
 		return 1;
 	}

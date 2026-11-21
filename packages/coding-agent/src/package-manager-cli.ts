@@ -43,9 +43,9 @@ import { SettingsManager } from "./core/settings-manager.ts";
 import { hasTrustRequiringProjectResources, ProjectTrustStore } from "./core/trust-manager.ts";
 import {
 	isPiBoltChannel,
+	type PiBoltChannel,
 	RAPIDPI,
 	RAPIDPI_INSTALL_COMMAND,
-	type PiBoltChannel,
 	rapidPiChannel,
 	rapidPiExecutableIn,
 	rapidPiInstallDir,
