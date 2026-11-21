@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Header title mark from your SVG (760x280 landscape): terminal plate + >_ prompt + cyan lightning #00F2FE, white #FFFFFF on dark #0B1319. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="190"
+    android:viewportHeight="70">
+    <!-- Dark background plate (your SVG #000000 -> theme charcoal) -->
+    <path
+        android:fillColor="#0B1319"
+        android:pathData="M 0,0 h 190 v 70 h -190 z" />
+    <!-- Terminal rounded plate: white stroke border -->
+    <path
+        android:fillColor="#0B1319"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineJoin="round"
+        android:pathData="M 8,8 h 56 v 54 h -56 z" />
+    <!-- Terminal prompt '>' -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 24,28 L 36,42 L 24,56" />
+    <!-- Terminal prompt cursor '_' -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M 42,56 L 58,56" />
+    <!-- Cyan lightning flash (your SVG #00F2FE) -->
+    <path
+        android:fillColor="#00F2FE"
+        android:pathData="M 110,22 L 122,8 L 118,8 L 130,42 Z" />
+</vector>

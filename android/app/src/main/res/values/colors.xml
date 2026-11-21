@@ -4,4 +4,9 @@
     <color name="splash_bg">#1C1B19</color>
     <!-- Notifications: the small bolt and the app name in the shade, in the logo's amber. -->
     <color name="notification_accent">#FFE9A42C</color>
+
+    <!-- Rapid Pi brand: header title icon and title text -->
+    <color name="brand_amber">#FFFFD84D</color>
+    <color name="brand_amber_dim">#FFE9C46A</color>
+    <color name="brand_bg">#1C1B19</color>
 </resources>

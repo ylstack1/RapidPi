@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "Rapid Pi",
+    "slug": "waku-mobile",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/images/icon.png",
+    "scheme": "waku",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "sh.rapidpi.mobile",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#323246"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#1a1a1a",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 76
+        }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": false
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Waku to choose photos to attach to tasks.",
+          "cameraPermission": "Allow Waku to take photos to attach to tasks.",
+          "microphonePermission": false
+        }
+      ],
+      "./plugins/with-paste-input"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
