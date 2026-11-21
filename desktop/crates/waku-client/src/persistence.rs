@@ -927,7 +927,13 @@ impl StateStore {
                 state
             }
             Err(_) if cwd.parent().is_none() => PersistedState::empty(),
-            Err(_) => PersistedState::fresh(cwd),
+            Err(_) => {
+                let state = PersistedState::fresh(cwd);
+                // Daemon is disconnected — this is local state, not daemon-owned
+                // data, so allow saving it locally without the daemon.
+                self.task_state_loaded.store(true, Ordering::Release);
+                state
+            }
         };
         if state.projects.is_empty()
             && let Some(cwd) = self.remote_default_cwd.lock().clone()
@@ -1031,18 +1037,17 @@ impl StateStore {
             .cloned()
             .collect();
         let live_session_ids = state.sessions.iter().map(|session| session.id).collect();
-        self.daemon
-            .client()
-            .notify(
-                Uuid::nil(),
-                Uuid::nil(),
-                Command::SaveTaskState {
-                    projects: state.projects.clone(),
-                    live_session_ids,
-                    sessions,
-                },
-            )
-            .map_err(to_io_error)?;
+        // Daemon may be disconnected — saving task state to the daemon is
+        // best-effort; local app settings and state are already persisted above.
+        let _ = self.daemon.client().notify(
+            Uuid::nil(),
+            Uuid::nil(),
+            Command::SaveTaskState {
+                projects: state.projects.clone(),
+                live_session_ids,
+                sessions,
+            },
+        );
         state.dirty_sessions.clear();
         Ok(())
     }

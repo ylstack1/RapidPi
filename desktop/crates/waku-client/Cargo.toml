@@ -2,7 +2,7 @@
 name = "waku-client"
 version = "0.1.0"
 edition = "2024"
-description = "Rust client and daemon process supervisor for Rapid Pi"
+description = "Rust client and engine process supervisor for Rapid Pi"
 license = "GPL-3.0-only"
 
 [dependencies]
@@ -11,13 +11,10 @@ crossbeam-channel = "0.5"
 dirs = "6.0"
 parking_lot = "0.12"
 nucleo-matcher = "0.3"
+rand = "0.8"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 smol = "2"
-tungstenite = { version = "0.30", default-features = false, features = [
-    "handshake",
-    "native-tls",
-] }
 url = "2"
 uuid = { version = "1.18", features = ["v4", "serde"] }
 waku-protocol = { path = "../waku-protocol" }

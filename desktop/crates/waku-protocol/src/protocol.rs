@@ -262,6 +262,13 @@ pub enum Command {
         rows: u16,
     },
     CloseTerminal,
+    /// Start the built-in remote control WebSocket server for phone pairing.
+    StartRemoteControl {
+        /// The session ID this remote control is tied to.
+        session_id: Uuid,
+        /// Optional LAN IP to use for the pairing QR code.
+        lan_ip: Option<String>,
+    },
     CloseSession,
 }
 

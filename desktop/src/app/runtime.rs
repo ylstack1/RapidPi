@@ -984,7 +984,9 @@ impl Waku {
                 true
             }
             Err(error) => {
-                eprintln!("could not refresh daemon task state: {error}");
+                if !error.contains("disconnected") {
+                    eprintln!("could not refresh daemon task state: {error}");
+                }
                 false
             }
         }
@@ -1148,7 +1150,9 @@ impl Waku {
                 }
             }
             Err(error) => {
-                eprintln!("could not attach desktop to daemon session {session_id}: {error:#}");
+                if !error.to_string().contains("disconnected") {
+                    eprintln!("could not attach desktop to daemon session {session_id}: {error:#}");
+                }
             }
         }
     }

@@ -2,16 +2,16 @@ use uuid::Uuid;
 use waku_protocol::provider_session::{ProviderSessionFork, ProviderSessionForkRequest};
 use waku_protocol::{Command, ResponsePayload, WorkspaceOperation, WorkspaceResult};
 
-use crate::DaemonClient;
+use crate::client::EngineClient;
 
 /// Typed convenience wrapper around daemon-owned filesystem and Git RPCs.
 #[derive(Clone)]
 pub struct WorkspaceClient {
-    client: DaemonClient,
+    client: EngineClient,
 }
 
 impl WorkspaceClient {
-    pub fn new(client: DaemonClient) -> Self {
+    pub fn new(client: EngineClient) -> Self {
         Self { client }
     }
 

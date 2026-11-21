@@ -1962,7 +1962,9 @@ impl Waku {
         let home_directory = crate::projectless::home_directory();
         state.apply_daemon_settings(daemon.settings());
         if let Err(error) = daemon.update_settings(state.daemon_settings()) {
-            eprintln!("could not normalize daemon settings after migration: {error:#}");
+            if !error.to_string().contains("disconnected") {
+                eprintln!("could not normalize daemon settings after migration: {error:#}");
+            }
         }
         crate::i18n::set_language(state.language);
         // Chrome text is authored in `sp` rems against the default UI font

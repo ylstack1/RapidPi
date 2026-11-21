@@ -32,7 +32,6 @@ pub mod composer_complete;
 pub use computer_use::ComputerUseConfig;
 pub use computer_use::get_cwd;
 pub mod cursor_session;
-pub mod daemon;
 pub mod deepseek_pool;
 pub mod deepseek_session;
 pub mod driver;
@@ -65,7 +64,6 @@ pub mod worktree;
 
 mod fs_ext;
 mod protocol;
-mod server;
 
 pub use protocol::{
     APP_EXECUTABLE_ENV, ClientMessage, Command, DAEMON_ADDRESS_ENV, DAEMON_TOKEN_ENV, DaemonReady,
@@ -73,6 +71,20 @@ pub use protocol::{
     SequencedEvent, ServerMessage, WireComputerToolRequest, WireDriverEvent,
     WireDriverStartOptions, WireSessionOptions,
 };
-pub use server::{Backend, EventSink, ServerOptions, serve};
 pub use settings::{DaemonSettings, DaemonSettingsStore};
 pub use workspace::{WorkspaceOperation, WorkspaceResult};
+
+// Minimal EventSink for terminal output without the daemon WebSocket server.
+// Terminal events flow through the engine's JSON-RPC transport instead.
+#[derive(Clone, Debug, Default)]
+pub struct EventSink;
+
+impl EventSink {
+    pub fn send(&self, _event: crate::protocol::WireDriverEvent) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    pub fn send_ephemeral(&self, _event: crate::protocol::WireDriverEvent) -> anyhow::Result<()> {
+        Ok(())
+    }
+}

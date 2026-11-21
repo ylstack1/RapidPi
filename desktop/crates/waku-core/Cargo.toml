@@ -25,7 +25,6 @@ smol = "2"
 subtle = "2"
 toml = "0.8"
 trash = "5.2.6"
-tungstenite = { version = "0.30", default-features = false, features = ["handshake"] }
 url = "2"
 uuid = { version = "1.18", features = ["v4", "serde"] }
 waku-protocol = { path = "../waku-protocol" }
@@ -49,7 +48,3 @@ windows-sys = { version = "0.61", features = [
 
 [dev-dependencies]
 waku-client = { path = "../waku-client" }
-
-[[bin]]
-name = "waku-daemon"
-path = "src/bin/daemon.rs"

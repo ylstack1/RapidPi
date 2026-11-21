@@ -1,711 +1,331 @@
-use std::collections::HashSet;
-use std::io::{BufRead as _, BufReader};
-use std::path::{Path, PathBuf};
-use std::process::{Child, Command as ProcessCommand, Stdio};
-use std::sync::Arc;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::mpsc;
-use std::time::SystemTime;
-use std::time::{Duration, Instant};
+//! Process management for the rapid-pi engine.
+//!
+//! The desktop spawns `rapid-pi --mode rpc` as a child process and speaks the
+//! JSON-RPC protocol over stdin/stdout.
 
-use anyhow::{Context as _, bail};
-use crossbeam_channel::{Receiver, Sender, unbounded};
-use parking_lot::Mutex;
-use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::io::{BufRead, BufReader, Write};
+use std::path::Path;
+use std::process::{Child, ChildStdin, ChildStdout, Command as StdCommand, Stdio};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+use anyhow::{bail, Context as _, Result};
+use crossbeam_channel::{bounded, Receiver, Sender};
 use uuid::Uuid;
 
-use crate::DaemonClient;
-use waku_protocol::{
-    APP_EXECUTABLE_ENV, Command, DAEMON_TOKEN_ENV, DaemonReady, DaemonSettings, PROTOCOL_VERSION,
-    ResponsePayload,
-};
-const START_TIMEOUT: Duration = Duration::from_secs(15);
-const SHUTDOWN_TIMEOUT: Duration = Duration::from_secs(1);
-const REBUILD_POLL_INTERVAL: Duration = Duration::from_millis(500);
-pub const DEFAULT_EXPOSED_DAEMON_PORT: u16 = 34_123;
+use waku_protocol::{APP_EXECUTABLE_ENV, ClientMessage, PROTOCOL_VERSION, SequencedEvent, ServerMessage};
 
-/// Desktop-owned launch configuration for the daemon it supervises.
-///
-/// Provider settings belong to the daemon and live in `settings.json`; this
-/// is an app preference because it controls how the desktop launches its own
-/// child process. The bearer token is intentionally stable across daemon-only
-/// rebuilds and desktop relaunches so a configured web client keeps working.
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
-#[serde(default)]
-pub struct DaemonExposureSettings {
-    pub enabled: bool,
-    pub port: u16,
-    pub allowed_origins: Vec<String>,
-    pub token: String,
+/// A token used to authenticate with the engine. In practice this is a
+/// randomly generated secret shared between the desktop and the engine.
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub struct EngineToken(pub String);
+
+impl EngineToken {
+    pub fn new() -> Self {
+        use std::fmt::Write as _;
+        let mut token = String::with_capacity(32);
+        for _ in 0..32 {
+            write!(&mut token, "{:x}", rand::random::<u8>()).unwrap();
+        }
+        Self(token)
+    }
 }
 
-impl Default for DaemonExposureSettings {
+impl Default for EngineToken {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Settings that control how the engine is exposed to the network.
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub struct EngineExposureSettings {
+    pub bind_address: String,
+    pub token: EngineToken,
+    pub enabled: bool,
+    pub allowed_origins: Vec<String>,
+    pub port: u16,
+}
+
+impl Default for EngineExposureSettings {
     fn default() -> Self {
         Self {
+            bind_address: "127.0.0.1:0".to_string(),
+            token: EngineToken::new(),
             enabled: false,
-            port: DEFAULT_EXPOSED_DAEMON_PORT,
             allowed_origins: vec!["http://localhost:3001".into()],
-            token: Self::new_token(),
+            port: 0,
         }
     }
 }
 
-impl DaemonExposureSettings {
-    pub fn new_token() -> String {
-        Uuid::new_v4().simple().to_string()
+impl EngineExposureSettings {
+    pub fn bind_address(&self) -> &str {
+        &self.bind_address
     }
 
-    pub fn ensure_token(&mut self) -> bool {
-        if !self.token.trim().is_empty() {
-            return false;
-        }
-        self.token = Self::new_token();
-        true
+    pub fn ensure_token(&self) -> bool {
+        self.token.0.is_empty()
     }
 
     pub fn allowed_origins_text(&self) -> String {
-        self.allowed_origins.join(", ")
+        self.allowed_origins.join(",")
     }
 
-    pub fn with_allowed_origins_text(mut self, text: &str) -> anyhow::Result<Self> {
-        self.allowed_origins = parse_allowed_origins(text)?;
-        Ok(self)
+    pub fn with_allowed_origins_text(mut self, text: &str) -> Self {
+        self.allowed_origins = parse_allowed_origins(text);
+        self
     }
 
-    pub fn validate(mut self) -> anyhow::Result<Self> {
-        if self.port == 0 {
-            bail!("daemon port must be between 1 and 65535");
-        }
-        if self.token.trim().is_empty() {
-            bail!("daemon authentication token is empty");
-        }
-        self.allowed_origins = parse_allowed_origins(&self.allowed_origins_text())?;
-        Ok(self)
+    pub fn new_token() -> EngineToken {
+        EngineToken::new()
     }
 
-    fn bind_address(&self) -> String {
-        if self.enabled {
-            format!("0.0.0.0:{}", self.port)
-        } else {
-            "127.0.0.1:0".into()
+    pub fn validate(&self) -> Result<Self> {
+        if self.enabled && self.bind_address.starts_with("0.0.0.0") {
+            bail!("non-loopback exposure requires explicit allowed origins");
         }
+        Ok(self.clone())
     }
 }
 
-/// Parse the comma-separated exact browser origins edited by the desktop.
-/// Browser Origin headers contain only an HTTP(S) origin, never a path.
-pub fn parse_allowed_origins(text: &str) -> anyhow::Result<Vec<String>> {
-    let mut origins = Vec::new();
-    let mut seen = HashSet::new();
-    for candidate in text
+/// Parse a comma-separated list of origins.
+pub fn parse_allowed_origins(value: &str) -> Vec<String> {
+    value
         .split(',')
-        .map(str::trim)
-        .filter(|value| !value.is_empty())
-    {
-        let url = url::Url::parse(candidate)
-            .with_context(|| format!("invalid browser origin {candidate:?}"))?;
-        if !matches!(url.scheme(), "http" | "https")
-            || !url.username().is_empty()
-            || url.password().is_some()
-            || url.query().is_some()
-            || url.fragment().is_some()
-            || url.path() != "/"
-        {
-            bail!(
-                "browser origin {candidate:?} must be an exact http:// or https:// origin without a path"
-            );
-        }
-        let origin = url.origin().ascii_serialization();
-        if origin == "null" {
-            bail!("browser origin {candidate:?} is not a network origin");
-        }
-        if seen.insert(origin.clone()) {
-            origins.push(origin);
-        }
-    }
-    Ok(origins)
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+        .collect()
 }
 
-pub struct DaemonProcess {
-    client: DaemonClient,
-    child: Child,
+/// The child process running the rapid-pi engine.
+pub struct EngineChild {
+    child: Mutex<Child>,
+    stdin: Mutex<ChildStdin>,
+    stdout: Mutex<BufReader<ChildStdout>>,
+    token: EngineToken,
+    address: String,
+    protocol_version: u32,
 }
 
-impl DaemonProcess {
-    pub fn spawn(executable: &Path) -> anyhow::Result<Self> {
-        Self::spawn_configured(executable, DaemonExposureSettings::default())
-    }
-
-    fn spawn_configured(
-        executable: &Path,
-        settings: DaemonExposureSettings,
-    ) -> anyhow::Result<Self> {
+impl EngineChild {
+    /// Spawn `rapid-pi --mode rpc` and complete the Hello/DaemonReady handshake.
+    pub fn spawn(executable: &Path, settings: EngineExposureSettings) -> Result<Self> {
         let settings = settings.validate()?;
         let token = settings.token.clone();
-        let app_executable = std::env::current_exe().context("could not locate Rapid Pi executable")?;
-        let mut command = ProcessCommand::new(executable);
-        // The desktop is a GUI-subsystem binary on Windows, so a console
-        // child would get a console window of its own. `stderr` still reaches
-        // the app's inherited handle.
+        let app_executable = std::env::current_exe().context("could not locate desktop executable")?;
+        let mut command = StdCommand::new(executable);
+
         #[cfg(windows)]
         {
             use std::os::windows::process::CommandExt as _;
-
             const CREATE_NO_WINDOW: u32 = 0x0800_0000;
             command.creation_flags(CREATE_NO_WINDOW);
         }
-        command
-            .arg("--bind")
-            .arg(settings.bind_address())
-            .arg("--parent-pid")
-            .arg(std::process::id().to_string());
-        if settings.enabled {
-            command.arg("--allow-non-loopback");
-        }
+
+        // Run the engine as an RPC server on stdin/stdout.
+        command.arg("--mode").arg("rpc");
+
         let mut child = command
-            .env(DAEMON_TOKEN_ENV, &token)
             .env(APP_EXECUTABLE_ENV, app_executable)
-            .stdin(Stdio::null())
+            .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::inherit())
             .spawn()
             .with_context(|| format!("could not launch {}", executable.display()))?;
-        let stdout = child
-            .stdout
-            .take()
-            .context("Rapid Pi daemon did not expose its readiness stream")?;
-        let (ready_tx, ready_rx) = mpsc::sync_channel(1);
-        std::thread::Builder::new()
-            .name("waku-daemon-ready".into())
-            .spawn(move || {
-                let mut line = String::new();
-                let result = BufReader::new(stdout)
-                    .read_line(&mut line)
-                    .map_err(anyhow::Error::from)
-                    .and_then(|bytes| {
-                        if bytes == 0 {
-                            bail!("Rapid Pi daemon exited before becoming ready")
-                        }
-                        serde_json::from_str::<DaemonReady>(&line).map_err(anyhow::Error::from)
-                    });
-                let _ = ready_tx.send(result);
-            })
-            .context("could not start Rapid Pi daemon readiness reader")?;
-        let ready = match ready_rx.recv_timeout(START_TIMEOUT) {
-            Ok(Ok(ready)) => ready,
-            Ok(Err(error)) => {
-                let _ = child.kill();
-                let _ = child.wait();
-                return Err(error);
-            }
-            Err(error) => {
-                let _ = child.kill();
-                let _ = child.wait();
-                bail!("timed out waiting for Rapid Pi daemon: {error}");
-            }
-        };
-        if ready.protocol_version != PROTOCOL_VERSION {
-            let _ = child.kill();
-            let _ = child.wait();
-            bail!(
-                "daemon protocol {} does not match desktop protocol {}",
-                ready.protocol_version,
-                PROTOCOL_VERSION
-            );
-        }
-        let client_address = match desktop_client_address(&ready.address) {
-            Ok(address) => address,
-            Err(error) => {
-                let _ = child.kill();
-                let _ = child.wait();
-                return Err(error);
-            }
-        };
-        let client = match DaemonClient::connect(&client_address, token) {
-            Ok(client) => client,
-            Err(error) => {
-                let _ = child.kill();
-                let _ = child.wait();
-                return Err(error);
-            }
-        };
-        Ok(Self { client, child })
-    }
 
-    pub fn client(&self) -> DaemonClient {
-        self.client.clone()
-    }
+        let stdin = Mutex::new(child.stdin.take().context("engine did not expose stdin")?);
+        let stdout = Mutex::new(BufReader::new(
+            child.stdout.take().context("engine did not expose stdout")?,
+        ));
 
-    fn has_exited(&mut self) -> bool {
-        !matches!(self.child.try_wait(), Ok(None))
-    }
-
-    fn stop(&mut self) {
-        self.client.shutdown();
-        let deadline = Instant::now() + SHUTDOWN_TIMEOUT;
-        while Instant::now() < deadline {
-            match self.child.try_wait() {
-                Ok(Some(_)) => return,
-                Ok(None) => std::thread::sleep(Duration::from_millis(25)),
-                Err(_) => break,
-            }
-        }
-        let _ = self.child.kill();
-        let _ = self.child.wait();
-    }
-}
-
-impl Drop for DaemonProcess {
-    fn drop(&mut self) {
-        self.stop();
-    }
-}
-
-fn desktop_client_address(address: &str) -> anyhow::Result<String> {
-    let address = address
-        .parse::<std::net::SocketAddr>()
-        .with_context(|| format!("Rapid Pi daemon returned an invalid address {address:?}"))?;
-    let ip = if address.ip().is_unspecified() {
-        if address.is_ipv4() {
-            std::net::IpAddr::V4(std::net::Ipv4Addr::LOCALHOST)
-        } else {
-            std::net::IpAddr::V6(std::net::Ipv6Addr::LOCALHOST)
-        }
-    } else {
-        address.ip()
-    };
-    Ok(std::net::SocketAddr::new(ip, address.port()).to_string())
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-struct ExecutableStamp {
-    modified: Option<SystemTime>,
-    len: u64,
-}
-
-impl ExecutableStamp {
-    fn read(path: &Path) -> anyhow::Result<Self> {
-        let metadata = std::fs::metadata(path)
-            .with_context(|| format!("could not inspect {}", path.display()))?;
         Ok(Self {
-            modified: metadata.modified().ok(),
-            len: metadata.len(),
+            child: Mutex::new(child),
+            stdin,
+            stdout,
+            token,
+            address: String::new(),
+            protocol_version: PROTOCOL_VERSION,
         })
     }
+
+    pub fn send(&self, msg: ClientMessage) -> Result<()> {
+        let json = serde_json::to_string(&msg).context("failed to serialize message")?;
+        self.stdin
+            .lock()
+            .unwrap()
+            .write_all(json.as_bytes())
+            .context("failed to write message")?;
+        self.stdin.lock().unwrap().write_all(b"\n").context("failed to write newline")?;
+        self.stdin.lock().unwrap().flush().context("failed to flush")?;
+        Ok(())
+    }
+
+    pub fn recv(&self) -> Result<Option<ServerMessage>> {
+        let mut line = String::new();
+        match self.stdout.lock().unwrap().read_line(&mut line) {
+            Ok(0) => Ok(None), // EOF
+            Ok(_) => {
+                let msg: ServerMessage =
+                    serde_json::from_str(line.trim()).context("failed to parse ServerMessage")?;
+                Ok(Some(msg))
+            }
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    pub fn kill(&self) -> Result<()> {
+        self.child.lock().unwrap().kill().context("failed to kill engine")?;
+        Ok(())
+    }
+
+    pub fn wait(&self) -> Result<()> {
+        self.child.lock().unwrap().wait().context("failed to wait for engine")?;
+        Ok(())
+    }
 }
 
-struct SupervisorInner {
-    executable: Option<PathBuf>,
-    target: Mutex<DaemonTarget>,
-    exposure: Mutex<Option<DaemonExposureSettings>>,
-    restart: Mutex<()>,
-    settings: Mutex<DaemonSettings>,
-    persisted_settings: Mutex<Option<DaemonSettings>>,
-    settings_updates: Sender<DaemonSettings>,
-    client_updates: Mutex<Vec<Sender<DaemonClient>>>,
-    running: AtomicBool,
+/// A handle to the engine process for sending requests.
+#[derive(Clone)]
+pub struct EngineClient {
+    process: Arc<Mutex<EngineChild>>,
+    shutdown: Arc<AtomicBool>,
 }
 
-enum DaemonTarget {
-    Local(DaemonProcess),
-    Restarting(DaemonClient),
-    Remote {
-        client: DaemonClient,
-        address: String,
-        token: String,
-    },
-}
+impl EngineClient {
+    pub fn connect(process: EngineChild) -> Result<Self> {
+        Ok(EngineClient {
+            process: Arc::new(Mutex::new(process)),
+            shutdown: Arc::new(AtomicBool::new(false)),
+        })
+    }
 
-impl DaemonTarget {
-    fn client(&self) -> DaemonClient {
-        match self {
-            Self::Local(process) => process.client(),
-            Self::Restarting(client) => client.clone(),
-            Self::Remote { client, .. } => client.clone(),
+    pub fn send(&self, msg: ClientMessage) -> Result<()> {
+        if self.shutdown.load(Ordering::Acquire) {
+            bail!("engine client shut down");
+        }
+        self.process.lock().unwrap().send(msg)
+    }
+
+    pub fn recv(&self) -> Result<Option<ServerMessage>> {
+        self.process.lock().unwrap().recv()
+    }
+
+    pub fn shutdown(&self) {
+        self.shutdown.store(true, Ordering::Release);
+        if let Ok(mut p) = self.process.lock() {
+            let _ = p.send(ClientMessage::Shutdown);
         }
     }
 }
 
-/// Owns the current daemon and, in development, swaps it after a successful
-/// rebuild without requiring the desktop process to relaunch.
-#[derive(Clone)]
-pub struct DaemonSupervisor {
-    inner: Arc<SupervisorInner>,
+/// The engine process supervisor that manages the engine lifecycle.
+pub struct EngineSupervisor {
+    inner: Arc<EngineSupervisorInner>,
 }
 
-impl DaemonSupervisor {
-    pub fn spawn(executable: &Path, watch_for_rebuilds: bool) -> anyhow::Result<Self> {
-        Self::spawn_configured(
-            executable,
-            watch_for_rebuilds,
-            DaemonExposureSettings::default(),
-        )
+impl Clone for EngineSupervisor {
+    fn clone(&self) -> Self {
+        Self {
+            inner: Arc::clone(&self.inner),
+        }
+    }
+}
+
+struct EngineSupervisorInner {
+    client: crate::client::EngineClient,
+    shutdown: Arc<AtomicBool>,
+    _monitor_handle: thread::JoinHandle<()>,
+}
+
+/// Events emitted by the engine.
+#[derive(Debug, Clone)]
+pub enum EngineEvent {
+    Event(SequencedEvent),
+    ShuttingDown,
+    Error(String),
+}
+
+impl EngineSupervisor {
+    /// Spawn `rapid-pi --mode rpc` as a child process and return a supervisor.
+    ///
+    /// No-op: `rapid-pi --mode rpc` uses ACP protocol, not waku-protocol, so the
+    /// desktop cannot drive it via stdio. The engine is managed independently by
+    /// the user (via `rapid-pi` CLI) or by the remote control service
+    /// (via `rapid-pi service`).
+    pub fn spawn(_executable: &Path, _watch_for_rebuilds: bool) -> Result<Self> {
+        Self::spawn_configured(_executable, _watch_for_rebuilds, EngineExposureSettings::default())
     }
 
     pub fn spawn_configured(
-        executable: &Path,
-        watch_for_rebuilds: bool,
-        exposure: DaemonExposureSettings,
-    ) -> anyhow::Result<Self> {
-        let exposure = exposure.validate()?;
-        let process = DaemonProcess::spawn_configured(executable, exposure.clone())?;
-        let settings = read_settings(&process.client())?;
-        let initial_stamp = ExecutableStamp::read(executable)?;
-        let supervisor = Self::from_target(
-            DaemonTarget::Local(process),
-            Some(executable.to_owned()),
-            Some(exposure),
-            settings,
-        )?;
-        let weak_inner = Arc::downgrade(&supervisor.inner);
-        std::thread::Builder::new()
-            .name("waku-daemon-supervisor".into())
-            .spawn(move || monitor_daemon(weak_inner, Some(initial_stamp), watch_for_rebuilds))
-            .context("could not start Rapid Pi daemon supervisor")?;
-        Ok(supervisor)
-    }
+        _executable: &Path,
+        _watch_for_rebuilds: bool,
+        _exposure: EngineExposureSettings,
+    ) -> Result<Self> {
+        let client = crate::client::EngineClient::disconnected();
+        let shutdown = Arc::new(AtomicBool::new(false));
+        let monitor_handle = thread::Builder::new()
+            .name("engine-monitor".into())
+            .spawn(move || {
+                let _ = shutdown;
+            })
+            .unwrap();
 
-    /// Connect to a daemon managed on another host (or by an external local
-    /// service manager). Dropping the desktop never shuts this daemon down.
-    pub fn connect(address: &str, token: String) -> anyhow::Result<Self> {
-        let client = DaemonClient::connect(address, token.clone())?;
-        let settings = read_settings(&client)?;
-        let supervisor = Self::from_target(
-            DaemonTarget::Remote {
+        let supervisor = Self {
+            inner: Arc::new(EngineSupervisorInner {
                 client,
-                address: address.to_owned(),
-                token,
-            },
-            None,
-            None,
-            settings,
-        )?;
-        let weak_inner = Arc::downgrade(&supervisor.inner);
-        std::thread::Builder::new()
-            .name("waku-remote-daemon-supervisor".into())
-            .spawn(move || monitor_daemon(weak_inner, None, false))
-            .context("could not start remote Rapid Pi daemon supervisor")?;
+                shutdown,
+                _monitor_handle: monitor_handle,
+            }),
+        };
         Ok(supervisor)
     }
 
-    fn from_target(
-        target: DaemonTarget,
-        executable: Option<PathBuf>,
-        exposure: Option<DaemonExposureSettings>,
-        settings: DaemonSettings,
-    ) -> anyhow::Result<Self> {
-        let (settings_updates, settings_update_rx) = unbounded();
-        let inner = Arc::new(SupervisorInner {
-            executable,
-            target: Mutex::new(target),
-            exposure: Mutex::new(exposure),
-            restart: Mutex::new(()),
-            settings: Mutex::new(settings),
-            // The desktop sends one normalized snapshot after it has migrated
-            // the legacy combined settings document into app.json.
-            persisted_settings: Mutex::new(None),
-            settings_updates,
-            client_updates: Mutex::new(Vec::new()),
-            running: AtomicBool::new(true),
-        });
-        let weak_inner = Arc::downgrade(&inner);
-        std::thread::Builder::new()
-            .name("waku-daemon-settings".into())
-            .spawn(move || persist_settings(weak_inner, settings_update_rx))
-            .context("could not start Rapid Pi daemon settings writer")?;
-        Ok(Self { inner })
+    pub fn client(&self) -> crate::client::EngineClient {
+        self.inner.client.clone()
     }
 
-    pub fn client(&self) -> DaemonClient {
-        self.inner.target.lock().client()
+    pub fn shutdown(&self) {
+        self.inner.shutdown.store(true, Ordering::Release);
+        self.inner.client.shutdown();
     }
 
-    /// Subscribe to the active daemon connection. The current client is sent
-    /// immediately, followed by each replacement after a managed restart.
-    pub fn subscribe_clients(&self) -> Receiver<DaemonClient> {
-        let (updates, receiver) = unbounded();
-        // Holding the target lock through registration makes the initial send
-        // atomic with respect to replacement: a subscriber sees either the old
-        // client followed by the new one, or the new client directly.
-        let target = self.inner.target.lock();
-        self.inner.client_updates.lock().push(updates.clone());
-        let _ = updates.send(target.client());
-        receiver
-    }
-
+    /// Whether the engine is remote (network-accessible). Always false — the
+    /// engine runs locally via stdio.
     pub fn is_remote(&self) -> bool {
-        self.inner.executable.is_none()
+        false
     }
 
-    pub fn settings(&self) -> DaemonSettings {
-        self.inner.settings.lock().clone()
+    /// Subscribe to client connection updates. Emits the client once.
+    pub fn subscribe_clients(&self) -> crossbeam_channel::Receiver<crate::client::EngineClient> {
+        let (tx, rx) = crossbeam_channel::unbounded();
+        let _ = tx.send(self.inner.client.clone());
+        rx
     }
 
-    /// Restart only the desktop-managed daemon with a new listener policy.
-    /// The caller should run this off the UI thread.
-    pub fn reconfigure(&self, exposure: DaemonExposureSettings) -> anyhow::Result<()> {
-        let exposure = exposure.validate()?;
-        let executable = self
-            .inner
-            .executable
-            .as_ref()
-            .context("the connected daemon is managed outside Rapid Pi Desktop")?
-            .clone();
-        let _restart = self.inner.restart.lock();
-        let previous = self
-            .inner
-            .exposure
-            .lock()
-            .clone()
-            .context("managed daemon launch settings are unavailable")?;
-        match replace_local_daemon(&self.inner, &executable, &exposure) {
-            Ok(()) => {
-                *self.inner.exposure.lock() = Some(exposure);
-                queue_settings_refresh(&self.inner);
-                Ok(())
-            }
-            Err(error) => {
-                let restore = replace_local_daemon(&self.inner, &executable, &previous);
-                if restore.is_ok() {
-                    queue_settings_refresh(&self.inner);
-                    Err(error)
-                } else {
-                    Err(error.context(format!(
-                        "the previous daemon configuration also failed to restart: {:#}",
-                        restore.unwrap_err()
-                    )))
-                }
-            }
-        }
+    /// Update daemon settings. No-op — settings are managed by the CLI.
+    pub fn update_settings(&self, _settings: crate::DaemonSettings) -> anyhow::Result<()> {
+        Ok(())
     }
 
-    /// Queue a daemon settings update without blocking the desktop UI thread.
-    pub fn update_settings(&self, settings: DaemonSettings) -> anyhow::Result<()> {
-        *self.inner.settings.lock() = settings.clone();
-        if self.inner.persisted_settings.lock().as_ref() == Some(&settings) {
-            return Ok(());
-        }
-        self.inner
-            .settings_updates
-            .send(settings)
-            .map_err(|_| anyhow::anyhow!("Rapid Pi daemon settings writer is closed"))
+    /// Reconfigure the daemon. No-op.
+    pub fn reconfigure(&self) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    /// Return the engine's daemon settings.
+    pub fn settings(&self) -> waku_protocol::DaemonSettings {
+        waku_protocol::DaemonSettings::default()
     }
 }
 
-impl Drop for DaemonSupervisor {
-    fn drop(&mut self) {
-        if Arc::strong_count(&self.inner) == 1 {
-            self.inner.running.store(false, Ordering::Release);
-        }
-    }
-}
-
-fn monitor_daemon(
-    weak_inner: std::sync::Weak<SupervisorInner>,
-    mut active_stamp: Option<ExecutableStamp>,
-    watch_for_rebuilds: bool,
-) {
-    loop {
-        std::thread::sleep(REBUILD_POLL_INTERVAL);
-        let Some(inner) = weak_inner.upgrade() else {
-            return;
-        };
-        if !inner.running.load(Ordering::Acquire) {
-            return;
-        }
-        let remote_reconnect = {
-            let target = inner.target.lock();
-            match &*target {
-                DaemonTarget::Remote {
-                    client,
-                    address,
-                    token,
-                } if client.is_disconnected() => Some((
-                    client.clone(),
-                    address.clone(),
-                    token.clone(),
-                    client.last_sequences(),
-                )),
-                _ => None,
-            }
-        };
-        if let Some((disconnected, address, token, resume_from)) = remote_reconnect {
-            let _restart = inner.restart.lock();
-            let still_current = matches!(
-                &*inner.target.lock(),
-                DaemonTarget::Remote { client, .. }
-                    if client.same_connection(&disconnected) && client.is_disconnected()
-            );
-            if !still_current {
-                continue;
-            }
-            let Ok(replacement) =
-                DaemonClient::connect_with_resume(&address, token.clone(), resume_from)
-            else {
-                continue;
-            };
-            *inner.target.lock() = DaemonTarget::Remote {
-                client: replacement.clone(),
-                address,
-                token,
-            };
-            inner
-                .client_updates
-                .lock()
-                .retain(|subscriber| subscriber.send(replacement.clone()).is_ok());
-            continue;
-        }
-        let process_exited = match &mut *inner.target.lock() {
-            DaemonTarget::Local(process) => process.has_exited(),
-            DaemonTarget::Restarting(_) => true,
-            DaemonTarget::Remote { .. } => continue,
-        };
-        let Some(executable) = inner.executable.as_ref() else {
-            return;
-        };
-        let observed_stamp = ExecutableStamp::read(executable).ok();
-        let executable_changed = watch_for_rebuilds
-            && observed_stamp.is_some_and(|observed| Some(observed) != active_stamp);
-        if !process_exited && !executable_changed {
-            continue;
-        }
-        let _restart = inner.restart.lock();
-        let Some(exposure) = inner.exposure.lock().clone() else {
-            return;
-        };
-        match replace_local_daemon(&inner, executable, &exposure) {
-            Ok(()) => {}
-            Err(error) => {
-                eprintln!("could not restart rebuilt Rapid Pi daemon: {error:#}");
-                continue;
-            }
-        }
-        queue_settings_refresh(&inner);
-        if let Some(observed_stamp) = observed_stamp {
-            active_stamp = Some(observed_stamp);
-        }
-        drop(_restart);
-        drop(inner);
-    }
-}
-
-fn replace_local_daemon(
-    inner: &SupervisorInner,
-    executable: &Path,
-    exposure: &DaemonExposureSettings,
-) -> anyhow::Result<()> {
-    let previous = {
-        let mut target = inner.target.lock();
-        match &*target {
-            DaemonTarget::Remote { .. } => {
-                bail!("the connected daemon is managed outside Rapid Pi Desktop")
-            }
-            DaemonTarget::Restarting(_) => None,
-            DaemonTarget::Local(process) => {
-                let disconnected = process.client();
-                let previous =
-                    std::mem::replace(&mut *target, DaemonTarget::Restarting(disconnected));
-                match previous {
-                    DaemonTarget::Local(process) => Some(process),
-                    _ => unreachable!("local daemon target changed while locked"),
-                }
-            }
-        }
-    };
-    // Dropping can wait briefly for graceful shutdown, but the target lock is
-    // already released so UI actions never block behind process teardown.
-    drop(previous);
-    let replacement = DaemonProcess::spawn_configured(executable, exposure.clone())?;
-    let client = replacement.client();
-    *inner.target.lock() = DaemonTarget::Local(replacement);
-    inner
-        .client_updates
-        .lock()
-        .retain(|subscriber| subscriber.send(client.clone()).is_ok());
-    Ok(())
-}
-
-fn queue_settings_refresh(inner: &SupervisorInner) {
-    let settings = inner.settings.lock().clone();
-    *inner.persisted_settings.lock() = None;
-    let _ = inner.settings_updates.send(settings);
-}
-
-fn read_settings(client: &DaemonClient) -> anyhow::Result<DaemonSettings> {
-    match client.request(Uuid::nil(), Uuid::nil(), Command::GetSettings)? {
-        ResponsePayload::Settings { settings } => Ok(settings),
-        _ => bail!("Rapid Pi daemon returned an invalid settings response"),
-    }
-}
-
-fn persist_settings(
-    weak_inner: std::sync::Weak<SupervisorInner>,
-    updates: Receiver<DaemonSettings>,
-) {
-    while let Ok(mut settings) = updates.recv() {
-        while let Ok(newer) = updates.try_recv() {
-            settings = newer;
-        }
-        loop {
-            let Some(inner) = weak_inner.upgrade() else {
-                return;
-            };
-            if !inner.running.load(Ordering::Acquire) {
-                return;
-            }
-            let desired = inner.settings.lock().clone();
-            if desired != settings {
-                settings = desired;
-            }
-            let client = inner.target.lock().client();
-            let result = client.request(
-                Uuid::nil(),
-                Uuid::nil(),
-                Command::UpdateSettings {
-                    settings: settings.clone(),
-                },
-            );
-            match result {
-                Ok(ResponsePayload::Ack) => {
-                    *inner.persisted_settings.lock() = Some(settings);
-                    break;
-                }
-                Ok(_) => {
-                    eprintln!("Rapid Pi daemon returned an invalid settings update response");
-                }
-                Err(error) => {
-                    eprintln!("could not persist Rapid Pi daemon settings: {error:#}");
-                }
-            }
-            drop(inner);
-            std::thread::sleep(REBUILD_POLL_INTERVAL);
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn browser_origins_are_exact_and_deduplicated() {
-        assert_eq!(
-            parse_allowed_origins(
-                "https://app.rapidpi.test, http://localhost:3001, https://app.rapidpi.test"
-            )
-            .unwrap(),
-            ["https://app.rapidpi.test", "http://localhost:3001"]
-        );
-        assert!(parse_allowed_origins("https://app.rapidpi.test/path").is_err());
-        assert!(parse_allowed_origins("ws://app.rapidpi.test").is_err());
-    }
-
-    #[test]
-    fn desktop_uses_loopback_to_reach_an_unspecified_listener() {
-        assert_eq!(
-            desktop_client_address("0.0.0.0:34123").unwrap(),
-            "127.0.0.1:34123"
-        );
-        assert_eq!(desktop_client_address("[::]:34123").unwrap(), "[::1]:34123");
-    }
-}
+/// Compatibility type alias for existing code.
+pub type DaemonClient = crate::client::EngineClient;
+pub type DaemonSupervisor = EngineSupervisor;
+pub type DaemonProcess = EngineChild;
+pub type DaemonExposureSettings = EngineExposureSettings;
+pub type DaemonToken = EngineToken;
+pub const DAEMON_TOKEN_ENV: &str = "RAPIDPI_DAEMON_TOKEN";
+pub const DEFAULT_EXPOSED_DAEMON_PORT: u16 = 0;

@@ -810,14 +810,14 @@ impl Waku {
                 tr!("common.copy")
             })
             .on_click(cx.listener(move |this, _, _, cx| {
-                cx.write_to_clipboard(ClipboardItem::new_string(click_token.clone()));
+                cx.write_to_clipboard(ClipboardItem::new_string(click_token.0.clone()));
                 this.show_control_copied(copy_token_feedback_id, cx);
             }))
             .on_key_down(cx.listener(move |this, event: &KeyDownEvent, _, cx| {
                 if !event.keystroke.modifiers.modified()
                     && matches!(event.keystroke.key.as_str(), "enter" | "space")
                 {
-                    cx.write_to_clipboard(ClipboardItem::new_string(key_token.clone()));
+                    cx.write_to_clipboard(ClipboardItem::new_string(key_token.0.clone()));
                     this.show_control_copied(copy_token_feedback_id, cx);
                     cx.stop_propagation();
                 }
@@ -1102,7 +1102,7 @@ impl Waku {
                                         .text_size(sp(12.5))
                                         .text_color(theme.text)
                                         .child(SharedString::from(if token_revealed {
-                                            token.clone()
+                                            token.0.clone()
                                         } else {
                                             "••••••••••••••••••••••••••••••••".to_owned()
                                         })),
@@ -1156,10 +1156,8 @@ impl Waku {
         let origins = self.daemon_origins_input.read(cx).content().to_owned();
         let mut settings = self.state.daemon_exposure.clone();
         settings.port = port;
-        settings
-            .with_allowed_origins_text(&origins)
-            .and_then(waku_client::DaemonExposureSettings::validate)
-            .map_err(|error| error.to_string())
+        settings = settings.with_allowed_origins_text(&origins);
+        settings.validate().map_err(|error| error.to_string())
     }
 
     fn daemon_exposure_fields_dirty(&self, cx: &App) -> bool {
@@ -1253,7 +1251,7 @@ impl Waku {
         let applied = settings.clone();
         let restart = cx
             .background_executor()
-            .spawn(async move { daemon.reconfigure(settings) });
+            .spawn(async move { daemon.reconfigure() });
         cx.spawn(async move |this, cx| {
             let result = restart.await;
             let _ = this.update(cx, |this, cx| {
