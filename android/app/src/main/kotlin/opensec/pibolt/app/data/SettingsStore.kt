@@ -152,7 +152,8 @@ object SettingsCodec {
                     }
                 } ?: CiTestResult.NotTested,
             ),
-            session = limit(json.double("spendSession")),
+            spend = SpendLimits(
+                session = limit(json.double("spendSession")),
                 day = limit(json.double("spendDay")),
                 month = limit(json.double("spendMonth")),
                 showInLists = json.bool("spendInLists") ?: d.spend.showInLists,
