@@ -4,6 +4,7 @@
 
 Local branches:
 - `main` (current)
+- `feat/ci-runner-settings` (CI runner settings feature, pushed)
 
 Remote branches (`origin/`):
 - `HEAD -> origin/main`
@@ -11,6 +12,7 @@ Remote branches (`origin/`):
 - `master`
 - `pi-bolt`
 - `feat/android-github-rest-tools`
+- `feat/ci-runner-settings`
 
 ## Merge status (all against local `main`)
 
@@ -20,18 +22,24 @@ Remote branches (`origin/`):
 | `origin/master` | Yes — fully merged |
 | `origin/pi-bolt` | Yes — fully merged |
 | `origin/feat/android-github-rest-tools` | Yes — fully merged |
+| `origin/feat/ci-runner-settings` | No — feature branch, not yet merged to main |
 
-**Conclusion:** All remote branches are already merged into `main`. Nothing is pending merge. Local `main` is identical to `origin/main`.
-
-## Recent commits (local main)
+## Recent commits
 
 ```
+dd4888f4b fix(android): fix CI runner settings compile errors
+afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
+72130ee0f docs(agent): add project memory files and wire AGENTS.md to .memory/
 864760f22 merge(agent): bring waku-daemon removal work onto main
-b840ca809 fix(agent): pi-bolt doctor and update improvements
-5e9f5e0de fix(agent): remove desktop/ directory from repository
-b704b2d99 fix(agent): remove waku daemon, use CLI remote-control service
-80362dd98 docs(agent): update DESKTOP_HANDOFF.md with launch-ready state
 ```
+
+## CI failure (fixed)
+
+`android-debug` workflow run 46071979773 failed on `feat/ci-runner-settings` with compile errors:
+- `SettingsStore.kt:114` — leftover sed garbage from ciRunner decode block + `when(it)` spacing
+- `CiRunnerSection.kt` — `CiTokenField` not `@Composable`, `remember(key)` delegate syntax invalid, `containerColor` not a `TextFieldDefaults.colors()` param, missing `Row`/`Icon` imports, `settings` vs `appSettings` reference
+
+All fixed in `dd4888f4b` and pushed. CI should pass on next run.
 
 ## Version
 
