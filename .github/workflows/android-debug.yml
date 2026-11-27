@@ -51,7 +51,7 @@ jobs:
           if [ -n "${{ github.event.inputs.engine_pack_tag }}" ]; then
             echo "tag=${{ github.event.inputs.engine_pack_tag }}" >> "$GITHUB_OUTPUT"
           else
-            tag=$(gh release list --repo "${{ github.repository }}" --limit 1 --json tagName -q '.[0].tagName')
+            tag=$(gh release list --repo "${{ github.repository }}" --exclude-pre-releases --limit 1 --json tagName -q '.[0].tagName')
             echo "tag=$tag" >> "$GITHUB_OUTPUT"
           fi
         env:
