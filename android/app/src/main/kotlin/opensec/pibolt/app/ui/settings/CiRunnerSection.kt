@@ -29,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import opensec.rapidpi.app.PiBoltApp
 import opensec.rapidpi.app.data.AppSettings
-import opensec.rapidpi.app.data.CiRunner.CiRunnerConfig
-import opensec.rapidpi.app.data.CiRunner.CiRunnerProvider
-import opensec.rapidpi.app.data.CiRunner.CiTestResult
+import opensec.rapidpi.app.data.CiRunnerConfig
+import opensec.rapidpi.app.data.CiRunnerProvider
+import opensec.rapidpi.app.data.CiTestResult
 import opensec.rapidpi.app.ui.components.GroupRow
 import opensec.rapidpi.app.ui.components.GroupSwitchRow
 import opensec.rapidpi.app.ui.components.PiSheet

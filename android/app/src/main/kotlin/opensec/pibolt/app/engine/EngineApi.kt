@@ -2,7 +2,7 @@ package opensec.rapidpi.app.engine
 
 import kotlinx.coroutines.flow.StateFlow
 import opensec.rapidpi.app.cost.Cost
-import opensec.rapidpi.app.data.CiRunner.CiRunnerInfo
+import opensec.rapidpi.app.data.CiRunnerInfo
 import opensec.rapidpi.app.session.SessionController
 import java.io.File
 

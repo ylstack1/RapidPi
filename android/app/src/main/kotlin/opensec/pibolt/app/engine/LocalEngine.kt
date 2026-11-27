@@ -28,7 +28,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import opensec.rapidpi.app.PiBoltApp
 import opensec.rapidpi.app.cost.Cost
-import opensec.rapidpi.app.data.CiRunner.CiRunnerInfo
+import opensec.rapidpi.app.data.CiRunnerInfo
 import opensec.rapidpi.app.checkpoints.Git
 import opensec.rapidpi.app.checkpoints.ShadowRepo
 import opensec.rapidpi.app.checkpoints.TurnCheckpoints
