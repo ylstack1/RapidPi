@@ -12,6 +12,22 @@
 - When the user asks a question, answer it first before making edits or running implementation commands.
 - When responding to user feedback or an analysis, explicitly say whether you agree or disagree before saying what you changed.
 
+## Project Memory (`.memory/`)
+
+Project knowledge is kept in `.memory/` so that any agent or session can continue development without re-discovering the repo. Read `.memory/` before starting work, and always update it when you change architecture, build process, features, interfaces, or git state.
+
+| File | Contents |
+|---|---|
+| `.memory/project.md` | What this repository is (supersedes any stale description); pointers to current memory files |
+| `.memory/workspace-architecture.md` | Monorepo layout, 12 packages, path aliases, key directories, dependency flow, generated files |
+| `.memory/runtime-design.md` | AOT compiler, build pipeline, executable layout, launch sequence, JIT on/off, platform ports, limitations |
+| `.memory/features-interfaces.md` | Features, ACP (`--acp`) and MCP (`--mcp`) interfaces, built-in tools, extensions/plugins, `rapid-pi doctor`, settings compatibility |
+| `.memory/build-process.md` | Two-stage build, scripts and options, training profiles, packaging, test commands, root npm scripts |
+| `.memory/development-guide.md` | TS/Chord v2 style rules, commands, git/changelog conventions, testing guidance |
+| `.memory/git-status.md` | Branch list, merge status, recent commits, version, working-tree state |
+
+Rule: after any change that affects the above, update the corresponding `.memory/` file before reporting done. Never let `.memory/` describe a different project (it previously described a Rust/Waku app that does not exist here).
+
 ## Code Quality
 
 - Read files in full before wide-ranging changes, before editing files you have not fully inspected, and when asked to investigate or audit. Do not rely on search snippets for broad changes.
