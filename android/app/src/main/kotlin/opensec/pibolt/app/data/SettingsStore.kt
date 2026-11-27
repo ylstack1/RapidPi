@@ -73,6 +73,8 @@ data class AppSettings(
     val voiceLabel: String? = null,
     /** Settings > Agent > Spending: limits per session, day and month, and costs on list rows. */
     val spend: SpendLimits = SpendLimits(),
+    /** CI/build runner configuration for heavy tasks (compiled builds, test suites). */
+    val ciRunner: CiRunnerConfig = CiRunnerConfig(),
 ) {
     companion object {
         val VOICE_RATE_CHOICES = listOf(75, 100, 125, 150, 200)
@@ -101,6 +103,15 @@ object SettingsCodec {
         put("voiceRate", s.voiceRate)
         s.voiceName?.let { put("voiceName", it) }
         s.voiceLabel?.let { put("voiceLabel", it) }
+        s.ciRunner.provider?.let { put("ciRunnerProvider", it.name) }
+        s.ciRunner.apiToken?.let { put("ciRunnerApiToken", it) }
+        s.ciRunner.selfHostedUrl?.let { put("ciRunnerSelfHostedUrl", it) }
+        s.ciRunner.selfHostedToken?.let { put("ciRunnerSelfHostedToken", it) }
+        put("ciRunnerSelfHostedLabels", s.ciRunner.selfHostedLabels.joinToString(","))
+        s.ciRunner.selectedRunner?.let { put("ciRunnerSelectedRunner", it) }
+        put("ciRunnerEnabled", s.ciRunner.runnerEnabled)
+        put("ciRunnerLastTestedAt", s.ciRunner.lastTestedAt)
+        s.ciRunner.lastTestResult?.let { put("ciRunnerLastTestResult", when(it) { is CiTestResult.Ok -> "ok", is CiTestResult.Failed -> "failed:${it.message}", CiTestResult.NotTested -> "not_tested" }) }
         s.spend.session?.let { put("spendSession", it) }
         s.spend.day?.let { put("spendDay", it) }
         s.spend.month?.let { put("spendMonth", it) }
@@ -126,6 +137,23 @@ object SettingsCodec {
             voiceRate = json.int("voiceRate")?.takeIf { it in AppSettings.VOICE_RATE_CHOICES } ?: d.voiceRate,
             voiceName = json.str("voiceName")?.takeIf { it.isNotBlank() },
             voiceLabel = json.str("voiceLabel")?.takeIf { it.isNotBlank() && !json.str("voiceName").isNullOrBlank() },
+            ciRunner = CiRunnerConfig(
+                provider = CiRunnerProvider.entries.firstOrNull { it.name == json.str("ciRunnerProvider") } ?: CiRunnerProvider.GitHub,
+                apiToken = json.str("ciRunnerApiToken"),
+                selfHostedUrl = json.str("ciRunnerSelfHostedUrl"),
+                selfHostedToken = json.str("ciRunnerSelfHostedToken"),
+                selfHostedLabels = json.str("ciRunnerSelfHostedLabels")?.split(",")?.filter { it.isNotEmpty() } ?: emptyList(),
+                selectedRunner = json.str("ciRunnerSelectedRunner"),
+                lastTestResult = json.str("ciRunnerLastTestResult")?.let {
+                    when (it) {
+                        "ok" -> CiTestResult.Ok
+                        "not_tested" -> CiTestResult.NotTested
+                        else -> CiTestResult.Failed(it.removePrefix("failed:"))
+                    }
+                } ?: CiTestResult.NotTested,
+                    else -> { val m = json.str("ciRunnerLastTestResult")?.removePrefix("failed:") ?: CiTestResult.NotTested; if (m is CiTestResult.NotTested) CiTestResult.NotTested else CiTestResult.Failed(m) }
+                },
+            ),
             spend = SpendLimits(
                 session = limit(json.double("spendSession")),
                 day = limit(json.double("spendDay")),

@@ -42,6 +42,7 @@ object SettingsIndex {
         SettingEntry("computers", SettingsGroup.RemoteControl, "Computers", "paired computer laptop desktop mac host pair scan qr code paste link connect forget"),
         SettingEntry("device-key", SettingsGroup.RemoteControl, "Device key", "security pairing reset revoke computer phone key"),
         SettingEntry("github", SettingsGroup.GitHub, "GitHub account", "git push pull clone pull request token sign in login personal access oauth"),
+        SettingEntry("ci-runner", SettingsGroup.Advanced, "CI/build runner", "circle ci github actions self-hosted runner build test compile heavy task cloud"),
         SettingEntry("tuning", SettingsGroup.Advanced, "Retry and compaction", "tuning reserve tokens backoff delay"),
         SettingEntry("reduce-motion", SettingsGroup.Advanced, "Reduce motion", "animations animation accessibility motion"),
         SettingEntry("haptics", SettingsGroup.Advanced, "Haptics", "vibration vibrate feedback"),

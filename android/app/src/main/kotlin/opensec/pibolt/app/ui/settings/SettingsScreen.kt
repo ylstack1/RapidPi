@@ -337,6 +337,7 @@ fun SettingsScreen(
                 if (show("haptics")) add { d -> GroupSwitchRow("Haptics", settings.haptics, { on -> update { it.copy(haptics = on) } }, icon = Icons.Rounded.Vibration, divider = d) }
                 if (show("notifications")) add { d -> NotificationsRow(d) }
                 if (show("background")) add { d -> BackgroundRunRow(d) }
+                if (show("ci-runner")) add { d -> CiRunnerRow(app, settings, divider = d) }
             }
             SettingsBlock(rows, header = SettingsGroup.Advanced.title)
         }

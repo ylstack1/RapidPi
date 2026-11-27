@@ -2,6 +2,7 @@ package opensec.rapidpi.app.engine
 
 import kotlinx.coroutines.flow.StateFlow
 import opensec.rapidpi.app.cost.Cost
+import opensec.rapidpi.app.data.CiRunner.CiRunnerInfo
 import opensec.rapidpi.app.session.SessionController
 import java.io.File
 
@@ -62,6 +63,9 @@ interface EngineApi {
 
     /** Deletes the npm or pip cache. Blocking: call off the main thread. */
     fun clearRuntimeStorage(kind: RuntimeStorage.Kind): Boolean
+
+    /** CI/build runner configuration: what agents read to decide whether to dispatch heavy tasks to CI. */
+    fun ciRunnerInfo(): CiRunnerInfo
 }
 
 /** A finished `pi` command: [code] is its exit status (-1 when it did not run or timed out). */

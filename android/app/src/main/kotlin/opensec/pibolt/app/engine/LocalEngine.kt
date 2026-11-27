@@ -28,6 +28,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import opensec.rapidpi.app.PiBoltApp
 import opensec.rapidpi.app.cost.Cost
+import opensec.rapidpi.app.data.CiRunner.CiRunnerInfo
 import opensec.rapidpi.app.checkpoints.Git
 import opensec.rapidpi.app.checkpoints.ShadowRepo
 import opensec.rapidpi.app.checkpoints.TurnCheckpoints
@@ -321,6 +322,14 @@ class LocalEngine(private val app: PiBoltApp) : EngineApi {
     }
 
     override fun clearRuntimeStorage(kind: RuntimeStorage.Kind): Boolean = RuntimeStore.clear(paths, kind)
+
+    override fun ciRunnerInfo(): CiRunnerInfo = CiRunnerInfo(
+        enabled = app.settings.settings.value.ciRunner.runnerEnabled,
+        provider = app.settings.settings.value.ciRunner.provider.name,
+        configured = app.settings.settings.value.ciRunner.isConfigured,
+        selectedRunner = app.settings.settings.value.ciRunner.selectedRunner,
+        lastTestResult = app.settings.settings.value.ciRunner.lastTestResult,
+    )
 
     /** Saved sessions with at least one message, newest first. Blocking file I/O: call off the main thread. */
     override fun sessions(project: File): List<SessionSummary> {
