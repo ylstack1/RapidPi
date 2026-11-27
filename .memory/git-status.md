@@ -27,6 +27,7 @@ Remote branches (`origin/`):
 ## Recent commits
 
 ```
+cdbedc222 fix(android): add missing spend = SpendLimits( in ciRunner decode block
 d4b67ada5 fix(android): add missing Box import to CiRunnerSection.kt
 dcd50351c fix(android): correct CiRunner import paths
 f33094979 fix(android): add getValue/setValue imports for CiTokenField delegate
@@ -38,7 +39,7 @@ afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
 
 ## CI failure (being fixed iteratively)
 
-`android-debug` workflow on `feat/ci-runner-settings` keeps failing at step 7 "Tests, lint, debug build" with Kotlin compile errors. Fixes applied so far:
+`android-debug` workflow on `feat/ci-runner-settings` keeps failing at step 7 "Tests, lint, debug build" with Kotlin compile errors. Fixes applied:
 
 | Error | File | Fix | Commit |
 |---|---|---|---|
@@ -48,6 +49,7 @@ afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
 | `Unresolved reference 'it'` | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
 | Wrong import path `opensec.rapidpi.app.data.CiRunner.<Class>` | `EngineApi.kt`, `LocalEngine.kt`, `CiRunnerSection.kt` | `CiRunner.kt` is in package `opensec.rapidpi.app.data` (no subpackage). Fixed to `opensec.rapidpi.app.data.<Class>` | `dcd50351c` |
 | Missing `Box` import | `CiRunnerSection.kt` | `Box` used in `CiProviderChoice` but not imported | `d4b67ada5` |
+| Missing `spend = SpendLimits(` in decode block | `SettingsStore.kt` | Python replacement dropped the line; `session/day/month/showInLists` were parsed as top-level AppSettings params instead of SpendLimits fields | `cdbedc222` |
 
 Root cause of most `CiRunnerSection.kt` errors: `var text by remember { mutableStateOf(value) }` requires `getValue`/`setValue` extension imports from `androidx.compose.runtime`, matching the pattern in `BackgroundRun.kt` and `SettingsScreen.kt`.
 
