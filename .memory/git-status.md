@@ -27,6 +27,7 @@ Remote branches (`origin/`):
 ## Recent commits
 
 ```
+f33094979 fix(android): add getValue/setValue imports for CiTokenField delegate
 dd4888f4b fix(android): fix CI runner settings compile errors
 afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
 72130ee0f docs(agent): add project memory files and wire AGENTS.md to .memory/
@@ -36,10 +37,17 @@ afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
 ## CI failure (fixed)
 
 `android-debug` workflow run 46071979773 failed on `feat/ci-runner-settings` with compile errors:
-- `SettingsStore.kt:114` — leftover sed garbage from ciRunner decode block + `when(it)` spacing
-- `CiRunnerSection.kt` — `CiTokenField` not `@Composable`, `remember(key)` delegate syntax invalid, `containerColor` not a `TextFieldDefaults.colors()` param, missing `Row`/`Icon` imports, `settings` vs `appSettings` reference
 
-All fixed in `dd4888f4b` and pushed. CI should pass on next run.
+| Error | File | Fix | Commit |
+|---|---|---|---|
+| `Expecting a when-condition` line 114 | `SettingsStore.kt` | `when(it)` → `when (it)`, removed sed garbage | `dd4888f4b` |
+| `@Composable invocations not in context` lines 238, 254, 255 | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
+| `Property delegate getValue/setValue missing` line 249 | `CiRunnerSection.kt` | Added `getValue`/`setValue` imports from `androidx.compose.runtime` | `f33094979` |
+| `Unresolved reference 'it'` lines 253 | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
+
+Root cause of most CiRunnerSection.kt errors: `var text by remember { mutableStateOf(value) }` requires `getValue`/`setValue` extension imports from `androidx.compose.runtime`, matching the pattern in `BackgroundRun.kt` and `SettingsScreen.kt`.
+
+All fixes pushed to `feat/ci-runner-settings`.
 
 ## Version
 
