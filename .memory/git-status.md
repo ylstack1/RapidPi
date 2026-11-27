@@ -27,6 +27,7 @@ Remote branches (`origin/`):
 ## Recent commits
 
 ```
+45151007a fix(android): final fix for CI runner settings compile errors
 cdbedc222 fix(android): add missing spend = SpendLimits( in ciRunner decode block
 d4b67ada5 fix(android): add missing Box import to CiRunnerSection.kt
 dcd50351c fix(android): correct CiRunner import paths
@@ -37,23 +38,24 @@ afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
 864760f22 merge(agent): bring waku-daemon removal work onto main
 ```
 
-## CI failure (being fixed iteratively)
+## CI failure (final fix pushed)
 
-`android-debug` workflow on `feat/ci-runner-settings` keeps failing at step 7 "Tests, lint, debug build" with Kotlin compile errors. Fixes applied:
+`android-debug` workflow on `feat/ci-runner-settings` kept failing at step 7 "Tests, lint, debug build" with Kotlin compile errors. All fixes applied:
 
 | Error | File | Fix | Commit |
 |---|---|---|---|
-| `Expecting a when-condition` line 114 | `SettingsStore.kt` | `when(it)` → `when (it)`, removed sed garbage | `dd4888f4b` |
-| `@Composable invocations not in context` | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
-| `Property delegate getValue/setValue missing` | `CiRunnerSection.kt` | Added `getValue`/`setValue` imports from `androidx.compose.runtime` | `f33094979` |
-| `Unresolved reference 'it'` | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
-| Wrong import path `opensec.rapidpi.app.data.CiRunner.<Class>` | `EngineApi.kt`, `LocalEngine.kt`, `CiRunnerSection.kt` | `CiRunner.kt` is in package `opensec.rapidpi.app.data` (no subpackage). Fixed to `opensec.rapidpi.app.data.<Class>` | `dcd50351c` |
-| Missing `Box` import | `CiRunnerSection.kt` | `Box` used in `CiProviderChoice` but not imported | `d4b67ada5` |
-| Missing `spend = SpendLimits(` in decode block | `SettingsStore.kt` | Python replacement dropped the line; `session/day/month/showInLists` were parsed as top-level AppSettings params instead of SpendLimits fields | `cdbedc222` |
+| `Expecting a when-condition` line 114 | `SettingsStore.kt` | `when(it)` → `when (result)` with explicit param + null branch | `45151007a` |
+| `it.removePrefix("failed:")` on CiTestResult? | `SettingsStore.kt` | `it` was CiTestResult?, not String — fixed with named param | `45151007a` |
+| Destructuring Pair<Pair<Pair<...>>> needs component3/4 | `CiRunnerSection.kt:55` | Replaced nested `to` chaining with `Triple` | `45151007a` |
+| Argument type mismatch: Color vs ImageVector | `CiRunnerSection.kt:63` | Fixed by fixing destructuring | `45151007a` |
+| Unresolved reference 'size'/'width'/'background' | `CiRunnerSection.kt` | Added modifier imports | `45151007a` |
+| Wrong import path `opensec.rapidpi.app.data.CiRunner.<Class>` | 3 files | `CiRunner.kt` is in package `opensec.rapidpi.app.data` (no subpackage) | `dcd50351c` |
+| Missing `Box` import | `CiRunnerSection.kt` | Added import | `d4b67ada5` |
+| Missing `spend = SpendLimits(` in decode | `SettingsStore.kt` | Restored dropped line | `cdbedc222` |
+| `when(it)` spacing | `SettingsStore.kt` | `when(it)` → `when (it)` | `dd4888f4b` |
+| Missing `getValue`/`setValue` imports | `CiRunnerSection.kt` | Added for `by remember` delegate | `f33094979` |
 
-Root cause of most `CiRunnerSection.kt` errors: `var text by remember { mutableStateOf(value) }` requires `getValue`/`setValue` extension imports from `androidx.compose.runtime`, matching the pattern in `BackgroundRun.kt` and `SettingsScreen.kt`.
-
-All fixes pushed to `feat/ci-runner-settings`. CI should pass on next run.
+All fixes pushed to `feat/ci-runner-settings`. Rerun `android-debug` workflow to verify.
 
 ## Version
 
