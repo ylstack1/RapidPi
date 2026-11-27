@@ -21,12 +21,13 @@ Remote branches (`origin/`):
 | `origin/master` | Yes — fully merged |
 | `origin/pi-bolt` | Yes — fully merged |
 | `origin/feat/android-github-rest-tools` | Yes — fully merged |
-| `origin/feat/ci-runner-settings` | Yes — merged into main via fast-forward (commit `b5a7fae59`) |
+| `origin/feat/ci-runner-settings` | Yes — merged into main via fast-forward |
 
 ## Recent commits on main
 
 ```
-b5a7fae59 docs(memory): update git-status with remaining CI fixes
+7357497b0 fix(ci): resolve engine pack tag excluding pre-releases
+b5a7fae59 docs(memory): update git-status with ci-runner merge
 ed9c87ebc fix(android): fix remaining CiRunnerSection.kt compile errors
 45151007a fix(android): final fix for CI runner settings compile errors
 cdbedc222 fix(android): add missing spend = SpendLimits( in ciRunner decode block
@@ -39,9 +40,15 @@ afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
 864760f22 merge(agent): bring waku-daemon removal work onto main
 ```
 
-## CI runner settings — merged into main
+## Fixes applied
 
-The CI runner settings feature was merged into `main` via fast-forward. The `android-debug` workflow builds successfully (`BUILD SUCCESSFUL`). Note: debug APK artifact upload is skipped on `workflow_dispatch` triggers due to `if: ${{ github.event_name == 'pull_request' }}` in `.github/workflows/android-debug.yml` — change to `if: always()` if you want artifacts on manual runs too.
+### Engine pack tag resolution (commit 7357497b0)
+
+`.github/workflows/android-debug.yml`: `gh release list --limit 1` was returning `android-v9` (the most recent pre-release with APK assets, no `rapid-pi-engine-pack.zip`), causing `curl 404`. Added `--exclude-pre-releases` so it resolves to `v1.1.2` (the "Packed Engine" release with the engine pack zip) by default.
+
+### CI runner settings (merged)
+
+Feature merged into `main`. Debug APK builds successfully. Debug APK artifact upload is skipped on `workflow_dispatch` triggers due to `if: ${{ github.event_name == 'pull_request' }}` in `.github/workflows/android-debug.yml` — change to `if: always()` if you want artifacts on manual runs too.
 
 ## Version
 
