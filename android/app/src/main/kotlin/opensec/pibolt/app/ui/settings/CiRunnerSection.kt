@@ -3,9 +3,12 @@ package opensec.rapidpi.app.ui.settings
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Build
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -15,10 +18,10 @@ import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Terminal
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,11 +55,27 @@ fun CiRunnerRow(app: PiBoltApp, appSettings: AppSettings, divider: Boolean = fal
     val ci = appSettings.ciRunner
     val colors = Pi.colors
     var open by remember { mutableStateOf(false) }
-    val (_, icon, value, valueColor) = when (ci.provider) {
-        CiRunnerProvider.GitHub -> "GitHub Actions" to Icons.Rounded.Cloud to (if (ci.runnerEnabled) "Enabled" else "Disabled") to (if (ci.runnerEnabled) colors.success else colors.warning)
-        CiRunnerProvider.CircleCI -> "Circle CI" to Icons.Rounded.Build to (if (ci.runnerEnabled && ci.apiToken?.isNotBlank() == true) "Configured" else "Not set up") to (if (ci.runnerEnabled && ci.apiToken?.isNotBlank() == true) colors.success else colors.warning)
-        CiRunnerProvider.SelfHosted -> "Self-hosted" to Icons.Rounded.Computer to (if (ci.runnerEnabled && ci.selfHostedUrl?.isNotBlank() == true && ci.selfHostedToken?.isNotBlank() == true) "Configured" else "Not set up") to (if (ci.runnerEnabled && ci.selfHostedUrl?.isNotBlank() == true && ci.selfHostedToken?.isNotBlank() == true) colors.success else colors.warning)
-        CiRunnerProvider.None -> "None" to Icons.Rounded.Terminal to "Disabled" to colors.warning
+    val (icon, value, valueColor) = when (ci.provider) {
+        CiRunnerProvider.GitHub -> Triple(
+            Icons.Rounded.Cloud,
+            if (ci.runnerEnabled) "Enabled" else "Disabled",
+            if (ci.runnerEnabled) colors.success else colors.warning
+        )
+        CiRunnerProvider.CircleCI -> Triple(
+            Icons.Rounded.Build,
+            if (ci.runnerEnabled && ci.apiToken?.isNotBlank() == true) "Configured" else "Not set up",
+            if (ci.runnerEnabled && ci.apiToken?.isNotBlank() == true) colors.success else colors.warning
+        )
+        CiRunnerProvider.SelfHosted -> Triple(
+            Icons.Rounded.Computer,
+            if (ci.runnerEnabled && ci.selfHostedUrl?.isNotBlank() == true && ci.selfHostedToken?.isNotBlank() == true) "Configured" else "Not set up",
+            if (ci.runnerEnabled && ci.selfHostedUrl?.isNotBlank() == true && ci.selfHostedToken?.isNotBlank() == true) colors.success else colors.warning
+        )
+        CiRunnerProvider.None -> Triple(
+            Icons.Rounded.Terminal,
+            "Disabled",
+            colors.warning
+        )
     }
     GroupRow(
         "CI/build runner",
@@ -260,5 +279,8 @@ private fun CiTokenField(label: String, placeholder: String, value: String, onCh
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
+        colors = TextFieldDefaults.colors(
+            containerColor = Pi.colors.canvas,
+        ),
     )
 }

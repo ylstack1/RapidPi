@@ -111,7 +111,13 @@ object SettingsCodec {
         s.ciRunner.selectedRunner?.let { put("ciRunnerSelectedRunner", it) }
         put("ciRunnerEnabled", s.ciRunner.runnerEnabled)
         put("ciRunnerLastTestedAt", s.ciRunner.lastTestedAt)
-        s.ciRunner.lastTestResult?.let { put("ciRunnerLastTestResult", when (it) { is CiTestResult.Ok -> "ok", is CiTestResult.Failed -> "failed:${it.message}", CiTestResult.NotTested -> "not_tested" }) }
+        s.ciRunner.lastTestResult?.let { result ->
+            put("ciRunnerLastTestResult", when (result) {
+                is CiTestResult.Ok -> "ok"
+                is CiTestResult.Failed -> "failed:${result.message}"
+                CiTestResult.NotTested -> "not_tested"
+                null -> "not_tested"
+            }) }
         s.spend.session?.let { put("spendSession", it) }
         s.spend.day?.let { put("spendDay", it) }
         s.spend.month?.let { put("spendMonth", it) }
