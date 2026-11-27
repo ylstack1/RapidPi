@@ -111,7 +111,7 @@ object SettingsCodec {
         s.ciRunner.selectedRunner?.let { put("ciRunnerSelectedRunner", it) }
         put("ciRunnerEnabled", s.ciRunner.runnerEnabled)
         put("ciRunnerLastTestedAt", s.ciRunner.lastTestedAt)
-        s.ciRunner.lastTestResult?.let { put("ciRunnerLastTestResult", when(it) { is CiTestResult.Ok -> "ok", is CiTestResult.Failed -> "failed:${it.message}", CiTestResult.NotTested -> "not_tested" }) }
+        s.ciRunner.lastTestResult?.let { put("ciRunnerLastTestResult", when (it) { is CiTestResult.Ok -> "ok", is CiTestResult.Failed -> "failed:${it.message}", CiTestResult.NotTested -> "not_tested" }) }
         s.spend.session?.let { put("spendSession", it) }
         s.spend.day?.let { put("spendDay", it) }
         s.spend.month?.let { put("spendMonth", it) }
@@ -151,11 +151,8 @@ object SettingsCodec {
                         else -> CiTestResult.Failed(it.removePrefix("failed:"))
                     }
                 } ?: CiTestResult.NotTested,
-                    else -> { val m = json.str("ciRunnerLastTestResult")?.removePrefix("failed:") ?: CiTestResult.NotTested; if (m is CiTestResult.NotTested) CiTestResult.NotTested else CiTestResult.Failed(m) }
-                },
             ),
-            spend = SpendLimits(
-                session = limit(json.double("spendSession")),
+            session = limit(json.double("spendSession")),
                 day = limit(json.double("spendDay")),
                 month = limit(json.double("spendMonth")),
                 showInLists = json.bool("spendInLists") ?: d.spend.showInLists,

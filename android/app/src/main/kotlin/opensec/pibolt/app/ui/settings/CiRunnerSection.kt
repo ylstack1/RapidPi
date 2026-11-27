@@ -1,5 +1,6 @@
 package opensec.rapidpi.app.ui.settings
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,14 +15,13 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Terminal
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -49,7 +49,7 @@ fun CiRunnerRow(app: PiBoltApp, appSettings: AppSettings, divider: Boolean = fal
     val ci = appSettings.ciRunner
     val colors = Pi.colors
     var open by remember { mutableStateOf(false) }
-    val (label, icon, value, valueColor) = when (ci.provider) {
+    val (_, icon, value, valueColor) = when (ci.provider) {
         CiRunnerProvider.GitHub -> "GitHub Actions" to Icons.Rounded.Cloud to (if (ci.runnerEnabled) "Enabled" else "Disabled") to (if (ci.runnerEnabled) colors.success else colors.warning)
         CiRunnerProvider.CircleCI -> "Circle CI" to Icons.Rounded.Build to (if (ci.runnerEnabled && ci.apiToken?.isNotBlank() == true) "Configured" else "Not set up") to (if (ci.runnerEnabled && ci.apiToken?.isNotBlank() == true) colors.success else colors.warning)
         CiRunnerProvider.SelfHosted -> "Self-hosted" to Icons.Rounded.Computer to (if (ci.runnerEnabled && ci.selfHostedUrl?.isNotBlank() == true && ci.selfHostedToken?.isNotBlank() == true) "Configured" else "Not set up") to (if (ci.runnerEnabled && ci.selfHostedUrl?.isNotBlank() == true && ci.selfHostedToken?.isNotBlank() == true) colors.success else colors.warning)
@@ -63,7 +63,7 @@ fun CiRunnerRow(app: PiBoltApp, appSettings: AppSettings, divider: Boolean = fal
         onClick = { open = true },
         divider = divider,
     )
-    if (open) CiRunnerSheet(app, settings, onDismiss = { open = false })
+    if (open) CiRunnerSheet(app, appSettings, onDismiss = { open = false })
 }
 
 /** The CI runner configuration sheet: pick provider, enter tokens, test connection. */
@@ -73,7 +73,7 @@ private fun CiRunnerSheet(app: PiBoltApp, settings: AppSettings, onDismiss: () -
     val colors = Pi.colors
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val close = rememberSheetCloser(sheet)
-    var ci by remember(settings.ciRunner) { mutableStateOf(settings.ciRunner) }
+    var ci by remember { mutableStateOf(settings.ciRunner) }
 
     LaunchedEffect(Unit) {
         sheet.expand()
@@ -246,7 +246,7 @@ private fun CiProviderChoice(selected: CiRunnerProvider, onSelect: (CiRunnerProv
 /** A single-line text field for tokens/URLs. */
 @Composable
 private fun CiTokenField(label: String, placeholder: String, value: String, onChange: (String) -> Unit) {
-    var text by remember(value) { mutableStateOf(value) }
+    var text by remember { mutableStateOf(value) }
     if (text != value) text = value
     OutlinedTextField(
         value = text,
@@ -257,8 +257,5 @@ private fun CiTokenField(label: String, placeholder: String, value: String, onCh
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
-        colors = TextFieldDefaults.colors(
-            containerColor = Pi.colors.canvas,
-        ),
     )
 }
