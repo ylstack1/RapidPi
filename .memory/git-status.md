@@ -4,7 +4,6 @@
 
 Local branches:
 - `main` (current)
-- `feat/ci-runner-settings` (CI runner settings feature, pushed)
 
 Remote branches (`origin/`):
 - `HEAD -> origin/main`
@@ -22,11 +21,12 @@ Remote branches (`origin/`):
 | `origin/master` | Yes — fully merged |
 | `origin/pi-bolt` | Yes — fully merged |
 | `origin/feat/android-github-rest-tools` | Yes — fully merged |
-| `origin/feat/ci-runner-settings` | No — feature branch, not yet merged to main |
+| `origin/feat/ci-runner-settings` | Yes — merged into main via fast-forward (commit `b5a7fae59`) |
 
-## Recent commits
+## Recent commits on main
 
 ```
+b5a7fae59 docs(memory): update git-status with remaining CI fixes
 ed9c87ebc fix(android): fix remaining CiRunnerSection.kt compile errors
 45151007a fix(android): final fix for CI runner settings compile errors
 cdbedc222 fix(android): add missing spend = SpendLimits( in ciRunner decode block
@@ -39,27 +39,9 @@ afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
 864760f22 merge(agent): bring waku-daemon removal work onto main
 ```
 
-## CI failure (being fixed iteratively)
+## CI runner settings — merged into main
 
-`android-debug` workflow on `feat/ci-runner-settings` kept failing at step 7 "Tests, lint, debug build" with Kotlin compile errors. All fixes applied:
-
-| Error | File | Fix | Commit |
-|---|---|---|---|
-| `Expecting a when-condition` line 114 | `SettingsStore.kt` | `when(it)` → `when (result)` with explicit param + null branch | `45151007a` |
-| `it.removePrefix("failed:")` on CiTestResult? | `SettingsStore.kt` | `it` was CiTestResult?, not String — fixed with named param | `45151007a` |
-| Destructuring Pair<Pair<Pair<...>>> needs component3/4 | `CiRunnerSection.kt:55` | Replaced nested `to` chaining with `Triple` | `45151007a` |
-| Argument type mismatch: Color vs ImageVector | `CiRunnerSection.kt:63` | Fixed by fixing destructuring | `45151007a` |
-| Unresolved reference 'size'/'width'/'background' | `CiRunnerSection.kt` | Added modifier imports | `45151007a` |
-| Unresolved reference 'background' (import) | `CiRunnerSection.kt` | import from `androidx.compose.foundation`, not `layout` | `ed9c87ebc` |
-| Unresolved reference 'rememberModalBottomSheetState' | `CiRunnerSection.kt` | Added import from `androidx.compose.material3` | `ed9c87ebc` |
-| No parameter 'containerColor' in TextFieldDefaults.colors() | `CiRunnerSection.kt` | Removed `colors` parameter, removed unused import | `ed9c87ebc` |
-| Wrong import path `opensec.rapidpi.app.data.CiRunner.<Class>` | 3 files | `CiRunner.kt` is in package `opensec.rapidpi.app.data` (no subpackage) | `dcd50351c` |
-| Missing `Box` import | `CiRunnerSection.kt` | Added import | `d4b67ada5` |
-| Missing `spend = SpendLimits(` in decode | `SettingsStore.kt` | Restored dropped line | `cdbedc222` |
-| `when(it)` spacing | `SettingsStore.kt` | `when(it)` → `when (it)` | `dd4888f4b` |
-| Missing `getValue`/`setValue` imports | `CiRunnerSection.kt` | Added for `by remember` delegate | `f33094979` |
-
-All fixes pushed to `feat/ci-runner-settings`. Rerun `android-debug` workflow to verify.
+The CI runner settings feature was merged into `main` via fast-forward. The `android-debug` workflow builds successfully (`BUILD SUCCESSFUL`). Note: debug APK artifact upload is skipped on `workflow_dispatch` triggers due to `if: ${{ github.event_name == 'pull_request' }}` in `.github/workflows/android-debug.yml` — change to `if: always()` if you want artifacts on manual runs too.
 
 ## Version
 
