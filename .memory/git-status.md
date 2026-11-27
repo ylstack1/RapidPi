@@ -27,6 +27,8 @@ Remote branches (`origin/`):
 ## Recent commits
 
 ```
+d4b67ada5 fix(android): add missing Box import to CiRunnerSection.kt
+dcd50351c fix(android): correct CiRunner import paths
 f33094979 fix(android): add getValue/setValue imports for CiTokenField delegate
 dd4888f4b fix(android): fix CI runner settings compile errors
 afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
@@ -34,20 +36,22 @@ afe0b21f8 feat(android): add CI/build runner settings for heavy tasks
 864760f22 merge(agent): bring waku-daemon removal work onto main
 ```
 
-## CI failure (fixed)
+## CI failure (being fixed iteratively)
 
-`android-debug` workflow run 46071979773 failed on `feat/ci-runner-settings` with compile errors:
+`android-debug` workflow on `feat/ci-runner-settings` keeps failing at step 7 "Tests, lint, debug build" with Kotlin compile errors. Fixes applied so far:
 
 | Error | File | Fix | Commit |
 |---|---|---|---|
 | `Expecting a when-condition` line 114 | `SettingsStore.kt` | `when(it)` → `when (it)`, removed sed garbage | `dd4888f4b` |
-| `@Composable invocations not in context` lines 238, 254, 255 | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
-| `Property delegate getValue/setValue missing` line 249 | `CiRunnerSection.kt` | Added `getValue`/`setValue` imports from `androidx.compose.runtime` | `f33094979` |
-| `Unresolved reference 'it'` lines 253 | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
+| `@Composable invocations not in context` | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
+| `Property delegate getValue/setValue missing` | `CiRunnerSection.kt` | Added `getValue`/`setValue` imports from `androidx.compose.runtime` | `f33094979` |
+| `Unresolved reference 'it'` | `CiRunnerSection.kt` | Cascading from missing delegate imports | `f33094979` |
+| Wrong import path `opensec.rapidpi.app.data.CiRunner.<Class>` | `EngineApi.kt`, `LocalEngine.kt`, `CiRunnerSection.kt` | `CiRunner.kt` is in package `opensec.rapidpi.app.data` (no subpackage). Fixed to `opensec.rapidpi.app.data.<Class>` | `dcd50351c` |
+| Missing `Box` import | `CiRunnerSection.kt` | `Box` used in `CiProviderChoice` but not imported | `d4b67ada5` |
 
-Root cause of most CiRunnerSection.kt errors: `var text by remember { mutableStateOf(value) }` requires `getValue`/`setValue` extension imports from `androidx.compose.runtime`, matching the pattern in `BackgroundRun.kt` and `SettingsScreen.kt`.
+Root cause of most `CiRunnerSection.kt` errors: `var text by remember { mutableStateOf(value) }` requires `getValue`/`setValue` extension imports from `androidx.compose.runtime`, matching the pattern in `BackgroundRun.kt` and `SettingsScreen.kt`.
 
-All fixes pushed to `feat/ci-runner-settings`.
+All fixes pushed to `feat/ci-runner-settings`. CI should pass on next run.
 
 ## Version
 
